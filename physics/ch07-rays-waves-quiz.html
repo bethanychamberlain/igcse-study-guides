@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Rays and Waves &mdash; Physics Ch7</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--subject);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline {
+    background: white;
+    color: var(--subject-dark);
+    border: 2px solid var(--subject);
+  }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tier header */
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+
+  .tier-header .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+
+  .tier-header .marks {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Answer area */
+  .q-answer {
+    padding: 0 20px 16px;
+    display: none;
+  }
+  .q-answer.visible { display: block; }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Self-rating */
+  .self-rate {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .self-rate .rate-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .rate-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  /* Answer lines for print */
+  .answer-lines { display: none; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines {
+      display: block;
+      padding: 4px 20px 16px;
+    }
+    .answer-lines .line {
+      border-bottom: 1px solid #d0d0d0;
+      height: 26px;
+    }
+    .tier-header { break-after: avoid; }
+  }
+
+  /* Quiz guide */
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .quiz-guide .guide-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .rating-scale {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .rating-scale .rs-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-scale .rs-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Physics Ch7 &mdash; Self-Test Quiz</div>
+  <h1>Rays and Waves</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name it. Intermediate = explain it. Advanced = calculate and discuss.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> in the answers show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each on the exam. Get these right and you're building a solid base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">State the two laws of reflection.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Law 1:</strong> The angle of incidence is equal to the angle of reflection [1].<br>
+      <strong>Law 2:</strong> The incident ray, the reflected ray, and the normal all lie in the same plane [1].
+      <div class="mark-hint">Many students forget Law 2. Make sure you mention the "normal" &mdash; saying "the mirror surface" instead of "the normal" loses you the mark.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">List the seven types of electromagnetic wave in order of <strong>decreasing wavelength</strong> (longest first).</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Radio waves</strong>, <strong>microwaves</strong>, <strong>infrared</strong>, <strong>visible light</strong>, <strong>ultraviolet</strong>, <strong>X-rays</strong>, <strong>gamma rays</strong> [2 for all correct and in order; 1 for mostly correct with one swap].
+      <div class="mark-hint">Mnemonic: Running Man In Vegas Uses Xtra Gear. This question appears on nearly every physics paper. Learn it cold.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">State <strong>two</strong> properties that are common to all electromagnetic waves.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Any two from: They are all <strong>transverse</strong> waves [1]. They all travel at the <strong>speed of light</strong> (3 &times; 10<sup>8</sup> m/s) in a vacuum [1]. They can all travel through a <strong>vacuum</strong> [1]. They all transfer <strong>energy</strong> [1].
+      <div class="mark-hint">Make sure your two properties are genuinely different. "They travel through a vacuum" and "they don't need a medium" count as the same point.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">What type of lens is used to correct (a) short sight and (b) long sight?</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) Short sight is corrected with a <strong>concave</strong> (diverging) lens [1].<br>
+      (b) Long sight is corrected with a <strong>convex</strong> (converging) lens [1].
+      <div class="mark-hint">Either the lens shape name (concave/convex) or the function name (diverging/converging) gets the mark. Know both.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain and Calculate?</h2>
+    <div class="marks">Worth 3-4 marks each. You need to show working in calculations and explain effects using correct terminology.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">Describe what happens to a ray of light when it passes from air into a glass block at an angle. In your answer, mention the <strong>normal</strong>, <strong>speed</strong>, and <strong>direction</strong>.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      When light enters the glass, it <strong>slows down</strong> (glass is denser than air) [1]. The ray bends <strong>towards the normal</strong> [1], so the angle of refraction is smaller than the angle of incidence [1]. This bending is called refraction and is caused by the change in speed.
+      <div class="mark-hint">Three marks: (1) speed decreases, (2) bends towards normal, (3) angle of refraction is smaller. If the ray entered along the normal (at 90 degrees), it would NOT bend &mdash; only mention bending when the ray enters at an angle.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">An object is 10 cm in front of a plane mirror. (a) How far is the image behind the mirror? (b) If the object is moved 3 cm closer to the mirror, how far is the object from its image now? (c) What type of image is formed?</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) The image is <strong>10 cm</strong> behind the mirror (same distance as object is in front) [1].<br>
+      (b) New object distance = 10 - 3 = 7 cm. Image is 7 cm behind mirror. Distance from object to image = 7 + 7 = <strong>14 cm</strong> [1].<br>
+      (c) The image is <strong>virtual</strong> (it cannot be formed on a screen) [1].
+      <div class="mark-hint">Part (b): the object is now 7 cm from the mirror, so the image is also 7 cm behind. Total distance = 7 + 7 = 14 cm. Students often forget to add both distances.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">Explain what is meant by <strong>total internal reflection</strong>. State the two conditions needed for it to occur.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Total internal reflection (TIR) is when light hitting the inside surface of a material is <strong>completely reflected</strong> back inside, with no refracted ray passing through the surface [1]. It occurs when the surface acts like a perfect mirror [1].<br><br>
+      <strong>Condition 1:</strong> Light must be travelling from a <strong>denser</strong> medium to a <strong>less dense</strong> medium (e.g. glass to air) [1].<br>
+      <strong>Condition 2:</strong> The angle of incidence must be <strong>greater than the critical angle</strong> [1].
+      <div class="mark-hint">Four marks: definition of TIR [1-2], then the two conditions [1 each]. Both conditions are needed &mdash; writing only one gets you only one mark for this part.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Discuss and Apply?</h2>
+    <div class="marks">Worth 5-6 marks each. These need full sentences, calculations with working, and clear reasoning.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">The refractive index of diamond is 2.42 and the speed of light in a vacuum is 300 000 km/s. (a) Calculate the speed of light in diamond. (b) Calculate the critical angle for diamond. (c) Explain why diamonds sparkle so much.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> n = speed in vacuum / speed in medium<br>
+      speed in diamond = 300 000 / 2.42 = <strong>124 000 km/s</strong> (accept 1.24 &times; 10<sup>5</sup> km/s) [1].<br><br>
+      <strong>(b)</strong> sin c = 1 / n = 1 / 2.42 = 0.413 [1]<br>
+      c = sin<sup>-1</sup>(0.413) = <strong>24&deg;</strong> [1].<br><br>
+      <strong>(c)</strong> Diamond has a very small critical angle (24&deg;) [1], which means that light entering the diamond is much more likely to undergo total internal reflection rather than passing out through the surface. The diamond is cut with angled faces so that light is reflected many times inside before escaping, creating the sparkle [1].
+      <div class="mark-hint">Part (a): rearrange the refractive index formula. Part (b): use sin c = 1/n. Part (c): link the small critical angle to lots of TIR and the diamond cut.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">A convex lens has a focal length of 6 cm. An object is placed 9 cm from the lens. (a) State the three standard rays you would draw on a ray diagram. (b) Describe the image formed (state whether it is real or virtual, upright or inverted, and enlarged or diminished). (c) Name a device that uses a convex lens to form this type of image.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> Ray 1: A ray through the centre of the lens passes straight through [1]. Ray 2: A ray parallel to the principal axis passes through the principal focus F after the lens [1]. Ray 3: A ray through F' (on the object side) leaves the lens parallel to the principal axis [1].<br><br>
+      <strong>(b)</strong> The object is between F and 2F (since F = 6 cm and 2F = 12 cm, and the object is at 9 cm). The image is: <strong>real</strong>, <strong>inverted</strong>, and <strong>enlarged</strong> (magnified, larger than the object) [2 &mdash; 1 for real and inverted, 1 for enlarged].<br><br>
+      <strong>(c)</strong> A <strong>projector</strong> (or film projector) [1].
+      <div class="mark-hint">To determine the image type, compare the object distance (9 cm) to F (6 cm) and 2F (12 cm). Object between F and 2F gives a real, inverted, enlarged image beyond 2F. This is the projector setup.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">A telephone system uses optical fibres to transmit digital signals. (a) State the difference between an analogue signal and a digital signal. (b) Give two advantages of transmitting digital signals rather than analogue signals. (c) Give two advantages of using optical fibres rather than copper cables for long-distance communication.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> An analogue signal varies <strong>continuously</strong> and can take any value [1]. A digital signal has only <strong>two values</strong> (on/off or 1/0) [1].<br><br>
+      <strong>(b)</strong> Any two from: Digital signals can be <strong>regenerated</strong> (cleaned up) to remove noise, so quality is maintained [1]. Analogue signals amplify the noise along with the signal [1]. Digital signals can carry more data [1].<br><br>
+      <strong>(c)</strong> Any two from: Optical fibres have less <strong>attenuation</strong> (signal loss) [1]. They are not affected by <strong>electrical interference</strong> [1]. They can carry <strong>more signals</strong> simultaneously [1]. They are <strong>thinner and lighter</strong> [1]. They are more <strong>secure</strong> (cannot be tapped) [1].
+      <div class="mark-hint">Part (a) needs BOTH definitions &mdash; one mark for each. Parts (b) and (c) need two DIFFERENT advantages each. The key word in (b) is "regenerated" &mdash; examiners love this term.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle answers
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  // Click question to toggle its answer
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  // Self-rating
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Human Impacts on Ecosystems &mdash; Biology Ch20</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px; }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+  .progress-bar { background: var(--card); border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .progress-bar .track { flex: 1; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--subject); border-radius: 5px; width: 0%; transition: width 0.4s ease; }
+  .progress-bar .label { font-size: 13px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+  .how-to { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+  .how-to h2 { font-size: 16px; color: var(--subject-dark); margin-bottom: 10px; }
+  .how-to .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .how-to .legend-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+  .how-to .legend-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
+  .section-header { background: var(--subject); color: #fff; border-radius: 10px 10px 0 0; padding: 14px 20px; margin-top: 28px; font-size: 18px; font-weight: 700; }
+  .section-header .num { opacity: 0.7; font-size: 13px; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+  .card { background: var(--card); border-radius: 0 0 10px 10px; padding: 0; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .card + .card { border-radius: 10px; }
+  .block { padding: 14px 20px; border-left: 4px solid transparent; display: flex; gap: 12px; align-items: flex-start; }
+  .block + .block { border-top: 1px solid #f0f0f0; }
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+  .block .icon { flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+  .block .body { flex: 1; }
+  .block .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+  .checklist { list-style: none; padding: 14px 20px; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; font-size: 14px; }
+  .checklist input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--check-done); flex-shrink: 0; cursor: pointer; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  .compare-table th { background: var(--subject-light); color: var(--subject-dark); padding: 8px 10px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .intro-text { padding: 14px 20px; font-size: 14px; color: var(--text-secondary); }
+  .end-card { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 12px; padding: 24px; margin-top: 28px; text-align: center; }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 20</div>
+  <h1>Human Impacts on Ecosystems</h1>
+  <div class="subtitle">Agriculture, pollution, eutrophication, deforestation, and conservation &mdash; how humans change the environment</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 22 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go.</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: FOOD SUPPLY AND AGRICULTURE ===== -->
+<div class="section-header">
+  <span class="num">Section 20.1</span>
+  Food Supply: Humans and Agriculture
+</div>
+<div class="card">
+  <div class="intro-text">
+    As the human population grows, we need more food. Modern agriculture is efficient but comes with serious environmental costs.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Monoculture</div>
+      <p><strong>Monoculture</strong> = growing a single crop over a large area.</p>
+      <p style="margin-top:6px;"><strong>Advantages:</strong> specialised harvesting machines, highly selected strains, precise mineral/water requirements calculated.</p>
+      <p style="margin-top:6px;"><strong>Disadvantages:</strong> poor wildlife food variety, diseases spread easily between identical plants, loss of genetic variety (vulnerable to environmental change), soil minerals depleted by the same crop year after year.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Intensive Farming</div>
+      <p><strong>Intensive farming</strong> of livestock keeps many animals in limited space. Made possible by:</p>
+      <p>&bull; Temperature control (reduces energy wasted on heat production)</p>
+      <p>&bull; Selective breeding for high <strong>conversion ratio</strong> (food &rarr; body mass)</p>
+      <p>&bull; Minimised movement (less energy wasted)</p>
+      <p>&bull; High-protein food, antibiotics, hygienic conditions</p>
+      <p style="margin-top:6px;"><strong>Disadvantages:</strong> waste pollutes rivers, animal welfare concerns, disease spreads easily, antibiotics can select resistant bacteria, heating/lighting costs and environmental damage.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Exam questions about intensive farming often ask you to discuss <strong>both sides</strong> &mdash; benefit (more food) vs cost (pollution, welfare, antibiotic resistance). Always give at least one advantage and one disadvantage.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define monoculture and give advantages + disadvantages</li>
+    <li><input type="checkbox"> I can explain how intensive farming increases food production</li>
+    <li><input type="checkbox"> I know the disadvantages of intensive livestock farming</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: DEFORESTATION ===== -->
+<div class="section-header">
+  <span class="num">Section 20.2</span>
+  Deforestation and Land Use
+</div>
+<div class="card">
+  <div class="intro-text">
+    Humans remove forests for farmland, timber, and resources. The consequences ripple through the entire ecosystem.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Consequences of Deforestation</div>
+      <p><strong>Deforestation</strong> = the rapid destruction of woodland.</p>
+      <p style="margin-top:6px;"><strong>Consequences:</strong></p>
+      <p>&bull; <strong>Soil erosion</strong> &mdash; tree roots no longer hold soil; wind and rain remove it.</p>
+      <p>&bull; <strong>Reduced soil fertility</strong> &mdash; deciduous trees contain 90% of the forest nutrients; removing them removes nutrients.</p>
+      <p>&bull; <strong>Flooding and landslips</strong> &mdash; trees normally absorb 50% of rainfall via roots; without them water runs off.</p>
+      <p>&bull; <strong>Rising CO&#8322;</strong> &mdash; fewer trees means less photosynthesis to absorb CO&#8322;.</p>
+      <p>&bull; <strong>Reduced O&#8322;</strong> &mdash; less photosynthesis means less oxygen produced.</p>
+      <p>&bull; <strong>Climate change</strong> &mdash; drier atmosphere, reduced rainfall, more intense winds.</p>
+      <p>&bull; <strong>Species extinction</strong> &mdash; many species depend on forest habitats (e.g. orangutans).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Hedgerow Removal</div>
+      <p>Farmers remove hedges to make fields bigger for machinery.</p>
+      <p style="margin-top:6px;"><strong>Benefits of hedges:</strong> windbreaks, nesting sites for 65+ bird species (predators of crop pests), limit soil erosion, nutrient enrichment from fallen leaves, breeding sites for pollinating insects.</p>
+      <p style="margin-top:6px;">150,000+ km of hedgerow removed in Britain since WW2.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>For exam questions on deforestation, learn at least four consequences. The question might ask for "three effects" &mdash; having four in your head means you can pick the best three. Always link back to scientific processes: "less photosynthesis &rarr; more CO&#8322; &rarr; enhanced greenhouse effect."</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list at least four consequences of deforestation</li>
+    <li><input type="checkbox"> I can explain why hedgerows are important for biodiversity</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: POLLUTION ===== -->
+<div class="section-header">
+  <span class="num">Section 20.4</span>
+  Pollution: Atmosphere, Water, and Land
+</div>
+<div class="card">
+  <div class="intro-text">
+    Pollution is any effect of human activities that has a harmful effect on the environment. The exam wants you to know causes, effects, AND solutions for each type.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Greenhouse Effect</div>
+      <p><strong>Greenhouse gases</strong> (CO&#8322; and methane) trap infrared radiation (heat) near the Earth's surface.</p>
+      <p style="margin-top:6px;"><strong>Causes of increase:</strong> combustion of fossil fuels (CO&#8322;), methane from cattle/rice fields/landfill.</p>
+      <p style="margin-top:6px;"><strong>Effects (global warming):</strong> climatic extremes (stronger winds, heavier rainfall), melting polar ice &rarr; rising sea levels, desertification, pests spreading to new areas.</p>
+      <p style="margin-top:6px;"><strong>Solutions:</strong> reduce fossil fuel burning, use alternative energy, reduce deforestation, replant forests.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Acid Rain</div>
+      <p><strong>Cause:</strong> Burning fossil fuels releases sulfur dioxide (SO&#8322;) and nitrogen oxides (NO/NO&#8322;). These dissolve in rainwater to form <strong>sulfuric acid</strong> and <strong>nitric acid</strong>.</p>
+      <p style="margin-top:6px;"><strong>Effects:</strong> soils become acidic (minerals leach out, decomposition inhibited), lakes become acidic (fish and invertebrates die), forest trees starve from mineral loss.</p>
+      <p style="margin-top:6px;"><strong>Solutions:</strong> scrubbers in power stations, catalytic converters in cars, adding crushed limestone to acidified lakes.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Pesticide Bioaccumulation</div>
+      <p>Pesticides (e.g. DDT) can be <strong>amplified</strong> through food chains. Concentration increases at each trophic level because the pesticide is stored in body tissues, not broken down.</p>
+      <p style="margin-top:6px;">Example: water (0.02 ppm) &rarr; plankton (5) &rarr; small fish (50) &rarr; large fish (250) &rarr; bird (1500 ppm). The top predator gets a lethal dose even though the water concentration was tiny.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>Greenhouse effect</strong> vs <strong>acid rain</strong>: they are both caused by burning fossil fuels, but by <em>different</em> gases. CO&#8322; causes the greenhouse effect. SO&#8322; and nitrogen oxides cause acid rain. Don't mix them up in an exam answer.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe causes, effects, and solutions for the greenhouse effect</li>
+    <li><input type="checkbox"> I can describe causes, effects, and solutions for acid rain</li>
+    <li><input type="checkbox"> I can explain how pesticides accumulate through food chains</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: EUTROPHICATION ===== -->
+<div class="section-header">
+  <span class="num">Section 20.5</span>
+  Eutrophication
+</div>
+<div class="card">
+  <div class="intro-text">
+    Eutrophication is what happens when too many nutrients get into water. It's a chain reaction that ends with dead fish. Learn the sequence &mdash; the exam tests it step by step.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Eutrophication Sequence</div>
+      <p><strong>Step 1:</strong> Excess <strong>nitrates and phosphates</strong> enter water from fertiliser runoff (leaching) or sewage.</p>
+      <p><strong>Step 2:</strong> Algae and surface plants grow rapidly &mdash; an <strong>algal bloom</strong>.</p>
+      <p><strong>Step 3:</strong> The algae block light to plants below the surface. These rooted plants <strong>die</strong>.</p>
+      <p><strong>Step 4:</strong> Dead plants + dead algae provide food for <strong>aerobic decomposing bacteria</strong>, whose population multiplies rapidly.</p>
+      <p><strong>Step 5:</strong> The bacteria consume large amounts of <strong>oxygen</strong> for respiration (creating a high <strong>biological oxygen demand / BOD</strong>).</p>
+      <p><strong>Step 6:</strong> Other organisms (fish, invertebrates) <strong>cannot get enough oxygen</strong> and die.</p>
+      <p><strong>Step 7:</strong> Their bodies provide even more food for bacteria &mdash; a <strong>positive feedback</strong> loop that makes it worse.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>Eutrophication is NOT "fertiliser poisons the fish." The fertiliser feeds algae, which block light, which kills plants, which feeds bacteria, which use up oxygen, which suffocates fish. It's an <strong>indirect</strong> chain of events. The exam wants all the steps, not just "fertiliser kills fish."</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; BOD</div>
+      <p><strong>Biological oxygen demand (BOD)</strong> = the mass of oxygen consumed by microorganisms in a sample of water. Measured by comparing oxygen concentration before and after a period of microbial respiration. High BOD = polluted water.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Learn the Chain</div>
+      <p>The eutrophication sequence is one of the most commonly tested 5&ndash;6 mark questions. Memorise it as a numbered list. Practise writing it out from memory. Each step is worth a mark.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe all steps of eutrophication in order</li>
+    <li><input type="checkbox"> I know what BOD means and what a high BOD indicates</li>
+    <li><input type="checkbox"> I can explain why eutrophication involves positive feedback</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: CONSERVATION ===== -->
+<div class="section-header">
+  <span class="num">Section 20.6&ndash;20.8</span>
+  Conservation and Endangered Species
+</div>
+<div class="card">
+  <div class="intro-text">
+    Humans can also have positive effects. Conservation is about balancing human needs with maintaining biodiversity.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Species Become Endangered</div>
+      <p>&bull; <strong>Habitat loss</strong> &mdash; land cleared for agriculture or building</p>
+      <p>&bull; <strong>Over-hunting / commercial exploitation</strong> &mdash; e.g. tigers hunted for fur</p>
+      <p>&bull; <strong>Pollution</strong> &mdash; rivers and ponds lose oxygen-requiring species</p>
+      <p>&bull; <strong>Introduced species</strong> &mdash; e.g. stoats on islands eliminate ground-nesting birds</p>
+      <p>&bull; <strong>Climate change</strong> &mdash; loss of Arctic ice affects polar bears</p>
+      <p>&bull; <strong>Pest control</strong> &mdash; hunting of predators like cheetahs that kill livestock</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Conservation Strategies</div>
+      <p><strong>Sustainable development</strong> = using resources at a rate that allows them to be replaced, so future generations can also use them.</p>
+      <p style="margin-top:6px;"><strong>Conservation programmes</strong> involve:</p>
+      <p>&bull; <strong>Sampling</strong> &mdash; assess the population</p>
+      <p>&bull; <strong>Management plan</strong> &mdash; devise strategies to protect/increase the population</p>
+      <p>&bull; <strong>Carrying out the plan</strong></p>
+      <p>&bull; <strong>Re-sampling</strong> &mdash; check if it worked</p>
+      <p style="margin-top:6px;"><strong>Types:</strong> Preservation (keep unchanged), Reclamation (restore damaged habitats), Creation (make new habitats, e.g. garden ponds).</p>
+      <p style="margin-top:6px;"><strong>Other tools:</strong> captive breeding in zoos, seed banks for threatened plants, education programmes, CITES (controls trade in endangered species), protected areas/national parks.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Conservation questions often ask you to describe a strategy for a named species. The template is always: (1) why it's endangered, (2) what's being done (protected area, breeding programme, legal protection), (3) why genetic variation matters if populations are small.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list at least four reasons why species become endangered</li>
+    <li><input type="checkbox"> I can define sustainable development</li>
+    <li><input type="checkbox"> I can describe the stages of a conservation programme</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: FISH STOCKS ===== -->
+<div class="section-header">
+  <span class="num">Section 20.7</span>
+  Managing Fish Stocks
+</div>
+<div class="card">
+  <div class="intro-text">
+    Overfishing is a real-world example of humans disrupting an ecosystem. The exam often uses fish stocks as a case study for sustainability.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How Fish Stocks Are Managed</div>
+      <p>&bull; <strong>Education</strong> &mdash; study fish growth patterns to advise on mesh sizes and fishing methods.</p>
+      <p>&bull; <strong>Net mesh size</strong> &mdash; use larger meshes that catch mature fish but let young/immature fish escape so they can reproduce.</p>
+      <p>&bull; <strong>Quotas</strong> &mdash; governments set limits on how many fish can be caught.</p>
+      <p>&bull; <strong>Restocking</strong> &mdash; fish bred in farms (aquaculture) can be released to replenish wild populations.</p>
+      <p>&bull; <strong>Fish farming</strong> &mdash; species grown in enclosures with controlled food, temperature, and disease management.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>Fish farming has <strong>environmental concerns</strong> too: pesticides in the water kill wild organisms, excess food and faeces cause <strong>eutrophication</strong> below the pens (increased BOD). It's not a perfect solution &mdash; know both sides.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe at least three methods used to conserve fish stocks</li>
+    <li><input type="checkbox"> I know the advantages and environmental concerns of fish farming</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 20 Notes Complete</h2>
+  <p>You've covered agriculture, deforestation, pollution, eutrophication, conservation, and fish stocks. Now test yourself with the Chapter 20 quiz.</p>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

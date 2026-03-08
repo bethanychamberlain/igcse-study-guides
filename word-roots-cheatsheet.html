@@ -1,0 +1,1215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Word Roots, Prefixes &amp; Suffixes — IGCSE Decoder Ring</title>
+<style>
+  :root {
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --hero-dark: #2c3e50;
+    --hero-light: #34495e;
+    --bio: #27ae60;
+    --chem: #8e44ad;
+    --phys: #2e86c1;
+    --eng: #16a085;
+    --span: #e67e22;
+    --math: #e74c3c;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--hero-dark), var(--hero-light));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 28px 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin: 4px 0 8px; }
+  .hero p { font-size: 14px; opacity: 0.85; max-width: 600px; margin: 0 auto; }
+  .hero .stats {
+    display: flex;
+    justify-content: center;
+    gap: 28px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .hero .stat { text-align: center; }
+  .hero .stat-num { font-size: 26px; font-weight: 800; }
+  .hero .stat-label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 17px;
+    color: var(--hero-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #eee;
+  }
+  .card h3 {
+    font-size: 14px;
+    color: var(--hero-dark);
+    margin: 16px 0 8px;
+  }
+
+  /* How to use box */
+  .how-box {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    font-size: 14px;
+  }
+  .how-box .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .how-box ol {
+    margin: 6px 0 0 20px;
+    font-size: 13px;
+  }
+  .how-box li { margin-bottom: 4px; }
+  .how-box strong { color: var(--hero-dark); }
+
+  /* Root tables */
+  .root-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .root-table th {
+    background: #f0f0f0;
+    color: var(--hero-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: sticky;
+    top: 0;
+  }
+  .root-table td {
+    padding: 7px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .root-table tr:last-child td { border-bottom: none; }
+  .root-table tr:hover { background: #fafafa; }
+
+  .root-table .word-part {
+    font-weight: 700;
+    color: var(--hero-dark);
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .root-table .meaning {
+    font-weight: 600;
+    color: #333;
+  }
+  .root-table .hook {
+    font-style: italic;
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+  .root-table .examples {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .root-table .examples b {
+    color: var(--hero-dark);
+    font-weight: 600;
+  }
+
+  /* Subject tags */
+  .subj {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #fff;
+    margin-right: 2px;
+    vertical-align: middle;
+  }
+  .subj.bio { background: var(--bio); }
+  .subj.chem { background: var(--chem); }
+  .subj.phys { background: var(--phys); }
+  .subj.eng { background: var(--eng); }
+  .subj.span { background: var(--span); }
+  .subj.math { background: var(--math); }
+  .subj.all { background: var(--hero-dark); }
+
+  /* Section dividers */
+  .section-label {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #fff;
+    padding: 4px 14px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+  }
+  .section-label.prefix { background: #e74c3c; }
+  .section-label.suffix { background: #8e44ad; }
+  .section-label.root { background: #2e86c1; }
+
+  /* Trick/Warning blocks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Quick decode section */
+  .decode-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .decode-table th {
+    background: #2c3e50;
+    color: #fff;
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .decode-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .decode-table .word {
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--hero-dark);
+  }
+  .decode-table .breakdown {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .decode-table .decoded {
+    font-weight: 600;
+    color: #333;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 11px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+    .root-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .subj { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .section-label { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .decode-table th { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  @media (max-width: 600px) {
+    .hero .stats { gap: 16px; }
+    .root-table { font-size: 12px; }
+    .root-table .hook { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">All Subjects &mdash; Memory Drill Sheet</div>
+  <h1>Word Roots, Prefixes &amp; Suffixes</h1>
+  <p>Learn these 120 word parts and you can decode almost any science or English word they throw at you on the exam.</p>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">40</div>
+      <div class="stat-label">Prefixes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">35</div>
+      <div class="stat-label">Suffixes</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">45</div>
+      <div class="stat-label">Root Words</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-box">
+  <div class="label">How to Decode Any Word on the Exam</div>
+  <ol>
+    <li><strong>Find the root</strong> &mdash; the core meaning in the middle of the word</li>
+    <li><strong>Check the prefix</strong> &mdash; what comes before changes the direction (un-, anti-, de-)</li>
+    <li><strong>Check the suffix</strong> &mdash; what comes after tells you the category (-ase = enzyme, -tion = process)</li>
+    <li><strong>Combine them</strong> &mdash; <em>photo</em> (light) + <em>synthesis</em> (putting together) = putting together using light</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- PREFIXES                                                      -->
+<!-- ============================================================ -->
+<div class="card">
+  <span class="section-label prefix">Prefixes &mdash; The Beginning Changes the Direction</span>
+  <h2>High-Frequency Prefixes</h2>
+
+  <table class="root-table">
+    <tr>
+      <th style="width:14%;">Prefix</th>
+      <th style="width:16%;">Means</th>
+      <th style="width:22%;">Memory Hook</th>
+      <th>Examples from Your Subjects</th>
+    </tr>
+    <tr>
+      <td class="word-part">a- / an-</td>
+      <td class="meaning">without, not</td>
+      <td class="hook">"a" = absent</td>
+      <td class="examples"><b>a</b>naerobic (without air), <b>a</b>biotic (without life), <b>an</b>ion (without positive charge) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">anti-</td>
+      <td class="meaning">against</td>
+      <td class="hook">anti-hero fights against</td>
+      <td class="examples"><b>anti</b>biotic (against life/bacteria), <b>anti</b>body (against foreign body), <b>anti</b>septic (against infection) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">auto-</td>
+      <td class="meaning">self</td>
+      <td class="hook">auto-pilot = flies itself</td>
+      <td class="examples"><b>auto</b>troph (self-feeding), <b>auto</b>biography (self-written life story) <span class="subj bio">BIO</span> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">bi-</td>
+      <td class="meaning">two</td>
+      <td class="hook">bicycle = two wheels</td>
+      <td class="examples"><b>bi</b>nomial (two names), <b>bi</b>lateral (two sides), <b>bi</b>ography (two = about someone's life) <span class="subj bio">BIO</span> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">bio-</td>
+      <td class="meaning">life</td>
+      <td class="hook">biology = study of life</td>
+      <td class="examples"><b>bio</b>degradable, <b>bio</b>technology, <b>bio</b>mass, <b>bio</b>accumulation, anti<b>bio</b>tic <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">chloro-</td>
+      <td class="meaning">green</td>
+      <td class="hook">chlorine pool = greenish</td>
+      <td class="examples"><b>chloro</b>phyll (green leaf pigment), <b>chloro</b>plast (green organelle) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">co- / con-</td>
+      <td class="meaning">together, with</td>
+      <td class="hook">co-operate = work together</td>
+      <td class="examples"><b>con</b>densation (joining together), <b>co</b>mpound (put together), <b>co</b>dominance <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">contra- / counter-</td>
+      <td class="meaning">against, opposite</td>
+      <td class="hook">contradict = say opposite</td>
+      <td class="examples"><b>contra</b>st, <b>contra</b>dict, <b>counter</b>argument <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">de-</td>
+      <td class="meaning">remove, down, reverse</td>
+      <td class="hook">delete = remove</td>
+      <td class="examples"><b>de</b>compose (break down), <b>de</b>forest (remove forest), <b>de</b>nature (remove nature/shape), <b>de</b>nitrification <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">di-</td>
+      <td class="meaning">two</td>
+      <td class="hook">di = dos (Spanish 2!)</td>
+      <td class="examples"><b>di</b>oxide (two oxygens), <b>di</b>ploid (two sets), <b>di</b>saccharide (two sugars) <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">dis-</td>
+      <td class="meaning">apart, not</td>
+      <td class="hook">disconnect = pull apart</td>
+      <td class="examples"><b>dis</b>solve (break apart), <b>dis</b>tillation (separate apart), <b>dis</b>placement <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">ecto-</td>
+      <td class="meaning">outside</td>
+      <td class="hook">ecto = exit = outside</td>
+      <td class="examples"><b>ecto</b>thermic (outside heat &mdash; cold-blooded) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">electro-</td>
+      <td class="meaning">electric</td>
+      <td class="hook">electricity!</td>
+      <td class="examples"><b>electro</b>lysis (electric splitting), <b>electro</b>de, <b>electro</b>magnetic, <b>electro</b>plating <span class="subj chem">CHEM</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">endo-</td>
+      <td class="meaning">inside, within</td>
+      <td class="hook">"endo" sounds like "in-do"</td>
+      <td class="examples"><b>endo</b>thermic (heat goes IN), <b>endo</b>crine (secretes within body) <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">epi-</td>
+      <td class="meaning">upon, above, outer</td>
+      <td class="hook">epic = above ordinary</td>
+      <td class="examples"><b>epi</b>dermis (upon the skin = outer skin layer) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">eu-</td>
+      <td class="meaning">true, good</td>
+      <td class="hook">euphoria = truly good feeling</td>
+      <td class="examples"><b>eu</b>karyote (true nucleus), <b>eu</b>trophication (too much "good" nutrients) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">ex- / exo-</td>
+      <td class="meaning">out, outside</td>
+      <td class="hook">exit = go out</td>
+      <td class="examples"><b>exo</b>thermic (heat goes OUT), <b>ex</b>cretion (remove out), <b>ex</b>hale (breathe out) <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">hetero-</td>
+      <td class="meaning">different</td>
+      <td class="hook">hetero = "not the same"</td>
+      <td class="examples"><b>hetero</b>zygous (different alleles), <b>hetero</b>troph (feeds on different/others) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">homo-</td>
+      <td class="meaning">same</td>
+      <td class="hook">homogeneous = all same</td>
+      <td class="examples"><b>homo</b>zygous (same alleles), <b>homo</b>logous (same structure) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">hydro-</td>
+      <td class="meaning">water</td>
+      <td class="hook">hydrate = add water</td>
+      <td class="examples"><b>hydro</b>lysis (water splitting), <b>hydro</b>carbon, de<b>hydra</b>tion, <b>hydro</b>gen (water maker) <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">hyper-</td>
+      <td class="meaning">over, excess, above</td>
+      <td class="hook">hyperactive = too active</td>
+      <td class="examples"><b>hyper</b>tonic (higher concentration outside), <b>hyper</b>bole (over-exaggeration) <span class="subj bio">BIO</span> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">hypo-</td>
+      <td class="meaning">under, below</td>
+      <td class="hook">hypo = low (opposite of hyper)</td>
+      <td class="examples"><b>hypo</b>tonic (lower concentration outside), <b>hypo</b>thesis (under-tested idea) <span class="subj bio">BIO</span> <span class="subj all">ALL</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">in- / im-</td>
+      <td class="meaning">not, into</td>
+      <td class="hook">impossible = not possible</td>
+      <td class="examples"><b>im</b>permeable (not passing through), <b>in</b>complete combustion, <b>in</b>soluble, <b>im</b>plicit <span class="subj chem">CHEM</span> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">inter-</td>
+      <td class="meaning">between</td>
+      <td class="hook">internet = between networks</td>
+      <td class="examples"><b>inter</b>costal (between ribs), <b>inter</b>molecular (between molecules) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">intra-</td>
+      <td class="meaning">within</td>
+      <td class="hook">intranet = within one network</td>
+      <td class="examples"><b>intra</b>cellular (within the cell), <b>intra</b>molecular (within a molecule) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">iso-</td>
+      <td class="meaning">equal</td>
+      <td class="hook">isosceles = equal sides</td>
+      <td class="examples"><b>iso</b>tope (equal place in table), <b>iso</b>tonic (equal concentration), <b>iso</b>mer <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span> <span class="subj math">MATH</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">mal-</td>
+      <td class="meaning">bad, wrong</td>
+      <td class="hook">malware = bad software</td>
+      <td class="examples"><b>mal</b>nutrition (bad nutrition), <b>mal</b>ignant (bad growth) <span class="subj bio">BIO</span> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">micro-</td>
+      <td class="meaning">small</td>
+      <td class="hook">microphone = small sound &rarr; big</td>
+      <td class="examples"><b>micro</b>scope (see small), <b>micro</b>organism, <b>micro</b>metre <span class="subj bio">BIO</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">mono-</td>
+      <td class="meaning">one</td>
+      <td class="hook">monopoly = one player owns all</td>
+      <td class="examples"><b>mono</b>saccharide (one sugar), <b>mono</b>mer (one unit), carbon <b>mono</b>xide (one oxygen) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">multi-</td>
+      <td class="meaning">many</td>
+      <td class="hook">multiplayer = many players</td>
+      <td class="examples"><b>multi</b>cellular (many cells) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">photo-</td>
+      <td class="meaning">light</td>
+      <td class="hook">photograph = light writing</td>
+      <td class="examples"><b>photo</b>synthesis (light + building), <b>photo</b>tropism (light + turning), <b>photo</b>n <span class="subj bio">BIO</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">poly-</td>
+      <td class="meaning">many</td>
+      <td class="hook">polygon = many angles</td>
+      <td class="examples"><b>poly</b>mer (many units), <b>poly</b>saccharide (many sugars), <b>poly</b>gon <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span> <span class="subj math">MATH</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">pre-</td>
+      <td class="meaning">before</td>
+      <td class="hook">preview = see before</td>
+      <td class="examples"><b>pre</b>dict (say before), <b>pre</b>cipitate (form before settling) <span class="subj all">ALL</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">pro-</td>
+      <td class="meaning">before, forward</td>
+      <td class="hook">progress = move forward</td>
+      <td class="examples"><b>pro</b>karyote (before nucleus), <b>pro</b>duct (pushed forward), <b>pro</b>tease <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">re-</td>
+      <td class="meaning">again, back</td>
+      <td class="hook">replay = play again</td>
+      <td class="examples"><b>re</b>versible, <b>re</b>produce, <b>re</b>spiration (breathe again), <b>re</b>dox, <b>re</b>duction <span class="subj all">ALL</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">semi-</td>
+      <td class="meaning">half, partly</td>
+      <td class="hook">semi-final = halfway to final</td>
+      <td class="examples"><b>semi</b>-permeable (partly permeable), <b>semi</b>circle <span class="subj bio">BIO</span> <span class="subj math">MATH</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">sub-</td>
+      <td class="meaning">under, below</td>
+      <td class="hook">submarine = under the sea</td>
+      <td class="examples"><b>sub</b>limation (below liquid stage), <b>sub</b>strate (layer under enzyme), <b>sub</b>atomic <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">super-</td>
+      <td class="meaning">above, beyond</td>
+      <td class="hook">superhero = beyond normal</td>
+      <td class="examples"><b>super</b>saturated, <b>super</b>nova (beyond a nova) <span class="subj chem">CHEM</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">thermo-</td>
+      <td class="meaning">heat</td>
+      <td class="hook">thermos flask = keeps heat</td>
+      <td class="examples"><b>thermo</b>meter, exo<b>therm</b>ic, endo<b>therm</b>ic, <b>therm</b>al <span class="subj phys">PHYS</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">trans-</td>
+      <td class="meaning">across</td>
+      <td class="hook">transport = carry across</td>
+      <td class="examples"><b>trans</b>piration (breathe across leaf), <b>trans</b>location, <b>trans</b>former, <b>trans</b>genic <span class="subj bio">BIO</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">tri-</td>
+      <td class="meaning">three</td>
+      <td class="hook">triangle = three angles</td>
+      <td class="examples"><b>tri</b>angle, <b>tri</b>ple bond, <b>tri</b>glyceride <span class="subj math">MATH</span> <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">uni-</td>
+      <td class="meaning">one</td>
+      <td class="hook">unicorn = one horn</td>
+      <td class="examples"><b>uni</b>cellular (one cell), <b>uni</b>versal indicator <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">The Endo/Exo Pair &mdash; Know This Cold</div>
+    <strong>ENDO</strong> = energy goes <strong>IN</strong> (endo sounds like "in-do"). Feels cold. <strong>EXO</strong> = energy comes <strong>OUT</strong> (exo sounds like "exit"). Feels hot. Works for: endothermic/exothermic (chemistry), endocrine (biology, secretes internally), ectothermic (gets heat from outside).
+  </div>
+
+  <div class="trick">
+    <div class="label">The Hyper/Hypo Pair</div>
+    <strong>HYPER</strong> = too much / above (think: hyperactive kid bouncing off walls). <strong>HYPO</strong> = too little / below (think: hypothermia = too cold = below normal temp). If the solution is <em>hyper</em>tonic, there's MORE solute outside the cell.
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SUFFIXES                                                      -->
+<!-- ============================================================ -->
+<div class="card">
+  <span class="section-label suffix">Suffixes &mdash; The Ending Tells You the Category</span>
+  <h2>High-Frequency Suffixes</h2>
+
+  <table class="root-table">
+    <tr>
+      <th style="width:14%;">Suffix</th>
+      <th style="width:16%;">Means</th>
+      <th style="width:22%;">Memory Hook</th>
+      <th>Examples from Your Subjects</th>
+    </tr>
+    <tr>
+      <td class="word-part">-ase</td>
+      <td class="meaning">enzyme</td>
+      <td class="hook">-ase = always an enzyme!</td>
+      <td class="examples">amyl<b>ase</b>, prote<b>ase</b>, lip<b>ase</b>, helic<b>ase</b>, lact<b>ase</b> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ate</td>
+      <td class="meaning">salt / compound with oxygen</td>
+      <td class="hook">-ate has an O (oxygen)</td>
+      <td class="examples">sulf<b>ate</b>, nitr<b>ate</b>, carbon<b>ate</b>, phosph<b>ate</b>, chlor<b>ate</b> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-tion / -sion</td>
+      <td class="meaning">process, action</td>
+      <td class="hook">action &rarr; -tion</td>
+      <td class="examples">evapora<b>tion</b>, condensa<b>tion</b>, oxida<b>tion</b>, respira<b>tion</b>, transpira<b>tion</b>, ero<b>sion</b> <span class="subj all">ALL</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-cyte</td>
+      <td class="meaning">cell</td>
+      <td class="hook">cyto- = cell, -cyte = a cell</td>
+      <td class="examples">phago<b>cyte</b> (eating cell), lympho<b>cyte</b> (lymph cell), erythro<b>cyte</b> (red cell) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-gen</td>
+      <td class="meaning">producer, creator</td>
+      <td class="hook">generator = creates power</td>
+      <td class="examples">patho<b>gen</b> (disease maker), hydro<b>gen</b> (water maker), oxy<b>gen</b> (acid maker), aller<b>gen</b> <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ide</td>
+      <td class="meaning">binary compound (2 elements)</td>
+      <td class="hook">-ide = inside (just 2 elements)</td>
+      <td class="examples">chlor<b>ide</b>, ox<b>ide</b>, sulph<b>ide</b>, hydrox<b>ide</b> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ine</td>
+      <td class="meaning">chemical substance</td>
+      <td class="hook">medicine ends in -ine</td>
+      <td class="examples">chlor<b>ine</b>, adrenal<b>ine</b>, caffe<b>ine</b>, am<b>ine</b> <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ism</td>
+      <td class="meaning">condition, system, process</td>
+      <td class="hook">organism = living system</td>
+      <td class="examples">metabol<b>ism</b>, organ<b>ism</b>, trop<b>ism</b>, magnet<b>ism</b> <span class="subj bio">BIO</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-itis</td>
+      <td class="meaning">inflammation</td>
+      <td class="hook">-itis = it is swollen!</td>
+      <td class="examples">bronch<b>itis</b> (inflamed bronchi), arthr<b>itis</b> (inflamed joints), hepat<b>itis</b> (inflamed liver) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-logy</td>
+      <td class="meaning">study of</td>
+      <td class="hook">-logy = logic of a subject</td>
+      <td class="examples">bio<b>logy</b>, eco<b>logy</b>, techno<b>logy</b>, morpho<b>logy</b> <span class="subj all">ALL</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-lysis</td>
+      <td class="meaning">breaking apart, splitting</td>
+      <td class="hook">analysis = break apart to understand</td>
+      <td class="examples">hydro<b>lysis</b> (water splitting), electro<b>lysis</b> (electric splitting), dia<b>lysis</b>, ana<b>lysis</b> <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-mer</td>
+      <td class="meaning">part, unit</td>
+      <td class="hook">part-mer like partner</td>
+      <td class="examples">poly<b>mer</b> (many parts), mono<b>mer</b> (one part), iso<b>mer</b> (equal parts) <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-meter / -metry</td>
+      <td class="meaning">measure</td>
+      <td class="hook">metre stick measures</td>
+      <td class="examples">thermo<b>meter</b>, volt<b>meter</b>, am<b>meter</b>, poto<b>meter</b>, geo<b>metry</b> <span class="subj phys">PHYS</span> <span class="subj bio">BIO</span> <span class="subj math">MATH</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-oid</td>
+      <td class="meaning">resembling</td>
+      <td class="hook">android = resembles a man</td>
+      <td class="examples">aster<b>oid</b> (star-like), human<b>oid</b>, thyr<b>oid</b> (shield-shaped) <span class="subj phys">PHYS</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ose</td>
+      <td class="meaning">sugar</td>
+      <td class="hook">-ose = "oh so sweet"</td>
+      <td class="examples">gluc<b>ose</b>, fruct<b>ose</b>, sucr<b>ose</b>, lact<b>ose</b>, malt<b>ose</b>, cellul<b>ose</b> <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-osis</td>
+      <td class="meaning">condition, process</td>
+      <td class="hook">-osis = ongoing thing</td>
+      <td class="examples">osm<b>osis</b>, mit<b>osis</b>, mei<b>osis</b>, cyanosis, fibrosis <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-phyll</td>
+      <td class="meaning">leaf</td>
+      <td class="hook">a leaf = a "fill" of green</td>
+      <td class="examples">chloro<b>phyll</b> (green leaf pigment), meso<b>phyll</b> (middle of leaf) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-plasm</td>
+      <td class="meaning">formed material, substance</td>
+      <td class="hook">plasma = living goo</td>
+      <td class="examples">cyto<b>plasm</b> (cell material), proto<b>plasm</b> (first material) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-scope</td>
+      <td class="meaning">to look, to view</td>
+      <td class="hook">scope it out = look at it</td>
+      <td class="examples">micro<b>scope</b> (see small), stetho<b>scope</b> (see chest sounds), oscillo<b>scope</b> <span class="subj bio">BIO</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-synthesis</td>
+      <td class="meaning">putting together</td>
+      <td class="hook">synthesizer = puts sounds together</td>
+      <td class="examples">photo<b>synthesis</b> (light + building), bio<b>synthesis</b>, de novo <b>synthesis</b> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-troph</td>
+      <td class="meaning">feed, nourish</td>
+      <td class="hook">trophy = prize that feeds ego</td>
+      <td class="examples">auto<b>troph</b> (self-feeder), hetero<b>troph</b> (feeds on others), eu<b>troph</b>ication (over-fed) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-vore</td>
+      <td class="meaning">eater</td>
+      <td class="hook">devour = eat greedily</td>
+      <td class="examples">herbi<b>vore</b> (plant eater), carni<b>vore</b> (meat eater), omni<b>vore</b> (eats all) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-phage</td>
+      <td class="meaning">eat, devour</td>
+      <td class="hook">Pac-Man is a phage!</td>
+      <td class="examples"><b>phage</b>ocyte (eating cell), bacterio<b>phage</b> (bacteria eater) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-philic</td>
+      <td class="meaning">loving, attracted to</td>
+      <td class="hook">Philadelphia = city of love</td>
+      <td class="examples">hydro<b>philic</b> (water-loving) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-phobic</td>
+      <td class="meaning">fearing, repelled by</td>
+      <td class="hook">phobia = fear</td>
+      <td class="examples">hydro<b>phobic</b> (water-fearing = repels water) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">-graph / -graphy</td>
+      <td class="meaning">writing, recording</td>
+      <td class="hook">autograph = self-writing</td>
+      <td class="examples">chromato<b>graphy</b> (colour writing), bio<b>graphy</b>, auto<b>biography</b> <span class="subj chem">CHEM</span> <span class="subj eng">ENG</span></td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">The Chemistry Naming Rule</div>
+    <strong>-ide</strong> = just two elements (sodium chlor<b>ide</b> = Na + Cl). <strong>-ate</strong> = contains oxygen too (sodium sulf<b>ate</b> = Na + S + O). If you see -ate on the exam, there's oxygen hiding in there.
+  </div>
+
+  <div class="trick">
+    <div class="label">The Biology Enzyme Rule</div>
+    If a word ends in <strong>-ase</strong>, it's ALWAYS an enzyme. The first part tells you what it breaks down: <strong>lip</strong>ase breaks <strong>lip</strong>ids, <strong>prote</strong>ase breaks <strong>prote</strong>ins, <strong>amyl</strong>ase breaks <strong>amyl</strong>ose (starch). Free marks on the exam!
+  </div>
+
+  <div class="trick">
+    <div class="label">The Sugar Rule</div>
+    If a word ends in <strong>-ose</strong>, it's a sugar. <strong>Mono</strong>saccharide = one sugar (glucose). <strong>Di</strong>saccharide = two sugars joined (sucrose). <strong>Poly</strong>saccharide = many sugars chained (starch, glycogen).
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ROOT WORDS                                                    -->
+<!-- ============================================================ -->
+<div class="card">
+  <span class="section-label root">Root Words &mdash; The Core Meaning</span>
+  <h2>High-Frequency Roots</h2>
+
+  <table class="root-table">
+    <tr>
+      <th style="width:14%;">Root</th>
+      <th style="width:16%;">Means</th>
+      <th style="width:22%;">Memory Hook</th>
+      <th>Examples from Your Subjects</th>
+    </tr>
+    <tr>
+      <td class="word-part">aer</td>
+      <td class="meaning">air</td>
+      <td class="hook">aerial = in the air</td>
+      <td class="examples"><b>aer</b>obic (with air), an<b>aer</b>obic (without air) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">aqua</td>
+      <td class="meaning">water</td>
+      <td class="hook">aquarium = water tank</td>
+      <td class="examples"><b>aqua</b>tic, <b>aque</b>ous (dissolved in water) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">cardi</td>
+      <td class="meaning">heart</td>
+      <td class="hook">cardiac arrest = heart stops</td>
+      <td class="examples"><b>cardi</b>ac, <b>cardi</b>ovascular, electro<b>cardi</b>ogram <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">carn</td>
+      <td class="meaning">flesh, meat</td>
+      <td class="hook">chili con carne = with meat</td>
+      <td class="examples"><b>carn</b>ivore (meat eater) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">chrom</td>
+      <td class="meaning">colour</td>
+      <td class="hook">Google Chrome logo = colourful</td>
+      <td class="examples"><b>chrom</b>osome (coloured body), <b>chrom</b>atography (colour writing) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">cyt / cyto</td>
+      <td class="meaning">cell</td>
+      <td class="hook">"city" of cells</td>
+      <td class="examples"><b>cyto</b>plasm (cell material), phago<b>cyte</b> (eating cell), lympho<b>cyte</b> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">derm</td>
+      <td class="meaning">skin</td>
+      <td class="hook">dermatologist = skin doctor</td>
+      <td class="examples">epi<b>derm</b>is (outer skin), <b>derm</b>is <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">gastr</td>
+      <td class="meaning">stomach</td>
+      <td class="hook">gastric flu = stomach flu</td>
+      <td class="examples"><b>gastr</b>ic juice, <b>gastro</b>intestinal <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">gen / gene</td>
+      <td class="meaning">birth, produce, origin</td>
+      <td class="hook">generation = birth of new</td>
+      <td class="examples"><b>gene</b> (origin of traits), <b>gen</b>etics, <b>gen</b>otype, hydro<b>gen</b> (water producer) <span class="subj bio">BIO</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">glyc</td>
+      <td class="meaning">sugar, sweet</td>
+      <td class="hook">glycerine = sweet liquid</td>
+      <td class="examples"><b>glyc</b>ogen (animal starch), <b>glyc</b>olysis (sugar splitting), tri<b>glyc</b>eride <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">haem / hemo</td>
+      <td class="meaning">blood</td>
+      <td class="hook">haemorrhage = blood loss</td>
+      <td class="examples"><b>haem</b>oglobin (blood protein), <b>haem</b>ophilia (blood won't clot) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">herb</td>
+      <td class="meaning">plant, grass</td>
+      <td class="hook">herb garden = plants</td>
+      <td class="examples"><b>herb</b>ivore (plant eater), <b>herb</b>icide (plant killer) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">kin / kine</td>
+      <td class="meaning">movement</td>
+      <td class="hook">kinetic = moving</td>
+      <td class="examples"><b>kin</b>etic energy (movement energy), <b>kin</b>ase <span class="subj phys">PHYS</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">morph</td>
+      <td class="meaning">shape, form</td>
+      <td class="hook">Power Rangers morph = change shape</td>
+      <td class="examples">meta<b>morph</b>osis (shape change), <b>morph</b>ology, poly<b>morph</b>ism <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">neur</td>
+      <td class="meaning">nerve</td>
+      <td class="hook">neural = nerve-related</td>
+      <td class="examples"><b>neur</b>on (nerve cell), <b>neur</b>otransmitter, sensory <b>neur</b>one <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">nuc / nucle</td>
+      <td class="meaning">centre, kernel</td>
+      <td class="hook">nucleus = centre of atom/cell</td>
+      <td class="examples"><b>nucle</b>us, <b>nucle</b>on (proton/neutron), <b>nucle</b>ar <span class="subj bio">BIO</span> <span class="subj phys">PHYS</span> <span class="subj chem">CHEM</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">oxy / oxi</td>
+      <td class="meaning">oxygen, sharp</td>
+      <td class="hook">oxygen!</td>
+      <td class="examples"><b>oxi</b>dation (gaining oxygen / losing electrons), <b>oxy</b>gen, de<b>oxy</b>genated <span class="subj chem">CHEM</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">path</td>
+      <td class="meaning">disease, suffering, feeling</td>
+      <td class="hook">sympathy = feeling with someone</td>
+      <td class="examples"><b>path</b>ogen (disease maker), <b>path</b>ology, em<b>path</b>y, sym<b>path</b>y <span class="subj bio">BIO</span> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">phot</td>
+      <td class="meaning">light</td>
+      <td class="hook">photo = captured light</td>
+      <td class="examples"><b>phot</b>on (light particle), <b>phot</b>osynthesis, <b>phot</b>otropism <span class="subj phys">PHYS</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">pulmo</td>
+      <td class="meaning">lung</td>
+      <td class="hook">pulmonary = lung-related</td>
+      <td class="examples"><b>pulmo</b>nary artery/vein (lung blood vessels) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">ren / renal</td>
+      <td class="meaning">kidney</td>
+      <td class="hook">renal = kidney ward</td>
+      <td class="examples"><b>ren</b>al artery/vein, <b>ren</b>al capsule <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">sacchar</td>
+      <td class="meaning">sugar</td>
+      <td class="hook">saccharin = fake sugar</td>
+      <td class="examples">mono<b>sacchar</b>ide, di<b>sacchar</b>ide, poly<b>sacchar</b>ide <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">spir</td>
+      <td class="meaning">breathe</td>
+      <td class="hook">inspire = breathe in (idea)</td>
+      <td class="examples">re<b>spir</b>ation (breathing process), in<b>spir</b>ation (breathing in), tran<b>spir</b>ation <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">stom / stomat</td>
+      <td class="meaning">mouth, opening</td>
+      <td class="hook">stomach starts at the mouth</td>
+      <td class="examples"><b>stom</b>ach, <b>stomat</b>a (leaf openings/mouths) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">terr</td>
+      <td class="meaning">earth, land</td>
+      <td class="hook">terrain = type of land</td>
+      <td class="examples"><b>terr</b>estrial (land-based), <b>terr</b>itory <span class="subj bio">BIO</span> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">vas / vascul</td>
+      <td class="meaning">vessel, tube</td>
+      <td class="hook">vase = a vessel for flowers</td>
+      <td class="examples">cardio<b>vascul</b>ar (heart vessels), <b>vascul</b>ar bundle (plant tubes) <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">vol / volt</td>
+      <td class="meaning">turn, energy</td>
+      <td class="hook">revolve = turn around</td>
+      <td class="examples"><b>volt</b> (unit of energy push), <b>volt</b>meter, re<b>vol</b>ution, e<b>vol</b>ution <span class="subj phys">PHYS</span> <span class="subj bio">BIO</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- ENGLISH LITERARY / ANALYTICAL ROOTS                           -->
+<!-- ============================================================ -->
+<div class="card">
+  <span class="section-label root" style="background: var(--eng);">English &amp; General Roots</span>
+  <h2>Roots That Help Decode Reading Comprehension Words</h2>
+
+  <table class="root-table">
+    <tr>
+      <th style="width:14%;">Root</th>
+      <th style="width:16%;">Means</th>
+      <th style="width:22%;">Memory Hook</th>
+      <th>Words You'll See on the Exam</th>
+    </tr>
+    <tr>
+      <td class="word-part">bene-</td>
+      <td class="meaning">good, well</td>
+      <td class="hook">benefit = good thing</td>
+      <td class="examples"><b>bene</b>volent (well-wishing), <b>bene</b>ficial, <b>bene</b>factor <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">dict</td>
+      <td class="meaning">say, speak</td>
+      <td class="hook">dictionary = book of sayings</td>
+      <td class="examples">contra<b>dict</b> (say against), pre<b>dict</b> (say before), <b>dict</b>ion (way of saying) <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">duc / duct</td>
+      <td class="meaning">lead</td>
+      <td class="hook">conductor leads an orchestra</td>
+      <td class="examples">intro<b>duc</b>tion (lead in), de<b>duct</b> (lead away), in<b>duc</b>e <span class="subj eng">ENG</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">fac / fect</td>
+      <td class="meaning">make, do</td>
+      <td class="hook">factory = place that makes</td>
+      <td class="examples">ef<b>fect</b> (thing made), <b>fac</b>tor (thing that makes), manu<b>fac</b>ture <span class="subj eng">ENG</span> <span class="subj all">ALL</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">loc</td>
+      <td class="meaning">place</td>
+      <td class="hook">location = a place</td>
+      <td class="examples"><b>loc</b>al, <b>loc</b>ation, trans<b>loc</b>ation (across places), dis<b>loc</b>ate <span class="subj eng">ENG</span> <span class="subj bio">BIO</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">man / manu</td>
+      <td class="meaning">hand</td>
+      <td class="hook">manual = by hand</td>
+      <td class="examples"><b>manu</b>facture (make by hand), <b>manu</b>script (written by hand), <b>man</b>ipulate <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">narr</td>
+      <td class="meaning">tell</td>
+      <td class="hook">narrator tells the story</td>
+      <td class="examples"><b>narr</b>ative (a telling), <b>narr</b>ator, <b>narr</b>ation <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">scrib / script</td>
+      <td class="meaning">write</td>
+      <td class="hook">scribble = write messily</td>
+      <td class="examples">de<b>scrib</b>e (write down), <b>script</b>, manu<b>script</b> (handwritten), sub<b>script</b> <span class="subj eng">ENG</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">spec / spect</td>
+      <td class="meaning">look, see</td>
+      <td class="hook">spectacles = glasses to see</td>
+      <td class="examples">per<b>spect</b>ive (way of seeing), in<b>spect</b> (look into), <b>spect</b>rum <span class="subj eng">ENG</span> <span class="subj phys">PHYS</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">ver / veri</td>
+      <td class="meaning">true</td>
+      <td class="hook">very = truly</td>
+      <td class="examples"><b>veri</b>fy (prove true), <b>ver</b>dict (true saying) <span class="subj eng">ENG</span> <span class="subj all">ALL</span></td>
+    </tr>
+    <tr>
+      <td class="word-part">voc / vok</td>
+      <td class="meaning">voice, call</td>
+      <td class="hook">vocal = using voice</td>
+      <td class="examples">e<b>vok</b>e (call out emotion), pro<b>voc</b>ative (calls out reaction), ad<b>voc</b>ate <span class="subj eng">ENG</span></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- SPANISH ROOTS                                                 -->
+<!-- ============================================================ -->
+<div class="card">
+  <span class="section-label root" style="background: var(--span);">Spanish Cognate Roots</span>
+  <h2>English &harr; Spanish Patterns</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Many English and Spanish words share Latin roots. Spot these patterns to decode unfamiliar Spanish vocab.</p>
+
+  <table class="root-table">
+    <tr>
+      <th style="width:25%;">English Ending</th>
+      <th style="width:25%;">Spanish Ending</th>
+      <th>Examples</th>
+    </tr>
+    <tr>
+      <td class="word-part">-tion</td>
+      <td class="meaning">-ci&oacute;n</td>
+      <td class="examples">educa<b>tion</b> &rarr; educa<b>ci&oacute;n</b>, informa<b>tion</b> &rarr; informa<b>ci&oacute;n</b>, transporta<b>tion</b> &rarr; transporta<b>ci&oacute;n</b></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ty</td>
+      <td class="meaning">-dad / -tad</td>
+      <td class="examples">universi<b>ty</b> &rarr; universi<b>dad</b>, liber<b>ty</b> &rarr; liber<b>tad</b>, ci<b>ty</b> &rarr; ciu<b>dad</b></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ous</td>
+      <td class="meaning">-oso</td>
+      <td class="examples">fam<b>ous</b> &rarr; fam<b>oso</b>, nerv<b>ous</b> &rarr; nervi<b>oso</b>, delici<b>ous</b> &rarr; delici<b>oso</b></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ment</td>
+      <td class="meaning">-mento / -miento</td>
+      <td class="examples">apart<b>ment</b> &rarr; aparta<b>mento</b>, mo<b>ment</b> &rarr; mo<b>mento</b></td>
+    </tr>
+    <tr>
+      <td class="word-part">-al</td>
+      <td class="meaning">-al</td>
+      <td class="examples">natur<b>al</b> &rarr; natur<b>al</b>, norm<b>al</b> &rarr; norm<b>al</b>, hospit<b>al</b> &rarr; hospit<b>al</b></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ble</td>
+      <td class="meaning">-ble</td>
+      <td class="examples">possi<b>ble</b> &rarr; posi<b>ble</b>, terri<b>ble</b> &rarr; terri<b>ble</b>, incredi<b>ble</b> &rarr; incre&iacute;<b>ble</b></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ist</td>
+      <td class="meaning">-ista</td>
+      <td class="examples">art<b>ist</b> &rarr; art<b>ista</b>, tour<b>ist</b> &rarr; tur<b>ista</b>, dent<b>ist</b> &rarr; dent<b>ista</b></td>
+    </tr>
+    <tr>
+      <td class="word-part">-ary</td>
+      <td class="meaning">-ario</td>
+      <td class="examples">diction<b>ary</b> &rarr; diccion<b>ario</b>, vocabul<b>ary</b> &rarr; vocabul<b>ario</b></td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">False Friends &mdash; Words That Look the Same but Aren't!</div>
+    <strong>embarazada</strong> &ne; embarrassed (it means pregnant!). <strong>actual</strong> &ne; actual (it means current/present). <strong>&eacute;xito</strong> &ne; exit (it means success). <strong>sensible</strong> &ne; sensible (it means sensitive). Always check context!
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DECODE PRACTICE                                               -->
+<!-- ============================================================ -->
+<div class="card">
+  <h2>Practice: Decode These Words</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Use the tables above to break down each word. Answers below.</p>
+
+  <table class="decode-table">
+    <tr>
+      <th style="width:22%;">Word</th>
+      <th style="width:38%;">Break It Down</th>
+      <th style="width:40%;">So It Means...</th>
+    </tr>
+    <tr>
+      <td class="word"><b>photo</b>synthesis</td>
+      <td class="breakdown">photo (light) + synthesis (putting together)</td>
+      <td class="decoded">Putting together [food] using light</td>
+    </tr>
+    <tr>
+      <td class="word"><b>electro</b>lysis</td>
+      <td class="breakdown">electro (electric) + lysis (splitting)</td>
+      <td class="decoded">Splitting apart using electricity</td>
+    </tr>
+    <tr>
+      <td class="word"><b>hydro</b>phobic</td>
+      <td class="breakdown">hydro (water) + phobic (fearing)</td>
+      <td class="decoded">Water-fearing / repels water</td>
+    </tr>
+    <tr>
+      <td class="word"><b>endo</b>thermic</td>
+      <td class="breakdown">endo (inside) + thermic (heat)</td>
+      <td class="decoded">Heat goes inside / absorbs heat</td>
+    </tr>
+    <tr>
+      <td class="word"><b>mono</b>saccharide</td>
+      <td class="breakdown">mono (one) + saccharide (sugar)</td>
+      <td class="decoded">One sugar unit (e.g. glucose)</td>
+    </tr>
+    <tr>
+      <td class="word"><b>bio</b>degradable</td>
+      <td class="breakdown">bio (life) + de (remove) + grad (step) + able</td>
+      <td class="decoded">Able to be broken down by living things</td>
+    </tr>
+    <tr>
+      <td class="word"><b>cardio</b>vascular</td>
+      <td class="breakdown">cardio (heart) + vascular (vessels)</td>
+      <td class="decoded">Heart and blood vessel system</td>
+    </tr>
+    <tr>
+      <td class="word"><b>auto</b>biography</td>
+      <td class="breakdown">auto (self) + bio (life) + graphy (writing)</td>
+      <td class="decoded">Writing about your own life</td>
+    </tr>
+    <tr>
+      <td class="word"><b>an</b>aerobic</td>
+      <td class="breakdown">an (without) + aer (air) + obic (relating to)</td>
+      <td class="decoded">Without air / not needing oxygen</td>
+    </tr>
+    <tr>
+      <td class="word"><b>de</b>nitrification</td>
+      <td class="breakdown">de (remove) + nitr (nitrogen) + fication (process)</td>
+      <td class="decoded">Process of removing nitrogen [from soil]</td>
+    </tr>
+    <tr>
+      <td class="word"><b>hetero</b>zygous</td>
+      <td class="breakdown">hetero (different) + zyg (yoke/pair) + ous</td>
+      <td class="decoded">Having different alleles paired together</td>
+    </tr>
+    <tr>
+      <td class="word"><b>eu</b>trophication</td>
+      <td class="breakdown">eu (good/excess) + troph (feed) + ication (process)</td>
+      <td class="decoded">Process of over-feeding [a waterway with nutrients]</td>
+    </tr>
+  </table>
+</div>
+
+<!-- DRILL TIPS -->
+<div class="card">
+  <h2>How to Drill These</h2>
+  <div class="trick">
+    <div class="label">Method 1 &mdash; Cover and Guess</div>
+    Cover the "Means" column with your hand. Read the prefix/suffix/root and say the meaning out loud. Check. Move on. Come back to the ones you missed.
+  </div>
+  <div class="trick">
+    <div class="label">Method 2 &mdash; Reverse Drill</div>
+    Cover the "Prefix" column. Read the meaning and try to say the word part. This is harder but builds the connection both ways.
+  </div>
+  <div class="trick">
+    <div class="label">Method 3 &mdash; Random Word Decode</div>
+    Open any science textbook page. Point at a random bold word. Break it into parts using these tables. If you can decode 3 in a row without looking, you've got it.
+  </div>
+  <div class="trick">
+    <div class="label">Method 4 &mdash; Teach It</div>
+    Explain one word root to someone else (your aunt, uncle, a friend). If you can teach it, you know it. This is the strongest way to memorise anything.
+  </div>
+</div>
+
+</body>
+</html>

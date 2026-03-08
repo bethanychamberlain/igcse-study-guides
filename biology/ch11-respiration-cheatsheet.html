@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Respiration &mdash; Biology Ch11</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch11 &mdash; Cheat Sheet</div>
+    <h1>Respiration</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Respiration</strong></td>
+      <td>Chemical reactions in all living cells that release energy from glucose, controlled by enzymes.</td>
+      <td class="confuse">Breathing (that's just moving air in/out of lungs &mdash; a physical process, not chemical)</td>
+    </tr>
+    <tr>
+      <td><strong>Aerobic respiration</strong></td>
+      <td>Respiration that uses oxygen. Happens in the mitochondria. Releases a lot of energy.</td>
+      <td class="confuse">Anaerobic (that's without oxygen, much less energy)</td>
+    </tr>
+    <tr>
+      <td><strong>Anaerobic respiration</strong></td>
+      <td>Respiration without oxygen. Happens in the cytoplasm. Releases much less energy (~1/20).</td>
+      <td class="confuse">Aerobic (that's with oxygen, much more energy)</td>
+    </tr>
+    <tr>
+      <td><strong>Mitochondria</strong></td>
+      <td>The organelles where aerobic respiration takes place. Cells that need lots of energy have many mitochondria.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>ATP</strong></td>
+      <td>Adenosine triphosphate &mdash; a small molecule that stores energy released by respiration for use in cell reactions.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Lactic acid</strong></td>
+      <td>The waste product of anaerobic respiration in humans/animals. Poisonous &mdash; causes muscle fatigue.</td>
+      <td class="confuse">Ethanol/alcohol (that's the waste from yeast anaerobic respiration)</td>
+    </tr>
+    <tr>
+      <td><strong>Fermentation</strong></td>
+      <td>Anaerobic respiration in yeast: glucose &rarr; ethanol + carbon dioxide + energy. Used in brewing and baking.</td>
+      <td class="confuse">Animal anaerobic respiration (that produces lactic acid, not alcohol)</td>
+    </tr>
+    <tr>
+      <td><strong>Oxygen debt</strong></td>
+      <td>The extra oxygen needed after exercise to break down the lactic acid that built up during anaerobic respiration.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Respirometer</strong></td>
+      <td>A device that measures oxygen consumption. Uses KOH to absorb CO&#8322; so only O&#8322; changes are measured.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Hydrogencarbonate indicator</strong></td>
+      <td>Changes colour when CO&#8322; dissolves in it: purple (low CO&#8322;) &rarr; red &rarr; yellow (high CO&#8322;).</td>
+      <td class="confuse">Limewater (also detects CO&#8322; but turns milky/cloudy instead of changing colour)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE -->
+<div class="card">
+  <h2>Aerobic vs Anaerobic &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Aerobic</th>
+      <th>Anaerobic (Humans)</th>
+      <th>Anaerobic (Yeast)</th>
+    </tr>
+    <tr>
+      <td>Oxygen needed?</td>
+      <td>Yes</td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Where?</td>
+      <td>Mitochondria</td>
+      <td>Cytoplasm</td>
+      <td>Cytoplasm</td>
+    </tr>
+    <tr>
+      <td>Products</td>
+      <td>CO&#8322; + water</td>
+      <td>Lactic acid</td>
+      <td>Ethanol + CO&#8322;</td>
+    </tr>
+    <tr>
+      <td>Energy released</td>
+      <td>A lot</td>
+      <td>A little (~1/20)</td>
+      <td>A little</td>
+    </tr>
+    <tr>
+      <td>Word equation</td>
+      <td>glucose + oxygen &rarr; CO&#8322; + water</td>
+      <td>glucose &rarr; lactic acid</td>
+      <td>glucose &rarr; ethanol + CO&#8322;</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Which Organism?</div>
+    Read the question carefully. If it says "in humans" or "in animals," the product is <strong>lactic acid</strong>. If it says "in yeast" or "fermentation," the products are <strong>ethanol + CO&#8322;</strong>. They are NOT the same.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE 2: REST vs EXERCISE vs RECOVERY -->
+<div class="card">
+  <h2>Rest vs Exercise vs Recovery</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Rest</th>
+      <th>Hard Exercise</th>
+      <th>Recovery</th>
+    </tr>
+    <tr>
+      <td>Respiration type</td>
+      <td>Aerobic only</td>
+      <td>Aerobic + anaerobic</td>
+      <td>Aerobic (repaying debt)</td>
+    </tr>
+    <tr>
+      <td>Lactic acid</td>
+      <td>None builds up</td>
+      <td>Accumulates in muscles</td>
+      <td>Broken down by extra O&#8322;</td>
+    </tr>
+    <tr>
+      <td>Heart rate</td>
+      <td>~70 bpm</td>
+      <td>~140 bpm</td>
+      <td>~140 &rarr; falling to normal</td>
+    </tr>
+    <tr>
+      <td>Breathing rate</td>
+      <td>~15 breaths/min</td>
+      <td>~50 breaths/min</td>
+      <td>~50 &rarr; falling to normal</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Respiration</span>
+    <span>A chemical process in all living cells that releases energy from glucose &mdash; it is NOT breathing.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Aerobic</span>
+    <span>Uses oxygen, happens in mitochondria, releases a lot of energy &mdash; the main type of respiration.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Anaerobic</span>
+    <span>No oxygen needed, happens in cytoplasm, releases only 1/20 of the energy &mdash; the backup system.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Lactic acid</span>
+    <span>Toxic waste product of anaerobic respiration in muscles &mdash; causes fatigue and the burning feeling during sprints.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Oxygen debt</span>
+    <span>The extra O&#8322; your body needs after exercise to break down the lactic acid that built up &mdash; why you keep panting.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Fermentation</span>
+    <span>Anaerobic respiration in yeast &mdash; produces ethanol and CO&#8322;, used in brewing beer and making bread rise.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Respirometer</span>
+    <span>Measures O&#8322; uptake by organisms &mdash; KOH absorbs CO&#8322; so only oxygen changes move the liquid.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Aerobic Equation</div>
+    <strong>G</strong>lucose + <strong>O</strong>xygen &rarr; <strong>C</strong>arbon dioxide + <strong>W</strong>ater. Think "<strong>GO CW</strong>" &mdash; like "Go, cow!" Aerobic respiration needs oxygen to GO.
+  </div>
+
+  <div class="trick">
+    <div class="label">Oxygen Debt = A Loan</div>
+    During exercise you "borrow" energy without paying oxygen. After exercise you "pay it back" by breathing hard. Bigger loan (harder exercise) = longer payback (more panting).
+  </div>
+
+  <div class="trick">
+    <div class="label">Human vs Yeast Products</div>
+    <strong>H</strong>umans make <strong>L</strong>actic acid &mdash; <strong>HL</strong>. <strong>Y</strong>east makes <strong>A</strong>lcohol &mdash; <strong>YA</strong>. "HL" and "YA" &mdash; short and easy to remember.
+  </div>
+
+  <div class="trick">
+    <div class="label">Why Root Hair Cells Have Lots of Mitochondria</div>
+    They need loads of energy for active transport of minerals. More mitochondria = more aerobic respiration = more ATP. If the exam mentions "many mitochondria," think energy and active transport.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"What is respiration?"</td>
+      <td>The release of energy from glucose in <strong>all living cells</strong>, controlled by enzymes. NOT breathing.</td>
+    </tr>
+    <tr>
+      <td>"Write the word equation for aerobic respiration"</td>
+      <td>glucose + oxygen &rarr; carbon dioxide + water (+ energy released)</td>
+    </tr>
+    <tr>
+      <td>"Where does aerobic respiration take place?"</td>
+      <td>In the <strong>mitochondria</strong></td>
+    </tr>
+    <tr>
+      <td>"What is the product of anaerobic respiration in humans?"</td>
+      <td><strong>Lactic acid</strong> (NOT alcohol &mdash; that's yeast)</td>
+    </tr>
+    <tr>
+      <td>"Why does breathing rate stay high after exercise?"</td>
+      <td>To supply extra oxygen to break down <strong>lactic acid</strong> and repay the <strong>oxygen debt</strong></td>
+    </tr>
+    <tr>
+      <td>"Why does anaerobic respiration release less energy?"</td>
+      <td>Glucose is only <strong>partially broken down</strong> (lactic acid still contains energy), unlike in aerobic where it is completely broken down</td>
+    </tr>
+    <tr>
+      <td>"Why do muscle cells contain many mitochondria?"</td>
+      <td>They need a lot of energy for <strong>contraction</strong>, supplied by aerobic respiration in the mitochondria</td>
+    </tr>
+    <tr>
+      <td>"What is the role of KOH in a respirometer?"</td>
+      <td>It <strong>absorbs CO&#8322;</strong>, so any change in gas volume is due to oxygen being used up</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

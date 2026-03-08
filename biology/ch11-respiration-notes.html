@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Respiration &mdash; Biology Ch11</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 11</div>
+  <h1>Respiration</h1>
+  <div class="subtitle">Aerobic vs anaerobic respiration, ATP, oxygen debt &mdash; how cells release the energy they need to stay alive</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 16 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: RESPIRATION PROVIDES ENERGY FOR LIFE ===== -->
+<div class="section-header">
+  <span class="num">Section 11.1</span>
+  Respiration Provides Energy for Life
+</div>
+<div class="card">
+  <div class="intro-text">
+    Every living cell needs energy. Respiration is the process that releases it &mdash; it happens in <em>all</em> living cells, all the time, not just when you breathe.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p><strong>Respiration</strong> is the release of energy from food substances (such as glucose) in <strong>all living cells</strong>. It is a set of chemical reactions that break down nutrient molecules, controlled by <strong>enzymes</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Respiration vs Breathing</div>
+      <p><strong>Respiration</strong> is a <em>chemical process</em> that happens inside cells. <strong>Breathing</strong> (ventilation) is a <em>physical process</em> &mdash; moving air in and out of the lungs. They are NOT the same thing. The exam will try to catch you on this.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Energy Conversions</div>
+      <p><strong>Photosynthesis</strong> converts light energy &rarr; chemical energy (stored in food).<br>
+         <strong>Respiration</strong> converts chemical energy (in food) &rarr; energy for work in cells.</p>
+      <p style="margin-top:8px;">Much of the energy eventually leaves organisms as <strong>heat</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Cells Use Energy For</div>
+      <p>Cells use energy from respiration for:<br>
+         &bull; <strong>Growth</strong> &mdash; building large molecules from smaller ones (e.g. protein synthesis from amino acids)<br>
+         &bull; <strong>Active transport</strong> &mdash; moving molecules against a concentration gradient (e.g. mineral uptake by roots)<br>
+         &bull; <strong>Cell division</strong> &mdash; replication and separation of chromosomes<br>
+         &bull; <strong>Muscle contraction</strong> &mdash; movement<br>
+         &bull; <strong>Nerve impulses</strong> &mdash; pumping ions in and out of nerve cells<br>
+         &bull; <strong>Maintaining body temperature</strong> &mdash; heat released from reactions</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; ATP</div>
+      <p>The energy released by respiration is stored in small &lsquo;packets&rsquo; in a molecule called <strong>adenosine triphosphate (ATP)</strong>. ATP acts as a short-term energy store that drives reactions inside the cell.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>An exam question might ask: &ldquo;Why do root hair cells contain many mitochondria?&rdquo; The answer links directly here &mdash; they need lots of energy (from respiration) for <strong>active transport</strong> of mineral ions.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define respiration without looking</li>
+    <li><input type="checkbox"> I know the difference between respiration and breathing</li>
+    <li><input type="checkbox"> I can list at least 4 uses of energy in living organisms</li>
+    <li><input type="checkbox"> I know what ATP is and why it matters</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: AEROBIC RESPIRATION ===== -->
+<div class="section-header">
+  <span class="num">Section 11.1 continued</span>
+  Aerobic Respiration
+</div>
+<div class="card">
+  <div class="intro-text">
+    The main type of respiration &mdash; the one that releases the most energy &mdash; requires oxygen.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Aerobic Respiration</div>
+      <p><strong>Aerobic respiration</strong> is the release of energy from glucose in the presence of <strong>oxygen</strong>. It takes place in the <strong>mitochondria</strong> of cells.</p>
+      <p style="margin-top:8px;"><strong>Word equation:</strong><br>
+         glucose + oxygen &rarr; energy + carbon dioxide + water</p>
+      <p style="margin-top:6px;"><strong>Chemical equation:</strong><br>
+         C&#8326;H&#8321;&#8322;O&#8326; + 6O&#8322; &rarr; energy + 6CO&#8322; + 6H&#8322;O</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Learn the Equation</div>
+      <p>Write the word equation from memory 5 times on a blank sheet. If you can do it without looking, you know it. The word equation is worth 2 marks on its own. The chemical equation is a bonus that shows top-level understanding.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the word equation for aerobic respiration from memory</li>
+    <li><input type="checkbox"> I know aerobic respiration happens in the mitochondria</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: CONTRACTION OF MUSCLES ===== -->
+<div class="section-header">
+  <span class="num">Section 11.2</span>
+  Contraction of Muscles Requires Energy
+</div>
+<div class="card">
+  <div class="intro-text">
+    Muscles need energy to contract. During hard exercise, aerobic respiration alone can&rsquo;t keep up &mdash; so cells switch to a backup system.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Muscles and Energy</div>
+      <p>Muscles are collections of <strong>muscle fibres</strong>. When many fibres shorten at the same time, the muscle <strong>contracts</strong> and pulls on bones to create movement.</p>
+      <p style="margin-top:6px;">Muscles need a constant supply of <strong>glucose</strong> and <strong>oxygen</strong> (delivered by the blood) for aerobic respiration. They also have extensive <strong>capillary beds</strong> to supply nutrients and carry away waste (CO&#8322; and heat).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Anaerobic Respiration</div>
+      <p><strong>Anaerobic respiration</strong> is the release of energy from glucose <strong>without using oxygen</strong>. It happens when muscles are working so hard that the heart and lungs cannot supply enough oxygen.</p>
+      <p style="margin-top:8px;"><strong>Word equation (in humans):</strong><br>
+         glucose &rarr; energy + lactic acid</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Two Types of Anaerobic Respiration</div>
+      <p>In <strong>humans/animals</strong>: glucose &rarr; lactic acid (+ energy)<br>
+         In <strong>yeast (fermentation)</strong>: glucose &rarr; alcohol + carbon dioxide (+ energy)</p>
+      <p style="margin-top:6px;">They are <strong>different products</strong>. The exam will ask which organism &mdash; read the question carefully. Yeast fermentation is used in brewing and baking.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Drawbacks of Anaerobic Respiration</div>
+      <p>&bull; It releases only about <strong>one-twentieth</strong> (1/20) of the energy per glucose molecule compared to aerobic respiration &mdash; much less efficient.<br>
+         &bull; <strong>Lactic acid</strong> is poisonous &mdash; if it builds up in muscles it inhibits contraction, causing <strong>fatigue</strong> (and eventually, death if not removed).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This is why you get a &ldquo;burning&rdquo; feeling in your muscles during a sprint &mdash; that&rsquo;s lactic acid building up. It&rsquo;s also why you keep panting <em>after</em> you stop running.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the word equation for anaerobic respiration in humans</li>
+    <li><input type="checkbox"> I know the word equation for anaerobic respiration in yeast</li>
+    <li><input type="checkbox"> I can state two drawbacks of anaerobic respiration</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: OXYGEN DEBT ===== -->
+<div class="section-header">
+  <span class="num">Section 11.2 continued</span>
+  Oxygen Debt and Recovery
+</div>
+<div class="card">
+  <div class="intro-text">
+    After hard exercise, your body has to &ldquo;pay back&rdquo; the oxygen it couldn&rsquo;t supply during the workout.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Oxygen Debt</div>
+      <p><strong>Oxygen debt</strong> is the extra oxygen that must be taken in after exercise to break down the <strong>lactic acid</strong> that built up during anaerobic respiration.</p>
+      <p style="margin-top:6px;">Lactic acid is carried in the blood to the <strong>heart</strong>, <strong>liver</strong>, and <strong>kidneys</strong>, where it is oxidised to <strong>pyruvate</strong> using the extra oxygen. This releases energy by aerobic respiration.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Rest, Exercise, Recovery</div>
+      <table class="compare-table">
+        <tr>
+          <th>Phase</th>
+          <th>What happens</th>
+          <th>Heart rate</th>
+          <th>Breathing</th>
+        </tr>
+        <tr>
+          <td><strong>Rest</strong></td>
+          <td>Aerobic respiration meets all energy needs; no lactic acid builds up</td>
+          <td>~70 bpm</td>
+          <td>~15 breaths/min</td>
+        </tr>
+        <tr>
+          <td><strong>Hard exercise</strong></td>
+          <td>Anaerobic respiration kicks in; lactic acid accumulates; oxygen debt builds</td>
+          <td>~140 bpm</td>
+          <td>~50 breaths/min</td>
+        </tr>
+        <tr>
+          <td><strong>Recovery</strong></td>
+          <td>Deep, fast breathing continues to supply extra O&#8322; to break down lactic acid and repay the oxygen debt</td>
+          <td>~140 falling to normal</td>
+          <td>~50 falling to normal</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Think of a Loan</div>
+      <p>Oxygen debt is like a loan. During exercise you &ldquo;borrow&rdquo; energy without paying oxygen. After exercise you &ldquo;pay it back&rdquo; by breathing heavily to supply extra oxygen. If an exam question asks &ldquo;Why does breathing rate stay high after exercise?&rdquo; &mdash; the answer is oxygen debt.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define oxygen debt</li>
+    <li><input type="checkbox"> I know what happens to lactic acid during recovery</li>
+    <li><input type="checkbox"> I can explain why breathing stays fast after exercise stops</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: MEASUREMENT OF RESPIRATION ===== -->
+<div class="section-header">
+  <span class="num">Section 11.3</span>
+  The Measurement of Respiration
+</div>
+<div class="card">
+  <div class="intro-text">
+    You can&rsquo;t see respiration happening, but you can measure its products &mdash; heat, CO&#8322; release, and oxygen consumption.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Measuring Anaerobic Respiration in Yeast</div>
+      <p>Yeast in a sugar solution produces <strong>carbon dioxide</strong> (and ethanol) during anaerobic respiration. You can measure the volume of CO&#8322; collected in a measuring cylinder over time.</p>
+      <p style="margin-top:6px;">A layer of liquid paraffin on top of the yeast suspension keeps oxygen out, ensuring only <strong>anaerobic</strong> respiration occurs.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Respirometer</div>
+      <p>A <strong>respirometer</strong> measures <strong>oxygen consumption</strong> by living organisms (e.g. germinating seeds, maggots).</p>
+      <p style="margin-top:6px;"><strong>How it works:</strong><br>
+         &bull; <strong>Potassium hydroxide (KOH)</strong> absorbs CO&#8322; produced during respiration<br>
+         &bull; Since CO&#8322; is removed, any change in gas volume must be due to <strong>oxygen being used up</strong><br>
+         &bull; The drop of coloured liquid in the capillary tube <strong>moves</strong> as volume decreases<br>
+         &bull; The distance moved per unit time = rate of oxygen consumption</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Detecting CO&#8322; Release</div>
+      <p><strong>Hydrogencarbonate indicator</strong> changes colour when CO&#8322; dissolves in it:<br>
+         &bull; Purple at high pH (alkaline) &rarr; Red at neutral &rarr; <strong>Yellow/orange at low pH</strong> (acidic, more CO&#8322;)<br>
+         <strong>Limewater</strong> turns <strong>cloudy/milky</strong> when CO&#8322; is bubbled through it.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The respirometer and CO&#8322; indicator experiments are common practical questions. Know the role of <strong>KOH</strong> (absorbs CO&#8322;) and why you need a <strong>control</strong> (dead organisms or glass beads to show that changes are due to living respiration, not temperature/pressure changes).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Vacuum Flask Experiment</div>
+      <p>In the textbook, living peas in a vacuum flask get warmer over time but dead peas don&rsquo;t. This proves respiration releases <strong>heat</strong>. If an exam gives you this data, say: &ldquo;The living peas are respiring, releasing heat energy. The dead peas are not respiring, so no heat is released.&rdquo; Always mention the <strong>control</strong> (flask B with dead peas).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know how to measure anaerobic respiration in yeast</li>
+    <li><input type="checkbox"> I can explain how a respirometer works and the role of KOH</li>
+    <li><input type="checkbox"> I know what hydrogencarbonate indicator and limewater detect</li>
+  </ul>
+</div>
+
+<!-- ===== BIG COMPARISON ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  Aerobic vs Anaerobic &mdash; The Big Comparison
+</div>
+<div class="card">
+  <div class="intro-text">
+    The exam <strong>will</strong> ask you to compare these two types of respiration. This table is the single most important thing in this chapter.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Aerobic</th>
+          <th>Anaerobic (humans)</th>
+          <th>Anaerobic (yeast)</th>
+        </tr>
+        <tr>
+          <td><strong>Oxygen needed?</strong></td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Where?</strong></td>
+          <td>Mitochondria</td>
+          <td>Cytoplasm</td>
+          <td>Cytoplasm</td>
+        </tr>
+        <tr>
+          <td><strong>Products</strong></td>
+          <td>CO&#8322; + water</td>
+          <td>Lactic acid</td>
+          <td>Alcohol + CO&#8322;</td>
+        </tr>
+        <tr>
+          <td><strong>Energy released</strong></td>
+          <td>A lot</td>
+          <td>A little (~1/20)</td>
+          <td>A little</td>
+        </tr>
+        <tr>
+          <td><strong>Word equation</strong></td>
+          <td>glucose + oxygen &rarr; energy + CO&#8322; + water</td>
+          <td>glucose &rarr; energy + lactic acid</td>
+          <td>glucose &rarr; energy + alcohol + CO&#8322;</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Real Test</div>
+      <p>Close your book. Draw this table from memory on a blank piece of paper. If you can fill in all cells correctly, you own this topic. This comparison is worth 4-6 marks across the exam.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the comparison table into my notes</li>
+    <li><input type="checkbox"> I can recreate it from memory</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 11 Notes Complete</h2>
+  <p>You've covered aerobic and anaerobic respiration, oxygen debt, and how to measure respiration. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Shape and Space 3 &mdash; Math Ch9</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Math Ch9 &mdash; Cheat Sheet</div>
+    <h1>Shape and Space 3</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Similar</strong></td>
+      <td>Same shape, different size. All angles equal, all sides in the same ratio (scale factor).</td>
+      <td class="confuse">Congruent (same shape AND same size)</td>
+    </tr>
+    <tr>
+      <td><strong>Congruent</strong></td>
+      <td>Exact same shape and size. Can be rotated, reflected, or translated but measurements are identical.</td>
+      <td class="confuse">Similar (similar can be different sizes)</td>
+    </tr>
+    <tr>
+      <td><strong>Scale factor</strong></td>
+      <td>The multiplier that converts one similar shape to another. Found by dividing corresponding sides.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Hypotenuse (H)</strong></td>
+      <td>The longest side of a right-angled triangle, opposite the right angle.</td>
+      <td class="confuse">Adjacent or Opposite (these depend on which angle you pick)</td>
+    </tr>
+    <tr>
+      <td><strong>Opposite (O)</strong></td>
+      <td>The side directly across from the angle you're working with.</td>
+      <td class="confuse">Adjacent (next to the angle, not across from it)</td>
+    </tr>
+    <tr>
+      <td><strong>Adjacent (A)</strong></td>
+      <td>The side next to the angle you're working with (that isn't the hypotenuse).</td>
+      <td class="confuse">Opposite (across from the angle)</td>
+    </tr>
+    <tr>
+      <td><strong>Angle of elevation</strong></td>
+      <td>The angle you look UP from the horizontal to see something above you.</td>
+      <td class="confuse">Angle of depression (looking DOWN)</td>
+    </tr>
+    <tr>
+      <td><strong>Angle of depression</strong></td>
+      <td>The angle you look DOWN from the horizontal to see something below you.</td>
+      <td class="confuse">Angle of elevation (looking UP)</td>
+    </tr>
+    <tr>
+      <td><strong>Bearing</strong></td>
+      <td>Direction measured clockwise from North, always written as 3 digits (e.g. 070&deg;, 215&deg;).</td>
+      <td class="confuse">An ordinary angle (bearings are always FROM North, always 3 digits)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- SIMILAR vs CONGRUENT -->
+<div class="card">
+  <h2>Similar vs Congruent &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Similar</th>
+      <th>Congruent</th>
+    </tr>
+    <tr>
+      <td>Shape</td>
+      <td>Same</td>
+      <td>Same</td>
+    </tr>
+    <tr>
+      <td>Size</td>
+      <td>Different (one is enlarged)</td>
+      <td>Identical</td>
+    </tr>
+    <tr>
+      <td>Angles</td>
+      <td>All equal</td>
+      <td>All equal</td>
+    </tr>
+    <tr>
+      <td>Sides</td>
+      <td>In the same ratio</td>
+      <td>All exactly equal</td>
+    </tr>
+    <tr>
+      <td>Scale factor</td>
+      <td>Any number</td>
+      <td>Exactly 1</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Rectangles</div>
+    Two rectangles with the same angles (all 90&deg;) are NOT necessarily similar. You must also check that the side ratios match. E.g. a 2&times;4 rectangle and a 3&times;5 rectangle both have 90&deg; angles but are NOT similar (2/3 &ne; 4/5).
+  </div>
+</div>
+
+<!-- TRIG FORMULAS -->
+<div class="card">
+  <h2>SOHCAHTOA &mdash; The Three Trig Ratios</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Ratio</th>
+      <th>Formula</th>
+      <th>Stands For</th>
+    </tr>
+    <tr>
+      <td>sin x</td>
+      <td>O / H</td>
+      <td><strong>S</strong>in = <strong>O</strong>pposite &divide; <strong>H</strong>ypotenuse</td>
+    </tr>
+    <tr>
+      <td>cos x</td>
+      <td>A / H</td>
+      <td><strong>C</strong>os = <strong>A</strong>djacent &divide; <strong>H</strong>ypotenuse</td>
+    </tr>
+    <tr>
+      <td>tan x</td>
+      <td>O / A</td>
+      <td><strong>T</strong>an = <strong>O</strong>pposite &divide; <strong>A</strong>djacent</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Which Ratio to Use</div>
+    Look at the two sides involved (what you have + what you want). O and H &rarr; sin. A and H &rarr; cos. O and A &rarr; tan.
+  </div>
+</div>
+
+<!-- CHOOSING THE RIGHT ACTION -->
+<div class="card">
+  <h2>Finding a Side vs Finding an Angle</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Finding a Side</th>
+      <th>Finding an Angle</th>
+    </tr>
+    <tr>
+      <td>You know</td>
+      <td>An angle + one side</td>
+      <td>Two sides</td>
+    </tr>
+    <tr>
+      <td>You use</td>
+      <td>sin, cos, or tan (normal)</td>
+      <td>sin<sup>&minus;1</sup>, cos<sup>&minus;1</sup>, or tan<sup>&minus;1</sup> (inverse)</td>
+    </tr>
+    <tr>
+      <td>Unknown on top?</td>
+      <td>Multiply</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Unknown on bottom?</td>
+      <td>Divide</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Sense-check</td>
+      <td>Answer &lt; hypotenuse</td>
+      <td>Answer between 0&deg; and 90&deg;</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Calculator Mode</div>
+    Make sure your calculator is in <strong>DEGREES</strong> mode, not radians. If you get tiny answers like 0.36 instead of 20.6&deg;, you're in the wrong mode.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Similar shapes</span>
+    <span>Same shape, different size &mdash; find the scale factor from a pair of corresponding sides, then use it for the rest.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Congruent shapes</span>
+    <span>Exact same shape and size, even if one is rotated, reflected, or slid across the page.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Labelling H, O, A</span>
+    <span>H is always opposite the right angle; O is opposite YOUR angle; A is the remaining side next to YOUR angle.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">SOHCAHTOA</span>
+    <span>sin = O/H, cos = A/H, tan = O/A &mdash; pick the one that uses the two sides you care about.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Inverse trig</span>
+    <span>When you know two sides and want the angle, use sin<sup>&minus;1</sup>, cos<sup>&minus;1</sup>, or tan<sup>&minus;1</sup> on your calculator.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Word problems</span>
+    <span>Draw the triangle first, label it, find the right angle, then SOHCAHTOA as normal.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Bearings</span>
+    <span>Always measured clockwise from North, always written as three digits (e.g. 070&deg;, not 70&deg;).</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">SOHCAHTOA &mdash; The Sentence</div>
+    <strong>S</strong>illy <strong>O</strong>ld <strong>H</strong>arry <strong>C</strong>aught <strong>A</strong> <strong>H</strong>erring <strong>T</strong>rawling <strong>O</strong>ff <strong>A</strong>fghanistan. Or just say "SOH-CAH-TOA" out loud until it sticks.
+  </div>
+
+  <div class="trick">
+    <div class="label">Multiply or Divide? &mdash; "Top = Times, Bottom = Bother"</div>
+    If the unknown is on <strong>top</strong> of the fraction, <strong>multiply</strong> (easy). If it's on the <strong>bottom</strong>, you have to <strong>divide</strong> (a bit more bother). E.g. x/10 = cos 32&deg; &rarr; x = 10 &times; cos 32&deg;. But 11/x = sin 36&deg; &rarr; x = 11 &divide; sin 36&deg;.
+  </div>
+
+  <div class="trick">
+    <div class="label">Similar Shapes &mdash; Match the Extremes</div>
+    The longest side of one shape matches the longest side of the other. The shortest matches the shortest. If they're drawn at weird angles, find the longest sides first.
+  </div>
+
+  <div class="trick">
+    <div class="label">Angle Sense-Check &mdash; "Both Add to 90"</div>
+    In a right-angled triangle, the two non-right angles must add up to 90&deg;. If you find one is 35&deg;, the other must be 55&deg;. Quick check for trig answers.
+  </div>
+
+  <div class="trick">
+    <div class="label">Drawing Word Problems</div>
+    Tower problems: draw a vertical line (tower), horizontal line (ground), and an angle at the ground = angle of elevation. The right angle is where the tower meets the ground.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"These triangles are similar. Find x."</td>
+      <td>Find scale factor from two known corresponding sides, then multiply or divide to find x.</td>
+    </tr>
+    <tr>
+      <td>"Which shapes are congruent?"</td>
+      <td>Find shapes that are the <strong>same size</strong>. They may be rotated, reflected, or translated.</td>
+    </tr>
+    <tr>
+      <td>"Find the length of side x" (right-angled triangle with an angle given)</td>
+      <td>Label H, O, A. Pick sin/cos/tan. If x is on top, multiply. If x is on bottom, divide.</td>
+    </tr>
+    <tr>
+      <td>"Find angle x" (two sides given in a right-angled triangle)</td>
+      <td>Label H, O, A. Calculate the fraction. Use <strong>inverse</strong> sin/cos/tan on the calculator.</td>
+    </tr>
+    <tr>
+      <td>"Angle of elevation to the top of a tower..."</td>
+      <td>Draw vertical tower, horizontal ground. Angle is at the ground. Use <strong>tan</strong> (usually O and A).</td>
+    </tr>
+    <tr>
+      <td>"Find the bearing of B from A"</td>
+      <td>Start at A, face North, measure <strong>clockwise</strong> to the direction of B. Write as 3 digits.</td>
+    </tr>
+    <tr>
+      <td>"Are these rectangles similar?"</td>
+      <td>Check side ratios. Same angles (all 90&deg;) is NOT enough. Side ratios must match too.</td>
+    </tr>
+    <tr>
+      <td>"The hypotenuse is 15 cm and angle A is 40&deg;. Find the opposite."</td>
+      <td>sin 40&deg; = O/15. So O = 15 &times; sin 40&deg; = <strong>9.6 cm</strong></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

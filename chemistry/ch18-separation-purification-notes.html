@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Separation and Purification &mdash; Chemistry Ch18</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 18</div>
+  <h1>Separation and Purification</h1>
+  <div class="subtitle">Filtration, crystallisation, evaporation, distillation, chromatography, R<sub>f</sub> values, and checking purity &mdash; how to get a pure product from a messy mixture</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 24 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: MAKING A SUBSTANCE IN THE LAB ===== -->
+<div class="section-header">
+  <span class="num">Section 18.1</span>
+  Making a Substance in the Lab
+</div>
+<div class="card">
+  <div class="intro-text">
+    Practical work in chemistry involves <strong>materials</strong>, <strong>apparatus</strong>, and <strong>methods</strong>. When you make a product in the lab, you need separation methods to remove impurities and obtain a pure substance.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Steps to Make Crystals of Copper(II) Sulfate</div>
+      <p><strong>1.</strong> Add copper(II) oxide (the reactant) to <strong>warm</strong> dilute sulfuric acid.<br>
+         <strong>2.</strong> <strong>Filter</strong> the excess copper(II) oxide from the solution (it is an impurity).<br>
+         <strong>3.</strong> <strong>Evaporate</strong> most of the water to make a hot saturated solution.<br>
+         <strong>4.</strong> Cool the solution &mdash; <strong>crystallisation</strong> takes place and crystals form.<br>
+         <strong>5.</strong> <strong>Filter</strong> the crystals from the remaining solution.<br>
+         <strong>6.</strong> Pat the crystals dry with filter paper.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p><strong>Impurity</strong> = any unwanted substance mixed with your product. A <strong>pure</strong> product contains only the particles shown in its formula.</p>
+      <p style="margin-top:6px;">Separation methods are essential because they remove unwanted chemicals and <strong>increase the purity</strong> of the product.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This copper(II) sulfate procedure is a classic exam question. They can ask you to describe each step, name the apparatus at each stage, or explain <em>why</em> a particular separation method is used. Steps 2&ndash;6 are all about purification &mdash; each step removes something unwanted.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Know Your Apparatus</div>
+      <p>Learn the names: beaker, conical flask, filter funnel, filter paper, evaporating dish, Bunsen burner, tripod, wire gauze, measuring cylinder, volumetric pipette, burette. The exam expects you to name these from diagrams. A <strong>volumetric pipette</strong> is more accurate than a measuring cylinder for small precise volumes.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list the six steps to make copper(II) sulfate crystals</li>
+    <li><input type="checkbox"> I can explain why each step is needed (what it removes)</li>
+    <li><input type="checkbox"> I can define "impurity" and "pure substance"</li>
+    <li><input type="checkbox"> I can name at least six pieces of lab apparatus from diagrams</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: SOLUTIONS AND SOLUBILITY ===== -->
+<div class="section-header">
+  <span class="num">Section 18.2</span>
+  Solutions and Solubility
+</div>
+<div class="card">
+  <div class="intro-text">
+    When you mix sugar with water, the sugar seems to disappear &mdash; its molecules spread out among the water molecules. Understanding solutions is the key to knowing which separation method to use.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Core Definitions (Memorise These)</div>
+      <p>&bull; <strong>Solvent</strong> = the substance that dissolves a solute (e.g. water)<br>
+         &bull; <strong>Solute</strong> = the substance that is dissolved (e.g. sugar)<br>
+         &bull; <strong>Solution</strong> = a mixture of one or more solutes dissolved in a solvent<br>
+         &bull; <strong>Aqueous solution</strong> = a solution where water is the solvent<br>
+         &bull; <strong>Saturated solution</strong> = a solution that can dissolve <strong>no more solute</strong> at that temperature<br>
+         &bull; <strong>Solubility</strong> = the mass of solute (in g) that dissolves in 100 g of water at a given temperature</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Solubility Rules</div>
+      <p>&bull; <strong>Solubility is different for every substance.</strong> Silver nitrate (241.3 g/100 g) is very soluble; calcium carbonate (0.0013 g/100 g) is effectively <strong>insoluble</strong>.<br>
+         &bull; <strong>Solubility usually increases with temperature.</strong> More solute dissolves in hot water than cold.<br>
+         &bull; <strong>All sodium compounds are soluble</strong> in water &mdash; useful pattern to remember.<br>
+         &bull; The solvent matters too: nail polish is insoluble in water but soluble in <strong>propanone</strong> (acetone). Sugar is soluble in <strong>ethanol</strong> but salt is not.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Dissolved vs Suspended</div>
+      <p>If you mix chalk powder with water, the chalk does <strong>not</strong> dissolve &mdash; you get a cloudy <strong>suspension</strong>, not a solution. The particles are big enough to see and will eventually sink. A true <strong>solution</strong> is clear (though it may be coloured, like copper sulfate solution = blue). If you can see particles floating, it's not a solution.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Crystallisation Depends on This</div>
+      <p>Crystallisation works because solubility <strong>decreases</strong> as temperature falls. If you make a hot saturated solution of copper(II) sulfate (105 g dissolves at 90&deg;C) and cool it to 25&deg;C (only 34 g dissolves), the extra 71 g <strong>must</strong> come out of solution as crystals. This is exactly why you heat and then cool in steps 3&ndash;4 of making crystals.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Solubility Graphs</div>
+      <p>The exam loves solubility graphs (solubility on the y-axis, temperature on the x-axis). Practice reading them: "How much dissolves at X&deg;C?" and "If I cool a saturated solution from 90&deg;C to 25&deg;C, how many grams of crystals form?" The answer is always: (solubility at high temp) minus (solubility at low temp).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define solvent, solute, solution, aqueous, saturated, and solubility</li>
+    <li><input type="checkbox"> I know that solubility usually increases with temperature</li>
+    <li><input type="checkbox"> I can explain why crystallisation works using solubility data</li>
+    <li><input type="checkbox"> I can read a solubility graph to calculate crystal yield</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: SEPARATING A SOLID FROM A LIQUID ===== -->
+<div class="section-header">
+  <span class="num">Section 18.3</span>
+  Separating a Solid from a Liquid
+</div>
+<div class="card">
+  <div class="intro-text">
+    There are three main methods: filtration, crystallisation, and evaporation. The method you choose depends on whether the solid is dissolved (in solution) or not, and whether its solubility changes much with temperature.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; When to Use Each Method</div>
+      <table class="compare-table">
+        <tr>
+          <th>Method</th>
+          <th>Use When</th>
+          <th>How It Works</th>
+          <th>Key Terms</th>
+        </tr>
+        <tr>
+          <td><strong>Filtration</strong></td>
+          <td>The solid is <strong>not dissolved</strong> (insoluble). E.g. chalk from water, excess reactant from a solution.</td>
+          <td>Pour the mixture through filter paper in a funnel. Solid particles are too big to pass through the pores.</td>
+          <td><strong>Residue</strong> = solid trapped on the paper. <strong>Filtrate</strong> = liquid that passes through.</td>
+        </tr>
+        <tr>
+          <td><strong>Crystallisation</strong></td>
+          <td>The solid is dissolved AND its solubility <strong>changes a lot</strong> with temperature. E.g. copper(II) sulfate, potassium nitrate.</td>
+          <td>Heat to evaporate water and concentrate the solution. Cool it &mdash; crystals form as solubility drops. Filter and dry.</td>
+          <td>Test readiness: drop onto cool glass slide &mdash; if crystals form quickly, it's ready.</td>
+        </tr>
+        <tr>
+          <td><strong>Evaporation</strong></td>
+          <td>The solid is dissolved BUT its solubility <strong>changes very little</strong> with temperature. E.g. sodium chloride (salt).</td>
+          <td>Heat the solution in an evaporating dish. The water evaporates, leaving the solid behind.</td>
+          <td>Crystallisation won't work for salt because cooling doesn't make it come out of solution.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Crystallisation vs Evaporation</div>
+      <p>These are <strong>not</strong> the same thing. <strong>Crystallisation</strong> = heat to concentrate, then <strong>cool</strong> so crystals form slowly (gives nice pure crystals). <strong>Evaporation</strong> = heat until <strong>all</strong> the water is gone (used when crystallisation won't work). The exam will ask "Why is crystallisation not used for NaCl?" &mdash; the answer is that salt's solubility barely changes with temperature, so cooling won't produce crystals.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Separating Two Solids</div>
+      <p>To separate a mixture of two solids, find a solvent that dissolves <strong>only one</strong> of them.<br>
+         <strong>Example:</strong> sugar + salt mixture &rarr; add <strong>ethanol</strong> (sugar dissolves, salt does not) &rarr; <strong>filter</strong> (salt = residue, sugar solution = filtrate) &rarr; rinse salt, dry in oven &rarr; <strong>evaporate</strong> ethanol from sugar solution (use a water bath &mdash; ethanol is flammable!).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Decision Tree</div>
+      <p>When the exam says "suggest a method to separate X from Y," ask yourself: (1) Is the solid dissolved? If NO &rarr; <strong>filtration</strong>. If YES &rarr; (2) Does its solubility change a lot with temperature? If YES &rarr; <strong>crystallisation</strong>. If NO &rarr; <strong>evaporation</strong>. Write this decision tree in your notes and practice applying it.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name three methods to separate a solid from a liquid</li>
+    <li><input type="checkbox"> I can explain when to use filtration vs crystallisation vs evaporation</li>
+    <li><input type="checkbox"> I know what residue and filtrate mean</li>
+    <li><input type="checkbox"> I can describe how to separate a mixture of two solids</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: SEPARATING BY DISTILLATION ===== -->
+<div class="section-header">
+  <span class="num">Section 18.4</span>
+  Separating by Distillation
+</div>
+<div class="card">
+  <div class="intro-text">
+    Distillation separates substances from a liquid mixture by boiling and then condensing. There are two types: simple distillation (solvent from solute) and fractional distillation (two or more liquids from each other).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Simple Distillation</div>
+      <p><strong>Purpose:</strong> Separate the <strong>solvent</strong> from a solution (e.g. obtain pure water from salt water).</p>
+      <p style="margin-top:6px;"><strong>How it works:</strong><br>
+         <strong>1.</strong> Heat the solution in a round-bottomed flask. Water vapour rises into the <strong>condenser</strong>.<br>
+         <strong>2.</strong> The condenser is a cold tube (cold water flows around it). The vapour <strong>condenses</strong> back to liquid.<br>
+         <strong>3.</strong> Pure <strong>distilled water</strong> drips into a collecting beaker.<br>
+         <strong>4.</strong> The salt (or other solute) stays behind as a <strong>residue</strong> in the flask.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Fractional Distillation</div>
+      <p><strong>Purpose:</strong> Separate <strong>two or more liquids</strong> with different boiling points (e.g. ethanol from water).</p>
+      <p style="margin-top:6px;"><strong>How it works:</strong><br>
+         <strong>1.</strong> Heat the mixture. Ethanol (b.p. 78&deg;C) boils first. A mixture of vapours rises up the <strong>fractionating column</strong> (packed with glass beads).<br>
+         <strong>2.</strong> The glass beads heat up. Water vapour condenses on them and drips back down. Ethanol vapour keeps rising.<br>
+         <strong>3.</strong> Pure ethanol vapour reaches the condenser, condenses, and is collected.<br>
+         <strong>4.</strong> When the thermometer rises above 78&deg;C, all the ethanol has been collected.</p>
+      <p style="margin-top:6px;"><strong>The fractionating column is the key difference.</strong> It provides a surface for repeated condensation and evaporation, giving better separation.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Simple vs Fractional</div>
+      <p><strong>Simple distillation</strong> = solvent from solute (e.g. water from salt water). <strong>Fractional distillation</strong> = liquid from liquid (e.g. ethanol from water). If the exam asks "How would you get pure water from seawater?" the answer is <strong>simple distillation</strong>. If it asks "How would you separate ethanol and water?" the answer is <strong>fractional distillation</strong>. Simple distillation won't separate two liquids well because their vapours mix.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Industry Examples</div>
+      <p>Fractional distillation is used in industry to: (1) <strong>refine petroleum</strong> into fractions (petrol, diesel, kerosene, etc.) in tall fractionating towers, (2) produce <strong>ethanol</strong> from fermented plant material, and (3) separate <strong>nitrogen, oxygen, and noble gases</strong> from liquid air (cooled to &minus;200&deg;C, then warmed slowly &mdash; each gas boils off at its own boiling point). These are common exam examples.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Label the Diagram</div>
+      <p>Draw both apparatus setups from memory. For simple distillation: round-bottomed flask, condenser (label "water in" at bottom, "water out" at top), collecting beaker. For fractional: same setup <strong>plus</strong> a fractionating column (with glass beads) and a thermometer. If you can draw and label both, you'll pick up easy marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe how simple distillation works, step by step</li>
+    <li><input type="checkbox"> I can describe how fractional distillation works, step by step</li>
+    <li><input type="checkbox"> I know when to use simple vs fractional distillation</li>
+    <li><input type="checkbox"> I can give three industrial uses of fractional distillation</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: PAPER CHROMATOGRAPHY ===== -->
+<div class="section-header">
+  <span class="num">Sections 18.5 &ndash; 18.6</span>
+  Paper Chromatography and R<sub>f</sub> Values
+</div>
+<div class="card">
+  <div class="intro-text">
+    Paper chromatography is used to: (1) separate substances from a mixture, (2) check whether a substance is pure, and (3) identify unknown substances. It works because different substances travel at different speeds through the paper.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How Chromatography Works</div>
+      <p><strong>1.</strong> Draw a pencil line near the bottom of chromatography paper (the <strong>origin</strong> / base line). Use <strong>pencil</strong>, not pen, because pen ink would dissolve and interfere.<br>
+         <strong>2.</strong> Place a spot of the substance on the line.<br>
+         <strong>3.</strong> Stand the paper in a beaker with a small amount of solvent (e.g. ethanol or water). The spot must be <strong>above</strong> the solvent level.<br>
+         <strong>4.</strong> The solvent rises up the paper by <strong>capillary action</strong>, dissolving the substances and carrying them upward.<br>
+         <strong>5.</strong> Different substances travel at different speeds because of their different <strong>solubilities</strong> in the solvent and attraction to the paper.<br>
+         <strong>6.</strong> Remove the paper before the solvent reaches the top. Mark the <strong>solvent front</strong> (how far the solvent travelled).</p>
+      <p style="margin-top:8px;">The result is called a <strong>chromatogram</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Three Uses of Chromatography</div>
+      <table class="compare-table">
+        <tr>
+          <th>Use</th>
+          <th>How It Tells You</th>
+        </tr>
+        <tr>
+          <td><strong>Separating a mixture</strong></td>
+          <td>Different coloured bands appear (e.g. black ink separates into blue, red, yellow). Cut the bands apart to collect each substance.</td>
+        </tr>
+        <tr>
+          <td><strong>Checking purity</strong></td>
+          <td>A pure substance gives <strong>one spot</strong>. If you see two or more spots, the substance contains impurities.</td>
+        </tr>
+        <tr>
+          <td><strong>Identifying substances</strong></td>
+          <td>Run the unknown alongside known substances on the same paper. If a spot in the unknown is at the <strong>same height</strong> as a known substance, they are the same.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; R<sub>f</sub> Values</div>
+      <p><strong>R<sub>f</sub></strong> (retention factor) = distance from origin to spot &divide; distance from origin to solvent front</p>
+      <p style="margin-top:6px;">R<sub>f</sub> values are always between 0 and 1. They are <strong>unique</strong> to each substance <em>for a given solvent under the same conditions</em>. You can look up R<sub>f</sub> values in tables to <strong>identify</strong> unknown substances.</p>
+      <p style="margin-top:6px;"><strong>For colourless substances</strong> (like amino acids): after running the chromatogram, spray with a <strong>locating agent</strong> (e.g. <strong>ninhydrin</strong>) and warm in an oven to make the spots visible. Then measure and calculate R<sub>f</sub>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>R<sub>f</sub> values only work if conditions are the same.</strong> If you change the solvent, the temperature, or the type of paper, R<sub>f</sub> values change. So when comparing an unknown to a table, you must use the <strong>same solvent and conditions</strong> listed in the table. Also: measure to the <strong>centre</strong> of each spot, not the edge.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam often gives you a chromatogram and asks: "How many substances are in the mixture?" (count the spots), "Is substance X pure?" (one spot = pure), or "Calculate the R<sub>f</sub> value" (measure the distances and divide). These are straightforward marks if you know the formula and can use a ruler.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practice R<sub>f</sub> Calculations</div>
+      <p>Draw a fake chromatogram: origin at 0 cm, solvent front at 10 cm, spot at 6 cm. R<sub>f</sub> = 6/10 = 0.60. Now do another: origin at 0 cm, solvent front at 8 cm, spot at 3.2 cm. R<sub>f</sub> = 3.2/8 = 0.40. Do five of these until the formula is automatic. The exam will give you the distances &mdash; all you have to do is divide.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe the chromatography procedure step by step</li>
+    <li><input type="checkbox"> I know why you use pencil (not pen) for the base line</li>
+    <li><input type="checkbox"> I can explain the three uses: separating, checking purity, identifying</li>
+    <li><input type="checkbox"> I can calculate R<sub>f</sub> values and use them to identify substances</li>
+    <li><input type="checkbox"> I know what a locating agent is and when it is needed</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: CHECKING PURITY ===== -->
+<div class="section-header">
+  <span class="num">Section 18.7</span>
+  Checking Purity
+</div>
+<div class="card">
+  <div class="intro-text">
+    A <strong>pure substance</strong> contains only one type of particle &mdash; nothing else. There are two ways to check if something is pure: melting/boiling point analysis and paper chromatography.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Using Melting and Boiling Points to Check Purity</div>
+      <p>&bull; A <strong>pure substance</strong> has a <strong>sharp, definite</strong> melting point and boiling point (happens at one exact temperature).<br>
+         &bull; When a substance contains an <strong>impurity</strong>:<br>
+         &nbsp;&nbsp;&ndash; Its melting point <strong>falls</strong> (lower than expected)<br>
+         &nbsp;&nbsp;&ndash; Its boiling point <strong>rises</strong> (higher than expected)<br>
+         &nbsp;&nbsp;&ndash; It melts and boils over a <strong>range</strong> of temperatures, not sharply<br>
+         &bull; The <strong>more impurity</strong> present, the bigger the change and the wider the range.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Melting/Boiling Points as ID</div>
+      <p>Every pure substance has a <strong>unique pair</strong> of melting and boiling points &mdash; like a fingerprint. If you measure both for an unknown substance and look them up in a data table, you can <strong>identify</strong> what it is.</p>
+      <p style="margin-top:6px;"><strong>Example:</strong> A substance melts at 0&deg;C and boils at 100&deg;C = water. If the same substance melts at &minus;0.5&deg;C and boils at 101&deg;C, it contains impurities.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Increase Purity</div>
+      <p>&bull; <strong>Rinse</strong> a solid product with distilled water to wash away soluble impurities.<br>
+         &bull; <strong>Repeat</strong> the separation technique (e.g. dissolve crystals in pure solvent, then recrystallise).<br>
+         &bull; In industry: ultra-fine filtration, repeated crystallisation, and advanced chromatography are used to purify products like vaccines and food additives.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; The Direction of Change</div>
+      <p>Impurities make the melting point go <strong>DOWN</strong> and the boiling point go <strong>UP</strong>. Students often mix these up. Think of it this way: impurities make the lattice <strong>easier to break apart</strong> (melts sooner = lower m.p.), but make it <strong>harder for particles to escape</strong> the liquid (boils later = higher b.p.).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam commonly gives you two samples: "Sample X melts in the range 332.5&ndash;333.5&deg;C. Sample Y melts in the range 331&ndash;333.5&deg;C. Pure potassium nitrate melts sharply at 334&deg;C. Which sample contains more impurity?" Y has a wider range and a lower start &mdash; so Y has more impurity. Quick marks if you understand the rule.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Two Methods, Same Goal</div>
+      <p>Make a mini flashcard: "Two ways to check purity: (1) Melting/boiling points &mdash; sharp and at the correct value = pure. (2) Paper chromatography &mdash; one spot = pure." If the exam asks for "a method to check purity," either answer works. But be ready to explain <em>how</em> each method tells you.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state two methods to check purity</li>
+    <li><input type="checkbox"> I know what happens to melting and boiling points when impurities are present</li>
+    <li><input type="checkbox"> I can explain how m.p./b.p. can be used to identify a substance</li>
+    <li><input type="checkbox"> I can explain how chromatography shows whether a substance is pure</li>
+    <li><input type="checkbox"> I can describe two ways to increase the purity of a product</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 18 Notes Complete</h2>
+  <p>You've covered solutions, filtration, crystallisation, evaporation, distillation, chromatography, and purity checks. Now test yourself with the Chapter 18 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

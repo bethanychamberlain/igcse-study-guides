@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Atoms and Elements &mdash; Chemistry Ch2</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--subject);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline {
+    background: white;
+    color: var(--subject-dark);
+    border: 2px solid var(--subject);
+  }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tier header */
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+
+  .tier-header .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+
+  .tier-header .info {
+    flex: 1;
+  }
+  .tier-header h2 {
+    font-size: 16px;
+    margin: 0;
+  }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+
+  .tier-header .marks {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+
+  .q-text {
+    flex: 1;
+    font-size: 14px;
+  }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Answer area */
+  .q-answer {
+    padding: 0 20px 16px;
+    display: none;
+  }
+  .q-answer.visible {
+    display: block;
+  }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Self-rating */
+  .self-rate {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .self-rate .rate-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .rate-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 2px solid #ddd;
+      background: white;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+  }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  /* Answer lines for print */
+  .answer-lines {
+    display: none;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines {
+      display: block;
+      padding: 4px 20px 16px;
+    }
+    .answer-lines .line {
+      border-bottom: 1px solid #d0d0d0;
+      height: 26px;
+    }
+    .tier-header { break-after: avoid; }
+  }
+
+  /* Quiz guide */
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .quiz-guide .guide-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .rating-scale {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .rating-scale .rs-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-scale .rs-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry Ch2 &mdash; Self-Test Quiz</div>
+  <h1>Atoms and Elements</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name it. Intermediate = explain it. Advanced = discuss and apply it.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> in the answers show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each on the exam. Get these right and you're building a solid base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">Define the term <strong>element</strong>.</div>
+    <span class="q-marks">1 mark</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      An element is a substance that contains only <strong>one kind of atom</strong> [1].
+      <div class="mark-hint">The key phrase is "one kind of atom." Don't say "one type of molecule" or "one type of particle" &mdash; it must be "atom."</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">Name the three subatomic particles found in an atom, and state the charge of each.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Proton</strong> &mdash; positive charge (+1) [1]<br>
+      <strong>Neutron</strong> &mdash; no charge (0)<br>
+      <strong>Electron</strong> &mdash; negative charge (&minus;1) [1]
+      <div class="mark-hint">One mark for naming all three, one mark for all charges correct. If you get one charge wrong, you lose the second mark.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">Define the term <strong>isotopes</strong>.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Isotopes are atoms of the <strong>same element</strong> [1] that have the same number of protons but <strong>different numbers of neutrons</strong> [1].
+      <div class="mark-hint">Both parts are needed for full marks. Saying "same element, different mass" is not enough &mdash; you must specifically say "different numbers of neutrons."</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">State the difference between a <strong>compound</strong> and a <strong>mixture</strong>.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      A <strong>compound</strong> is made of atoms of different elements <strong>chemically bonded</strong> together [1]. A <strong>mixture</strong> contains different elements or compounds that are <strong>not bonded</strong> together and can usually be separated easily by physical methods [1].
+      <div class="mark-hint">The key distinction is "bonded" vs "not bonded." An example helps: water is a compound (H and O bonded); salt water is a mixture (salt and water not bonded).</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain It?</h2>
+    <div class="marks">Worth 3-4 marks each. You need to explain WHY, not just name things.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">An atom has a proton number of 15 and a nucleon number of 31. State the number of protons, neutrons, and electrons in this atom. Identify the element using the Periodic Table.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Protons:</strong> 15 (same as proton number) [1]<br>
+      <strong>Electrons:</strong> 15 (equal to number of protons in a neutral atom)<br>
+      <strong>Neutrons:</strong> 31 &minus; 15 = <strong>16</strong> [1]<br>
+      The element is <strong>phosphorus</strong> (P) [1].
+      <div class="mark-hint">The method: protons = proton number, electrons = protons, neutrons = nucleon number &minus; proton number. Always show the subtraction working for the neutrons mark.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">An element has a proton number of 17. Give its electronic configuration and state which group and period it is in on the Periodic Table.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      17 electrons, so the electronic configuration is <strong>2, 8, 7</strong> [1].<br>
+      There are <strong>3 occupied shells</strong>, so the element is in <strong>Period 3</strong> [1].<br>
+      There are <strong>7 outer shell electrons</strong>, so it is in <strong>Group VII</strong> [1].<br>
+      (The element is chlorine, Cl.)
+      <div class="mark-hint">Fill shells in order: 2 in the first, 8 in the second, that's 10 used, leaving 7 for the third shell. Period = number of shells. Group = number of outer electrons.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text"><strong>Explain</strong> why atoms have no overall electrical charge.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Atoms contain <strong>equal numbers</strong> of protons and electrons [1]. Protons have a <strong>positive</strong> charge (+1) and electrons have a <strong>negative</strong> charge (&minus;1) [1]. The positive and negative charges <strong>cancel out</strong>, so the atom has no overall charge [1].
+      <div class="mark-hint">Three marks, three ideas: (1) equal numbers, (2) opposite charges, (3) they cancel. Don't just say "they balance" &mdash; explain why they balance.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Discuss It?</h2>
+    <div class="marks">Worth 5-6 marks each. These need full sentences, multiple points, and clear reasoning. This is where exam grades are won or lost.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">The elements lithium (proton number 3), sodium (proton number 11), and potassium (proton number 19) are all in Group I of the Periodic Table. (a) Write the electronic configuration of each. (b) State what is similar about their electronic configurations. (c) Explain why elements in the same group have similar chemical properties.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> Lithium: <strong>2, 1</strong>. Sodium: <strong>2, 8, 1</strong>. Potassium: <strong>2, 8, 8, 1</strong>. [1]<br><br>
+      <strong>(b)</strong> They all have <strong>1 electron in their outer shell</strong> [1].<br><br>
+      <strong>(c)</strong> The chemical properties of an element depend on the number of <strong>outer shell electrons</strong> [1]. Since elements in the same group have the <strong>same number of outer shell electrons</strong> [1], they react in a <strong>similar way</strong> [1].
+      <div class="mark-hint">The key idea: same group = same number of outer electrons = similar reactions. This is the single most important concept linking electron configuration to chemistry. It explains why the Periodic Table is arranged the way it is.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">The elements in Group VIII (the noble gases) are described as unreactive. <strong>Explain</strong>, in terms of electronic configuration, why Group VIII elements do not readily take part in chemical reactions. Include at least one example.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Group VIII elements have a <strong>full outer shell of electrons</strong> [1]. For example, neon has the electronic configuration 2, 8 &mdash; both shells are full [1]. A full outer shell is a very <strong>stable</strong> arrangement [1]. Atoms react in order to gain, lose, or share electrons to achieve a full outer shell [1]. Since Group VIII elements already have a full outer shell, they have <strong>no tendency to react</strong> [1].
+      <div class="mark-hint">Five marks: full outer shell, example with config, stable arrangement, atoms react to get full shells, noble gases already have them. This question tests whether you understand that reactivity is driven by electrons trying to reach a stable configuration.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">Gallium has two naturally occurring isotopes: gallium-69 and gallium-71. The relative atomic mass (A&#7523;) of gallium is 69.723. (a) Explain what the term <em>relative atomic mass</em> means. (b) Use the A&#7523; value to determine which isotope is more abundant. Explain your reasoning. (c) Calculate the approximate percentage abundance of each isotope.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> The relative atomic mass is the <strong>average mass</strong> of the isotopes of an element [1], compared to 1/12 the mass of a carbon-12 atom [1].<br><br>
+      <strong>(b)</strong> The A&#7523; of 69.723 is <strong>closer to 69 than to 71</strong> [1], so <strong>gallium-69</strong> must be the more abundant isotope, because the average is pulled towards the more common one [1].<br><br>
+      <strong>(c)</strong> Let the percentage of gallium-69 = x. Then gallium-71 = (100 &minus; x).<br>
+      69x + 71(100 &minus; x) = 69.723 &times; 100<br>
+      69x + 7100 &minus; 71x = 6972.3<br>
+      &minus;2x = &minus;127.7<br>
+      x = 63.85<br>
+      So gallium-69 is approximately <strong>64%</strong> [1] and gallium-71 is approximately <strong>36%</strong> [1].
+      <div class="mark-hint">Part (c) is Extended syllabus. Even if the algebra is tricky, parts (a) and (b) are worth 4 marks on their own. For part (b), the reasoning is simple: the A&#7523; is a weighted average, so it's always closer to the more abundant isotope. For (c), set up the equation carefully and solve step by step.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle answers
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  // Click question to toggle its answer
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  // Self-rating
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    // Update button styles
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

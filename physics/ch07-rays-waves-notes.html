@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Rays and Waves &mdash; Physics Ch7</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #2e86c1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Formula highlight */
+  .formula {
+    display: inline-block;
+    background: #fff;
+    border: 2px solid var(--subject);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--subject-dark);
+    margin: 8px 0;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* Worked example */
+  .worked {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 13px;
+    border: 1px solid #e0e0e0;
+  }
+  .worked .step {
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    font-size: 12px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .step-text code {
+    background: var(--subject-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Physics &mdash; Chapter 7</div>
+  <h1>Rays and Waves</h1>
+  <div class="subtitle">Reflection, refraction, total internal reflection, lenses, the EM spectrum, and digital signals</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 34 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 7.1: LIGHT RAYS AND WAVES ===== -->
+<div class="section-header">
+  <span class="num">Section 7.1</span>
+  Light Rays and Waves
+</div>
+<div class="card">
+  <div class="intro-text">
+    Light is a form of electromagnetic radiation. It travels as transverse waves, but we often draw straight lines called rays to show which direction it is going.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Properties of Light</div>
+      <p>&bull; Light travels in <strong>straight lines</strong><br>
+         &bull; Light travels as <strong>transverse</strong> waves<br>
+         &bull; Light can travel through a <strong>vacuum</strong> (it does not need a medium)<br>
+         &bull; Speed of light in a vacuum: <strong>300 000 km/s</strong> (3 &times; 10<sup>8</sup> m/s) &mdash; nothing can travel faster<br>
+         &bull; <strong>Luminous</strong> objects emit their own light (Sun, lamps, lasers). <strong>Non-luminous</strong> objects are visible because they <strong>reflect</strong> light</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Happens When Light Hits a Surface</div>
+      <p>&bull; <strong>Diffuse reflection</strong> &mdash; rough surfaces scatter light in all directions (e.g. paper)<br>
+         &bull; <strong>Regular reflection</strong> &mdash; smooth, shiny surfaces reflect light at equal angles (e.g. mirrors)<br>
+         &bull; <strong>Absorption</strong> &mdash; dark surfaces absorb most of the light (e.g. black paper)<br>
+         &bull; <strong>Transmission</strong> &mdash; transparent materials let light pass through (e.g. glass, water)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Wavelength and Colour</div>
+      <p>Different wavelengths of light are seen as different colours. The visible spectrum ranges from about <strong>0.0004 mm</strong> (violet) to <strong>0.0007 mm</strong> (red). White light is a <strong>mixture</strong> of all colours. Lasers emit <strong>monochromatic</strong> light (a single wavelength and colour).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know light travels in straight lines as transverse waves at 3 &times; 10<sup>8</sup> m/s</li>
+    <li><input type="checkbox"> I can explain the difference between luminous and non-luminous objects</li>
+    <li><input type="checkbox"> I know four things that can happen when light hits a surface</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7.2-7.3: REFLECTION ===== -->
+<div class="section-header">
+  <span class="num">Section 7.2&ndash;7.3</span>
+  Reflection in Plane Mirrors
+</div>
+<div class="card">
+  <div class="intro-text">
+    When light hits a mirror, it bounces off in a predictable way. Understanding the laws of reflection lets you predict where images will form.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Laws of Reflection</div>
+      <p><strong>Law 1:</strong> The angle of incidence is <strong>equal</strong> to the angle of reflection.<br>
+         <strong>Law 2:</strong> The incident ray, reflected ray, and the normal all lie in the <strong>same plane</strong>.</p>
+      <p style="margin-top:6px;">&bull; The <strong>normal</strong> is a line drawn at right angles (90&deg;) to the mirror surface at the point where the light hits<br>
+         &bull; The <strong>angle of incidence</strong> is measured between the incident ray and the normal<br>
+         &bull; The <strong>angle of reflection</strong> is measured between the reflected ray and the normal</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Image in a Plane Mirror</div>
+      <p>When a plane (flat) mirror forms an image:<br>
+         &bull; The image is the <strong>same size</strong> as the object<br>
+         &bull; The image is the <strong>same distance behind</strong> the mirror as the object is in front<br>
+         &bull; The image is <strong>laterally inverted</strong> (left and right are swapped)<br>
+         &bull; The image is <strong>virtual</strong> &mdash; it cannot be formed on a screen because no rays actually pass through the image position</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Angles Are Measured From the Normal</div>
+      <p>Students often measure angles from the mirror surface instead of from the <strong>normal</strong>. The angle of incidence and the angle of reflection are ALWAYS measured from the normal (the line at 90&deg; to the surface), never from the surface itself.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Real vs Virtual Images</div>
+      <p><strong>Real image:</strong> formed where rays actually converge (meet). Can be picked up on a screen. Example: cinema projector.<br>
+         <strong>Virtual image:</strong> formed where rays only <em>appear</em> to come from. Cannot be formed on a screen. Example: image in a plane mirror.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state the two laws of reflection</li>
+    <li><input type="checkbox"> I know angles are measured from the normal, not the surface</li>
+    <li><input type="checkbox"> I can describe the properties of an image in a plane mirror (same size, same distance, laterally inverted, virtual)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7.4: REFRACTION OF LIGHT ===== -->
+<div class="section-header">
+  <span class="num">Section 7.4</span>
+  Refraction of Light
+</div>
+<div class="card">
+  <div class="intro-text">
+    When light passes from one medium into another (e.g. from air into glass), it changes speed. If it enters at an angle, it also changes direction. This bending is called refraction.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How Refraction Works</div>
+      <p>&bull; Light <strong>slows down</strong> when it enters a denser medium (e.g. air to glass)<br>
+         &bull; Light <strong>speeds up</strong> when it enters a less dense medium (e.g. glass to air)<br>
+         &bull; When light slows down, it bends <strong>towards the normal</strong><br>
+         &bull; When light speeds up, it bends <strong>away from the normal</strong><br>
+         &bull; If light enters at 90&deg; (along the normal), it passes straight through without bending</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Refractive Index</div>
+      <div class="formula">refractive index = speed of light in vacuum / speed of light in medium</div>
+      <p>For glass: n = 300 000 / 200 000 = <strong>1.5</strong><br>
+         For water: n = <strong>1.33</strong><br>
+         The higher the refractive index, the more the light bends.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Dispersion</div>
+      <p>When white light passes through a <strong>prism</strong>, it splits into a <strong>spectrum</strong> of colours (red, orange, yellow, green, blue, violet). This is called <strong>dispersion</strong>. It happens because the prism refracts each colour by a slightly different amount. Violet is deviated most; red is deviated least.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Drawing Refraction Diagrams</div>
+      <p>Always draw the <strong>normal</strong> first (dashed line, at 90&deg; to the surface). Then draw the incident ray. Ask: is the light going into a denser medium? If yes, bend it towards the normal. If leaving, bend it away. Label the angle of incidence and the angle of refraction.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know light bends towards the normal when entering a denser medium</li>
+    <li><input type="checkbox"> I can define refractive index and calculate it</li>
+    <li><input type="checkbox"> I can explain dispersion and name the spectrum colours in order</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7.5: TOTAL INTERNAL REFLECTION ===== -->
+<div class="section-header">
+  <span class="num">Section 7.5</span>
+  Total Internal Reflection
+</div>
+<div class="card">
+  <div class="intro-text">
+    When light travels from a denser medium to a less dense one (e.g. glass to air), something remarkable can happen: at large enough angles, ALL the light is reflected back inside. The surface acts like a perfect mirror.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Critical Angle and TIR</div>
+      <p><strong>Critical angle:</strong> The angle of incidence at which the refracted ray travels along the surface (angle of refraction = 90&deg;).</p>
+      <p style="margin-top:6px;"><strong>Total internal reflection (TIR):</strong> When the angle of incidence is <strong>greater than</strong> the critical angle, there is no refracted ray &mdash; all the light is reflected back inside the material.</p>
+      <p style="margin-top:6px;">Two conditions for TIR: (1) light must be travelling from a <strong>denser</strong> medium to a <strong>less dense</strong> one, (2) the angle of incidence must be <strong>greater than</strong> the critical angle.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Critical Angle Formula</div>
+      <div class="formula">sin c = 1 / n</div>
+      <p><strong>c</strong> = critical angle<br>
+         <strong>n</strong> = refractive index of the material<br>
+         Example: glass has n = 1.5, so sin c = 1/1.5 = 0.67, c = 42&deg;</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Uses of TIR</div>
+      <p>&bull; <strong>Optical fibres:</strong> thin, flexible glass rods that carry light (or infrared) over long distances. Light bounces along inside the fibre by TIR. Used in telecommunications and endoscopes<br>
+         &bull; <strong>Reflecting prisms:</strong> used in periscopes, binoculars, and rear reflectors on bikes and cars (angle of incidence of 45&deg; is greater than glass critical angle of 42&deg;)</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Optical fibres are how your internet connection, phone calls, and streaming services work. Data is sent as pulses of infrared light along thin glass fibres. They are better than copper cables because: they carry more data, have less signal loss (attenuation), are not affected by electrical interference, and are thinner and lighter.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define the critical angle and total internal reflection</li>
+    <li><input type="checkbox"> I know the two conditions needed for TIR</li>
+    <li><input type="checkbox"> I can use sin c = 1/n to calculate the critical angle</li>
+    <li><input type="checkbox"> I can name two practical uses of TIR</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7.6: SNELL'S LAW ===== -->
+<div class="section-header">
+  <span class="num">Section 7.6</span>
+  Snell's Law and Refraction Calculations
+</div>
+<div class="card">
+  <div class="intro-text">
+    When light refracts, the angles of incidence and refraction are linked by a precise mathematical relationship discovered by the Dutch scientist Willebrord Snell in 1620.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Snell's Law</div>
+      <div class="formula">n = sin i / sin r</div>
+      <p><strong>n</strong> = refractive index of the medium<br>
+         <strong>i</strong> = angle of incidence (in the less dense medium, e.g. air)<br>
+         <strong>r</strong> = angle of refraction (in the denser medium, e.g. glass)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <p>Light enters water (n = 1.33) at an angle of incidence of 45&deg;. Find the angle of refraction.</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write Snell's law: <code>n = sin i / sin r</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Rearrange: <code>sin r = sin i / n</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Substitute: <code>sin r = sin 45&deg; / 1.33 = 0.707 / 1.33 = 0.532</code></span></div>
+        <div class="step"><span class="step-num">4.</span> <span class="step-text">Find angle: <code>r = sin&sup1;(0.532) = 32&deg;</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Calculator Check</div>
+      <p>Make sure your calculator is in <strong>degrees</strong> mode, not radians. On most scientific calculators, look for "DEG" on the screen. If you get weird answers for sin calculations, check this first.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write Snell's law from memory: n = sin i / sin r</li>
+    <li><input type="checkbox"> I can rearrange to find any of the three variables</li>
+    <li><input type="checkbox"> I solved the worked example and got r = 32&deg;</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7.7-7.9: LENSES ===== -->
+<div class="section-header">
+  <span class="num">Section 7.7&ndash;7.9</span>
+  Lenses and Their Uses
+</div>
+<div class="card">
+  <div class="intro-text">
+    Lenses bend light by refraction and can form images. There are two main types, and you need to know how each one works.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Two Types of Lens</div>
+      <p><strong>Convex (converging) lens:</strong> thickest in the middle, thinnest at the edges. Bends parallel rays <strong>inwards</strong> to meet at the <strong>principal focus (F)</strong>. The distance from the centre of the lens to F is the <strong>focal length</strong>.</p>
+      <p style="margin-top:6px;"><strong>Concave (diverging) lens:</strong> thinnest in the middle, thickest at the edges. Bends parallel rays <strong>outwards</strong> so they appear to come from a point behind the lens (the principal focus).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Ray Diagrams (Convex Lens)</div>
+      <p>To find where a convex lens forms an image, draw any two of these three <strong>standard rays</strong>:</p>
+      <p>&bull; <strong>Ray 1:</strong> A ray through the centre of the lens passes straight through (no bending)<br>
+         &bull; <strong>Ray 2:</strong> A ray parallel to the principal axis passes through F after the lens<br>
+         &bull; <strong>Ray 3:</strong> A ray through F' (on the object side) leaves the lens parallel to the principal axis</p>
+      <p style="margin-top:6px;">Where two rays meet on the other side = the <strong>image position</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Images Formed by Convex Lens</div>
+      <table class="compare-table">
+        <tr>
+          <th>Object Position</th>
+          <th>Image</th>
+          <th>Use</th>
+        </tr>
+        <tr>
+          <td>Very far away</td>
+          <td>At F; real, inverted, diminished</td>
+          <td>Camera</td>
+        </tr>
+        <tr>
+          <td>Beyond 2F</td>
+          <td>Between F and 2F; real, inverted, diminished</td>
+          <td>Camera, eye</td>
+        </tr>
+        <tr>
+          <td>Between F and 2F</td>
+          <td>Beyond 2F; real, inverted, enlarged</td>
+          <td>Projector</td>
+        </tr>
+        <tr>
+          <td>Closer than F</td>
+          <td>Same side; virtual, upright, enlarged</td>
+          <td>Magnifying glass</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Correcting Vision</div>
+      <p><strong>Short sight</strong> (cannot see distant objects clearly): corrected with a <strong>concave</strong> (diverging) lens.<br>
+         <strong>Long sight</strong> (cannot see close objects clearly): corrected with a <strong>convex</strong> (converging) lens.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Remember the Correction</div>
+      <p><strong>S</strong>hort sight = conca<strong>v</strong>e lens (think: short and conca<strong>v</strong>e both have a "v" shape dipping inwards). <strong>L</strong>ong sight = con<strong>v</strong>ex lens. Or simply: short sight needs to spread rays out (diverge), long sight needs to bring rays together (converge).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe the difference between convex and concave lenses</li>
+    <li><input type="checkbox"> I can draw ray diagrams using the three standard rays</li>
+    <li><input type="checkbox"> I know what image is formed when the object is at different distances</li>
+    <li><input type="checkbox"> I know which lens corrects short sight and which corrects long sight</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7.10-7.11: EM SPECTRUM ===== -->
+<div class="section-header">
+  <span class="num">Section 7.10&ndash;7.11</span>
+  The Electromagnetic Spectrum
+</div>
+<div class="card">
+  <div class="intro-text">
+    Light is just one type of electromagnetic (EM) wave. There is a whole family of EM waves, from radio waves to gamma rays, that share common properties but differ in wavelength and frequency.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Properties Common to All EM Waves</div>
+      <p>&bull; They are all <strong>transverse</strong> waves<br>
+         &bull; They all travel at the <strong>speed of light</strong> (3 &times; 10<sup>8</sup> m/s) in a vacuum<br>
+         &bull; They can all travel through a <strong>vacuum</strong><br>
+         &bull; They all transfer <strong>energy</strong><br>
+         &bull; They obey the wave equation: v = f&lambda;</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Spectrum (Learn This Order!)</div>
+      <table class="compare-table">
+        <tr>
+          <th>Type (long &lambda; to short &lambda;)</th>
+          <th>Key Uses</th>
+          <th>Key Hazards</th>
+        </tr>
+        <tr>
+          <td><strong>Radio waves</strong></td>
+          <td>TV, radio, communication</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>Microwaves</strong></td>
+          <td>Mobile phones, Wi-Fi, cooking, satellites</td>
+          <td>Internal heating of body tissue</td>
+        </tr>
+        <tr>
+          <td><strong>Infrared</strong></td>
+          <td>Remote controls, thermal imaging, optical fibres</td>
+          <td>Skin burns</td>
+        </tr>
+        <tr>
+          <td><strong>Visible light</strong></td>
+          <td>Vision, photography, optical fibres</td>
+          <td>&mdash;</td>
+        </tr>
+        <tr>
+          <td><strong>Ultraviolet</strong></td>
+          <td>Fluorescence, sterilisation, security marking</td>
+          <td>Skin cancer, eye damage</td>
+        </tr>
+        <tr>
+          <td><strong>X-rays</strong></td>
+          <td>Medical imaging, airport security</td>
+          <td>Cell damage, cancer</td>
+        </tr>
+        <tr>
+          <td><strong>Gamma rays</strong></td>
+          <td>Cancer treatment, sterilising equipment</td>
+          <td>Cell damage, cancer, mutations</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Remember the Order</div>
+      <p><strong>R</strong>unning <strong>M</strong>an <strong>I</strong>n <strong>V</strong>egas <strong>U</strong>ses <strong>X</strong>-tra <strong>G</strong>ear. (Radio, Microwave, Infrared, Visible, Ultraviolet, X-rays, Gamma). Longest wavelength / lowest frequency first, shortest wavelength / highest frequency last.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Wavelength vs Frequency</div>
+      <p>As you go from radio waves to gamma rays: wavelength <strong>decreases</strong> and frequency <strong>increases</strong>. They go in opposite directions. This is because v = f&lambda; and the speed is constant for all EM waves, so if frequency goes up, wavelength must go down.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list all 7 types of EM wave in order of wavelength</li>
+    <li><input type="checkbox"> I know at least one use and one hazard for each type</li>
+    <li><input type="checkbox"> I know that all EM waves travel at the same speed in a vacuum</li>
+    <li><input type="checkbox"> I know that UV, X-rays, and gamma rays are ionising (can damage cells)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7.12: SENDING SIGNALS ===== -->
+<div class="section-header">
+  <span class="num">Section 7.12</span>
+  Sending Signals
+</div>
+<div class="card">
+  <div class="intro-text">
+    Modern communications use electromagnetic waves to send information over long distances. Signals can be analogue or digital.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Analogue vs Digital</div>
+      <p><strong>Analogue signal:</strong> varies <strong>continuously</strong> &mdash; the signal can take any value and changes smoothly. Example: the varying voltage from a microphone.</p>
+      <p style="margin-top:6px;"><strong>Digital signal:</strong> has only <strong>two values</strong> (on/off, 1/0). The analogue signal is sampled many times per second and converted into binary code (a series of 0s and 1s).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Advantages of Digital Signals</div>
+      <p>&bull; Digital signals can be <strong>cleaned up and regenerated</strong> by regenerators, removing noise<br>
+         &bull; Analogue signals amplify the noise along with the signal, so quality degrades over distance<br>
+         &bull; Digital signals can carry <strong>more information</strong> in the same bandwidth</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Optical Fibres in Communications</div>
+      <p>Optical fibres carry digital signals as <strong>pulses of infrared light</strong> (or laser light). Advantages over copper cables:<br>
+         &bull; Carry more signals<br>
+         &bull; Less attenuation (signal loss) over long distances<br>
+         &bull; Not affected by electrical interference<br>
+         &bull; Thinner and lighter<br>
+         &bull; Cannot be "tapped" (more secure)</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define analogue and digital signals</li>
+    <li><input type="checkbox"> I can state two advantages of digital over analogue</li>
+    <li><input type="checkbox"> I can explain why optical fibres are better than copper cables</li>
+  </ul>
+</div>
+
+<!-- ===== BIG SUMMARY TABLE ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  The Big Formula Table
+</div>
+<div class="card">
+  <div class="intro-text">
+    Copy this table into your notes. These are the key formulas and facts you need for Chapter 7.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Formulas</div>
+      <table class="compare-table">
+        <tr>
+          <th>Formula</th>
+          <th>What It Tells You</th>
+          <th>Units</th>
+        </tr>
+        <tr>
+          <td><strong>angle i = angle r</strong></td>
+          <td>Law of reflection</td>
+          <td>degrees (&deg;)</td>
+        </tr>
+        <tr>
+          <td><strong>n = sin i / sin r</strong></td>
+          <td>Snell's law (refraction)</td>
+          <td>no unit (n is a ratio)</td>
+        </tr>
+        <tr>
+          <td><strong>n = speed in vacuum / speed in medium</strong></td>
+          <td>Refractive index definition</td>
+          <td>no unit</td>
+        </tr>
+        <tr>
+          <td><strong>sin c = 1 / n</strong></td>
+          <td>Critical angle for TIR</td>
+          <td>degrees (&deg;)</td>
+        </tr>
+        <tr>
+          <td><strong>v = f &times; &lambda;</strong></td>
+          <td>Wave equation (applies to all EM waves)</td>
+          <td>m/s, Hz, m</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Real Test</div>
+      <p>Close your book. Can you: (1) state the two laws of reflection, (2) draw a refraction diagram showing the normal, angles, and bending direction, (3) list the EM spectrum in order, (4) explain what total internal reflection is and when it occurs, (5) draw a ray diagram for a convex lens? If yes, you are ready for the quiz.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the formula table into my notes</li>
+    <li><input type="checkbox"> I can reproduce all five formulas from memory</li>
+    <li><input type="checkbox"> I can list the EM spectrum in order without looking</li>
+    <li><input type="checkbox"> I can draw a complete refraction diagram from scratch</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 7 Notes Complete</h2>
+  <p>You've covered light rays, reflection, refraction, total internal reflection, lenses, the EM spectrum, and digital signals. Now test yourself with the Chapter 7 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

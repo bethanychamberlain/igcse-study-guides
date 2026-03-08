@@ -1,0 +1,637 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Endings &mdash; English Ch9</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* State flow reused for Freytag's Pyramid */
+  .state-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .state-flow .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--subject-light);
+    border-radius: 6px;
+  }
+  .state-flow .flow-from {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 55px;
+  }
+  .state-flow .flow-arrow {
+    color: var(--subject);
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .state-flow .flow-to {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 55px;
+  }
+  .state-flow .flow-name {
+    flex: 1;
+    font-style: italic;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">English Ch9 &mdash; Cheat Sheet</div>
+    <h1>Endings</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Explicit</strong></td>
+      <td>Stated directly. The information is right there on the page.</td>
+      <td class="confuse">Implicit (that's suggested, not stated &mdash; you have to infer it)</td>
+    </tr>
+    <tr>
+      <td><strong>Implicit</strong></td>
+      <td>Suggested or implied. The reader must infer the meaning from clues.</td>
+      <td class="confuse">Explicit (that's stated directly &mdash; no inference needed)</td>
+    </tr>
+    <tr>
+      <td><strong>Exposition</strong></td>
+      <td>The opening of a story: characters, setting, and "normal world" are introduced.</td>
+      <td class="confuse">Climax (that's the turning point, not the beginning)</td>
+    </tr>
+    <tr>
+      <td><strong>Climax</strong></td>
+      <td>The turning point &mdash; the moment of greatest tension or conflict.</td>
+      <td class="confuse">Denouement (that's the resolution AFTER the climax)</td>
+    </tr>
+    <tr>
+      <td><strong>Denouement</strong></td>
+      <td>The resolution &mdash; how everything settles after the climax. The "new normal."</td>
+      <td class="confuse">Falling action (falling action = consequences unfolding; denouement = final resolution)</td>
+    </tr>
+    <tr>
+      <td><strong>Pathetic fallacy</strong></td>
+      <td>Using weather or nature to reflect mood. Storm = anger. Sunshine = happiness.</td>
+      <td class="confuse">Personification (pathetic fallacy is specifically nature reflecting MOOD)</td>
+    </tr>
+    <tr>
+      <td><strong>Foreshadowing</strong></td>
+      <td>Hints about what will happen later in the story.</td>
+      <td class="confuse">Flashback (that goes BACK in time; foreshadowing hints FORWARD)</td>
+    </tr>
+    <tr>
+      <td><strong>Oxymoron</strong></td>
+      <td>Two contradictory words in one phrase: "deafening silence," "bittersweet."</td>
+      <td class="confuse">Juxtaposition (that's contrasting IDEAS side by side, not contradictory WORDS)</td>
+    </tr>
+    <tr>
+      <td><strong>Irony</strong></td>
+      <td>When the meaning is the opposite of what is said or expected.</td>
+      <td class="confuse">Sarcasm (sarcasm is spoken irony meant to mock &mdash; irony is broader)</td>
+    </tr>
+    <tr>
+      <td><strong>Symbolism</strong></td>
+      <td>Using an object to represent a bigger idea. A dove = peace. A storm = conflict.</td>
+      <td class="confuse">Metaphor (a metaphor says X IS Y; a symbol is an object that REPRESENTS an idea throughout)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: SOUND DEVICES -->
+<div class="card">
+  <h2>Sound Devices &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Alliteration</th>
+      <th>Assonance</th>
+      <th>Consonance</th>
+      <th>Sibilance</th>
+    </tr>
+    <tr>
+      <td>What repeats</td>
+      <td>Consonant at START of words</td>
+      <td>Vowel sounds WITHIN words</td>
+      <td>Consonant WITHIN or END</td>
+      <td>"S" or "sh" sounds</td>
+    </tr>
+    <tr>
+      <td>Example</td>
+      <td><em>Peter Piper picked</em></td>
+      <td><em>rain in Spain, plain</em></td>
+      <td><em>pitter-patter</em></td>
+      <td><em>She sells seashells</em></td>
+    </tr>
+    <tr>
+      <td>Effect</td>
+      <td>Rhythm, emphasis, attention</td>
+      <td>Musicality, dreamy flow</td>
+      <td>Rhythmic, punchy</td>
+      <td>Whispering or sinister</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; Telling Them Apart</div>
+    <strong>A</strong>lliteration = <strong>A</strong>t the start.
+    <strong>A</strong>ssonance = vowels (<strong>A</strong>, E, I, O, U).
+    <strong>C</strong>onsonance = <strong>C</strong>onsonants inside or at the end.
+    <strong>S</strong>ibilance = <strong>S</strong> and <strong>Sh</strong> sounds.
+  </div>
+</div>
+
+<!-- FREYTAG'S PYRAMID -->
+<div class="card">
+  <h2>Freytag's Pyramid &mdash; The 5-Stage Story Arc</h2>
+  <div class="state-flow">
+    <div class="flow-row">
+      <span class="flow-from">1</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Exposition</span>
+      <span class="flow-name">= Characters, setting, "normal world" introduced</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">2</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Rising Action</span>
+      <span class="flow-name">= Tension builds, obstacles appear, stakes rise</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">3</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Climax</span>
+      <span class="flow-name">= Turning point, greatest tension, everything on the line</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">4</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Falling Action</span>
+      <span class="flow-name">= Consequences unfold, loose ends tie up</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">5</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Denouement</span>
+      <span class="flow-name">= Resolution / "new normal" (or catastrophe in tragedy)</span>
+    </div>
+  </div>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Tragedy vs Comedy</div>
+    SAME five stages, different direction. <strong>Tragedy:</strong> climax = hero's downfall, ending = catastrophe. <strong>Comedy:</strong> climax = resolution of complications, ending = happiness. Don't assume all stories end happily.
+  </div>
+</div>
+
+<!-- COMPLETE LITERARY TERMS TABLE -->
+<div class="card">
+  <h2>All Literary Terms You Need &mdash; Quick Reference</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Term</th>
+      <th style="width:40%;">Definition</th>
+      <th style="width:35%;">Effect to Write About</th>
+    </tr>
+    <tr>
+      <td><strong>Simile</strong></td>
+      <td>Comparison using "like" or "as"</td>
+      <td>Creates a vivid image; helps reader visualise by linking to something familiar</td>
+    </tr>
+    <tr>
+      <td><strong>Metaphor</strong></td>
+      <td>Saying something IS something else</td>
+      <td>Stronger than simile; transforms the subject; creates deeper associations</td>
+    </tr>
+    <tr>
+      <td><strong>Personification</strong></td>
+      <td>Giving human qualities to non-human things</td>
+      <td>Makes settings/objects feel alive; can create threat, beauty, or sympathy</td>
+    </tr>
+    <tr>
+      <td><strong>Imagery</strong></td>
+      <td>Language appealing to the five senses</td>
+      <td>Immerses the reader; makes the scene feel real and present</td>
+    </tr>
+    <tr>
+      <td><strong>Oxymoron</strong></td>
+      <td>"Deafening silence," "bittersweet"</td>
+      <td>Shows complexity or contradiction; reveals mixed feelings</td>
+    </tr>
+    <tr>
+      <td><strong>Hyperbole</strong></td>
+      <td>Deliberate exaggeration</td>
+      <td>Creates emphasis, humour, or urgency</td>
+    </tr>
+    <tr>
+      <td><strong>Irony</strong></td>
+      <td>Opposite of what's said or expected</td>
+      <td>Creates humour, tension, or criticism; makes reader think deeper</td>
+    </tr>
+    <tr>
+      <td><strong>Symbolism</strong></td>
+      <td>Object represents a bigger idea</td>
+      <td>Adds layers of meaning; rewards careful reading</td>
+    </tr>
+    <tr>
+      <td><strong>Pathetic fallacy</strong></td>
+      <td>Weather/nature reflects mood</td>
+      <td>Reinforces atmosphere; environment mirrors character's emotions</td>
+    </tr>
+    <tr>
+      <td><strong>Foreshadowing</strong></td>
+      <td>Hints about what happens later</td>
+      <td>Creates tension and suspense; makes reader anxious or curious</td>
+    </tr>
+    <tr>
+      <td><strong>Juxtaposition</strong></td>
+      <td>Contrasting ideas side by side</td>
+      <td>Highlights differences; creates irony, shock, or moral outrage</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">The Golden Rule</div>
+    Naming a technique = 1 mark. Explaining its <strong>effect on the reader</strong> = 3-4 marks. Every time you spot a technique, immediately ask: "So what? What does this make the reader feel or think?"
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Implicit meaning</span>
+    <span>What the text SUGGESTS but doesn't state &mdash; "He slammed the door" implies anger without saying "angry."</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Freytag's Pyramid</span>
+    <span>Every story: exposition, rising action, climax, falling action, denouement.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Paper 1</span>
+    <span>4 questions, 2 passages. Q1+Q3 = PEE analysis. Q2 = summary. Q4 = compare both texts.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Paper 2</span>
+    <span>Section A = directed writing (letter, article, report, speech). Section B = narrative or descriptive composition.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Summary rule</span>
+    <span>WHAT (key points, own words, no opinion) not HOW (no techniques, no analysis).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Narrative writing</span>
+    <span>Plan with Freytag, start in the action, show don't tell, 2-3 characters max, end with impact.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Descriptive writing</span>
+    <span>One scene, 3+ senses, figurative language, varied sentences, clear mood throughout.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">PEE Paragraph Template</div>
+    <strong>P</strong> = make your POINT (name the technique). <strong>E</strong> = give EVIDENCE (short quote). <strong>E</strong> = EXPLAIN the effect (this is where ALL the marks are &mdash; make it the longest part). Your explanation should be <em>at least twice</em> as long as point + evidence combined.
+  </div>
+
+  <div class="trick">
+    <div class="label">Implicit Meaning &mdash; The "Really" Test</div>
+    After reading any sentence, ask: "What is REALLY going on here?" If "She smiled and said everything was fine" &mdash; is everything actually fine? Probably not. That gap between what's said and what's meant = implicit meaning.
+  </div>
+
+  <div class="trick">
+    <div class="label">Freytag = Anime Arc</div>
+    Map it to any anime: Exposition (hero in village), Rising Action (quest + enemies), Climax (final boss fight), Falling Action (aftermath), Denouement (hero returns, changed). Works for every show.
+  </div>
+
+  <div class="trick">
+    <div class="label">Paper 1 Time Plan</div>
+    <strong>Q1</strong> = 25 mins. <strong>Q2</strong> = 15 mins. <strong>Q3</strong> = 25 mins. <strong>Q4</strong> = 15 mins. <strong>Check</strong> = 10 mins. Stick to this. Don't spend 40 mins on Q1 and run out of time for Q4.
+  </div>
+
+  <div class="trick">
+    <div class="label">Paper 2 Time Plan</div>
+    <strong>Section A</strong> (directed writing) = 45 mins. <strong>Section B</strong> (composition) = 45 mins. <strong>Plan B</strong> = 15 mins. <strong>Check both</strong> = 15 mins.
+  </div>
+
+  <div class="trick">
+    <div class="label">Narrative Opening Hack</div>
+    Start IN the action. "The door burst open" is always better than "One day, a long time ago, there was a boy called..." The exam rewards you for grabbing the reader immediately.
+  </div>
+
+  <div class="trick">
+    <div class="label">Sentence Starters for Analysis</div>
+    "The writer uses [technique] to convey [idea]..." / "The word '[X]' suggests/implies/connotes..." / "This creates a sense of [feeling] in the reader because..." / "This is effective because it makes the reader feel..." / "This implies that [deeper meaning]..."
+  </div>
+</div>
+
+<!-- PEE TEMPLATES -->
+<div class="card">
+  <h2>PEE Paragraph Templates &mdash; Use These in Every Answer</h2>
+
+  <div class="warning">
+    <div class="label">Your #1 Weakness (Easter Test Result)</div>
+    You scored 100% on factual/recognition questions but only 46% on analytical writing. The gap is HERE &mdash; in PEE paragraphs. These templates close the gap.
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 1 &mdash; Analysing Figurative Language</div>
+    <strong>P:</strong> The writer uses [metaphor / simile / personification] to convey [idea / mood].<br>
+    <strong>E:</strong> For example, "[short quote]"<br>
+    <strong>E:</strong> By comparing [X] to "[Y]," the writer suggests [meaning]. The word "[zoom word]" connotes [association], which creates a sense of [feeling] for the reader. This is effective because it makes the reader [feel / think / understand] that [deeper meaning]. The overall atmosphere created is one of [mood].
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 2 &mdash; Analysing Implicit Meaning</div>
+    <strong>P:</strong> The writer implies [idea] without stating it directly.<br>
+    <strong>E:</strong> For example, "[quote showing action/detail, not stated emotion]"<br>
+    <strong>E:</strong> Although the writer does not explicitly say [emotion/idea], the detail of "[specific word/action]" suggests [inference]. This creates [tension / sympathy / unease] for the reader, who must read between the lines. The implicit meaning is more powerful than a direct statement because it forces the reader to engage actively with the text.
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 3 &mdash; Analysing Narrative Structure</div>
+    <strong>P:</strong> This passage is positioned at the [rising action / climax / denouement] of the narrative.<br>
+    <strong>E:</strong> This is evident because "[quote showing tension building / conflict peaking / resolution]"<br>
+    <strong>E:</strong> The [building tension / peak conflict / resolution] at this point creates [anticipation / shock / relief] in the reader. The writer's structural choice to [build slowly / hit the climax suddenly / end ambiguously] is effective because [reason]. This shows an awareness of narrative structure that [effect on reader].
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"What does this suggest about the character?"</td>
+      <td>This is asking for <strong>implicit meaning</strong>. Don't just quote &mdash; explain what the quote IMPLIES about the character's feelings, motives, or situation.</td>
+    </tr>
+    <tr>
+      <td>"How does the writer create tension / atmosphere?"</td>
+      <td>Find <strong>pathetic fallacy, foreshadowing, personification, short sentences, sensory detail</strong>. Name, quote, explain effect on the reader. Zoom in on one word.</td>
+    </tr>
+    <tr>
+      <td>"Identify the technique and explain its effect"</td>
+      <td>Name the technique (1 mark). Explain what it <strong>makes the reader feel or think</strong> (3-4 marks). The explanation is worth more than the identification.</td>
+    </tr>
+    <tr>
+      <td>"Summarise the key points" (Paper 1, Q2)</td>
+      <td>Own words. 6-8 distinct points. One per sentence. <strong>No analysis. No opinion.</strong> Stay in word limit. This is WHAT, not HOW.</td>
+    </tr>
+    <tr>
+      <td>"Write a narrative" (Paper 2, Section B)</td>
+      <td>Plan with <strong>Freytag</strong> (5 mins). Start in the action. Show don't tell. 2-3 characters max. End with impact (twist, revelation, powerful image).</td>
+    </tr>
+    <tr>
+      <td>"Write a description of..." (Paper 2, Section B)</td>
+      <td>ONE scene only. <strong>3+ senses</strong>. 2+ similes/metaphors + personification. Vary sentence length. Every detail should create a <strong>mood</strong>.</td>
+    </tr>
+    <tr>
+      <td>"Compare how the two passages present..."</td>
+      <td>Compare by <strong>FEATURE</strong> (tone, language, structure, viewpoint). Weave both texts in every paragraph. Use "whereas," "in contrast," "while."</td>
+    </tr>
+    <tr>
+      <td>"Write a [letter / article / report / speech]" (Paper 2, Section A)</td>
+      <td>Use the <strong>correct format</strong> for that text type (see Ch6 and Ch7 cheatsheets). Use content from the passage. Marked on BOTH reading and writing quality.</td>
+    </tr>
+  </table>
+</div>
+
+<!-- EXAM STRUCTURE REMINDER -->
+<div class="card">
+  <h2>Paper Structure at a Glance</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Paper 1 (Reading)</th>
+      <th>Paper 2 (Writing)</th>
+    </tr>
+    <tr>
+      <td>Time</td>
+      <td>1 hr 45 mins</td>
+      <td>2 hrs</td>
+    </tr>
+    <tr>
+      <td>Q1 / Section A</td>
+      <td>Passage A analysis (15 marks, PEE)</td>
+      <td>Directed writing from passage (25 marks)</td>
+    </tr>
+    <tr>
+      <td>Q2 / Section B</td>
+      <td>Passage A summary (5 marks, own words)</td>
+      <td>Composition: narrative or descriptive (25 marks)</td>
+    </tr>
+    <tr>
+      <td>Q3</td>
+      <td>Passage B analysis (15 marks, PEE)</td>
+      <td>&mdash;</td>
+    </tr>
+    <tr>
+      <td>Q4</td>
+      <td>Compare both passages (5 marks)</td>
+      <td>&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

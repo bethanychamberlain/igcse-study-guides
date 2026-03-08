@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: All the World's a Stage &mdash; English Ch4</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #d1f2eb;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #8e44ad;
+    --trick-bg: #f4ecf7;
+    --pee: #d35400;
+    --pee-bg: #fef0e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .effect {
+    color: var(--subject-dark);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .pee-box {
+    background: var(--pee-bg);
+    border-left: 4px solid var(--pee);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .pee-box .label {
+    font-weight: 700;
+    color: var(--pee);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .template-box {
+    background: #f9f9f9;
+    border: 2px dashed var(--subject);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .template-box .fill-line {
+    display: inline-block;
+    border-bottom: 2px solid var(--subject);
+    min-width: 120px;
+    margin: 0 4px;
+    color: var(--subject);
+    font-style: italic;
+  }
+  .template-box p {
+    margin: 6px 0;
+    line-height: 2;
+  }
+
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .word-bank .word {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning, .pee-box { break-inside: avoid; }
+    .template-box { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">English Ch4 &mdash; Cheat Sheet</div>
+    <h1>All the World&rsquo;s a Stage</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- KEY VOCABULARY -->
+<div class="card">
+  <h2>Key Vocabulary &mdash; Drama Terms</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:20%;">Term</th>
+      <th style="width:40%;">What It Means</th>
+      <th style="width:40%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Soliloquy</strong></td>
+      <td>Character speaks thoughts aloud, alone on stage. Audience hears their inner feelings.</td>
+      <td class="effect">Monologue (soliloquy = alone, private thoughts; monologue = long speech TO other characters)</td>
+    </tr>
+    <tr>
+      <td><strong>Monologue</strong></td>
+      <td>A long speech by one character, addressed to other characters on stage.</td>
+      <td class="effect">Soliloquy (monologue = spoken to others; soliloquy = spoken to self/audience)</td>
+    </tr>
+    <tr>
+      <td><strong>Stage directions</strong></td>
+      <td>Instructions in brackets or italics telling actors what to do, how to move, or how to speak.</td>
+      <td class="effect">Dialogue (stage directions are NOT spoken; dialogue is what characters say)</td>
+    </tr>
+    <tr>
+      <td><strong>D&eacute;nouement</strong></td>
+      <td>The final resolution of the plot &mdash; where everything is explained or wrapped up.</td>
+      <td class="effect">Climax (climax = the peak of tension; d&eacute;nouement = the resolution AFTER the climax)</td>
+    </tr>
+    <tr>
+      <td><strong>Fatal flaw</strong></td>
+      <td>A weakness in a hero's character that leads to their downfall (also called <em>hamartia</em>).</td>
+      <td class="effect">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Sympathy</strong></td>
+      <td>Feeling sorry FOR someone. "I feel bad for them."</td>
+      <td class="effect">Empathy (sympathy = pity from outside; empathy = understanding from inside their experience)</td>
+    </tr>
+    <tr>
+      <td><strong>Empathy</strong></td>
+      <td>Feeling WITH someone. "I understand how they feel because I can imagine being them."</td>
+      <td class="effect">Sympathy (empathy is deeper &mdash; you share the feeling, not just observe it)</td>
+    </tr>
+    <tr>
+      <td><strong>Register</strong></td>
+      <td>The style of language suited to a situation. Created by diction + tone + syntax.</td>
+      <td class="effect">Tone (register = formality level; tone = writer's attitude)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- TRAGEDY vs COMEDY -->
+<div class="card">
+  <h2>Tragedy vs Comedy &mdash; At a Glance</h2>
+  <table class="compare-table">
+    <tr>
+      <th style="text-align:left;"></th>
+      <th>Tragedy</th>
+      <th>Comedy</th>
+    </tr>
+    <tr>
+      <td>Plot direction</td>
+      <td>Good to bad &mdash; reversal of fortune</td>
+      <td>Bad to good &mdash; complications to happy ending</td>
+    </tr>
+    <tr>
+      <td>Ending</td>
+      <td>Suffering, death, or despair</td>
+      <td>Resolution, marriage, "happy ever after"</td>
+    </tr>
+    <tr>
+      <td>Audience feels</td>
+      <td>Fear and pity</td>
+      <td>Laughter and relief</td>
+    </tr>
+    <tr>
+      <td>Hero's flaw</td>
+      <td>Has a fatal flaw that destroys them</td>
+      <td>Has flaws but overcomes them</td>
+    </tr>
+    <tr>
+      <td>Example</td>
+      <td>Macbeth (ambition destroys him)</td>
+      <td>A Midsummer Night's Dream (mix-ups resolved)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ARISTOTLE'S SIX ELEMENTS -->
+<div class="card">
+  <h2>Aristotle's Six Elements of Drama</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:20%;">Element</th>
+      <th style="width:40%;">What It Means</th>
+      <th style="width:40%;">Modern Example</th>
+    </tr>
+    <tr>
+      <td><strong>1. Plot</strong></td>
+      <td>The sequence of events. Aristotle said this is the MOST important element.</td>
+      <td class="effect">The storyline of a film or show</td>
+    </tr>
+    <tr>
+      <td><strong>2. Character</strong></td>
+      <td>The people and their personalities, flaws, strengths.</td>
+      <td class="effect">The protagonist, antagonist, supporting cast</td>
+    </tr>
+    <tr>
+      <td><strong>3. Diction</strong></td>
+      <td>The language and word choices characters use (dialogue).</td>
+      <td class="effect">How a character talks &mdash; slang, formal, poetic</td>
+    </tr>
+    <tr>
+      <td><strong>4. Thought</strong></td>
+      <td>The themes and ideas the drama explores.</td>
+      <td class="effect">Justice, power, identity, love</td>
+    </tr>
+    <tr>
+      <td><strong>5. Spectacle</strong></td>
+      <td>Everything visual: costumes, scenery, effects, movement.</td>
+      <td class="effect">CGI, set design, fight choreography</td>
+    </tr>
+    <tr>
+      <td><strong>6. Song</strong></td>
+      <td>Music, sound, rhythm in the performance.</td>
+      <td class="effect">Soundtrack, sound effects</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; PC-DTS-S</div>
+    <strong>P</strong>lot, <strong>C</strong>haracter, <strong>D</strong>iction, <strong>T</strong>hought, <strong>S</strong>pectacle, <strong>S</strong>ong. Or just remember: "A <strong>P</strong>erfect <strong>C</strong>ast <strong>D</strong>elivers <strong>T</strong>he <strong>S</strong>how's <strong>S</strong>oul."
+  </div>
+</div>
+
+<!-- ADVERTISEMENT vs ARTICLE -->
+<div class="card">
+  <h2>Advertisement vs Article &mdash; Comparing Purposes</h2>
+  <table class="compare-table">
+    <tr>
+      <th style="text-align:left;"></th>
+      <th>Advertisement</th>
+      <th>Newspaper Article</th>
+    </tr>
+    <tr>
+      <td>Purpose</td>
+      <td>To persuade (buy this, join this)</td>
+      <td>To inform (here are the facts)</td>
+    </tr>
+    <tr>
+      <td>Language</td>
+      <td>Positive, enthusiastic ("Don't miss your chance!")</td>
+      <td>Balanced, quotes from multiple viewpoints</td>
+    </tr>
+    <tr>
+      <td>Tone</td>
+      <td>Exciting, aspirational</td>
+      <td>Neutral or analytical</td>
+    </tr>
+    <tr>
+      <td>Bias</td>
+      <td>One-sided &mdash; only positive</td>
+      <td>May present opposing views</td>
+    </tr>
+  </table>
+</div>
+
+<!-- REGISTER -->
+<div class="card">
+  <h2>Register &mdash; At a Glance</h2>
+  <table class="compare-table">
+    <tr>
+      <th style="text-align:left;"></th>
+      <th>Formal</th>
+      <th>Neutral</th>
+      <th>Informal</th>
+    </tr>
+    <tr>
+      <td>Used for</td>
+      <td>Essays, complaint letters, reports</td>
+      <td>News articles, informative texts</td>
+      <td>Blogs, personal letters, dialogue</td>
+    </tr>
+    <tr>
+      <td>Features</td>
+      <td>No slang, no contractions, complex sentences</td>
+      <td>Clear, factual, standard English</td>
+      <td>Slang, contractions, colloquial language</td>
+    </tr>
+    <tr>
+      <td>Example</td>
+      <td>"I wish to express my concern..."</td>
+      <td>"The event took place on Monday."</td>
+      <td>"So basically what happened was..."</td>
+    </tr>
+  </table>
+</div>
+
+<!-- PEE TEMPLATE FOR DRAMA -->
+<div class="card">
+  <h2>PEE Paragraph Template &mdash; For Drama</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">In drama, EVERYTHING is a deliberate choice. Your job is to explain WHY the playwright made that choice.</p>
+
+  <div class="template-box">
+    <p><strong>P (Point):</strong> The playwright uses <span class="fill-line">technique/element</span> to reveal <span class="fill-line">what it shows about character/theme</span>.</p>
+    <p><strong>E (Evidence):</strong> This is shown when <span class="fill-line">character name</span> says/does "<span class="fill-line">quote or action</span>" <span class="fill-line">stage direction if relevant</span>.</p>
+    <p><strong>E (Explanation):</strong> The word "<span class="fill-line">specific word</span>" suggests <span class="fill-line">what it implies about the character</span>. This makes the audience feel <span class="fill-line">emotion</span> because <span class="fill-line">why</span>. The playwright may have intended this to <span class="fill-line">purpose</span>.</p>
+  </div>
+
+  <div class="pee-box">
+    <div class="label">Drama-Specific Tip</div>
+    Don't forget to analyse <strong>stage directions</strong>, not just dialogue. Most students ignore them &mdash; but stage directions reveal character emotions and power dynamics. Commenting on them shows deeper reading.
+  </div>
+
+  <div class="warning">
+    <div class="label">Common Mistake</div>
+    Do NOT just describe what happens: "Sheila cries." Instead, explain the EFFECT: "Sheila's distress reveals her genuine guilt, which contrasts with Gerald's attempts to minimise his involvement, making the audience sympathise with her more." Description = low marks. Analysis = high marks.
+  </div>
+</div>
+
+<!-- DIRECTED WRITING FORMATS -->
+<div class="card">
+  <h2>Directed Writing &mdash; Format Cheat Sheet</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:20%;">Text Type</th>
+      <th style="width:40%;">Key Features</th>
+      <th style="width:40%;">Quick Tips</th>
+    </tr>
+    <tr>
+      <td><strong>Article</strong></td>
+      <td>Headline, opening hook, body paragraphs, conclusion</td>
+      <td class="effect">Match register to publication (blog = informal; broadsheet = formal). Stick to 250-350 words.</td>
+    </tr>
+    <tr>
+      <td><strong>Formal letter</strong></td>
+      <td>Dear Mr/Mrs... or Dear Sir/Madam; state purpose first; one point per paragraph</td>
+      <td class="effect">Name known = "Yours sincerely." Name unknown = "Yours faithfully." Never rude, even in complaints.</td>
+    </tr>
+    <tr>
+      <td><strong>Speech</strong></td>
+      <td>Direct address ("You all know..."), rhetorical questions, groups of three</td>
+      <td class="effect">Write as if you're speaking out loud. Read it back to yourself &mdash; does it sound natural?</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">The Bullet Point Trick</div>
+    Directed writing questions always give you bullet points of what to include. Turn <strong>each bullet point into a paragraph</strong>. 3 bullet points = 3 body paragraphs + intro + conclusion. This guarantees you cover everything.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Soliloquy</span>
+    <span>A character speaks their private thoughts aloud while alone on stage &mdash; the audience becomes their confidant.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Fatal flaw</span>
+    <span>A weakness (ambition, jealousy, pride) that the hero cannot control, which ultimately destroys them.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Stage directions</span>
+    <span>Not just instructions for actors &mdash; they reveal character emotions, power dynamics, and hidden tensions.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Register</span>
+    <span>The level of formality must match the audience and situation &mdash; a blog wouldn't work as a school essay.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Comparing texts</span>
+    <span>Weave both texts together &mdash; if you write a paragraph about only one text, you've lost marks.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Soliloquy vs Monologue</div>
+    <strong>Sol</strong>iloquy = <strong>Sol</strong>o (alone on stage). <strong>Mono</strong>logue = <strong>Mono</strong>polises the conversation (talks AT other characters).
+  </div>
+
+  <div class="trick">
+    <div class="label">Yours Sincerely vs Yours Faithfully</div>
+    <strong>S</strong>incerely goes with a <strong>S</strong>pecific name (Dear Mr Smith). <strong>F</strong>aithfully goes with a <strong>F</strong>ormal greeting (Dear Sir/Madam). <strong>S = S, F = F.</strong>
+  </div>
+
+  <div class="trick">
+    <div class="label">PEE for Drama &mdash; The Three Layers</div>
+    Layer 1: What happens (the action/dialogue). Layer 2: What it reveals (about character/theme). Layer 3: What the audience feels (the emotional effect). Your exam answer needs all three layers. Most students stop at Layer 1.
+  </div>
+
+  <div class="trick">
+    <div class="label">Stage Direction Adverbs = Gold</div>
+    When a stage direction says <em>(uneasily)</em>, <em>(dryly)</em>, or <em>(distressed)</em>, this is the playwright TELLING you the character's emotions. Quote these in your PEE paragraph &mdash; they are easy, free evidence.
+  </div>
+</div>
+
+<!-- QUICK-FIRE EXAM CUES -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:45%;">If the Question Says...</th>
+      <th style="width:55%;">Your Answer Should...</th>
+    </tr>
+    <tr>
+      <td>"How does the playwright present [character]?"</td>
+      <td>Look at dialogue, stage directions, actions, and what others say about them. Quote specific words, explain what they SUGGEST about the character.</td>
+    </tr>
+    <tr>
+      <td>"What is the effect of the stage directions?"</td>
+      <td>Quote the adverbs (e.g. "uneasily," "massively"). Explain what they reveal about the character's emotions and the power balance in the scene.</td>
+    </tr>
+    <tr>
+      <td>"What is [character]'s fatal flaw?"</td>
+      <td>Name the flaw (ambition, jealousy, etc.) AND explain how it leads to their downfall with specific evidence from the text.</td>
+    </tr>
+    <tr>
+      <td>"Write an article about..."</td>
+      <td>Headline, hook, body paragraphs, conclusion. Match the register. Turn each bullet point into a paragraph.</td>
+    </tr>
+    <tr>
+      <td>"Compare how the two texts..."</td>
+      <td>Weave texts together. For each point: PEE on Text A, link with a connective, PEE on Text B. Never treat them in separate halves.</td>
+    </tr>
+    <tr>
+      <td>"Who is the intended audience?"</td>
+      <td>Consider age, education, prior knowledge. Explain how the language/register/tone targets that audience. This is about WHO, not WHY.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Shape &amp; Space 1 &mdash; Math Ch1</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #8e44ad;
+    --trick-bg: #f4ecf7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Math Ch1 &mdash; Cheat Sheet</div>
+    <h1>Shape &amp; Space 1</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- KEY VOCABULARY -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Acute angle</strong></td>
+      <td>An angle less than 90&deg;.</td>
+      <td class="confuse">Obtuse (90&deg;&ndash;180&deg;) or Reflex (&gt;180&deg;)</td>
+    </tr>
+    <tr>
+      <td><strong>Vertically opposite</strong></td>
+      <td>Two angles formed when lines cross &mdash; they are always <strong>equal</strong>.</td>
+      <td class="confuse">Adjacent angles (which are NOT equal)</td>
+    </tr>
+    <tr>
+      <td><strong>Alternate angles</strong></td>
+      <td>Z-shaped angles between parallel lines &mdash; they are <strong>equal</strong>.</td>
+      <td class="confuse">Corresponding (F-shape) or Co-interior (C-shape, sum to 180&deg;)</td>
+    </tr>
+    <tr>
+      <td><strong>Polygon</strong></td>
+      <td>Any flat shape with straight sides (triangle, quad, pentagon, etc.).</td>
+      <td class="confuse">Circle (not a polygon &mdash; no straight sides)</td>
+    </tr>
+    <tr>
+      <td><strong>Regular polygon</strong></td>
+      <td>All sides equal AND all angles equal.</td>
+      <td class="confuse">Irregular polygon (sides or angles differ)</td>
+    </tr>
+    <tr>
+      <td><strong>Circumference</strong></td>
+      <td>The distance around the outside of a circle.</td>
+      <td class="confuse">Area (the space inside), Diameter (a straight line through the centre)</td>
+    </tr>
+    <tr>
+      <td><strong>Radius</strong></td>
+      <td>Distance from the centre of a circle to the edge.</td>
+      <td class="confuse">Diameter (which is <strong>twice</strong> the radius)</td>
+    </tr>
+    <tr>
+      <td><strong>Sector</strong></td>
+      <td>A "pizza slice" of a circle (two radii + an arc).</td>
+      <td class="confuse">Segment (the region between a chord and the arc)</td>
+    </tr>
+    <tr>
+      <td><strong>Prism</strong></td>
+      <td>A 3D shape with the same cross-section all the way through.</td>
+      <td class="confuse">Pyramid (comes to a point)</td>
+    </tr>
+    <tr>
+      <td><strong>Net</strong></td>
+      <td>A flat pattern that folds up into a 3D shape.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- FORMULA TABLE -->
+<div class="card">
+  <h2>Key Formulae &mdash; Memorise These</h2>
+  <table class="compare-table">
+    <tr>
+      <th>What</th>
+      <th>Formula</th>
+      <th>Watch Out</th>
+    </tr>
+    <tr>
+      <td>Interior angle sum</td>
+      <td>(n &minus; 2) &times; 180&deg;</td>
+      <td>n = number of sides</td>
+    </tr>
+    <tr>
+      <td>Each exterior angle (regular)</td>
+      <td>360&deg; &divide; n</td>
+      <td>Interior + Exterior = 180&deg;</td>
+    </tr>
+    <tr>
+      <td>Circumference</td>
+      <td>&pi; &times; d &nbsp;(or 2&pi;r)</td>
+      <td>Check: given r or d?</td>
+    </tr>
+    <tr>
+      <td>Circle area</td>
+      <td>&pi; &times; r&sup2;</td>
+      <td>Halve d first if given diameter</td>
+    </tr>
+    <tr>
+      <td>Arc length</td>
+      <td>(&theta;/360) &times; &pi;d</td>
+      <td>&theta; = sector angle in degrees</td>
+    </tr>
+    <tr>
+      <td>Sector area</td>
+      <td>(&theta;/360) &times; &pi;r&sup2;</td>
+      <td>It's just a fraction of the full circle</td>
+    </tr>
+    <tr>
+      <td>Triangle area</td>
+      <td>&frac12; &times; base &times; height</td>
+      <td>Height must be <strong>perpendicular</strong></td>
+    </tr>
+    <tr>
+      <td>Parallelogram area</td>
+      <td>base &times; perpendicular height</td>
+      <td>NOT the slant side</td>
+    </tr>
+    <tr>
+      <td>Trapezium area</td>
+      <td>&frac12; &times; (a + b) &times; h</td>
+      <td>a &amp; b = the two parallel sides</td>
+    </tr>
+    <tr>
+      <td>Prism volume</td>
+      <td>cross-section area &times; length</td>
+      <td>Works for cuboids, cylinders, any prism</td>
+    </tr>
+    <tr>
+      <td>Cylinder volume</td>
+      <td>&pi;r&sup2; &times; h</td>
+      <td>A cylinder is a circular prism</td>
+    </tr>
+    <tr>
+      <td>Cuboid surface area</td>
+      <td>2(lw + lh + wh)</td>
+      <td>Three different pairs of faces</td>
+    </tr>
+    <tr>
+      <td>Cylinder surface area</td>
+      <td>2&pi;r&sup2; + 2&pi;rh</td>
+      <td>Two circles + the curved rectangle</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">The Fraction Trick for Sectors</div>
+    Arc length and sector area are just <strong>a fraction of the full circle</strong>. The fraction is always &theta;/360. Find the full circumference or full area first, then multiply by that fraction.
+  </div>
+</div>
+
+<!-- ANGLE FACTS SIDE BY SIDE -->
+<div class="card">
+  <h2>Angle Facts at a Glance</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Rule</th>
+      <th>Angles Add Up To</th>
+      <th>How to Spot It</th>
+    </tr>
+    <tr>
+      <td>Straight line</td>
+      <td>180&deg;</td>
+      <td>Angles on one side of a line</td>
+    </tr>
+    <tr>
+      <td>Point</td>
+      <td>360&deg;</td>
+      <td>Angles around a single point</td>
+    </tr>
+    <tr>
+      <td>Triangle</td>
+      <td>180&deg;</td>
+      <td>Three interior angles</td>
+    </tr>
+    <tr>
+      <td>Quadrilateral</td>
+      <td>360&deg;</td>
+      <td>Four interior angles</td>
+    </tr>
+    <tr>
+      <td>Vertically opposite</td>
+      <td>Equal</td>
+      <td>X shape where two lines cross</td>
+    </tr>
+    <tr>
+      <td>Alternate (Z-angles)</td>
+      <td>Equal</td>
+      <td>Draw a Z between parallel lines</td>
+    </tr>
+    <tr>
+      <td>Corresponding (F-angles)</td>
+      <td>Equal</td>
+      <td>Draw an F between parallel lines</td>
+    </tr>
+    <tr>
+      <td>Co-interior (C-angles)</td>
+      <td>180&deg;</td>
+      <td>Draw a C or U between parallel lines</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Angle sum (polygon)</span>
+    <span>Split any polygon into triangles from one vertex: number of triangles = (n &minus; 2), total degrees = that &times; 180&deg;.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Exterior angles</span>
+    <span>The exterior angles of any polygon always add up to 360&deg;, no matter how many sides it has.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Line symmetry</span>
+    <span>If you can fold a shape along a line and both halves match exactly, that line is a line of symmetry.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Rotational symmetry</span>
+    <span>The order is how many times the shape looks the same during one full turn &mdash; a square has order 4, a regular hexagon has order 6.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Compound shapes</span>
+    <span>Split into simple shapes, find each area separately, then add (or subtract if there's a hole).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Prism volume</span>
+    <span>Find the area of the end face (the cross-section), then multiply by the length &mdash; this one formula covers cuboids, cylinders, and triangular prisms.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Scale drawings</span>
+    <span>Scale 1 : 500 means 1 cm on paper = 500 cm in real life. Drawing to real = multiply; real to drawing = divide.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Bearings</span>
+    <span>Always from North, always clockwise, always three digits (045&deg;, not 45&deg;).</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Z, F, C for Parallel Lines</div>
+    When you see parallel lines on the exam, physically draw the letter <strong>Z</strong> (alternate/equal), <strong>F</strong> (corresponding/equal), or <strong>C</strong> (co-interior/add to 180&deg;) right on the diagram. This makes the correct rule obvious and shows the examiner your reasoning.
+  </div>
+
+  <div class="trick">
+    <div class="label">Radius vs. Diameter &mdash; "r Is Half"</div>
+    The area formula uses <strong>r</strong> (the little one). If the question gives you a diameter, <strong>halve it first</strong>. Every time you see a circle question, ask: "Did they give me r or d?" This one check prevents the most common circle mistake.
+  </div>
+
+  <div class="trick">
+    <div class="label">Perpendicular Height &mdash; "Right Angle to the Base"</div>
+    For triangles and parallelograms, the height must be at a right angle to the base &mdash; picture a dotted line dropping straight down, not the slant edge. If you use the slant side by mistake, the answer is always too big.
+  </div>
+
+  <div class="trick">
+    <div class="label">Cylinder Curved Surface &mdash; "Unroll the Label"</div>
+    Imagine peeling the label off a tin can. It becomes a rectangle. Width = circumference (2&pi;r), height = h. So curved surface area = 2&pi;rh. Visualising the unrolled label makes the formula stick.
+  </div>
+
+  <div class="trick">
+    <div class="label">Units Checklist</div>
+    Length = cm, m. Area = cm&sup2;, m&sup2;. Volume = cm&sup3;, m&sup3;. Writing the wrong unit loses a mark even if the number is perfect. Check your units last thing before moving on.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Find the sum of interior angles of a polygon"</td>
+      <td>Use <strong>(n &minus; 2) &times; 180&deg;</strong>. Count the sides first.</td>
+    </tr>
+    <tr>
+      <td>"Find each exterior angle of a regular polygon"</td>
+      <td><strong>360&deg; &divide; n</strong>. Then interior = 180&deg; &minus; exterior.</td>
+    </tr>
+    <tr>
+      <td>"State the order of rotational symmetry"</td>
+      <td>How many times the shape maps onto itself in one full turn. Regular n-gon = order n.</td>
+    </tr>
+    <tr>
+      <td>"Find the circumference"</td>
+      <td><strong>&pi; &times; d</strong> (or 2&pi;r). Check whether they gave radius or diameter.</td>
+    </tr>
+    <tr>
+      <td>"Find the area of the shaded region"</td>
+      <td>Usually: <strong>big area &minus; small area</strong>. Find each part separately, then subtract.</td>
+    </tr>
+    <tr>
+      <td>"Find the arc length / sector area"</td>
+      <td>It's a <strong>fraction</strong> of the full circle: multiply by &theta;/360.</td>
+    </tr>
+    <tr>
+      <td>"Find the volume of this prism"</td>
+      <td><strong>Cross-section area &times; length.</strong> Find the end-face area first.</td>
+    </tr>
+    <tr>
+      <td>"Find the surface area"</td>
+      <td>Add up the areas of <strong>ALL faces</strong>. For a cuboid: 2(lw + lh + wh). For a cylinder: 2&pi;r&sup2; + 2&pi;rh.</td>
+    </tr>
+    <tr>
+      <td>"A map has scale 1 : 25 000. Find the real distance."</td>
+      <td><strong>Multiply</strong> the map measurement by 25 000, then convert units (cm &rarr; m &rarr; km).</td>
+    </tr>
+    <tr>
+      <td>"Give your answer in terms of &pi;"</td>
+      <td>Leave &pi; in the answer (e.g. 25&pi; cm&sup2;). Do NOT multiply out to a decimal.</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; "Not Drawn Accurately"</div>
+    If the diagram says "not drawn accurately," do NOT measure with a ruler or protractor. Use the angle/length rules and formulae instead. The diagram is just there to help you visualise.
+  </div>
+</div>
+
+</body>
+</html>

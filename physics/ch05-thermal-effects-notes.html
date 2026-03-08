@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Thermal Effects &mdash; Physics Ch5</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #2e86c1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Formula highlight */
+  .formula {
+    display: inline-block;
+    background: #fff;
+    border: 2px solid var(--subject);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--subject-dark);
+    margin: 8px 0;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* Worked example */
+  .worked {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 13px;
+    border: 1px solid #e0e0e0;
+  }
+  .worked .step {
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    font-size: 12px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .step-text code {
+    background: var(--subject-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Physics &mdash; Chapter 5</div>
+  <h1>Thermal Effects</h1>
+  <div class="subtitle">Particles, conduction, convection, radiation, specific heat capacity, latent heat &mdash; the full thermal toolkit</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 36 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 5.1: MOVING PARTICLES ===== -->
+<div class="section-header">
+  <span class="num">Section 5.1</span>
+  Moving Particles
+</div>
+<div class="card">
+  <div class="intro-text">
+    Everything is made of tiny moving particles. The kinetic theory explains how solids, liquids, and gases behave.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Particle Behaviour in Three States</div>
+      <table class="compare-table">
+        <tr>
+          <th>Property</th>
+          <th>Solid</th>
+          <th>Liquid</th>
+          <th>Gas</th>
+        </tr>
+        <tr>
+          <td><strong>Arrangement</strong></td>
+          <td>Regular pattern, close together</td>
+          <td>Irregular, close together</td>
+          <td>Very far apart, random</td>
+        </tr>
+        <tr>
+          <td><strong>Movement</strong></td>
+          <td>Vibrate in fixed positions</td>
+          <td>Slide past each other</td>
+          <td>Move fast in all directions</td>
+        </tr>
+        <tr>
+          <td><strong>Forces</strong></td>
+          <td>Strong bonds</td>
+          <td>Weaker bonds</td>
+          <td>Almost no bonds</td>
+        </tr>
+        <tr>
+          <td><strong>Shape/volume</strong></td>
+          <td>Fixed shape, fixed volume</td>
+          <td>No fixed shape, fixed volume</td>
+          <td>No fixed shape or volume</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Internal Energy</div>
+      <p><strong>Internal energy</strong> is the total kinetic energy and potential energy of all the particles in a material. The hotter the material, the more internal energy it has.</p>
+      <p style="margin-top:6px;"><strong>Heat</strong> is the transfer of thermal energy from a hotter object to a cooler one. Energy flows until both objects reach the <strong>same temperature</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Brownian Motion</div>
+      <p><strong>Brownian motion</strong> is the random, zig-zag movement of tiny visible particles (like smoke) caused by collisions with invisible gas molecules. It provides evidence that gas molecules are in constant, random motion.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The particle table above is one of the most commonly tested topics in IGCSE physics. You need to know the arrangement, movement, and forces for all three states. Learn it until you can fill in the table from memory.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe particle arrangement and movement in solids, liquids, and gases</li>
+    <li><input type="checkbox"> I can define internal energy</li>
+    <li><input type="checkbox"> I can explain Brownian motion</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.2: TEMPERATURE ===== -->
+<div class="section-header">
+  <span class="num">Section 5.2</span>
+  Temperature
+</div>
+<div class="card">
+  <div class="intro-text">
+    Temperature measures how hot something is. It is linked to how fast the particles are moving.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p>&bull; <strong>Temperature</strong> is related to the <strong>average kinetic energy</strong> of the particles. Higher temperature = faster particles on average.<br>
+         &bull; The Celsius scale has two <strong>fixed points</strong>: 0 &deg;C (melting ice) and 100 &deg;C (boiling water at standard pressure).<br>
+         &bull; <strong>Absolute zero</strong> = -273 &deg;C = 0 K. This is the lowest possible temperature &mdash; particles have minimum energy and cannot move any slower.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Converting Celsius to Kelvin</div>
+      <div class="formula">K = &deg;C + 273</div>
+      <p>Examples: 0 &deg;C = 273 K. 100 &deg;C = 373 K. -273 &deg;C = 0 K.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Temperature vs Heat</div>
+      <p><strong>Temperature</strong> tells you how hot something is (average KE per particle).<br>
+         <strong>Heat</strong> is the transfer of thermal energy from hot to cold.<br>
+         A cup of boiling water (100 &deg;C) has the same temperature as a bathtub of boiling water, but the bathtub contains far more thermal energy because it has more particles.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can convert between Celsius and Kelvin</li>
+    <li><input type="checkbox"> I know what absolute zero is (-273 &deg;C = 0 K)</li>
+    <li><input type="checkbox"> I know the difference between temperature and heat</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.3: EXPANSION ===== -->
+<div class="section-header">
+  <span class="num">Section 5.3</span>
+  Expansion of Solids and Liquids
+</div>
+<div class="card">
+  <div class="intro-text">
+    Most materials expand when heated. This is usually tiny, but if you don't allow for it, bridges can buckle and roads can crack.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Thermal Expansion</div>
+      <p><strong>Thermal expansion</strong> happens because heated particles vibrate faster and take up more space. Most solids expand when heated. Liquids expand more than solids. Gases expand the most.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Applications and Problems</div>
+      <p>&bull; <strong>Bridges</strong> have expansion gaps at the ends, and one end rests on rollers.<br>
+         &bull; <strong>Overhead cables</strong> are hung with slack so they don't snap when they contract in cold weather.<br>
+         &bull; Steel rods are used to reinforce concrete because they expand by the same amount.<br>
+         &bull; A <strong>bimetal strip</strong> (two metals bonded together) bends when heated because one metal expands more. Used in thermostats.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Water Is Unusual</div>
+      <p>Water expands when it <strong>freezes</strong> (unlike most substances). This is why ice floats and why frozen water can burst pipes. Water has its maximum density at <strong>4 &deg;C</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Exam questions often ask you to "explain why" bridges have gaps or cables have slack. The answer is always: thermal expansion. Materials expand when heated and contract when cooled. If there is no room to expand, the forces can crack concrete or buckle rails.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can explain thermal expansion using particle theory</li>
+    <li><input type="checkbox"> I can give examples of where expansion is allowed for (bridges, cables)</li>
+    <li><input type="checkbox"> I know that water is unusual &mdash; it expands when it freezes</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.4: HEATING GASES ===== -->
+<div class="section-header">
+  <span class="num">Section 5.4</span>
+  Heating Gases
+</div>
+<div class="card">
+  <div class="intro-text">
+    When a gas is heated, either its pressure or its volume (or both) will change. This links back to the kinetic theory and to Boyle's law from Chapter 3.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Two Situations</div>
+      <p><strong>Constant volume (e.g. sealed container):</strong> Heating makes particles move faster. They hit the walls harder and more often. Pressure <strong>increases</strong>.<br><br>
+         <strong>Constant pressure (e.g. balloon open to atmosphere):</strong> Heating makes particles move faster and push the walls outward. Volume <strong>increases</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Comparing Expansions</div>
+      <p>At constant pressure, for the same temperature rise:<br>
+         &bull; Gases expand the <strong>most</strong> (attractions between particles are very weak).<br>
+         &bull; Liquids expand <strong>moderately</strong>.<br>
+         &bull; Solids expand the <strong>least</strong> (strong attractions hold particles tightly).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>When explaining gas behaviour, always use the kinetic theory chain: heating &rarr; more kinetic energy &rarr; faster particles &rarr; harder/more frequent collisions &rarr; more pressure (or more volume). Each step in the chain is a mark.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can explain what happens when a gas is heated at constant volume</li>
+    <li><input type="checkbox"> I can explain what happens when a gas is heated at constant pressure</li>
+    <li><input type="checkbox"> I know the order: gases expand most, then liquids, then solids</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.5: CONDUCTION ===== -->
+<div class="section-header">
+  <span class="num">Section 5.5</span>
+  Thermal Conduction
+</div>
+<div class="card">
+  <div class="intro-text">
+    Conduction is how thermal energy travels through solids. It is why a metal spoon in hot soup gets hot, but a wooden spoon does not.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p><strong>Conduction</strong> is the transfer of thermal energy through a material without the material itself moving. Energy is passed from particle to particle by vibrations.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Conductors and Insulators</div>
+      <p>&bull; <strong>Good conductors:</strong> metals (especially copper, aluminium, iron). Also silicon, graphite.<br>
+         &bull; <strong>Good insulators (poor conductors):</strong> glass, water, plastics, rubber, wood, wool.<br>
+         &bull; Materials with <strong>trapped air</strong> (wool, fibreglass, foam) are excellent insulators because air is a very poor conductor.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Metals Conduct Best</div>
+      <p>Metals have <strong>free electrons</strong> that can move through the metal. When heated, these electrons speed up, collide with atoms further along, and transfer energy very quickly. This is much faster than particle-to-particle vibration alone.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; "Metal Feels Cold" Trap</div>
+      <p>A metal door handle feels cold because it conducts heat <strong>away from your hand</strong> quickly. A wooden door feels warm because wood is an insulator &mdash; it conducts heat away slowly. They are actually the same temperature (room temperature). The metal just transfers your body heat faster.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define conduction</li>
+    <li><input type="checkbox"> I can name good conductors and insulators</li>
+    <li><input type="checkbox"> I can explain why metals are the best conductors (free electrons)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.6: CONVECTION ===== -->
+<div class="section-header">
+  <span class="num">Section 5.6</span>
+  Convection
+</div>
+<div class="card">
+  <div class="intro-text">
+    Convection is how thermal energy travels through fluids (liquids and gases) by the movement of the material itself. It creates circulating currents.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition and Process</div>
+      <p><strong>Convection</strong> is the transfer of thermal energy by the movement of a heated fluid (liquid or gas).</p>
+      <p style="margin-top:6px;">The process: Fluid is heated &rarr; it <strong>expands</strong> &rarr; becomes <strong>less dense</strong> &rarr; <strong>rises</strong> &rarr; cooler, denser fluid <strong>sinks</strong> to replace it &rarr; this creates a <strong>convection current</strong> (a circulating loop).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Examples</div>
+      <p>&bull; <strong>Room heating:</strong> A radiator heats air, which rises. Cooler air sinks and is drawn towards the radiator, creating a convection current that heats the whole room.<br>
+         &bull; <strong>Refrigerator:</strong> The freezer is at the top. Cold air sinks and circulates around the food.<br>
+         &bull; <strong>Sea breezes:</strong> During the day, land heats up faster than sea. Warm air rises over the land, and cooler air moves in from the sea. At night, the reverse happens.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Convection Does NOT Happen in Solids</div>
+      <p>Convection requires the material to <strong>move</strong>. In a solid, particles are locked in place, so convection is impossible. If an exam question asks about heat transfer in a solid, the answer is conduction, not convection.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define convection and describe the convection current process</li>
+    <li><input type="checkbox"> I can explain examples: room heating, fridge, sea breezes</li>
+    <li><input type="checkbox"> I know convection cannot happen in solids</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.7: RADIATION ===== -->
+<div class="section-header">
+  <span class="num">Section 5.7</span>
+  Thermal Radiation
+</div>
+<div class="card">
+  <div class="intro-text">
+    Radiation is the only way thermal energy can travel through a vacuum (empty space). It is how the Sun's energy reaches Earth.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p><strong>Thermal radiation</strong> is energy transferred by <strong>infrared waves</strong> (a type of electromagnetic wave). It does not need a medium &mdash; it can travel through a <strong>vacuum</strong>. All objects emit thermal radiation. The hotter the object, the more radiation it emits.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Surfaces and Radiation</div>
+      <table class="compare-table">
+        <tr>
+          <th>Surface</th>
+          <th>Emitter</th>
+          <th>Absorber</th>
+          <th>Reflector</th>
+        </tr>
+        <tr>
+          <td><strong>Matt black</strong></td>
+          <td>Best</td>
+          <td>Best</td>
+          <td>Worst</td>
+        </tr>
+        <tr>
+          <td><strong>White</strong></td>
+          <td>Poor</td>
+          <td>Poor</td>
+          <td>Good</td>
+        </tr>
+        <tr>
+          <td><strong>Silver / shiny</strong></td>
+          <td>Worst</td>
+          <td>Worst</td>
+          <td>Best</td>
+        </tr>
+      </table>
+      <p style="margin-top:8px;">Good emitters are also good absorbers. Good reflectors are poor absorbers.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This explains real-world design: solar panels are black (absorb more radiation), houses in hot countries are painted white (reflect radiation), emergency blankets are shiny (reflect body heat back). The surface comparison table is heavily tested on the exam.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define thermal radiation</li>
+    <li><input type="checkbox"> I know that radiation travels through a vacuum (no medium needed)</li>
+    <li><input type="checkbox"> I know which surfaces are the best/worst emitters, absorbers, and reflectors</li>
+  </ul>
+</div>
+
+<!-- ===== THE BIG COMPARISON ===== -->
+<div class="section-header">
+  <span class="num">Key Comparison</span>
+  Conduction vs Convection vs Radiation
+</div>
+<div class="card">
+  <div class="intro-text">
+    The exam loves asking you to compare these three methods of heat transfer. Learn this table cold.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Conduction</th>
+          <th>Convection</th>
+          <th>Radiation</th>
+        </tr>
+        <tr>
+          <td><strong>How it works</strong></td>
+          <td>Particle vibrations (+ free electrons in metals)</td>
+          <td>Movement of heated fluid</td>
+          <td>Infrared electromagnetic waves</td>
+        </tr>
+        <tr>
+          <td><strong>Needs a medium?</strong></td>
+          <td>Yes (solids best)</td>
+          <td>Yes (fluids only)</td>
+          <td>No (works through vacuum)</td>
+        </tr>
+        <tr>
+          <td><strong>Works in solids?</strong></td>
+          <td>Yes (main method)</td>
+          <td>No</td>
+          <td>Yes (emitted from surface)</td>
+        </tr>
+        <tr>
+          <td><strong>Direction</strong></td>
+          <td>Hot end to cold end</td>
+          <td>Hot fluid rises, cold sinks</td>
+          <td>All directions from the source</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Multi-Process Questions</div>
+      <p>Many exam questions describe a situation (like a car engine cooling system) and ask you to identify which heat transfer process is involved at each stage. Often multiple processes are happening at once. For each stage, ask: "Are the particles moving to a new place?" (convection) "Is it passing through the material?" (conduction) "Is it through empty space or infrared?" (radiation).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the comparison table into my notes</li>
+    <li><input type="checkbox"> I can identify which heat transfer process is at work in real-life examples</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.8: LIQUIDS AND VAPOURS ===== -->
+<div class="section-header">
+  <span class="num">Section 5.8</span>
+  Liquids and Vapours
+</div>
+<div class="card">
+  <div class="intro-text">
+    This section covers evaporation, boiling, and condensation &mdash; and the crucial differences between evaporation and boiling that come up on nearly every exam.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Evaporation vs Boiling</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Evaporation</th>
+          <th>Boiling</th>
+        </tr>
+        <tr>
+          <td><strong>Temperature</strong></td>
+          <td>Any temperature below boiling point</td>
+          <td>Only at the boiling point</td>
+        </tr>
+        <tr>
+          <td><strong>Where it happens</strong></td>
+          <td>Surface only</td>
+          <td>Throughout the liquid</td>
+        </tr>
+        <tr>
+          <td><strong>Bubbles?</strong></td>
+          <td>No bubbles</td>
+          <td>Yes, bubbles form inside</td>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Slow, gradual</td>
+          <td>Rapid</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Factors That Speed Up Evaporation</div>
+      <p>1. <strong>Higher temperature</strong> &mdash; more particles have enough energy to escape.<br>
+         2. <strong>Larger surface area</strong> &mdash; more particles are near the surface.<br>
+         3. <strong>Lower humidity</strong> &mdash; fewer vapour particles return to the liquid.<br>
+         4. <strong>Air blowing across the surface</strong> &mdash; carries away escaping particles.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Cooling Effect of Evaporation</div>
+      <p>When a liquid evaporates, the <strong>fastest</strong> (highest energy) particles escape from the surface. This leaves behind the <strong>slower</strong> (lower energy) particles, so the average kinetic energy decreases and the temperature drops. This is why sweating cools you down.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; This Connects to Chemistry</div>
+      <p>Evaporation vs boiling comes up in both physics and chemistry exams. The physics version focuses on the kinetic theory explanation (fast particles escape). The chemistry version focuses on state changes and heating curves. You need the physics explanation for this exam.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state at least three differences between evaporation and boiling</li>
+    <li><input type="checkbox"> I can list four factors that speed up evaporation</li>
+    <li><input type="checkbox"> I can explain the cooling effect of evaporation using kinetic theory</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.9: SPECIFIC HEAT CAPACITY ===== -->
+<div class="section-header">
+  <span class="num">Section 5.9</span>
+  Specific Heat Capacity
+</div>
+<div class="card">
+  <div class="intro-text">
+    Different materials take different amounts of energy to heat up. Specific heat capacity tells you how much energy is needed per kilogram per degree.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p><strong>Specific heat capacity</strong> (c) is the energy needed to raise the temperature of <strong>1 kg</strong> of a material by <strong>1 &deg;C</strong> (or 1 K). Unit: <strong>J/(kg &deg;C)</strong> or J/(kg K).</p>
+      <p style="margin-top:6px;">Water has a very high specific heat capacity: <strong>4200 J/(kg &deg;C)</strong>. That is why water is so good at storing thermal energy.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Formula + Units</div>
+      <div class="formula">E = m x c x &Delta;&theta;</div>
+      <p><strong>E</strong> = energy transferred (joules, J)<br>
+         <strong>m</strong> = mass (kilograms, kg)<br>
+         <strong>c</strong> = specific heat capacity (J/(kg &deg;C))<br>
+         <strong>&Delta;&theta;</strong> = temperature change (&deg;C or K)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <p>2 kg of water cools from 70 &deg;C to 20 &deg;C. How much thermal energy does it lose? (c = 4200 J/(kg &deg;C))</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the formula: <code>E = m x c x &Delta;&theta;</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Temperature change: <code>&Delta;&theta; = 70 - 20 = 50 &deg;C</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Substitute: <code>E = 2 x 4200 x 50</code></span></div>
+        <div class="step"><span class="step-num">4.</span> <span class="step-text">Calculate: <code>E = 420 000 J</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Temperature CHANGE, Not Temperature</div>
+      <p>&Delta;&theta; is the <strong>change</strong> in temperature, not the final temperature. If water heats from 20 &deg;C to 70 &deg;C, &Delta;&theta; = 50 &deg;C (not 70 &deg;C). Always subtract: final - initial (or the other way for cooling).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Common SHC Values</div>
+      <p>You don't need to memorise specific heat capacities &mdash; they will always be given in the question. But know that water (4200) is much higher than metals like aluminium (900) or copper (400). This is why water is used in heating systems and car cooling systems.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define specific heat capacity</li>
+    <li><input type="checkbox"> I can write E = mc&Delta;&theta; from memory and know what each letter means</li>
+    <li><input type="checkbox"> I solved the worked example (420 000 J)</li>
+    <li><input type="checkbox"> I know to use temperature CHANGE, not final temperature</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5.10: LATENT HEAT ===== -->
+<div class="section-header">
+  <span class="num">Section 5.10</span>
+  Latent Heat
+</div>
+<div class="card">
+  <div class="intro-text">
+    When a substance changes state (melts, boils, freezes, condenses), energy is transferred but the temperature does NOT change. This energy is called latent heat.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definitions</div>
+      <p>&bull; <strong>Latent heat of fusion</strong>: Energy needed to change 1 kg of a substance from solid to liquid at the same temperature. For ice: <strong>330 000 J/kg</strong>.<br>
+         &bull; <strong>Latent heat of vaporization</strong>: Energy needed to change 1 kg of a substance from liquid to gas at the same temperature. For water: <strong>2 300 000 J/kg</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Formula</div>
+      <div class="formula">E = m x L</div>
+      <p><strong>E</strong> = energy transferred (joules, J)<br>
+         <strong>m</strong> = mass (kilograms, kg)<br>
+         <strong>L</strong> = specific latent heat (J/kg)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <p>How much energy is needed to melt 2 kg of ice at 0 &deg;C? (L = 330 000 J/kg)</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the formula: <code>E = m x L</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Substitute: <code>E = 2 x 330 000</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Calculate: <code>E = 660 000 J</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Temperature Stays Constant</div>
+      <p>During a change of state, the energy supplied is used to <strong>break the bonds</strong> (forces of attraction) between particles, NOT to increase their kinetic energy. Since temperature depends on kinetic energy, the temperature stays the same until the change of state is complete.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; When to Use Which Formula</div>
+      <p>&bull; Changing temperature (no state change)? Use <strong>E = mc&Delta;&theta;</strong>.<br>
+         &bull; Changing state (melting, boiling, freezing, condensing &mdash; no temperature change)? Use <strong>E = mL</strong>.<br>
+         &bull; If a question asks you to heat ice from -10 &deg;C to steam at 100 &deg;C, you need BOTH formulas for different stages of the process.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The flat sections of heating curves (temperature constant while state changes) are explained by latent heat. This is one of the most tested concepts. Know the explanation by heart: "Energy is used to break bonds between particles, not to increase kinetic energy, so the temperature does not change."</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define latent heat of fusion and latent heat of vaporization</li>
+    <li><input type="checkbox"> I can write E = mL from memory</li>
+    <li><input type="checkbox"> I solved the worked example (660 000 J)</li>
+    <li><input type="checkbox"> I know why temperature stays constant during a change of state</li>
+    <li><input type="checkbox"> I know when to use E = mc&Delta;&theta; vs E = mL</li>
+  </ul>
+</div>
+
+<!-- ===== THE BIG FORMULA TABLE ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  The Big Formula Table
+</div>
+<div class="card">
+  <div class="intro-text">
+    This table summarises every formula in this chapter. Copy it into your notes and learn to reproduce it from memory.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Quantity</th>
+          <th>Formula</th>
+          <th>Units</th>
+        </tr>
+        <tr>
+          <td><strong>Kelvin conversion</strong></td>
+          <td>K = &deg;C + 273</td>
+          <td>K</td>
+        </tr>
+        <tr>
+          <td><strong>Specific heat capacity</strong></td>
+          <td>E = m x c x &Delta;&theta;</td>
+          <td>J</td>
+        </tr>
+        <tr>
+          <td><strong>Latent heat</strong></td>
+          <td>E = m x L</td>
+          <td>J</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Real Test</div>
+      <p>Close your book. Write out all three formulas, the comparison table (conduction / convection / radiation), and the evaporation vs boiling table from memory. If you can do this perfectly, you own this chapter.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the formula table into my notes</li>
+    <li><input type="checkbox"> I can write all three formulas from memory</li>
+    <li><input type="checkbox"> I can reproduce the conduction/convection/radiation comparison from memory</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 5 Notes Complete</h2>
+  <p>You've covered particles, temperature, expansion, heating gases, conduction, convection, radiation, evaporation, specific heat capacity, and latent heat. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

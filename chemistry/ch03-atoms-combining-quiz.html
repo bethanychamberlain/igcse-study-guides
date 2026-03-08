@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Atoms Combining &mdash; Chemistry Ch3</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--subject);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline {
+    background: white;
+    color: var(--subject-dark);
+    border: 2px solid var(--subject);
+  }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tier header */
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+
+  .tier-header .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+
+  .tier-header .info {
+    flex: 1;
+  }
+  .tier-header h2 {
+    font-size: 16px;
+    margin: 0;
+  }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+
+  .tier-header .marks {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+
+  .q-text {
+    flex: 1;
+    font-size: 14px;
+  }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Answer area */
+  .q-answer {
+    padding: 0 20px 16px;
+    display: none;
+  }
+  .q-answer.visible {
+    display: block;
+  }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Self-rating */
+  .self-rate {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .self-rate .rate-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .rate-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 2px solid #ddd;
+      background: white;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+  }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  /* Answer lines for print */
+  .answer-lines {
+    display: none;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines {
+      display: block;
+      padding: 4px 20px 16px;
+    }
+    .answer-lines .line {
+      border-bottom: 1px solid #d0d0d0;
+      height: 26px;
+    }
+    .tier-header { break-after: avoid; }
+  }
+
+  /* Quiz guide */
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .quiz-guide .guide-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .rating-scale {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .rating-scale .rs-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-scale .rs-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry Ch3 &mdash; Self-Test Quiz</div>
+  <h1>Atoms Combining</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name it. Intermediate = explain it. Advanced = discuss and apply it.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> in the answers show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each on the exam. Get these right and you're building a solid base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">What is a <strong>compound</strong>? How is it different from a <strong>mixture</strong>?</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      A compound is made of atoms of <strong>different elements bonded together</strong> [1]. A mixture contains different substances that are <strong>not bonded/chemically joined together</strong> and can usually be separated easily [1].
+      <div class="mark-hint">The key word is "bonded." A compound = bonded, a mixture = not bonded. If you only say "a compound has different elements" without mentioning bonding, you lose a mark.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">Explain why atoms of Group VIII (the noble gases) do not form bonds.</div>
+    <span class="q-marks">1 mark</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Their atoms already have a <strong>full outer shell of electrons</strong>, so they are stable and do not need to gain, lose, or share electrons [1].
+      <div class="mark-hint">"Full outer shell" is the key phrase. Don't just say "they are stable" without explaining why.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">Define the term <strong>ion</strong>. What is the difference between a <strong>cation</strong> and an <strong>anion</strong>?</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      An ion is a charged particle (atom or group of atoms) that has an <strong>unequal number of protons and electrons</strong> [1]. A cation is a <strong>positive</strong> ion (formed by losing electrons). An anion is a <strong>negative</strong> ion (formed by gaining electrons) [1].
+      <div class="mark-hint">Remember: positive cat(ion), negative an(ion). Metals form cations; non-metals form anions.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">What is a <strong>covalent bond</strong>? What is a <strong>molecule</strong>?</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      A covalent bond is formed when two atoms <strong>share a pair of electrons</strong> [1]. A molecule is two or more atoms <strong>held together by covalent bonds</strong> [1].
+      <div class="mark-hint">Don't say "atoms give electrons to each other" &mdash; that describes ionic bonding, not covalent. Sharing is the key word.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain It?</h2>
+    <div class="marks">Worth 3-4 marks each. You need to explain WHY and HOW, not just name things.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">Describe how an <strong>ionic bond</strong> forms between sodium and chlorine. Include what happens to the electrons, the charges on the ions formed, and the formula of the compound.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Sodium has 1 electron in its outer shell. It <strong>loses/transfers</strong> this electron to a chlorine atom [1]. Sodium becomes a positive ion, Na&#8314;, and chlorine becomes a negative ion, Cl&#8315; [1]. Both ions now have a <strong>full outer shell of electrons</strong> [1]. The formula of the compound is <strong>NaCl</strong> (one Na&#8314; for each Cl&#8315; so the charges balance to zero) [1].
+      <div class="mark-hint">Four marks, four ideas: (1) electron transfer from Na to Cl, (2) charges on both ions, (3) both achieve full outer shells, (4) formula. Don't forget to say both ions get full outer shells &mdash; that's the whole reason bonding happens.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Explain why solid sodium chloride does <strong>not</strong> conduct electricity, but sodium chloride solution <strong>does</strong> conduct.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      In solid sodium chloride, the ions are held in a <strong>fixed/regular lattice</strong> and cannot move [1]. To conduct electricity, charged particles must be <strong>free to move</strong> [1]. When dissolved in water, the lattice breaks apart and the ions (Na&#8314; and Cl&#8315;) are <strong>free to move</strong> through the solution, carrying the electric charge [1].
+      <div class="mark-hint">Three marks: (1) ions fixed in solid, (2) must be free to move to conduct, (3) dissolving frees the ions. This question comes up very frequently. The same explanation applies to melted ionic compounds.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">Diamond and graphite are both made of carbon atoms, yet diamond is very hard while graphite is soft and slippery. <strong>Explain</strong> this difference in terms of their structures.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      In diamond, each carbon atom is bonded to <strong>4 other carbon atoms</strong> by strong covalent bonds [1], forming a rigid <strong>3D giant covalent structure</strong>, which makes it very hard [1]. In graphite, each carbon atom is bonded to <strong>3 others</strong>, forming flat <strong>layers/sheets</strong> [1]. The forces <strong>between the layers are weak</strong>, so the layers can slide over each other, making graphite soft and slippery [1].
+      <div class="mark-hint">Key distinction: it's the forces BETWEEN the layers in graphite that are weak, not the covalent bonds. The bonds within the layers are just as strong as in diamond. If you say "graphite has weak bonds," that's wrong and you'll lose the mark.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Discuss It?</h2>
+    <div class="marks">Worth 5-6 marks each. These need full sentences, multiple points, and clear reasoning. This is where exam grades are won or lost.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">The table below shows data for four substances. For each one, identify the type of structure and bonding. Explain your reasoning.<br><br>
+    <table style="width:100%; font-size:13px; border-collapse:collapse; margin-top:6px;">
+      <tr style="background:#f0f0f0;"><th style="padding:4px 8px; text-align:left;">Substance</th><th style="padding:4px 8px;">Melting point / &deg;C</th><th style="padding:4px 8px;">Conducts as solid?</th><th style="padding:4px 8px;">Conducts when melted?</th></tr>
+      <tr><td style="padding:4px 8px;">A</td><td style="padding:4px 8px; text-align:center;">801</td><td style="padding:4px 8px; text-align:center;">No</td><td style="padding:4px 8px; text-align:center;">Yes</td></tr>
+      <tr><td style="padding:4px 8px;">B</td><td style="padding:4px 8px; text-align:center;">&minus;78</td><td style="padding:4px 8px; text-align:center;">No</td><td style="padding:4px 8px; text-align:center;">No</td></tr>
+      <tr><td style="padding:4px 8px;">C</td><td style="padding:4px 8px; text-align:center;">1083</td><td style="padding:4px 8px; text-align:center;">Yes</td><td style="padding:4px 8px; text-align:center;">Yes</td></tr>
+      <tr><td style="padding:4px 8px;">D</td><td style="padding:4px 8px; text-align:center;">3550</td><td style="padding:4px 8px; text-align:center;">No</td><td style="padding:4px 8px; text-align:center;">No</td></tr>
+    </table></div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>A: Giant ionic</strong> &mdash; high melting point (strong ionic bonds), does not conduct as a solid (ions fixed in lattice) but conducts when melted (ions free to move) [2 &mdash; 1 for identification, 1 for reasoning].<br><br>
+      <strong>B: Molecular covalent (simple molecules)</strong> &mdash; very low melting point (weak intermolecular forces between molecules), does not conduct in either state (no charged particles/ions) [1].<br><br>
+      <strong>C: Metallic</strong> &mdash; high melting point (strong metallic bonds), conducts as a solid and when melted (delocalised electrons free to move and carry charge in both states) [2 &mdash; 1 for identification, 1 for reasoning].<br><br>
+      <strong>D: Giant covalent</strong> &mdash; very high melting point (many strong covalent bonds to break), does not conduct in either state (no free electrons or ions) [1].
+      <div class="mark-hint">This is one of the most common exam question types. The trick is matching the pattern: ionic = high mp, conducts only when melted/dissolved. Metallic = high mp, always conducts. Molecular = low mp, never conducts. Giant covalent = very high mp, never conducts (except graphite).</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">Magnesium (Group II) reacts with oxygen (Group VI) to form magnesium oxide. (a) Describe what happens to the electrons when magnesium reacts with oxygen. (b) State the charges on the ions formed and explain how you can work out the charge on each ion. (c) Write the formula of magnesium oxide.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> Each magnesium atom <strong>loses/transfers 2 electrons</strong> from its outer shell to an oxygen atom [1]. The oxygen atom <strong>gains these 2 electrons</strong> [1].<br><br>
+      <strong>(b)</strong> The magnesium ion has a charge of <strong>2+</strong> (Mg&#178;&#8314;) because it has 12 protons but only 10 electrons (12+ and 10&minus; = 2+) [1]. The oxide ion has a charge of <strong>2&minus;</strong> (O&#178;&#8315;) because it has 8 protons but 10 electrons (8+ and 10&minus; = 2&minus;) [1].<br><br>
+      <strong>(c)</strong> The formula is <strong>MgO</strong> &mdash; one Mg&#178;&#8314; balances one O&#178;&#8315;, giving a total charge of zero [1].
+      <div class="mark-hint">The ion charges come from proton count minus electron count. Magnesium is in Group II so it loses 2 electrons. Oxygen is in Group VI so it needs 2 more to fill its shell. That's why the charges match and you only need one of each.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">Copper is a metal used for electrical wiring and water pipes. Using your knowledge of metallic bonding and the structure of metals, explain: (a) why copper is a good conductor of electricity, (b) why copper can be drawn into thin wires (it is ductile), and (c) why copper has a high melting point (1083&deg;C).</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> In copper, the outer electrons are <strong>delocalised</strong> (free to move throughout the structure) [1]. When a voltage is applied, these delocalised electrons can move through the metal lattice, <strong>carrying charge as an electric current</strong> [1].<br><br>
+      <strong>(b)</strong> The metal ions are arranged in <strong>layers</strong>. When a force is applied, the layers can <strong>slide over each other</strong> [1] without the metallic bond breaking, because the sea of delocalised electrons moves with the ions and <strong>new bonds re-form</strong> in the new position [1].<br><br>
+      <strong>(c)</strong> There is a <strong>strong electrostatic attraction</strong> between the positive copper ions and the sea of delocalised electrons (the metallic bond) [1]. It takes a <strong>large amount of energy</strong> to overcome these strong attractions, so the melting point is high [1].
+      <div class="mark-hint">Six marks, six ideas. Notice every answer comes back to the same model: positive ions in a sea of delocalised electrons. If you understand that model, you can answer any question about metals. Always mention "delocalised electrons" &mdash; that's the phrase the examiner is looking for.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle answers
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  // Click question to toggle its answer
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  // Self-rating
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    // Update button styles
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

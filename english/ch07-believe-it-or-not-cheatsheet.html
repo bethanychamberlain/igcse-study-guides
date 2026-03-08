@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Believe It or Not &mdash; English Ch7</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">English Ch7 &mdash; Cheat Sheet</div>
+    <h1>Believe It or Not</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Bias</strong></td>
+      <td>When a text favours one side &mdash; it's not neutral. Can be deliberate or unconscious.</td>
+      <td class="confuse">Opinion (bias is hidden or slanted; opinion is stated openly)</td>
+    </tr>
+    <tr>
+      <td><strong>Significant absence</strong></td>
+      <td>What a text deliberately leaves OUT. What's missing can be as important as what's included.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Colloquial language</strong></td>
+      <td>Informal, everyday speech &mdash; slang, contractions. Makes writing feel personal.</td>
+      <td class="confuse">Cliche (colloquial = informal register; cliche = overused expression)</td>
+    </tr>
+    <tr>
+      <td><strong>Cliche</strong></td>
+      <td>An overused expression that has lost its impact. "At the end of the day." Shows lazy writing.</td>
+      <td class="confuse">Idiom (idioms can be fresh and effective; cliches are worn out)</td>
+    </tr>
+    <tr>
+      <td><strong>Emotive language</strong></td>
+      <td>Words chosen to provoke an emotional response. Bypasses logic, appeals to feelings.</td>
+      <td class="confuse">Descriptive language (emotive triggers feelings; descriptive creates images)</td>
+    </tr>
+    <tr>
+      <td><strong>Direct speech</strong></td>
+      <td>Exact words in quotation marks: "I was terrified," she said. Feels immediate and real.</td>
+      <td class="confuse">Indirect speech (that's reported: She said she had been terrified.)</td>
+    </tr>
+    <tr>
+      <td><strong>Discursive writing</strong></td>
+      <td>Explores BOTH sides of an argument, then reaches a balanced conclusion.</td>
+      <td class="confuse">Persuasive writing (that's one-sided &mdash; trying to convince)</td>
+    </tr>
+    <tr>
+      <td><strong>Juxtaposition</strong></td>
+      <td>Placing two contrasting ideas side by side to highlight their differences.</td>
+      <td class="confuse">Oxymoron (that's two contradictory words in ONE phrase, like "deafening silence")</td>
+    </tr>
+    <tr>
+      <td><strong>Omniscient narrator</strong></td>
+      <td>An all-knowing narrator who can see into every character's thoughts.</td>
+      <td class="confuse">First-person narrator (that one only knows their own thoughts)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: NEWS WRITING TYPES -->
+<div class="card">
+  <h2>News Report vs Article vs Feature</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>News Report</th>
+      <th>Article</th>
+      <th>Feature</th>
+    </tr>
+    <tr>
+      <td>Purpose</td>
+      <td>Inform (what happened)</td>
+      <td>Inform + engage</td>
+      <td>Entertain + explore</td>
+    </tr>
+    <tr>
+      <td>Person</td>
+      <td>Third person, past tense</td>
+      <td>First or third</td>
+      <td>Often first person</td>
+    </tr>
+    <tr>
+      <td>Structure</td>
+      <td>Inverted pyramid (big news first)</td>
+      <td>Subheadings, paragraphs</td>
+      <td>Hook opening, anecdotes</td>
+    </tr>
+    <tr>
+      <td>Language</td>
+      <td>Factual, concise</td>
+      <td>Descriptive, some opinion</td>
+      <td>Colloquial, descriptive, human interest</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; News Report Opening</div>
+    Always answer <strong>WHO-WHAT-WHERE-WHEN</strong> in the first paragraph. If it doesn't answer all four, rewrite it. This is your exam shortcut for news reports.
+  </div>
+</div>
+
+<!-- COMPARISON: DISCURSIVE VS PERSUASIVE -->
+<div class="card">
+  <h2>Discursive vs Persuasive &mdash; Know the Difference</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Discursive</th>
+      <th>Persuasive</th>
+    </tr>
+    <tr>
+      <td>Trigger word</td>
+      <td>"Discuss," "explore," "consider"</td>
+      <td>"Argue," "persuade," "convince"</td>
+    </tr>
+    <tr>
+      <td>Sides</td>
+      <td>BOTH sides, then your conclusion</td>
+      <td>ONE side only &mdash; yours</td>
+    </tr>
+    <tr>
+      <td>Structure</td>
+      <td>Intro, for, against, conclusion</td>
+      <td>Intro, argument, argument, argument, conclusion</td>
+    </tr>
+    <tr>
+      <td>Connectives</td>
+      <td>"However," "On the other hand," "Conversely"</td>
+      <td>"Furthermore," "Moreover," "Clearly"</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap</div>
+    If the question says "discuss," you MUST show both sides. Writing only one side means you've answered the wrong question &mdash; instant structure penalty.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Fake news check</span>
+    <span>Consider the source, read beyond the headline, check the author, verify evidence, check the date, check your own biases.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Significant absence</span>
+    <span>What a writer leaves OUT shapes how the reader perceives what's left IN.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Colloquial language</span>
+    <span>Informal register that builds rapport &mdash; effective in articles, wrong in reports.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Emotive language</span>
+    <span>Swaps neutral words for emotional ones to make the reader FEEL instead of just KNOW.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Show, don't tell</span>
+    <span>Don't say "she was scared" &mdash; describe her trembling hands and short gasping breaths.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Juxtaposition</span>
+    <span>Place wealth next to poverty, peace next to war &mdash; the contrast makes both more vivid.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Content vs Style</span>
+    <span>Comparing texts = HOW the writer says it (techniques, tone, language), never WHAT they say (content).</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">PEE Paragraph Template</div>
+    <strong>P</strong> = make your POINT (name the technique). <strong>E</strong> = give EVIDENCE (short quote). <strong>E</strong> = EXPLAIN the effect (this is where ALL the marks are &mdash; make it the longest part). Your explanation should be <em>at least twice</em> as long as point + evidence combined.
+  </div>
+
+  <div class="trick">
+    <div class="label">Emotive Language &mdash; The Swap Test</div>
+    Mentally replace the emotive word with a neutral one. "Slaughtered" becomes "killed." The difference between the two IS the effect. That's exactly what you write about.
+  </div>
+
+  <div class="trick">
+    <div class="label">Show Don't Tell &mdash; Name Zero Emotions</div>
+    To practise: pick any emotion (anger, joy, fear). Write 2-3 sentences conveying it through <strong>actions, body language, and sensory detail</strong> WITHOUT ever naming the emotion. If you can do this, Paper 2 narrative marks go up.
+  </div>
+
+  <div class="trick">
+    <div class="label">Comparison = Weave, Not List</div>
+    Never: "Text A says... Text B says..." Always: "Text A uses [X], <strong>whereas</strong> Text B uses [Y]. This creates [different effects]." Both texts in one paragraph, every time.
+  </div>
+
+  <div class="trick">
+    <div class="label">Discursive Connectives &mdash; 3 Groups</div>
+    <strong>FOR:</strong> Firstly, One argument is that, Supporters claim...<br>
+    <strong>AGAINST:</strong> However, On the other hand, Conversely, Critics argue...<br>
+    <strong>CONCLUSION:</strong> On balance, Having considered both sides, Ultimately...
+  </div>
+
+  <div class="trick">
+    <div class="label">Sentence Starters for Analysis</div>
+    "The writer uses [technique] to [effect]..." / "The word '[X]' suggests/implies/connotes..." / "This creates a sense of [feeling] for the reader because..." / "This positions the reader to feel..."
+  </div>
+</div>
+
+<!-- PEE TEMPLATES -->
+<div class="card">
+  <h2>PEE Paragraph Templates &mdash; Use These in Every Answer</h2>
+
+  <div class="warning">
+    <div class="label">Your #1 Weakness (Easter Test Result)</div>
+    You scored 100% on factual/recognition questions but only 46% on analytical writing. The gap is HERE &mdash; in PEE paragraphs. These templates close the gap.
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 1 &mdash; Analysing Emotive Language</div>
+    <strong>P:</strong> The writer uses emotive language to create [sympathy / outrage / urgency].<br>
+    <strong>E:</strong> For example, the phrase "[short quote]"<br>
+    <strong>E:</strong> The word "[zoom word]" suggests [meaning], which makes the reader feel [emotion]. By choosing "[emotive word]" instead of a neutral alternative like "[neutral word]," the writer intensifies the reader's response, positioning them to [agree / oppose / sympathise].
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 2 &mdash; Comparing Two Texts</div>
+    <strong>P:</strong> Both writers address [topic], but they adopt very different [tones / registers].<br>
+    <strong>E:</strong> Text A uses [technique + quote], while Text B [technique + quote].<br>
+    <strong>E:</strong> Text A's [language choice] creates [effect], making the reader feel [feeling]. In contrast, Text B's [approach] encourages [different response]. This difference reflects their different purposes: Text A aims to [purpose] while Text B aims to [purpose].
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 3 &mdash; Narrative Voice</div>
+    <strong>P:</strong> The writer uses [omniscient narration / "show don't tell" / juxtaposition] to create [tension / sympathy / irony].<br>
+    <strong>E:</strong> We are told that "[short quote]"<br>
+    <strong>E:</strong> This reveals [information the character doesn't know / a contrast the reader notices]. The effect is [tension / dramatic irony / sympathy], because the reader [knows something the character doesn't / sees the contrast / feels the emotion through action rather than statement].
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"How does the writer try to influence the reader?"</td>
+      <td>Find <strong>bias, emotive language, significant absences</strong>. Name the technique + explain its effect on the reader using PEE.</td>
+    </tr>
+    <tr>
+      <td>"Write a news report about..."</td>
+      <td><strong>Headline</strong> (present tense, punchy), <strong>byline</strong>, open with WHO-WHAT-WHERE-WHEN, quotes from witnesses, formal and factual.</td>
+    </tr>
+    <tr>
+      <td>"Discuss whether..." or "Explore both sides of..."</td>
+      <td><strong>Discursive structure:</strong> Intro, 2-3 FOR paragraphs, 2-3 AGAINST paragraphs, balanced conclusion with your own opinion.</td>
+    </tr>
+    <tr>
+      <td>"How does the writer use language to create an atmosphere?"</td>
+      <td>Find <strong>personification, juxtaposition, sensory detail, "show don't tell"</strong>. Quote short, explain long. Zoom in on one powerful word.</td>
+    </tr>
+    <tr>
+      <td>"Compare how the two writers present their ideas"</td>
+      <td>Compare by <strong>FEATURE</strong> (tone, language, purpose, viewpoint), NOT by text. Weave both texts in every paragraph. Use "whereas," "in contrast."</td>
+    </tr>
+    <tr>
+      <td>"What is the effect of direct speech here?"</td>
+      <td>Direct speech feels <strong>immediate and authentic</strong>. The reader hears the person's own words, creating drama and trust. Contrast with indirect speech, which feels more distant.</td>
+    </tr>
+    <tr>
+      <td>"What is the writer's attitude?"</td>
+      <td>Identify the <strong>tone</strong> (admiring, critical, sarcastic, etc.). Find the specific word choices that reveal that attitude. Never just say "positive" or "negative" &mdash; be precise.</td>
+    </tr>
+    <tr>
+      <td>"Identify a pun and explain its effect"</td>
+      <td>A pun = wordplay with <strong>double meaning</strong>. Explain BOTH meanings. Say it makes the headline memorable and draws the reader in with humour.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

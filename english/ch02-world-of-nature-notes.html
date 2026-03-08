@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: The World of Nature &mdash; English Ch2</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #16a085;
+    --pee: #d35400;
+    --pee-bg: #fef0e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+  .block-pee { border-left-color: var(--pee); background: var(--pee-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+  .block-pee .icon { background: var(--pee); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+  .block-pee .label { color: var(--pee); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Before/After comparison box */
+  .before-after {
+    padding: 14px 20px;
+  }
+  .before-after .ba-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+  .ba-box {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .ba-box.bad {
+    background: #fdedec;
+    border-left: 4px solid #e74c3c;
+  }
+  .ba-box.good {
+    background: #d1f2eb;
+    border-left: 4px solid #16a085;
+  }
+  .ba-box .ba-tag {
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .ba-box.bad .ba-tag { color: #e74c3c; }
+  .ba-box.good .ba-tag { color: #0e6655; }
+
+  /* PEE highlight box */
+  .pee-hero {
+    background: linear-gradient(135deg, #d35400, #e67e22);
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 28px 0 16px;
+    text-align: center;
+  }
+  .pee-hero h2 { font-size: 22px; margin-bottom: 6px; }
+  .pee-hero p { font-size: 14px; opacity: 0.95; }
+
+  /* PEE step boxes */
+  .pee-steps {
+    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pee-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fef0e7;
+    border-left: 4px solid #d35400;
+  }
+  .pee-step .step-letter {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #d35400;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .pee-step .step-body {
+    flex: 1;
+    font-size: 14px;
+  }
+  .pee-step .step-body strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+    .pee-hero { break-inside: avoid; break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English &mdash; Chapter 2</div>
+  <h1>The World of Nature</h1>
+  <div class="subtitle">Descriptive writing techniques, language analysis, writer's purpose and audience, vocabulary development</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 24 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: PERSONIFICATION ===== -->
+<div class="section-header">
+  <span class="num">Section 2.1</span>
+  Personification &mdash; Giving Nature a Voice
+</div>
+<div class="card">
+  <div class="intro-text">
+    Chapter 2 uses nature-themed texts to teach a critical technique: <strong>personification</strong>. This technique is used constantly in writing about nature, and the exam loves it.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Personification</div>
+      <p><strong>Personification</strong> = a type of metaphor in which something non-human (an object, animal, or idea) is described as if it were a person.</p>
+      <p style="margin-top:6px;"><strong>Examples:</strong> "the angry sea," "the wind whispered," "the branches talk in agony."</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Effects of Personification</div>
+      <table class="compare-table">
+        <tr>
+          <th>What Is Personified</th>
+          <th>Example</th>
+          <th>Effect on Reader</th>
+        </tr>
+        <tr>
+          <td><strong>Wind as a tyrant</strong></td>
+          <td>"announced the tyrant's coming"</td>
+          <td>Creates fear; the wind becomes a threatening ruler, giving nature a sense of deliberate cruelty</td>
+        </tr>
+        <tr>
+          <td><strong>River as a living force</strong></td>
+          <td>"the golden waterway is a taker as well as a giver of life"</td>
+          <td>Suggests the river has power and intention; creates a sense of respect and danger</td>
+        </tr>
+        <tr>
+          <td><strong>Trees feeling pain</strong></td>
+          <td>"the branches talk in agony"</td>
+          <td>Makes the reader feel empathy for the trees, as if nature itself is suffering</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Personification is one of the <strong>most common techniques in IGCSE English</strong>. If you can spot it AND explain its effect, you will score well. The exam will give you a passage about nature, weather, or a landscape and ask how the writer makes the scene vivid. Personification is almost always part of the answer.</p>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">PEE In Action &mdash; Analyzing Personification</div>
+      <p><strong>P:</strong> The writer uses personification to portray the wind as a violent, tyrannical force. <strong>E:</strong> The wind is described as "the tyrant" whose coming is "announced" by "a gasping messenger." <strong>E:</strong> By calling the wind a "tyrant," the writer transforms a natural event into something deliberate and menacing. The word "tyrant" implies oppression and cruelty, suggesting the storm has power over everything in its path. The "gasping messenger" adds urgency and panic, making the reader feel the terror of those caught in the storm. The reader no longer sees wind as a weather event but as a hostile, unstoppable ruler.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define personification and give at least 2 examples</li>
+    <li><input type="checkbox"> I can explain WHY a writer personifies nature (not just identify it)</li>
+    <li><input type="checkbox"> I can write a PEE paragraph about personification</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: WRITER'S PURPOSE AND AUDIENCE ===== -->
+<div class="section-header">
+  <span class="num">Section 2.2</span>
+  Writer's Purpose and Audience
+</div>
+<div class="card">
+  <div class="intro-text">
+    Chapter 2 covers several different text types: myths, newspaper reports, feature articles, information texts, and poetry. Each one has a different <strong>purpose</strong> and <strong>audience</strong>, which changes how the writer uses language.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Four Main Purposes of Writing</div>
+      <p>
+        <strong>1. To inform</strong> &mdash; give the reader facts and information (news reports, textbooks)<br>
+        <strong>2. To argue and persuade</strong> &mdash; convince the reader to agree with a viewpoint (opinion articles, speeches)<br>
+        <strong>3. To describe</strong> &mdash; create a vivid picture for the reader (travel writing, descriptive essays)<br>
+        <strong>4. To narrate</strong> &mdash; tell a story (myths, folk tales, novels)
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How Purpose Affects Language</div>
+      <table class="compare-table">
+        <tr>
+          <th>Purpose</th>
+          <th>Language Features</th>
+          <th>Example from Ch2</th>
+        </tr>
+        <tr>
+          <td><strong>Inform</strong></td>
+          <td>Third person, factual, precise vocabulary, statistics, passive voice</td>
+          <td>News reports about the Three Gorges Dam: "2,308 meters long and 185 meters high"</td>
+        </tr>
+        <tr>
+          <td><strong>Argue/Persuade</strong></td>
+          <td>Emotive language, rhetorical questions, counter-arguments, linking phrases</td>
+          <td>Articles arguing for or against changing the environment</td>
+        </tr>
+        <tr>
+          <td><strong>Describe</strong></td>
+          <td>Sensory language, simile, metaphor, personification, varied sentence length</td>
+          <td>Feature articles about rafting in Alaska</td>
+        </tr>
+        <tr>
+          <td><strong>Narrate</strong></td>
+          <td>Past tense, dialogue, character development, chronological or non-chronological structure</td>
+          <td>The folk tale of "How Coyote Gave Fire to the People"</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Purpose vs Text Type</div>
+      <p>A <strong>text type</strong> is the format (article, letter, speech, story). A <strong>purpose</strong> is what the writer is trying to achieve. One text can have <strong>multiple purposes</strong>. A feature article about Alaska might describe the scenery (describe), give facts about the river (inform), AND persuade the reader that wild places are worth protecting (persuade).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Always Identify Purpose First</div>
+      <p>Before analyzing any passage, ask: <strong>"Why was this written?"</strong> The answer (to inform, persuade, describe, or narrate) tells you what techniques to look for. If it's persuasive, look for rhetorical questions and emotive language. If it's descriptive, look for imagery and sensory details.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the four main purposes of writing</li>
+    <li><input type="checkbox"> I can match language features to each purpose</li>
+    <li><input type="checkbox"> I understand that a text can have multiple purposes</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: PEE FOR DESCRIPTIVE WRITING ===== -->
+<div class="pee-hero">
+  <h2>PEE FOR NATURE WRITING</h2>
+  <p>Chapter 2 is packed with descriptive writing about nature. Use PEE to analyze HOW writers bring nature to life.</p>
+</div>
+
+<div class="card" style="border-radius: 10px;">
+  <div class="intro-text">
+    Nature writing uses imagery, personification, and carefully chosen vocabulary to create atmosphere. The exam will ask you to analyze <em>how</em> a writer does this. Your biggest challenge: you tend to identify the technique but skip the explanation. The explanation is worth 3-4 times more than the identification.
+  </div>
+
+  <div class="pee-steps">
+    <div class="pee-step">
+      <div class="step-letter">P</div>
+      <div class="step-body">
+        <strong>Point &mdash; What does the writer do?</strong>
+        Name the technique and say what effect it creates in general terms.<br>
+        <em>"The writer creates a sense of danger and power through personification of the river."</em>
+      </div>
+    </div>
+    <div class="pee-step">
+      <div class="step-letter">E</div>
+      <div class="step-body">
+        <strong>Evidence &mdash; Quote the text</strong>
+        Pick the most powerful words. Keep it short.<br>
+        <em>"The river 'plunges through tight gorges, transforming into angry rapids.'"</em>
+      </div>
+    </div>
+    <div class="pee-step">
+      <div class="step-letter">E</div>
+      <div class="step-body">
+        <strong>Explanation &mdash; WHY does this work?</strong>
+        Explain the effect of the specific words. What does each word suggest? How does the reader feel?<br>
+        <em>"The verb 'plunges' suggests violent, uncontrolled downward movement, creating a sense of the river's unstoppable force. 'Angry' personifies the rapids, implying they are hostile and threatening to anyone who encounters them. The reader feels the danger of the river as though it has a will of its own, making the natural world seem powerful and unpredictable."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="before-after">
+    <div class="ba-label">Before and After &mdash; See the Difference</div>
+    <div class="ba-box bad">
+      <div class="ba-tag">Weak Response (1-2 marks)</div>
+      <p>"The writer uses personification to describe the river. The river 'plunges' and is called 'angry.' This makes it seem alive."</p>
+      <p style="margin-top:6px; font-style:italic; color:#c0392b;">Problem: "Makes it seem alive" is too vague. What KIND of alive? Friendly? Dangerous? The reader feels WHAT exactly?</p>
+    </div>
+    <div class="ba-box good">
+      <div class="ba-tag">Strong PEE Response (4-5 marks)</div>
+      <p><strong>P:</strong> The writer uses personification and dynamic verbs to present the river as a violent, unpredictable force. <strong>E:</strong> The river "plunges through tight gorges, transforming into angry rapids and then dangerous shallows." <strong>E:</strong> "Plunges" suggests violent, headlong movement, as if the river is throwing itself forward with no control. The word "angry" gives the rapids human emotion, implying the river is hostile and aggressive rather than simply flowing. The contrast between "tight gorges" and "dangerous shallows" shows that the river is unpredictable &mdash; it changes character constantly. This makes the reader feel uneasy, as though the river could become threatening at any moment.</p>
+      <p style="margin-top:6px; font-style:italic; color:#0e6655;">Why this works: It analyzes specific word choices ("plunges," "angry"), explains what each word suggests, and describes the reader's emotional response.</p>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">Key Vocabulary for Nature Analysis</div>
+      <p>When writing about how an author describes nature, use these precise words instead of vague ones:</p>
+      <p style="margin-top:6px;">
+        Instead of "nice" &rarr; <strong>serene, tranquil, idyllic, picturesque</strong><br>
+        Instead of "scary" &rarr; <strong>ominous, foreboding, menacing, hostile</strong><br>
+        Instead of "big" &rarr; <strong>immense, vast, imposing, formidable</strong><br>
+        Instead of "beautiful" &rarr; <strong>breathtaking, majestic, awe-inspiring, ethereal</strong><br>
+        Instead of "sad" &rarr; <strong>melancholic, desolate, sombre, bleak</strong>
+      </p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write a PEE paragraph about descriptive nature writing</li>
+    <li><input type="checkbox"> I use precise vocabulary (not "nice" or "scary") when describing mood</li>
+    <li><input type="checkbox"> My explanations are at least twice as long as my Point and Evidence</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: WRITING TO ARGUE AND PERSUADE ===== -->
+<div class="section-header">
+  <span class="num">Section 2.3</span>
+  Writing to Argue and Persuade
+</div>
+<div class="card">
+  <div class="intro-text">
+    Chapter 2 teaches you how to write argumentative and persuasive texts &mdash; a key skill for Paper 2. This is about presenting a case and convincing your reader.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Structure for Argumentative Writing</div>
+      <p>
+        <strong>Planning:</strong><br>
+        &bull; Use a spider-gram, mind map, or bullet list<br>
+        &bull; Number your points in the order you want to make them<br>
+        &bull; Include <strong>both sides</strong> of the argument<br>
+        &bull; Consider opposing viewpoints and prepare counter-arguments<br><br>
+        <strong>Writing:</strong><br>
+        &bull; Begin with a clear opening statement (do not indent the first paragraph)<br>
+        &bull; Start a new paragraph for each main point<br>
+        &bull; Each paragraph must have a clear <strong>topic sentence</strong><br>
+        &bull; Link paragraphs logically<br>
+        &bull; Lead your reader to your conclusion
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Persuasive Language Techniques</div>
+      <p>
+        &bull; <strong>Emotive language</strong> &mdash; words that trigger an emotional response ("devastating," "heartbreaking")<br>
+        &bull; <strong>Rhetorical questions</strong> &mdash; questions that don't need an answer ("How can we stand by and do nothing?")<br>
+        &bull; <strong>Counter-arguments</strong> &mdash; acknowledge the other side, then argue against it: "While many see this as... this is not convincing because..."<br>
+        &bull; <strong>Linking phrases</strong> &mdash; "Nonetheless...", "Furthermore...", "In spite of this..."<br>
+        &bull; <strong>Statistics and evidence</strong> &mdash; use data to support your points
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; What NOT to Do in Persuasive Writing</div>
+      <p>
+        &bull; Do NOT use too many rhetorical questions &mdash; one or two is enough<br>
+        &bull; Do NOT be rude &mdash; "which is rubbish" and "it's nonsense" lose you marks<br>
+        &bull; Do NOT make sweeping statements &mdash; "Everyone thinks..." or "It's a well-known fact that..." are weak<br>
+        &bull; Do NOT use words like "normal" or "ordinary" &mdash; what seems normal to you may not be to someone else
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Lawyer Test</div>
+      <p>Imagine you are a lawyer presenting a case in court. What evidence do you need to convince the judge? This mindset helps you write logically: state your argument, present evidence, address the other side, then conclude. If your argument wouldn't convince a judge, it won't convince the examiner.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can plan an argumentative essay that includes both sides</li>
+    <li><input type="checkbox"> I can use at least 3 persuasive techniques from the list</li>
+    <li><input type="checkbox"> I know what NOT to do in persuasive writing</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: WRITING TO INFORM AND DISCUSS ===== -->
+<div class="section-header">
+  <span class="num">Section 2.4</span>
+  Writing to Inform and Discuss
+</div>
+<div class="card">
+  <div class="intro-text">
+    Informative writing is factual, impersonal, and organized. You use this style in school projects, reports, and information leaflets. It is also the basis for <strong>Directed Writing</strong> on Paper 2.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; 12 Features of Informative Writing</div>
+      <p>
+        &bull; Clear and <strong>factual</strong><br>
+        &bull; <strong>Impersonal</strong> and objective (not "I think")<br>
+        &bull; May include data, diagrams, tables, or maps<br>
+        &bull; Does not have to be chronological<br>
+        &bull; Opens with a <strong>general statement and introduction</strong><br>
+        &bull; May use <strong>subheadings</strong> or divide information into categories<br>
+        &bull; May include references and citations<br>
+        &bull; Sentences are <strong>short and clear</strong><br>
+        &bull; Vocabulary is <strong>precise</strong><br>
+        &bull; Written in the <strong>third person</strong><br>
+        &bull; Mixes <strong>active and passive</strong> verbs<br>
+        &bull; Mixes present and past tenses
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Informative vs Persuasive</div>
+      <p><strong>Informative writing</strong> presents facts objectively. <strong>Persuasive writing</strong> uses facts to support an argument. If the question asks you to "inform and discuss," stay balanced and objective. If it asks you to "argue and persuade," take a clear position. Check the question keywords carefully.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Style and Tone Checklist</div>
+      <p>Before writing any text, ask yourself:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Who</strong> is going to read this? (audience)<br>
+        &bull; What <strong>register</strong> should I use? (formal, neutral, or informal)<br>
+        &bull; What <strong>vocabulary</strong> is appropriate?<br>
+        &bull; What <strong>tone</strong> of voice is appropriate?<br>
+        &bull; Is the information <strong>factual</strong> or can I use opinion adjectives?<br>
+        &bull; Are there other ways to say "then, and then, next, after that..."?
+      </p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list at least 6 features of informative writing</li>
+    <li><input type="checkbox"> I know the difference between informative and persuasive writing</li>
+    <li><input type="checkbox"> I check my audience, register, and tone before writing</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: VOCABULARY DEVELOPMENT ===== -->
+<div class="section-header">
+  <span class="num">Section 2.5</span>
+  Vocabulary Development &mdash; Animal Imagery and Idioms
+</div>
+<div class="card">
+  <div class="intro-text">
+    Chapter 2 includes vocabulary-building exercises based on animals. This builds your word power for reading comprehension AND for using more precise language in your own writing.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Animal Adjectives (Latin Origins)</div>
+      <table class="compare-table">
+        <tr>
+          <th>Adjective</th>
+          <th>Meaning</th>
+          <th>Animal</th>
+        </tr>
+        <tr><td><strong>Equine</strong></td><td>Relating to horses</td><td>Horse</td></tr>
+        <tr><td><strong>Feline</strong></td><td>Relating to cats</td><td>Cat</td></tr>
+        <tr><td><strong>Canine</strong></td><td>Relating to dogs</td><td>Dog</td></tr>
+        <tr><td><strong>Vulpine</strong></td><td>Relating to foxes; cunning</td><td>Fox</td></tr>
+        <tr><td><strong>Leonine</strong></td><td>Relating to lions; majestic</td><td>Lion</td></tr>
+        <tr><td><strong>Aquiline</strong></td><td>Relating to eagles; hooked (as a nose)</td><td>Eagle</td></tr>
+        <tr><td><strong>Asinine</strong></td><td>Relating to donkeys; foolish</td><td>Donkey</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Animal Verbs and Idioms</div>
+      <p>Animals have given us verbs and idioms in English:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>to ape</strong> = to mimic or copy<br>
+        &bull; <strong>to duck</strong> = to dip down or avoid<br>
+        &bull; <strong>to ferret out</strong> = to search out<br>
+        &bull; <strong>to hound</strong> = to chase or harass<br>
+        &bull; <strong>to fox</strong> = to trick or deceive<br>
+        &bull; <strong>to wolf (down)</strong> = to eat greedily<br>
+        &bull; <strong>mousy</strong> = timid, quiet, fair-haired<br>
+        &bull; <strong>a snake in the grass</strong> = a hidden enemy<br>
+        &bull; <strong>a wolf in sheep's clothing</strong> = someone who hides their true (dangerous) nature
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>A strong vocabulary does two things on the exam: (1) it helps you <strong>understand</strong> unfamiliar words in reading passages by recognizing roots and patterns, and (2) it lets you write with <strong>precision</strong> in your own responses. Using "vulpine smile" instead of "tricky smile" shows the examiner you have a sophisticated vocabulary.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can match at least 5 Latin animal adjectives to their animals</li>
+    <li><input type="checkbox"> I know at least 4 animal-based verbs or idioms</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7: DIRECTED WRITING ===== -->
+<div class="section-header">
+  <span class="num">Section 2.6</span>
+  Preparing for Exams &mdash; Directed Writing (Paper 2)
+</div>
+<div class="card">
+  <div class="intro-text">
+    Directed Writing is Section A of Paper 2. You read one or two texts (650-750 words total) and then write a discursive, argumentative, or persuasive piece of 250-350 words based on the information.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Directed Writing Tests</div>
+      <p>Your Directed Writing answer must show that you can:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Understand</strong> the explicit content of the text<br>
+        &bull; <strong>Understand</strong> implicit meanings and attitudes<br>
+        &bull; <strong>Analyze, evaluate, and develop</strong> facts, ideas, and opinions<br>
+        &bull; <strong>Support</strong> your views by selecting and using information from the text<br>
+        &bull; <strong>Communicate</strong> clearly and express what you think, feel, and imagine<br>
+        &bull; <strong>Organize</strong> ideas and structure your writing for deliberate effect<br>
+        &bull; Use a <strong>range of vocabulary and sentence structures</strong> appropriate to the context<br>
+        &bull; Use appropriate <strong>register</strong> (formal/informal)<br>
+        &bull; Use accurate <strong>spelling, punctuation, and grammar</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Mark Split</div>
+      <p>Directed Writing is marked in two parts:<br>
+        &bull; Up to <strong>15 marks</strong> for the <strong>content</strong> of your answer (what you say)<br>
+        &bull; Up to <strong>25 marks</strong> for the <strong>quality of your writing</strong> (how you say it)</p>
+      <p style="margin-top:6px;">This means <strong>how you write matters more than what you write</strong>. Good grammar, varied vocabulary, clear structure, and appropriate register are worth more than just including all the facts.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Use Your Own Words</div>
+      <p>In Directed Writing, you MUST use your own words. "Be careful to use your own words" appears in almost every question. This means: read the text, understand the ideas, then express them in your own language. Do not copy phrases from the source text.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I understand the format of Directed Writing (Paper 2, Section A)</li>
+    <li><input type="checkbox"> I know the mark split: 15 for content, 25 for quality of writing</li>
+    <li><input type="checkbox"> I understand that HOW I write matters more than WHAT I write</li>
+    <li><input type="checkbox"> I will use my own words, not copy from the source text</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 8: KEY TAKEAWAY ===== -->
+<div class="section-header">
+  <span class="num">Key Takeaway</span>
+  Where the Marks Are
+</div>
+<div class="card">
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">The #1 Thing to Remember from Chapter 2</div>
+      <p style="font-size:16px;"><strong>Always explain the EFFECT of the writer's choices.</strong></p>
+      <p style="margin-top:8px;">Whether analyzing personification, imagery, or word choice, the pattern is always the same: name the technique, quote the words, then explain what the words suggest and how the reader feels. The explanation should be longer than everything else combined.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Know Your Purposes</div>
+      <p>For every text you read, whether in the exam or in daily life, ask three questions:</p>
+      <p style="margin-top:6px;">
+        <strong>1. WHO</strong> is the audience?<br>
+        <strong>2. WHAT</strong> is the purpose? (inform, persuade, describe, narrate)<br>
+        <strong>3. HOW</strong> does the language serve that purpose?<br>
+        If you can answer these three questions about any text, you can analyze it.
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Build Your Word Power</div>
+      <p>Every time you encounter an unfamiliar word in a passage, look it up and write it down with its definition. Try to use it in a sentence within 24 hours. Building vocabulary is a slow process, but it pays off massively in both reading comprehension and writing quality.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I always explain EFFECT, not just identify techniques</li>
+    <li><input type="checkbox"> I ask WHO, WHAT, HOW for every text I read</li>
+    <li><input type="checkbox"> I have added at least 3 new words to my vocabulary today</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 2 Notes Complete</h2>
+  <p>You've covered personification, writer's purpose and audience, PEE for nature writing, argumentative and informative writing, vocabulary building, and Directed Writing preparation. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

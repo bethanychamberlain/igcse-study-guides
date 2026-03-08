@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Variation and Evolution &mdash; Biology Ch18</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--subject);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline {
+    background: white;
+    color: var(--subject-dark);
+    border: 2px solid var(--subject);
+  }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tier header */
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+
+  .tier-header .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+
+  .tier-header .marks {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Answer area */
+  .q-answer {
+    padding: 0 20px 16px;
+    display: none;
+  }
+  .q-answer.visible { display: block; }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Self-rating */
+  .self-rate {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .self-rate .rate-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .rate-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  /* Answer lines for print */
+  .answer-lines { display: none; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines {
+      display: block;
+      padding: 4px 20px 16px;
+    }
+    .answer-lines .line {
+      border-bottom: 1px solid #d0d0d0;
+      height: 26px;
+    }
+    .tier-header { break-after: avoid; }
+  }
+
+  /* Quiz guide */
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .quiz-guide .guide-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .rating-scale {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .rating-scale .rs-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-scale .rs-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology Ch18 &mdash; Self-Test Quiz</div>
+  <h1>Variation and Evolution</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name it. Intermediate = explain it. Advanced = discuss and apply it.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> in the answers show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each on the exam. Get these right and you're building a solid base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">State the difference between <strong>continuous</strong> and <strong>discontinuous</strong> variation. Give one example of each.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Continuous variation</strong> shows a range of values between two extremes with no clear categories (e.g. height, body mass) [1]. <strong>Discontinuous variation</strong> shows distinct categories with no intermediates (e.g. blood group, sex/gender) [1].
+      <div class="mark-hint">The key distinction: continuous = range, discontinuous = categories. If you can measure it with a number and get any value in a range, it's continuous.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">Define the term <strong>mutation</strong>.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      A mutation is a <strong>change in a gene or chromosome</strong> [1] that can result in a change in a characteristic / a different protein being produced [1].
+      <div class="mark-hint">Two parts: (1) what it IS (a change in DNA), and (2) what it DOES (changes a characteristic). Both needed for full marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">What is meant by <strong>adaptation</strong>? Give one example of an adaptive feature.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Adaptation</strong> is the way an organism is suited to survive in its environment [1]. Example: polar bears have white fur for camouflage in snow / thick fat for insulation against the cold / camels have large feet to walk on sand without sinking [1].
+      <div class="mark-hint">Any valid adaptive feature from any organism scores the example mark. Make sure you say HOW it helps the organism, not just what it looks like.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">Merino sheep have much thicker wool than wild sheep. Merino sheep are the result of:<br>
+      <strong>A</strong> mutation of a gene &nbsp;&nbsp;<strong>B</strong> natural selection &nbsp;&nbsp;<strong>C</strong> phenotypic variation &nbsp;&nbsp;<strong>D</strong> selective breeding</div>
+    <span class="q-marks">1 mark</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>D &mdash; selective breeding</strong> (artificial selection) [1].
+      <div class="mark-hint">Humans deliberately chose sheep with thicker wool and bred them over many generations. This is artificial / selective breeding, not natural selection (which is driven by the environment, not by humans).</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain It?</h2>
+    <div class="marks">Worth 3-4 marks each. You need to explain WHY and HOW, not just name things.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">Explain the relationship between <strong>genotype</strong>, <strong>environment</strong>, and <strong>phenotype</strong>. Use an example in your answer.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Phenotype = genotype + effects of the environment</strong> [1]. The genotype is the full set of genes an organism possesses, and the phenotype is its observable characteristics [1]. Example: a plant may have genes to produce chlorophyll (genotype), but if grown in the dark, it will not turn green (the environment affects the phenotype) [1].
+      <div class="mark-hint">State the equation, define the terms, and give a clear example showing how the environment changes the outcome. Another good example: identical twins raised in different countries may have different body masses due to diet.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Suggest <strong>two</strong> factors that could increase the rate of mutation. Name a specific example of a mutation and its effect on the organism.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Factors (mutagens): <strong>radiation</strong> (e.g. UV light, gamma rays, X-rays) [1] and <strong>chemicals</strong> (e.g. tars in tobacco smoke) [1].<br><br>
+      Example: <strong>Sickle cell anaemia</strong> &mdash; a gene mutation (change in one base of the haemoglobin gene) causes abnormal haemoglobin to be produced, resulting in sickle-shaped red blood cells [1].
+      <div class="mark-hint">Name specific mutagens, not just "chemicals" or "radiation" in isolation. Say WHAT type of radiation or WHICH chemical. For the example, link the mutation to its protein AND its effect on the organism.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">A plant breeder wants to produce a variety of wheat with larger grains. Describe the steps the breeder would follow using <strong>artificial selection</strong>.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      1. From existing wheat plants, <strong>select</strong> those with the largest grains [1].<br>
+      2. <strong>Breed</strong> these selected plants together (cross-pollinate them) [1].<br>
+      3. From the offspring, again <strong>select</strong> only those with the largest grains [1].<br>
+      4. <strong>Repeat</strong> this process over many generations until a variety with consistently large grains is produced [1].
+      <div class="mark-hint">Four steps, four marks. The key words are: select, breed, select from offspring, repeat. This exact pattern works for ANY artificial selection question &mdash; just swap in the desired trait (thicker wool, more milk, larger fruit, etc.).</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Discuss It?</h2>
+    <div class="marks">Worth 5-6 marks each. These need full explanations, multiple points, and clear reasoning. This is where exam grades are won or lost.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">Warfarin is a poison used to kill rats. It prevents blood clotting, so even small wounds cause the rat to bleed to death. Some rats are not affected by warfarin, and their numbers are increasing. Using the theory of natural selection, <strong>explain</strong> why this is happening.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Within the rat population, there is <strong>variation</strong> &mdash; some rats have a random <strong>mutation</strong> that makes them resistant to warfarin [1]. When warfarin is used, non-resistant rats <strong>die</strong> [1]. The resistant rats <strong>survive</strong> because the poison does not affect them [1]. The surviving resistant rats <strong>breed</strong> and pass on the resistance allele to their offspring [1]. Over many generations, the proportion of resistant rats in the population <strong>increases</strong> [1].
+      <div class="mark-hint">This is the natural selection chain applied to a real scenario: variation (mutation) &rarr; selection pressure (warfarin) &rarr; non-resistant die &rarr; resistant survive and breed &rarr; resistant genes become more common. Each link = 1 mark. This is EXACTLY the same pattern as antibiotic-resistant bacteria.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">An island was invaded by a species of bird that preyed on butterflies. In the population of butterflies, only those individuals that produced a toxic substance as a protection survived. (a) Name the type of selection occurring. (b) Explain, step by step, how the butterfly population changed over time.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> <strong>Natural selection</strong> [1].<br><br>
+      <strong>(b)</strong> There was <strong>variation</strong> in the butterfly population &mdash; some butterflies had a gene/mutation allowing them to produce a toxic substance [1]. The birds acted as a <strong>selection pressure</strong> &mdash; they ate the non-toxic butterflies [1]. Toxic butterflies <strong>survived</strong> because the birds avoided them [1]. The surviving toxic butterflies <strong>reproduced and passed on</strong> the gene for toxin production to their offspring, so over time, most butterflies in the population were toxic [1].
+      <div class="mark-hint">Part (a) is 1 free mark &mdash; don't write "artificial selection" (there are no humans choosing butterflies!). Part (b) follows the standard 4-step chain: variation &rarr; selection pressure &rarr; survival &rarr; passing on genes.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">Bacterial infections that were easily treated with antibiotics 50 years ago are now a problem in hospitals. Using your knowledge of mutation and natural selection, <strong>explain</strong> why antibiotic-resistant bacteria have become more common. Suggest <strong>one</strong> action that could slow the spread of resistance.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Within a population of bacteria, a random <strong>mutation</strong> may occur that gives one bacterium resistance to an antibiotic [1]. When the antibiotic is used, non-resistant bacteria are <strong>killed</strong> [1]. The resistant bacterium <strong>survives</strong> because it is not affected by the antibiotic [1]. It <strong>reproduces rapidly</strong> (bacteria reproduce very quickly by binary fission) [1]. The offspring inherit the resistance gene, so the population of resistant bacteria <strong>increases</strong> over time [1].<br><br>
+      Action to slow the spread: <strong>Only prescribe antibiotics when necessary</strong> / patients should always finish the full course of antibiotics / develop new antibiotics / improve hygiene in hospitals to prevent transmission [1].
+      <div class="mark-hint">5 marks for the explanation (mutation &rarr; antibiotic kills non-resistant &rarr; resistant survive &rarr; rapid reproduction &rarr; resistance spreads), 1 mark for a sensible suggestion. This question comes up almost every year &mdash; it is one of the most important in all of IGCSE Biology.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle answers
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  // Click question to toggle its answer
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  // Self-rating
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

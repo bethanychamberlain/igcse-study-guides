@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: States of Matter &mdash; Chemistry Ch1</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Changes of state flow */
+  .state-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .state-flow .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--subject-light);
+    border-radius: 6px;
+  }
+  .state-flow .flow-from {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 55px;
+  }
+  .state-flow .flow-arrow {
+    color: var(--subject);
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .state-flow .flow-to {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 55px;
+  }
+  .state-flow .flow-name {
+    flex: 1;
+    font-style: italic;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Chemistry Ch1 &mdash; Cheat Sheet</div>
+    <h1>States of Matter</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Particle theory</strong></td>
+      <td>All matter is made of tiny particles that are always moving. Higher temperature = faster movement.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Diffusion</strong></td>
+      <td>Net movement of particles from high concentration to low concentration (they spread out).</td>
+      <td class="confuse">Osmosis (water only, through a membrane &mdash; that's biology)</td>
+    </tr>
+    <tr>
+      <td><strong>Brownian motion</strong></td>
+      <td>Random jerky movement of visible particles (smoke, pollen) caused by collisions with invisible molecules.</td>
+      <td class="confuse">Diffusion (Brownian motion is evidence FOR particle movement, not the spreading itself)</td>
+    </tr>
+    <tr>
+      <td><strong>Melting</strong></td>
+      <td>Solid to liquid. Particles gain energy and overcome some forces.</td>
+      <td class="confuse">Dissolving (that's mixing into a solvent, not changing state)</td>
+    </tr>
+    <tr>
+      <td><strong>Boiling</strong></td>
+      <td>Liquid to gas at a fixed temperature, throughout the liquid. Bubbles form inside.</td>
+      <td class="confuse">Evaporation (any temp, surface only, no bubbles)</td>
+    </tr>
+    <tr>
+      <td><strong>Evaporation</strong></td>
+      <td>Liquid to gas at any temperature, but only at the surface. Fastest particles escape.</td>
+      <td class="confuse">Boiling (fixed temp, whole liquid, bubbles)</td>
+    </tr>
+    <tr>
+      <td><strong>Condensation</strong></td>
+      <td>Gas to liquid. Particles lose energy and forces pull them closer together.</td>
+      <td class="confuse">Freezing (that's liquid to solid)</td>
+    </tr>
+    <tr>
+      <td><strong>Sublimation</strong></td>
+      <td>Solid directly to gas, skipping liquid. Example: dry ice (solid CO&#8322;).</td>
+      <td class="confuse">Evaporation (that starts from a liquid, not a solid)</td>
+    </tr>
+    <tr>
+      <td><strong>Kinetic energy</strong></td>
+      <td>Energy of movement. Higher temperature = particles have more kinetic energy = move faster.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Gas pressure</strong></td>
+      <td>Force per unit area caused by gas particles colliding with the walls of their container.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Relative molecular mass (M&#7523;)</strong></td>
+      <td>Sum of atomic masses of all atoms in a molecule. E.g. H&#8322;O = 2(1) + 16 = 18.</td>
+      <td class="confuse">Number of atoms (CO&#8322; has 3 atoms but M&#7523; = 44)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: THREE STATES -->
+<div class="card">
+  <h2>Solid vs Liquid vs Gas &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Solid</th>
+      <th>Liquid</th>
+      <th>Gas</th>
+    </tr>
+    <tr>
+      <td>Arrangement</td>
+      <td>Regular pattern, tightly packed</td>
+      <td>Close but irregular</td>
+      <td>Far apart, random</td>
+    </tr>
+    <tr>
+      <td>Movement</td>
+      <td>Vibrate in fixed positions</td>
+      <td>Slide past each other</td>
+      <td>Move fast in all directions</td>
+    </tr>
+    <tr>
+      <td>Forces</td>
+      <td>Strong</td>
+      <td>Weaker</td>
+      <td>Very weak / negligible</td>
+    </tr>
+    <tr>
+      <td>Spacing</td>
+      <td>Touching</td>
+      <td>Almost touching</td>
+      <td>Far apart</td>
+    </tr>
+    <tr>
+      <td>Compressible?</td>
+      <td>No</td>
+      <td>No (almost)</td>
+      <td>Yes (particles far apart)</td>
+    </tr>
+    <tr>
+      <td>Example</td>
+      <td>Ice</td>
+      <td>Water</td>
+      <td>Steam</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick</div>
+    <strong>S</strong>olids = <strong>S</strong>tay put (vibrate only).
+    <strong>L</strong>iquids = s<strong>L</strong>ide around.
+    <strong>G</strong>ases = <strong>G</strong>o everywhere (fast, free, far apart).
+  </div>
+</div>
+
+<!-- CHANGES OF STATE -->
+<div class="card">
+  <h2>Changes of State &mdash; What Turns Into What</h2>
+  <div class="state-flow">
+    <div class="flow-row">
+      <span class="flow-from">Solid</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Liquid</span>
+      <span class="flow-name">= Melting</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Liquid</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Gas</span>
+      <span class="flow-name">= Boiling / Evaporation</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Gas</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Liquid</span>
+      <span class="flow-name">= Condensation</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Liquid</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Solid</span>
+      <span class="flow-name">= Freezing</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Solid</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Gas</span>
+      <span class="flow-name">= Sublimation (skips liquid!)</span>
+    </div>
+  </div>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Heating Curve Flat Sections</div>
+    If the exam shows a heating curve and asks "Why is the temperature constant here?", the answer is: <strong>"Energy is being used to overcome the forces between particles (breaking bonds between molecules), not to increase kinetic energy, so the temperature does not rise."</strong> This exact wording is worth 2 marks.
+  </div>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Boiling vs Evaporation</div>
+    <strong>Boiling</strong> = fixed temperature, whole liquid, bubbles. <strong>Evaporation</strong> = any temperature, surface only, no bubbles. They LOVE asking this difference.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Particle theory</span>
+    <span>Everything is made of particles that never stop moving, and heating them makes them move faster.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Diffusion</span>
+    <span>Particles randomly spread from where there are lots to where there are few &mdash; like perfume filling a room.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Solid</span>
+    <span>Particles packed tight in a pattern, vibrating on the spot &mdash; strong forces keep them locked in place.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Liquid</span>
+    <span>Particles close together but free to slide around &mdash; forces are weaker so they flow.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Gas</span>
+    <span>Particles far apart, moving fast in every direction &mdash; almost no forces between them.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Gas pressure</span>
+    <span>Billions of gas particles smashing into the container walls every second.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Heating curve flat</span>
+    <span>Temperature stops rising because energy is breaking forces between particles, not making them hotter.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Diffusion Direction</div>
+    Think of a packed concert: people spread OUT from the crowd, not into it. Particles do the same &mdash; high concentration to low.
+  </div>
+
+  <div class="trick">
+    <div class="label">Heavy = Slow (Gas Diffusion Rate)</div>
+    Imagine throwing a bowling ball vs a tennis ball with the same effort. The tennis ball flies further. Lighter molecules (lower M&#7523;) diffuse faster.
+  </div>
+
+  <div class="trick">
+    <div class="label">Flat Line = Breaking Bonds</div>
+    On a heating curve, when the line goes flat, picture the energy going into snapping chains between particles instead of speeding them up. Temperature only rises when the chains are already broken.
+  </div>
+
+  <div class="trick">
+    <div class="label">Chemistry Diffusion vs Biology Diffusion</div>
+    Same definition (high to low concentration), different examples. Chemistry: perfume, bromine gas, ink in water. Biology: oxygen into blood, CO&#8322; out of cells. Don't mix up the examples in the wrong exam paper!
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Describe the arrangement of particles in a solid"</td>
+      <td>Regular pattern / lattice, tightly packed, <strong>vibrate in fixed positions</strong></td>
+    </tr>
+    <tr>
+      <td>"Why can gases be compressed?"</td>
+      <td>Particles are <strong>far apart</strong> with space between them, so they can be pushed closer</td>
+    </tr>
+    <tr>
+      <td>"Why does temperature stay constant during melting?"</td>
+      <td>Energy is used to <strong>overcome forces between particles</strong>, not to increase kinetic energy</td>
+    </tr>
+    <tr>
+      <td>"Explain why perfume can be smelled across a room"</td>
+      <td><strong>Diffusion</strong> &mdash; perfume particles spread from high to low concentration through the air</td>
+    </tr>
+    <tr>
+      <td>"Why does ammonia diffuse faster than HCl?"</td>
+      <td>Ammonia has a <strong>lower relative molecular mass</strong> (17 vs 36.5), so its particles move faster</td>
+    </tr>
+    <tr>
+      <td>"Explain gas pressure using particle theory"</td>
+      <td>Gas particles <strong>collide with the walls</strong> of the container; more/harder collisions = higher pressure</td>
+    </tr>
+    <tr>
+      <td>"What is the difference between boiling and evaporation?"</td>
+      <td>Boiling: fixed temp, whole liquid, bubbles. Evaporation: any temp, surface only, no bubbles</td>
+    </tr>
+    <tr>
+      <td>"What is sublimation? Give an example."</td>
+      <td>Solid changes directly to gas (no liquid stage). Example: <strong>dry ice</strong> (solid CO&#8322;)</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

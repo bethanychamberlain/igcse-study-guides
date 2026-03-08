@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Energy Changes in Reactions &mdash; Chemistry Ch8</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 8</div>
+  <h1>Energy Changes in Reactions</h1>
+  <div class="subtitle">Exothermic &amp; endothermic reactions, energy level diagrams, bond energy calculations, and the hydrogen-oxygen fuel cell</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 18 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: ENERGY CHANGES IN REACTIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 8.1</span>
+  Energy Changes in Reactions
+</div>
+<div class="card">
+  <div class="intro-text">
+    Every chemical reaction involves an energy change. Energy is either given out or taken in, usually as heat (thermal energy). This divides all reactions into two groups: exothermic and endothermic.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p><strong>Exothermic reaction:</strong> a reaction that <strong>gives out thermal energy</strong> to the surroundings. The temperature of the surroundings <strong>rises</strong>.</p>
+      <p style="margin-top:8px;"><strong>Endothermic reaction:</strong> a reaction that <strong>takes in thermal energy</strong> from the surroundings. The temperature of the surroundings <strong>falls</strong>.</p>
+      <p style="margin-top:8px;"><strong>Surroundings</strong> = everything around the reaction that is not a reactant or product (e.g. the water in the beaker, the container walls, the air).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Examples</div>
+      <table class="compare-table">
+        <tr>
+          <th>Exothermic (gives out energy)</th>
+          <th>Endothermic (takes in energy)</th>
+        </tr>
+        <tr>
+          <td>Burning fuels (combustion)</td>
+          <td>Thermal decomposition of calcium carbonate</td>
+        </tr>
+        <tr>
+          <td>Neutralisation (acid + alkali)</td>
+          <td>Sherbet reacting on your tongue (citric acid + sodium hydrogen carbonate)</td>
+        </tr>
+        <tr>
+          <td>Iron reacting with sulfur</td>
+          <td>Barium hydroxide + ammonium chloride (freezes water underneath!)</td>
+        </tr>
+        <tr>
+          <td>Sodium reacting with water</td>
+          <td>Cooking (reactions in food when heated)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Describing Energy Changes</div>
+      <p><strong>Exothermic:</strong> reactants &rarr; products + thermal energy</p>
+      <p>The products have <strong>less energy</strong> than the reactants. Energy has been <strong>given out</strong>.</p>
+      <p style="margin-top:8px;"><strong>Endothermic:</strong> reactants + thermal energy &rarr; products</p>
+      <p>The products have <strong>more energy</strong> than the reactants. Energy has been <strong>taken in</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; The Temperature Trick</div>
+      <p>Exothermic makes the surroundings <strong>hotter</strong> (temperature goes up). Endothermic makes the surroundings <strong>colder</strong> (temperature goes down). Students often get this backwards because they think "taking in energy = getting hotter." No &mdash; it's <em>taking energy away from</em> the surroundings, so the surroundings cool down.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Memory Trick</div>
+      <p><strong>Exo</strong> means <strong>out</strong> (think "Exit" &mdash; energy exits the reaction). <strong>Endo</strong> means <strong>in</strong> (energy enters the reaction from the surroundings). If you remember "exit" you'll never mix them up.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam will give you a scenario &mdash; "the beaker gets warmer" or "the temperature drops" &mdash; and ask you to identify whether it's exothermic or endothermic. If the surroundings heat up, the reaction gave out energy = exothermic. If the surroundings cool down, the reaction took in energy = endothermic. Always explain in terms of <strong>energy transfer</strong>, not just "it gets hot."</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define exothermic and endothermic reactions</li>
+    <li><input type="checkbox"> I can give two examples of each type</li>
+    <li><input type="checkbox"> I can explain what "surroundings" means</li>
+    <li><input type="checkbox"> I can describe how each type affects temperature</li>
+    <li><input type="checkbox"> I can write the general energy equation for each type</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: A CLOSER LOOK AT ENERGY CHANGES ===== -->
+<div class="section-header">
+  <span class="num">Section 8.2</span>
+  A Closer Look at Energy Changes
+</div>
+<div class="card">
+  <div class="intro-text">
+    To understand why reactions give out or take in energy, we need to look at what happens to bonds. Every reaction involves breaking old bonds and making new ones &mdash; and each step has its own energy cost.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Two Steps in Every Reaction</div>
+      <p><strong>Step 1: Breaking bonds</strong> in the reactants &mdash; this <strong>takes in energy</strong> (endothermic process). The energy level rises.</p>
+      <p style="margin-top:6px;"><strong>Step 2: Making bonds</strong> in the products &mdash; this <strong>gives out energy</strong> (exothermic process). The energy level falls.</p>
+      <p style="margin-top:8px;">Remember: <strong>Bond breaking = endothermic. Bond making = exothermic.</strong> This is always true, no exceptions.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Decides Exo vs Endo?</div>
+      <p>The overall energy change depends on which step is bigger:</p>
+      <p style="margin-top:6px;">&bull; If energy out from making bonds <strong>&gt;</strong> energy in to break bonds &rarr; <strong>exothermic</strong> overall (net energy given out)</p>
+      <p>&bull; If energy in to break bonds <strong>&gt;</strong> energy out from making bonds &rarr; <strong>endothermic</strong> overall (net energy taken in)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Activation Energy and Enthalpy</div>
+      <p><strong>Activation energy (E<sub>a</sub>)</strong> is the <strong>minimum energy</strong> that colliding particles must have in order to react. It's the energy needed to start breaking bonds. Every reaction needs it &mdash; this is why the line on a reaction pathway diagram always goes <strong>up first</strong>.</p>
+      <p style="margin-top:8px;"><strong>Enthalpy change (&Delta;H)</strong> is the <strong>overall energy change</strong> of the reaction.</p>
+      <p style="margin-top:4px;">&bull; <strong>&Delta;H is negative</strong> for exothermic reactions (energy is released)</p>
+      <p>&bull; <strong>&Delta;H is positive</strong> for endothermic reactions (energy is absorbed)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Energy Level Diagrams</div>
+      <p>You need to be able to draw and label two diagrams. Both have "energy" on the y-axis and "progress of reaction" on the x-axis:</p>
+      <p style="margin-top:8px;"><strong>Exothermic:</strong> Reactants are drawn <strong>high</strong>, products are drawn <strong>low</strong>. The arrow pointing down between them shows &Delta;H (negative). The hump above the reactants shows E<sub>a</sub>.</p>
+      <p style="margin-top:6px;"><strong>Endothermic:</strong> Reactants are drawn <strong>low</strong>, products are drawn <strong>high</strong>. The arrow pointing up between them shows &Delta;H (positive). The hump above both shows E<sub>a</sub>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Energy Level Diagram vs Reaction Pathway Diagram</div>
+      <p>A simple <strong>energy level diagram</strong> (Section 8.1) just shows reactants and products at two levels with an arrow between them. A <strong>reaction pathway diagram</strong> (Section 8.2) shows the full curve with the hump (activation energy). The exam might ask for either &mdash; read the question carefully. If it says "include E<sub>a</sub> and &Delta;H," draw the pathway diagram with the hump.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Drawing and labelling reaction pathway diagrams is one of the most common exam questions. They'll ask you to label the axes, mark E<sub>a</sub>, mark &Delta;H, identify reactants and products, and say whether it's exothermic or endothermic. The line <strong>always curves up first</strong> (because you always need activation energy to break bonds first) &mdash; don't forget this.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw Both Diagrams From Memory</div>
+      <p>Practice drawing both reaction pathway diagrams until you can do them with your eyes closed. For exothermic: start high (reactants), hump up (E<sub>a</sub>), come down low (products), mark &Delta;H as the drop. For endothermic: start low (reactants), hump up (E<sub>a</sub>), end high (products), mark &Delta;H as the rise. If you can sketch both in under 30 seconds, you own it.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know that bond breaking is endothermic and bond making is exothermic</li>
+    <li><input type="checkbox"> I can explain what determines whether a reaction is exo or endo overall</li>
+    <li><input type="checkbox"> I can define activation energy (E<sub>a</sub>) and enthalpy change (&Delta;H)</li>
+    <li><input type="checkbox"> I can draw and label a reaction pathway diagram for an exothermic reaction</li>
+    <li><input type="checkbox"> I can draw and label a reaction pathway diagram for an endothermic reaction</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: CALCULATING ENTHALPY CHANGES ===== -->
+<div class="section-header">
+  <span class="num">Section 8.3</span>
+  Calculating Enthalpy Changes
+</div>
+<div class="card">
+  <div class="intro-text">
+    You can calculate the overall energy change of a reaction if you know the bond energies of all the bonds broken and formed. This section is where the maths comes in &mdash; but it's the same simple formula every time.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Formula</div>
+      <p><strong>Enthalpy change (&Delta;H) = Energy in (to break bonds) &minus; Energy out (from making bonds)</strong></p>
+      <p style="margin-top:8px;">The unit of energy is the <strong>joule (J)</strong>. 1000 J = 1 <strong>kilojoule (kJ)</strong>. Bond energies and enthalpy changes are given in <strong>kJ/mol</strong>.</p>
+      <p style="margin-top:8px;"><strong>Bond energy</strong> is the energy needed to break a bond, or released when the same bond forms. It is measured in kJ/mol.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Bond Energies</div>
+      <table class="compare-table">
+        <tr>
+          <th>Bond</th><th>Energy (kJ/mol)</th><th>Bond</th><th>Energy (kJ/mol)</th>
+        </tr>
+        <tr><td>H&mdash;H</td><td>436</td><td>C&mdash;H</td><td>413</td></tr>
+        <tr><td>Cl&mdash;Cl</td><td>242</td><td>O=O</td><td>498</td></tr>
+        <tr><td>H&mdash;Cl</td><td>431</td><td>O&mdash;H</td><td>464</td></tr>
+        <tr><td>C&mdash;C</td><td>346</td><td>N&mdash;H</td><td>391</td></tr>
+        <tr><td>C=C</td><td>612</td><td>N&#8801;N</td><td>946</td></tr>
+        <tr><td>C&mdash;O</td><td>358</td><td></td><td></td></tr>
+      </table>
+      <p style="margin-top:6px; font-size:13px; color:var(--text-secondary);">These are given on the exam &mdash; you don't need to memorise them. But practice using them!</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example 1 (Exothermic)</div>
+      <p><strong>Hydrogen + Chlorine &rarr; Hydrogen chloride</strong></p>
+      <p>H<sub>2</sub> + Cl<sub>2</sub> &rarr; 2HCl</p>
+      <p>Show all bonds: H&mdash;H + Cl&mdash;Cl &rarr; 2 H&mdash;Cl</p>
+      <p style="margin-top:8px;"><strong>Energy in</strong> (break bonds in reactants):<br>
+         &bull; 1 &times; H&mdash;H = 436 kJ<br>
+         &bull; 1 &times; Cl&mdash;Cl = 242 kJ<br>
+         &bull; Total energy in = <strong>678 kJ</strong></p>
+      <p style="margin-top:6px;"><strong>Energy out</strong> (make bonds in products):<br>
+         &bull; 2 &times; H&mdash;Cl = 2 &times; 431 = <strong>862 kJ</strong></p>
+      <p style="margin-top:6px;"><strong>&Delta;H = 678 &minus; 862 = &minus;184 kJ</strong></p>
+      <p style="margin-top:4px;">The negative sign means <strong>exothermic</strong> &mdash; 184 kJ of energy is given out.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example 2 (Endothermic)</div>
+      <p><strong>Decomposition of ammonia</strong></p>
+      <p>2NH<sub>3</sub> &rarr; N<sub>2</sub> + 3H<sub>2</sub></p>
+      <p style="margin-top:8px;"><strong>Energy in</strong> (break bonds in reactants):<br>
+         &bull; 6 &times; N&mdash;H = 6 &times; 391 = <strong>2346 kJ</strong></p>
+      <p style="margin-top:6px;"><strong>Energy out</strong> (make bonds in products):<br>
+         &bull; 1 &times; N&#8801;N = 946 kJ<br>
+         &bull; 3 &times; H&mdash;H = 3 &times; 436 = 1308 kJ<br>
+         &bull; Total energy out = <strong>2254 kJ</strong></p>
+      <p style="margin-top:6px;"><strong>&Delta;H = 2346 &minus; 2254 = +92 kJ</strong></p>
+      <p style="margin-top:4px;">The positive sign means <strong>endothermic</strong> &mdash; 92 kJ of energy is taken in.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; The Order Matters!</div>
+      <p>The formula is <strong>energy in MINUS energy out</strong>. NOT the other way around. If you flip it, your sign will be wrong and you'll call an exothermic reaction endothermic. Think of it this way: the formula follows the progress of the reaction &mdash; first you put energy in (to break bonds), then energy comes out (from making bonds). So "in" comes first.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Three-Step Method</div>
+      <p>Every bond energy calculation follows the same three steps:<br>
+         <strong>1.</strong> Draw out all the bonds (write the equation showing every single bond).<br>
+         <strong>2.</strong> Add up energy in (bonds broken) and energy out (bonds made) separately.<br>
+         <strong>3.</strong> Subtract: &Delta;H = energy in &minus; energy out.<br>
+         If &Delta;H is negative, it's exothermic. If positive, it's endothermic. Practice on at least three different reactions until this feels automatic.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Bond energy calculations are worth 4&ndash;6 marks on the exam and they are <strong>easy marks</strong> if you know the method. They'll give you the equation and a table of bond energies. All you do is count the bonds, multiply, add, subtract. Show your working clearly &mdash; even if you get the final answer wrong, you can pick up marks for each correct step.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the formula: &Delta;H = energy in &minus; energy out</li>
+    <li><input type="checkbox"> I can identify all bonds broken and formed from a structural equation</li>
+    <li><input type="checkbox"> I have worked through Example 1 (H<sub>2</sub> + Cl<sub>2</sub>) and got &minus;184 kJ</li>
+    <li><input type="checkbox"> I have worked through Example 2 (2NH<sub>3</sub>) and got +92 kJ</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: THE HYDROGEN-OXYGEN FUEL CELL ===== -->
+<div class="section-header">
+  <span class="num">Section 8.4</span>
+  The Hydrogen-Oxygen Fuel Cell
+</div>
+<div class="card">
+  <div class="intro-text">
+    Hydrogen and oxygen react to produce water &mdash; you already know this is exothermic. But instead of just making heat, a fuel cell converts this chemical energy directly into electrical energy. This is a big deal for clean transport.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Is a Fuel Cell?</div>
+      <p>A <strong>hydrogen-oxygen fuel cell</strong> uses hydrogen and oxygen to produce <strong>electricity</strong>. The only chemical product is <strong>water</strong>, which is harmless.</p>
+      <p style="margin-top:6px;">Overall reaction: 2H<sub>2</sub>(g) + O<sub>2</sub>(g) &rarr; 2H<sub>2</sub>O(l) + electrical energy + some thermal energy</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How It Works (Simplified)</div>
+      <p>&bull; The cell has two electrodes (anode and cathode) coated with a platinum catalyst, with a special membrane between them.<br>
+         &bull; <strong>At the anode (+):</strong> Hydrogen gas gives up electrons to form H<sup>+</sup> ions. (2H<sub>2</sub> &rarr; 4H<sup>+</sup> + 4e<sup>&minus;</sup>) &mdash; this is <strong>oxidation</strong>.<br>
+         &bull; The electrons flow through an external circuit &mdash; this is the electric current that powers the motor.<br>
+         &bull; The H<sup>+</sup> ions pass through the membrane to the cathode.<br>
+         &bull; <strong>At the cathode (&minus;):</strong> Oxygen reacts with the H<sup>+</sup> ions and electrons to form water. (O<sub>2</sub> + 4H<sup>+</sup> + 4e<sup>&minus;</sup> &rarr; 2H<sub>2</sub>O) &mdash; this is <strong>reduction</strong>.<br>
+         &bull; The overall reaction is a <strong>redox reaction</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Advantages and Disadvantages</div>
+      <table class="compare-table">
+        <tr>
+          <th>Hydrogen Fuel Cell</th>
+          <th>Petrol Engine</th>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-weight:700; background:#f9f9f9;">Advantages</td>
+        </tr>
+        <tr>
+          <td>Only product is water &mdash; harmless</td>
+          <td>Petrol stations widely available</td>
+        </tr>
+        <tr>
+          <td>Hydrogen can be made from water by electrolysis</td>
+          <td>Petrol is relatively cheap</td>
+        </tr>
+        <tr>
+          <td colspan="2" style="font-weight:700; background:#f9f9f9;">Disadvantages</td>
+        </tr>
+        <tr>
+          <td>Hydrogen must be stored under high pressure</td>
+          <td>Burning petrol produces CO<sub>2</sub> (climate change)</td>
+        </tr>
+        <tr>
+          <td>Hydrogen filling stations are rare</td>
+          <td>Also produces CO, NO<sub>x</sub>, unburnt hydrocarbons</td>
+        </tr>
+        <tr>
+          <td>Most hydrogen currently comes from fossil fuels</td>
+          <td>Petrol is from oil &mdash; a non-renewable resource</td>
+        </tr>
+        <tr>
+          <td>Fuel cell cars cost more (for now)</td>
+          <td></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Fuel Cell vs Electrolysis</div>
+      <p>A fuel cell looks a bit like an electrolysis cell, but they do the <strong>opposite</strong> thing. In <strong>electrolysis</strong>, you put electricity in to force a reaction to happen. In a <strong>fuel cell</strong>, a reaction happens and produces electricity. The fuel cell acts like a battery, not like electrolysis. Don't mix them up &mdash; the exam loves this trick.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Fuel cell questions often appear in the "extended" section of the exam and are worth easy marks if you know the advantages/disadvantages table. They also connect to environmental chemistry &mdash; expect questions like "Give one reason why hydrogen fuel cells are better for the environment than petrol engines" (answer: the only product is water, which is harmless, whereas petrol produces CO<sub>2</sub> which causes climate change).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Think "Clean but Not Easy"</div>
+      <p>The fuel cell sounds perfect &mdash; only makes water, no pollution. So why doesn't everyone use it? Because the hydrogen has to come from somewhere. If you use fossil fuels to make the hydrogen, you're still polluting. The future depends on using renewable energy (solar, wind) to split water by electrolysis. If the exam asks "Why isn't hydrogen widely used as a fuel?", hit these points: storage is difficult (high pressure), filling stations are rare, and the hydrogen is usually made from fossil fuels.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state what a hydrogen-oxygen fuel cell produces (electricity + water)</li>
+    <li><input type="checkbox"> I can outline how the fuel cell works (anode, cathode, membrane)</li>
+    <li><input type="checkbox"> I can give two advantages and two disadvantages vs petrol engines</li>
+    <li><input type="checkbox"> I know the difference between a fuel cell and electrolysis</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 8 Notes Complete</h2>
+  <p>You've covered exothermic and endothermic reactions, energy level and reaction pathway diagrams, bond energy calculations, and fuel cells. Now try the quiz to test yourself.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

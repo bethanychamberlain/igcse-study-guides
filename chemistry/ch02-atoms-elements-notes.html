@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Atoms and Elements &mdash; Chemistry Ch2</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 2</div>
+  <h1>Atoms and Elements</h1>
+  <div class="subtitle">Elements, the Periodic Table, subatomic particles, electron shells, isotopes, and relative atomic mass &mdash; the building blocks of everything</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 18 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: MEET THE ELEMENTS ===== -->
+<div class="section-header">
+  <span class="num">Section 2.1</span>
+  Meet the Elements
+</div>
+<div class="card">
+  <div class="intro-text">
+    In Chapter 1, you learned that everything is made of particles. Now we zoom in: the simplest type of particle is the <strong>atom</strong>, and a substance made of only one kind of atom is called an <strong>element</strong>. This section also introduces the Periodic Table, compounds, and mixtures.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p>&bull; <strong>Atom:</strong> the smallest particle of matter that cannot be broken down further by chemical means.<br>
+         &bull; <strong>Element:</strong> a substance that contains only <strong>one kind of atom</strong>. Examples: sodium (only sodium atoms), carbon (only carbon atoms), sulfur (only sulfur atoms).<br>
+         &bull; <strong>Compound:</strong> a substance made of atoms of <strong>different elements bonded together</strong>. Example: water (H&#8322;O) is hydrogen and oxygen atoms bonded together. A chemical reaction is needed to break them apart.<br>
+         &bull; <strong>Mixture:</strong> contains different elements or compounds that are <strong>not bonded together</strong>. You can usually separate them quite easily (e.g. filtering, distillation).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Periodic Table</div>
+      <p>The <strong>Periodic Table</strong> arranges all 118 known elements to show their patterns. Key features:</p>
+      <p style="margin-top:6px;">&bull; Each element has a <strong>symbol</strong> (Na for sodium, C for carbon, S for sulfur). Some symbols come from Latin names (Na = <em>natrium</em>).<br>
+         &bull; Columns are called <strong>groups</strong> (numbered I to VIII). Elements in the same group have <strong>similar properties</strong>.<br>
+         &bull; Rows are called <strong>periods</strong> (numbered 1 to 7).<br>
+         &bull; A zig-zag line separates <strong>metals</strong> (left side) from <strong>non-metals</strong> (right side), except hydrogen which is a non-metal despite being on the left.<br>
+         &bull; About 94 elements occur naturally; the rest are synthetic (made in labs).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Compound vs Mixture</div>
+      <p>This is a classic exam trap. A <strong>compound</strong> has atoms chemically bonded &mdash; you need a chemical reaction to separate them. A <strong>mixture</strong> has substances just mixed together &mdash; you can separate them by physical methods like filtering or evaporation. Water (H&#8322;O) is a compound. Salty water is a mixture.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The definitions of atom, element, compound, and mixture are <strong>guaranteed</strong> exam marks. They appear almost every year as short-answer questions. If you can write these four definitions from memory, that's easy marks in the bag before you even get to the hard stuff.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The "Only One" Test</div>
+      <p>To tell elements from compounds: if a substance has <strong>only one type of atom</strong>, it's an element. If it has <strong>two or more types bonded together</strong>, it's a compound. Look at the chemical formula &mdash; H&#8322; has only H atoms (element), H&#8322;O has H and O atoms (compound). Practise this with 5-6 formulas until it's automatic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define atom, element, compound, and mixture without looking</li>
+    <li><input type="checkbox"> I know what groups and periods are on the Periodic Table</li>
+    <li><input type="checkbox"> I can explain the difference between a compound and a mixture</li>
+    <li><input type="checkbox"> I know where the metals and non-metals are on the Periodic Table</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: MORE ABOUT ATOMS ===== -->
+<div class="section-header">
+  <span class="num">Section 2.2</span>
+  More About Atoms &mdash; Subatomic Particles
+</div>
+<div class="card">
+  <div class="intro-text">
+    Atoms aren't the smallest things after all. Inside every atom are three types of even tinier particles: protons, neutrons, and electrons. Understanding these is the key to understanding the whole of chemistry from here on.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Subatomic Particle</th>
+          <th>Mass (amu)</th>
+          <th>Charge</th>
+          <th>Location</th>
+        </tr>
+        <tr>
+          <td><strong>Proton</strong></td>
+          <td>1</td>
+          <td>Positive (+1)</td>
+          <td>In the nucleus</td>
+        </tr>
+        <tr>
+          <td><strong>Neutron</strong></td>
+          <td>1</td>
+          <td>None (0)</td>
+          <td>In the nucleus</td>
+        </tr>
+        <tr>
+          <td><strong>Electron</strong></td>
+          <td>~0 (negligible)</td>
+          <td>Negative (&minus;1)</td>
+          <td>In shells around the nucleus</td>
+        </tr>
+      </table>
+      <p style="margin-top:8px;">The <strong>nucleus</strong> (protons + neutrons) is tiny but contains nearly all the atom's mass. If the atom were the size of a football stadium, the nucleus would be the size of a pea.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Numbers</div>
+      <p>&bull; <strong>Proton number (atomic number):</strong> the number of protons in the nucleus. This identifies the element &mdash; every element has a unique proton number. Sodium always has 11 protons.<br>
+         &bull; <strong>Nucleon number (mass number):</strong> the total number of protons + neutrons. For sodium: 11 + 12 = 23.<br>
+         &bull; <strong>Number of neutrons</strong> = nucleon number &minus; proton number. For sodium: 23 &minus; 11 = 12 neutrons.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Atoms Have No Charge</div>
+      <p>Every atom has an <strong>equal number of protons and electrons</strong>. Protons are positive (+), electrons are negative (&minus;). The charges cancel out, so <strong>atoms have no overall charge</strong>. Sodium has 11 protons (11+) and 11 electrons (11&minus;) = 0 overall.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Proton Number vs Nucleon Number</div>
+      <p>The <strong>proton number</strong> (atomic number) tells you <em>which element</em> it is. The <strong>nucleon number</strong> (mass number) tells you the <em>total mass</em>. In the shorthand notation, the nucleon number goes on <strong>top</strong> and the proton number goes on the <strong>bottom</strong>. For example, sodium is written as &#185;&#185;Na with 23 on top and 11 on the bottom. Remember: <strong>big number on top</strong> (mass is always bigger because it includes neutrons).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>You'll need to read the shorthand notation and work out how many protons, electrons, and neutrons an atom has. This appears on <strong>every single IGCSE Chemistry paper</strong>. They'll give you something like "the atom has 12 protons and a nucleon number of 24" and expect you to work out everything from that. Practise the formula: neutrons = nucleon number &minus; proton number.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practise With the First 20</div>
+      <p>The textbook has a table of the first 20 elements with their proton numbers, electrons, neutrons, and nucleon numbers. Cover different columns and try to fill them in from memory. Start with just the first 10 (hydrogen to neon), then add 11&ndash;20. If you can do all 20, you'll be fast and confident on the exam.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the three subatomic particles and give their mass, charge, and location</li>
+    <li><input type="checkbox"> I can define proton number (atomic number) and nucleon number (mass number)</li>
+    <li><input type="checkbox"> I can calculate the number of neutrons from the nucleon and proton numbers</li>
+    <li><input type="checkbox"> I can explain why atoms have no overall charge</li>
+    <li><input type="checkbox"> I can read the shorthand notation (e.g. the notation for sodium-23) and extract all the information</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: HOW ELECTRONS ARE ARRANGED ===== -->
+<div class="section-header">
+  <span class="num">Section 2.3</span>
+  How Electrons Are Arranged
+</div>
+<div class="card">
+  <div class="intro-text">
+    Electrons aren't just floating randomly around the nucleus &mdash; they're arranged in specific <strong>shells</strong> (energy levels). The way electrons fill these shells directly links to the Periodic Table and explains why elements in the same group behave similarly.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Electron Shell Rules</div>
+      <p>Electrons fill shells starting from the one closest to the nucleus (lowest energy level):</p>
+      <p style="margin-top:6px;">&bull; <strong>1st shell:</strong> holds a maximum of <strong>2</strong> electrons<br>
+         &bull; <strong>2nd shell:</strong> holds a maximum of <strong>8</strong> electrons<br>
+         &bull; <strong>3rd shell:</strong> holds a maximum of <strong>8</strong> electrons (when it's the outer shell &mdash; it can hold 18 when it's not the outermost shell, but you don't need that for the first 20 elements)</p>
+      <p style="margin-top:6px;">This arrangement is called the <strong>electronic configuration</strong>. It's written as numbers separated by commas. For example: sodium = <strong>2,8,1</strong> (2 in the first shell, 8 in the second, 1 in the third).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Link to the Periodic Table</div>
+      <p>This is where it all connects:</p>
+      <p style="margin-top:6px;">&bull; The <strong>period number</strong> tells you how many <strong>electron shells</strong> are occupied. Period 2 elements have 2 shells, period 3 have 3, etc.<br>
+         &bull; The <strong>group number</strong> (for Groups I&ndash;VII) tells you how many <strong>outer shell electrons</strong> the atom has. Group I elements have 1 outer electron, Group II have 2, and so on.<br>
+         &bull; The number of outer shell electrons controls how an element reacts. That's why elements in the same group have <strong>similar chemical properties</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Group VIII: The Noble Gases</div>
+      <p>Group VIII elements (helium, neon, argon, krypton, xenon, radon) have a <strong>full outer shell of electrons</strong>. Helium has 2 (full 1st shell), neon has 2,8 (full 2nd shell), argon has 2,8,8 (full 3rd shell).</p>
+      <p style="margin-top:6px;">A full outer shell is very <strong>stable</strong>. These elements are <strong>unreactive</strong> (they don't need to gain, lose, or share electrons). They're also called the <strong>noble gases</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Shells vs Protons</div>
+      <p>Remember: the number of <strong>electrons</strong> equals the number of <strong>protons</strong> (in a neutral atom). So if they tell you "an element has proton number 17," you know it has 17 electrons and you can work out the electronic configuration: 2, 8, 7. Don't try to fit protons into shells &mdash; <strong>only electrons go in shells</strong>. Protons and neutrons stay in the nucleus.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam loves to give you a proton number and ask you to: (1) write the electronic configuration, (2) identify the group and period, or (3) predict how it will react. If you know the shell-filling rules and the link to the Periodic Table, you can answer all three from a single number. This will also help in biology &mdash; ion channels and nerve impulses depend on sodium (2,8,1) and potassium (2,8,8,1) losing their outer electrons.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw All 20</div>
+      <p>Get a blank piece of paper and draw electron shell diagrams for the first 20 elements (hydrogen to calcium). For each one, write the electronic configuration in 2,8,... format next to it. When you can do all 20 from memory in under 5 minutes, you own this topic. Pay special attention to potassium (2,8,8,1) and calcium (2,8,8,2) &mdash; they start a 4th shell even though the 3rd isn't "really" full (it can hold 18), because at this level it fills to 8 and then starts the next one.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state how many electrons each of the first three shells holds</li>
+    <li><input type="checkbox"> I can write the electronic configuration for any of the first 20 elements</li>
+    <li><input type="checkbox"> I can explain how the period number and group number relate to electron arrangement</li>
+    <li><input type="checkbox"> I can explain why Group VIII elements are unreactive</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: ISOTOPES AND RELATIVE ATOMIC MASS ===== -->
+<div class="section-header">
+  <span class="num">Section 2.4</span>
+  Isotopes and Relative Atomic Mass (A&#7523;)
+</div>
+<div class="card">
+  <div class="intro-text">
+    Not all atoms of the same element are identical. Some have extra neutrons, making them heavier. These variations are called isotopes. To deal with this, chemists use an average mass called the relative atomic mass.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Isotopes</div>
+      <p><strong>Isotopes</strong> are atoms of the <strong>same element</strong> that have the <strong>same number of protons</strong> but <strong>different numbers of neutrons</strong>.</p>
+      <p style="margin-top:8px;"><strong>Example &mdash; Carbon:</strong><br>
+         &bull; Carbon-12: 6 protons, 6 neutrons (nucleon number 12) &mdash; the most common<br>
+         &bull; Carbon-13: 6 protons, 7 neutrons (nucleon number 13)<br>
+         &bull; Carbon-14: 6 protons, 8 neutrons (nucleon number 14) &mdash; radioactive</p>
+      <p style="margin-top:8px;">All three are still carbon because they all have <strong>6 protons</strong>. The proton number defines the element; the neutron number just changes the mass.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Isotopes React the Same Way</div>
+      <p>All isotopes of an element have the same number of <strong>electrons</strong> (because they have the same number of protons). Since chemical reactions depend on <strong>outer shell electrons</strong>, all isotopes of an element have the <strong>same chemical properties</strong>. Carbon-12, carbon-13, and carbon-14 all react with oxygen to form CO&#8322; in exactly the same way.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Relative Atomic Mass (A&#7523;)</div>
+      <p>Because isotopes exist, we need an average mass. The <strong>relative atomic mass (A&#7523;)</strong> of an element is the <strong>average mass of its isotopes</strong>, compared to 1/12 the mass of a carbon-12 atom.</p>
+      <p style="margin-top:8px;"><strong>How to calculate A&#7523;:</strong><br>
+         A&#7523; = (mass of isotope 1 &times; its % abundance) + (mass of isotope 2 &times; its % abundance) + ...</p>
+      <p style="margin-top:8px;"><strong>Example &mdash; Chlorine:</strong><br>
+         Chlorine has two isotopes: &#179;&#8309;Cl (75%) and &#179;&#8311;Cl (25%).<br>
+         A&#7523; = (35 &times; 75/100) + (37 &times; 25/100) = 26.25 + 9.25 = <strong>35.5</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Nucleon Number vs Relative Atomic Mass</div>
+      <p>The <strong>nucleon number</strong> is for one specific atom (always a whole number). The <strong>relative atomic mass (A&#7523;)</strong> is the average across all isotopes (can be a decimal). Chlorine's nucleon numbers are 35 and 37, but its A&#7523; is 35.5 because it's an average. If the exam asks for nucleon number, give a whole number. If it asks for A&#7523;, it might be a decimal.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>You'll use A&#7523; constantly in later chapters when you calculate formula masses, moles, and reacting masses. Getting comfortable with it now saves headaches later. The A&#7523; calculation is also a common Extended syllabus question &mdash; it's basically a weighted average, which is the same maths you do in stats class.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Sanity-Check Your A&#7523;</div>
+      <p>Your calculated A&#7523; should <strong>always fall between</strong> the masses of the lightest and heaviest isotopes, and it should be <strong>closer to the more abundant one</strong>. For chlorine: 75% is mass 35, 25% is mass 37, so A&#7523; should be between 35 and 37 but closer to 35. Answer: 35.5. If you get a number outside this range, you've made an error.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define isotopes in one sentence</li>
+    <li><input type="checkbox"> I can explain why isotopes of the same element react the same way</li>
+    <li><input type="checkbox"> I can define relative atomic mass (A&#7523;)</li>
+    <li><input type="checkbox"> I can calculate A&#7523; from isotope masses and percentage abundances</li>
+    <li><input type="checkbox"> I know the difference between nucleon number and relative atomic mass</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 2 Notes Complete</h2>
+  <p>You've covered elements, the Periodic Table, subatomic particles, electron shells, isotopes, and relative atomic mass. Now try the quiz to test yourself &mdash; remember, if you can't write it from memory, you don't know it yet.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

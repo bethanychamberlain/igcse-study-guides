@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Believe It or Not &mdash; English Ch7</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--subject);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline {
+    background: white;
+    color: var(--subject-dark);
+    border: 2px solid var(--subject);
+  }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tier header */
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+
+  .tier-header .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+
+  .tier-header .marks {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Answer area */
+  .q-answer {
+    padding: 0 20px 16px;
+    display: none;
+  }
+  .q-answer.visible { display: block; }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Self-rating */
+  .self-rate {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .self-rate .rate-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .rate-btn {
+    width: 30px;
+    height: 30px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  /* Answer lines for print */
+  .answer-lines { display: none; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines {
+      display: block;
+      padding: 4px 20px 16px;
+    }
+    .answer-lines .line {
+      border-bottom: 1px solid #d0d0d0;
+      height: 26px;
+    }
+    .tier-header { break-after: avoid; }
+  }
+
+  /* Quiz guide */
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .quiz-guide .guide-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .rating-scale {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .rating-scale .rs-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-scale .rs-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English Ch7 &mdash; Self-Test Quiz</div>
+  <h1>Believe It or Not</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name it. Intermediate = explain it. Advanced = discuss and apply it.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> in the answers show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each on the exam. Get these right and you're building a solid base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">What is <strong>emotive language</strong>? Give one example.</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Emotive language is words chosen specifically to <strong>provoke an emotional response</strong> in the reader [1]. Example: "defenceless children" or "brutal attack" &mdash; words that make the reader feel sympathy, anger, or outrage [1].
+      <div class="mark-hint">The key is "emotional response." Don't just say "strong words" &mdash; say what feeling they create.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">What is the difference between <strong>direct speech</strong> and <strong>indirect speech</strong>?</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Direct speech</strong> uses the speaker's exact words in quotation marks, e.g. "I was terrified," she said [1]. <strong>Indirect speech</strong> reports what someone said without quoting them, e.g. She said that she had been terrified [1].
+      <div class="mark-hint">Remember: direct = quotation marks + exact words. Indirect = reported/paraphrased + no quotation marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">Name <strong>three</strong> things a news report opening paragraph should include.</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Any three from: <strong>WHO</strong> was involved, <strong>WHAT</strong> happened, <strong>WHERE</strong> it happened, <strong>WHEN</strong> it happened [1 for two correct, 2 for three or more].
+      <div class="mark-hint">The classic formula is WHO-WHAT-WHERE-WHEN. Some add WHY and HOW. Getting three of these in your opening paragraph shows the examiner you know the form.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">What is a <strong>cliche</strong>? Why should writers generally avoid using them?</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      A cliche is an <strong>overused expression</strong> that has lost its original impact [1], e.g. "at the end of the day" or "the tip of the iceberg." Writers should avoid them because they show <strong>lazy or unoriginal thinking</strong> and do not create a strong effect on the reader [1].
+      <div class="mark-hint">If you can finish the phrase without thinking, it's a cliche. On the exam, you get credit for identifying them AND for avoiding them in your own writing.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain It?</h2>
+    <div class="marks">Worth 3-4 marks each. You need to explain effects and use PEE structure.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">A writer uses the phrase <strong>"innocent victims were left to suffer in silence."</strong> Using PEE, explain how this creates a particular effect on the reader.</div>
+    <span class="q-marks">[4]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>P:</strong> The writer uses emotive language to create sympathy for the victims [1]. <strong>E:</strong> The phrase "innocent victims were left to suffer in silence" [1]. <strong>E:</strong> The word "innocent" emphasises that the victims are blameless, which deepens the reader's sense of injustice. "Suffer in silence" suggests they are both in pain and ignored, which makes the reader feel angry on their behalf and perhaps guilty for not being aware. The overall effect is to persuade the reader that these people deserve help [1 for explaining effect on reader, 1 for exploring specific word choices].
+      <div class="mark-hint">The marks are in the EXPLANATION. Naming "emotive language" = 1 mark. Explaining what "innocent" and "suffer in silence" DO to the reader = 2-3 marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Explain the difference between <strong>discursive</strong> and <strong>persuasive</strong> writing. What structural difference would an examiner expect to see?</div>
+    <span class="q-marks">[3]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Discursive writing</strong> presents <strong>both sides</strong> of an argument before reaching a balanced conclusion [1]. <strong>Persuasive writing</strong> argues for <strong>one side only</strong> and tries to convince the reader [1]. Structurally, a discursive essay has paragraphs FOR and paragraphs AGAINST, while a persuasive piece only supports one viewpoint [1].
+      <div class="mark-hint">If the exam says "discuss" = discursive (both sides). If it says "argue" or "persuade" = one side. Getting this wrong costs you marks on structure and purpose.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">Explain what <strong>"show, don't tell"</strong> means in narrative writing. Give one example of "telling" and rewrite it as "showing."</div>
+    <span class="q-marks">[4]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      "Show, don't tell" means conveying emotions and situations through <strong>actions, sensory detail, and description</strong> rather than naming them directly [1]. <strong>Telling:</strong> "He was angry" [1]. <strong>Showing:</strong> "His fists clenched at his sides, his jaw tight, and when he spoke his voice was a low, dangerous whisper" [1]. Showing is stronger because the reader <strong>experiences</strong> the emotion through physical signs rather than being told what to feel [1].
+      <div class="mark-hint">On Paper 2, if you write a narrative, "showing" puts you in the higher mark bands. Practise converting "telling" sentences into "showing" ones.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Discuss It?</h2>
+    <div class="marks">Worth 5-6 marks each. These need full PEE paragraphs, comparison, and detailed analysis.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">A news report about a factory closure says: <strong>"Workers were informed of the decision this morning."</strong> A feature article about the same event says: <strong>"Maria clutched her coffee cup, hands shaking, as the boss delivered the words that would shatter twenty years of loyalty."</strong> Compare how the two writers present the same event. Which is more effective, and why?</div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>P:</strong> Both writers describe the factory closure, but they adopt very different tones and levels of emotional engagement [1]. <strong>E (Text A):</strong> The news report uses neutral, impersonal language: "Workers were informed of the decision" [1]. <strong>E:</strong> The passive voice ("were informed") removes individual identity and emotion, creating a factual, objective tone. The reader receives information but feels no emotional connection [1]. <strong>E (Text B):</strong> The feature article uses "clutched," "hands shaking," and "shatter twenty years of loyalty" [1]. <strong>E:</strong> These details "show" Maria's distress physically, making the reader empathise with her. The metaphor "shatter" suggests something precious being violently broken, which creates a sense of loss and injustice. By naming Maria, the writer turns a statistic into a person [1]. <strong>Overall:</strong> Both are effective for their purpose &mdash; the report informs clearly, the feature makes the reader care. For creating emotional impact, the feature is more effective because it uses human interest and sensory detail to connect the reader to the event [1].
+      <div class="mark-hint">6 marks = 6 distinct points. You need: identify both tones, quote from both, explain effect of both, weave them together, give an overall judgement. Don't just describe &mdash; compare and evaluate.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">You are writing a discursive article for a school magazine about whether social media does more harm than good. Write <strong>one paragraph arguing FOR</strong> social media and <strong>one paragraph arguing AGAINST</strong>, using appropriate connectives and PEE structure in each.</div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>FOR paragraph (example):</strong> "Firstly, social media provides a platform for young people to connect with others who share their interests. For instance, online communities around art, music, or mental health support allow teenagers to find understanding and encouragement that they may not receive in their immediate environment. This can be especially valuable for those who feel isolated, as it creates a sense of belonging that boosts confidence and wellbeing." [3 marks: clear point + evidence/example + explanation of effect]<br><br>
+      <strong>AGAINST paragraph (example):</strong> "However, social media also creates unrealistic standards of appearance and success. Studies have shown that hours spent scrolling through filtered images lead to increased anxiety and low self-esteem among teenagers. This constant comparison is damaging because young people measure their real lives against a carefully edited version of other people's lives, leading to feelings of inadequacy that can affect their mental health long-term." [3 marks: counter-argument connective + evidence + extended explanation]
+      <div class="mark-hint">3 marks per paragraph: (1) clear point, (2) evidence or example, (3) explanation of WHY/HOW. Use connectives: "Firstly" for the first paragraph, "However" or "On the other hand" for the counter. Your explanation should be the longest part.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">A writer describes a character arriving at an abandoned house: <strong>"The door hung open like a broken jaw. Inside, shadows pressed against the walls, and somewhere deep in the house, a floorboard groaned."</strong> Using PEE, analyse how the writer uses language to create mood. You should comment on at least <strong>two</strong> techniques.</div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Technique 1 &mdash; Simile:</strong><br>
+      <strong>P:</strong> The writer uses a simile to make the house feel threatening [1]. <strong>E:</strong> "The door hung open like a broken jaw" [1]. <strong>E:</strong> Comparing the door to a "broken jaw" gives the house a human quality that is both damaged and aggressive. A jaw suggests the house could swallow or consume someone, creating a sense of danger. "Broken" implies violence has already occurred here, making the reader feel uneasy about what might be inside [1].<br><br>
+      <strong>Technique 2 &mdash; Personification:</strong><br>
+      <strong>P:</strong> The writer uses personification to make the setting feel alive [1]. <strong>E:</strong> "Shadows pressed against the walls" and "a floorboard groaned" [1]. <strong>E:</strong> "Pressed" suggests the shadows are actively crowding in, as though they have intention, making the darkness feel menacing rather than simply empty. "Groaned" gives the house a voice, suggesting pain or age, which creates an eerie atmosphere &mdash; the reader feels as though the house itself is responding to the character's presence [1].
+      <div class="mark-hint">6 marks for two techniques fully analysed with PEE. 3 marks per technique: (1) name it + state effect, (2) quote, (3) detailed explanation of how it affects the reader. Always explore individual WORD choices within the quote.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle answers
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  // Click question to toggle its answer
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  // Self-rating
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

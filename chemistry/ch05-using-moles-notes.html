@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Using Moles &mdash; Chemistry Ch5</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Worked example box */
+  .worked-example {
+    background: #f0faf0;
+    border-left: 4px solid #27ae60;
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+  .worked-example .we-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #27ae60;
+    margin-bottom: 6px;
+  }
+  .worked-example .step {
+    margin: 6px 0;
+    padding-left: 8px;
+  }
+  .worked-example .step .step-num {
+    font-weight: 700;
+    color: #1a7a3a;
+  }
+
+  /* Formula box */
+  .formula-box {
+    background: #eaf2f8;
+    border: 2px solid #2e86c1;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 5</div>
+  <h1>Using Moles</h1>
+  <div class="subtitle">The mole, calculations from equations, gas volumes, concentration, empirical &amp; molecular formulae, % yield and % purity &mdash; the calculation chapter</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 24 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: THE MOLE ===== -->
+<div class="section-header">
+  <span class="num">Section 5.1</span>
+  The Mole &mdash; Chemistry's Counting Unit
+</div>
+<div class="card">
+  <div class="intro-text">
+    Atoms are far too tiny to count one by one. Chemists use a special number called the <strong>mole</strong> to count huge quantities of particles at once &mdash; the same way you buy eggs by the dozen, chemists count atoms by the mole.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Is a Mole?</div>
+      <p><strong>One mole</strong> of any substance contains <strong>6.02 &times; 10&sup2;&sup3;</strong> particles. This number is called the <strong>Avogadro constant</strong>.</p>
+      <p style="margin-top:6px;">The symbol for the mole is <strong>mol</strong> (just like <em>g</em> is the symbol for grams).</p>
+      <p style="margin-top:6px;">The particles can be <strong>atoms</strong> (e.g. 1 mol of helium = 6.02 &times; 10&sup2;&sup3; helium atoms), <strong>molecules</strong> (e.g. 1 mol of water = 6.02 &times; 10&sup2;&sup3; water molecules), or <strong>ions</strong> (e.g. 1 mol of NaCl = 6.02 &times; 10&sup2;&sup3; "units" of Na&#8314; and Cl&#8315;).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Molar Mass Shortcut</div>
+      <p><strong>One mole of a substance has a mass equal to its A&#7523; or M&#7523;, expressed in grams.</strong></p>
+      <table class="compare-table">
+        <tr>
+          <th>Substance</th>
+          <th>Formula</th>
+          <th>A&#7523; or M&#7523;</th>
+          <th>Mass of 1 mole</th>
+        </tr>
+        <tr>
+          <td>Carbon</td>
+          <td>C</td>
+          <td>A&#7523; = 12</td>
+          <td><strong>12 g</strong></td>
+        </tr>
+        <tr>
+          <td>Water</td>
+          <td>H&#8322;O</td>
+          <td>M&#7523; = 18</td>
+          <td><strong>18 g</strong></td>
+        </tr>
+        <tr>
+          <td>Sodium chloride</td>
+          <td>NaCl</td>
+          <td>M&#7523; = 58.5</td>
+          <td><strong>58.5 g</strong></td>
+        </tr>
+        <tr>
+          <td>Ethanol</td>
+          <td>C&#8322;H&#8325;OH</td>
+          <td>M&#7523; = 46</td>
+          <td><strong>46 g</strong></td>
+        </tr>
+      </table>
+      <p style="margin-top:8px;">To find M&#7523;, add up the A&#7523; of every atom in the formula. For ethanol (C&#8322;H&#8325;OH): (2&times;12) + (6&times;1) + (1&times;16) = 24 + 6 + 16 = <strong>46</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Key Formulas</div>
+      <div class="formula-box">
+        moles = mass (g) &divide; M&#7523;<br>
+        mass (g) = moles &times; M&#7523;<br>
+        M&#7523; = mass (g) &divide; moles
+      </div>
+      <p style="margin-top:8px;">These three are just rearrangements of the same equation. Use the <strong>calculation triangle</strong>: put <strong>mass</strong> on top, and <strong>moles &times; M&#7523;</strong> on the bottom. Cover the one you want to find, and what's left tells you what to calculate.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Atoms vs Molecules</div>
+      <p>0.5 mol of <strong>bromine molecules</strong> (Br&#8322;, M&#7523; = 160) has mass = 0.5 &times; 160 = <strong>80 g</strong>.<br>
+      0.5 mol of <strong>bromine atoms</strong> (Br, A&#7523; = 80) has mass = 0.5 &times; 80 = <strong>40 g</strong>.<br>
+      Always check: does the question ask about <strong>atoms</strong> or <strong>molecules</strong>? This changes which mass you use.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The mole lets you link the <strong>invisible world</strong> (how many atoms react) to the <strong>real world</strong> (how many grams you weigh on a balance). Every single calculation in the rest of this chapter &mdash; and most of IGCSE chemistry &mdash; starts with converting between mass and moles.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Drill the Triangle</div>
+      <p>Write the triangle (mass on top, moles &times; M&#7523; on bottom) on a sticky note and put it on your desk. Do 10 quick conversions every day until it's automatic: "46 g of ethanol &rarr; how many moles?" (46 &divide; 46 = 1 mol). "3 mol of water &rarr; how many grams?" (3 &times; 18 = 54 g). Speed and confidence come from repetition.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define the mole and state the Avogadro constant</li>
+    <li><input type="checkbox"> I can calculate M&#7523; for any compound by adding up A&#7523; values</li>
+    <li><input type="checkbox"> I can convert mass to moles using moles = mass &divide; M&#7523;</li>
+    <li><input type="checkbox"> I can convert moles to mass using mass = moles &times; M&#7523;</li>
+    <li><input type="checkbox"> I know the difference between atoms and molecules when calculating</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: CALCULATIONS FROM EQUATIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 5.2</span>
+  Calculations from Equations
+</div>
+<div class="card">
+  <div class="intro-text">
+    A balanced equation does not just show you what reacts and what forms &mdash; it tells you the <strong>exact ratio</strong> of moles (and therefore grams) of every substance involved.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Reading Moles from an Equation</div>
+      <p>Consider: <strong>C(s) + O&#8322;(g) &rarr; CO&#8322;(g)</strong></p>
+      <p style="margin-top:6px;">The coefficients (big numbers in front) tell you the mole ratio:<br>
+      &bull; 1 mole of carbon reacts with 1 mole of oxygen to give 1 mole of carbon dioxide<br>
+      &bull; Using A&#7523;/M&#7523;: 12 g of carbon + 32 g of oxygen &rarr; 44 g of carbon dioxide</p>
+      <p style="margin-top:6px;">For <strong>2H&#8322;(g) + O&#8322;(g) &rarr; 2H&#8322;O(l)</strong>:<br>
+      &bull; 2 mol H&#8322; + 1 mol O&#8322; &rarr; 2 mol H&#8322;O<br>
+      &bull; 4 g + 32 g &rarr; 36 g</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Step-by-Step Method for Mass Calculations</div>
+      <p>To calculate masses from an equation, follow these four steps every time:</p>
+      <p style="margin-top:6px;">
+        <strong>Step 1:</strong> Write the balanced equation.<br>
+        <strong>Step 2:</strong> Write down A&#7523; or M&#7523; for each substance you need.<br>
+        <strong>Step 3:</strong> Use M&#7523; to convert the moles in the equation to grams (theoretical masses).<br>
+        <strong>Step 4:</strong> Scale up or down to match the actual mass given in the question.
+      </p>
+    </div>
+  </div>
+
+  <div class="worked-example">
+    <div class="we-label">Worked Example &mdash; Masses from Equations</div>
+    <p><strong>Question:</strong> What mass of oxygen is needed to burn 1 g of hydrogen, and what mass of water is produced?</p>
+    <div class="step"><span class="step-num">Step 1:</span> 2H&#8322;(g) + O&#8322;(g) &rarr; 2H&#8322;O(l)</div>
+    <div class="step"><span class="step-num">Step 2:</span> M&#7523;: H&#8322; = 2, O&#8322; = 32, H&#8322;O = 18</div>
+    <div class="step"><span class="step-num">Step 3:</span> From the equation: 2&times;2 g H&#8322; + 32 g O&#8322; &rarr; 2&times;18 g H&#8322;O, so 4 g + 32 g &rarr; 36 g</div>
+    <div class="step"><span class="step-num">Step 4:</span> We only have 1 g of H&#8322; (not 4 g), so divide everything by 4:<br>
+    &nbsp;&nbsp;1 g H&#8322; needs 32&divide;4 = <strong>8 g of O&#8322;</strong> and gives 36&divide;4 = <strong>9 g of H&#8322;O</strong></div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Conservation of Mass</div>
+      <p><strong>The total mass does not change during a chemical reaction.</strong> No atoms disappear; they are just rearranged. In the example above: 1 g + 8 g = 9 g. Mass in = mass out.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Coefficients Are Moles, Not Grams</div>
+      <p>In 2H&#8322; + O&#8322; &rarr; 2H&#8322;O, the "2" in front of H&#8322; means <strong>2 moles</strong> of hydrogen, not 2 grams. You must multiply by M&#7523; to get grams. This is where most mistakes happen.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Almost every extended calculation on the IGCSE paper uses this method. If you can follow these four steps consistently, you can answer questions about any reaction &mdash; even ones you have never seen before.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Always Write All Four Steps</div>
+      <p>Even if you can do it in your head, write every step. The examiner awards marks for <strong>method</strong>, not just the final number. If you get the arithmetic wrong but show the right method, you still pick up 2 or 3 of the marks. Skip steps and you get zero for a wrong answer.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can read the mole ratio from a balanced equation</li>
+    <li><input type="checkbox"> I can convert moles to grams using M&#7523; and scale to any given mass</li>
+    <li><input type="checkbox"> I can check my answer using conservation of mass</li>
+    <li><input type="checkbox"> I understand that coefficients mean moles, not grams</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: REACTIONS INVOLVING GASES ===== -->
+<div class="section-header">
+  <span class="num">Section 5.3</span>
+  Reactions Involving Gases
+</div>
+<div class="card">
+  <div class="intro-text">
+    Gases are hard to weigh, so chemists measure them by <strong>volume</strong> instead. A beautifully simple rule &mdash; Avogadro's Law &mdash; makes gas calculations surprisingly easy.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Avogadro's Law</div>
+      <p><strong>One mole of any gas occupies the same volume at the same temperature and pressure.</strong></p>
+      <p style="margin-top:6px;">At <strong>room temperature and pressure (rtp)</strong> &mdash; defined as 20 &deg;C and 1 atmosphere &mdash; the <strong>molar gas volume</strong> is <strong>24 dm&sup3;</strong> (which is 24,000 cm&sup3;).</p>
+      <p style="margin-top:6px;">This means 1 mol of hydrogen (2 g) and 1 mol of carbon dioxide (44 g) both take up exactly 24 dm&sup3; at rtp. It doesn't matter what gas it is.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Gas Volume Formulas</div>
+      <div class="formula-box">
+        volume (dm&sup3;) = moles &times; 24<br>
+        moles = volume (dm&sup3;) &divide; 24
+      </div>
+      <p style="margin-top:8px;">If the volume is in cm&sup3;, convert first: <strong>1 dm&sup3; = 1000 cm&sup3;</strong>.<br>
+      Or use: volume (cm&sup3;) = moles &times; 24,000 and moles = volume (cm&sup3;) &divide; 24,000.</p>
+    </div>
+  </div>
+
+  <div class="worked-example">
+    <div class="we-label">Worked Example &mdash; Gas Volume from Mass</div>
+    <p><strong>Question:</strong> What volume does 22 g of CO&#8322; occupy at rtp?</p>
+    <div class="step"><span class="step-num">Step 1:</span> Find M&#7523; of CO&#8322; = 12 + (2&times;16) = 44</div>
+    <div class="step"><span class="step-num">Step 2:</span> Find moles: 22 &divide; 44 = 0.5 mol</div>
+    <div class="step"><span class="step-num">Step 3:</span> Find volume: 0.5 &times; 24 = <strong>12 dm&sup3;</strong></div>
+  </div>
+
+  <div class="worked-example" style="margin-top:2px;">
+    <div class="we-label">Worked Example &mdash; Gas Volume from an Equation</div>
+    <p><strong>Question:</strong> What volume of hydrogen reacts with 24 dm&sup3; of oxygen?<br>
+    Equation: 2H&#8322;(g) + O&#8322;(g) &rarr; 2H&#8322;O(l)</p>
+    <div class="step"><span class="step-num">Step 1:</span> From the equation, 2 volumes of H&#8322; react with 1 volume of O&#8322;</div>
+    <div class="step"><span class="step-num">Step 2:</span> So 2 &times; 24 dm&sup3; react with 24 dm&sup3;</div>
+    <div class="step"><span class="step-num">Answer:</span> <strong>48 dm&sup3;</strong> of hydrogen</div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Units! dm&sup3; vs cm&sup3;</div>
+      <p>The most common mistake in gas questions is mixing up dm&sup3; and cm&sup3;. <strong>Always check the units in the question.</strong> If they give you cm&sup3;, divide by 1000 to get dm&sup3; before using the formula, or use 24,000 instead of 24. Write the conversion as a separate line so you don't lose marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Gas Questions Are Two-Step</div>
+      <p>Every gas volume question is: (1) find moles (from mass, or from an equation), then (2) multiply by 24 to get volume. If they give you volume, do it backwards: divide by 24 to get moles. That's it. Two steps. Practise until it's automatic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state Avogadro's Law and the molar gas volume at rtp (24 dm&sup3;)</li>
+    <li><input type="checkbox"> I can calculate volume from moles and moles from volume</li>
+    <li><input type="checkbox"> I can convert between dm&sup3; and cm&sup3; without errors</li>
+    <li><input type="checkbox"> I can calculate gas volumes from balanced equations</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: CONCENTRATION & EMPIRICAL/MOLECULAR FORMULA ===== -->
+<div class="section-header">
+  <span class="num">Section 5.4 &ndash; 5.6</span>
+  Concentration, Empirical Formula, and Molecular Formula
+</div>
+<div class="card">
+  <div class="intro-text">
+    This section covers three related skills: calculating the concentration of solutions, working out the simplest formula of a compound from experimental data, and converting that to the real molecular formula.
+  </div>
+
+  <!-- Concentration -->
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Concentration of a Solution</div>
+      <p><strong>Concentration</strong> = the amount of solute dissolved in 1 dm&sup3; of solution.</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Solute</strong> = the substance you dissolve (e.g. salt)<br>
+        &bull; <strong>Solvent</strong> = the liquid you dissolve it in (usually water)<br>
+        &bull; <strong>Solution</strong> = solute + solvent mixed together
+      </p>
+      <div class="formula-box" style="margin-top:10px;">
+        concentration (mol/dm&sup3;) = amount of solute (mol) &divide; volume of solution (dm&sup3;)<br>
+        amount of solute (mol) = concentration (mol/dm&sup3;) &times; volume (dm&sup3;)
+      </div>
+      <p style="margin-top:8px;">Concentration can also be given in <strong>g/dm&sup3;</strong>. The units in the question tell you which formula to use.</p>
+      <p style="margin-top:6px;"><strong>Volume conversion:</strong> if volume is in cm&sup3;, divide by 1000 to get dm&sup3;.</p>
+    </div>
+  </div>
+
+  <div class="worked-example">
+    <div class="we-label">Worked Example &mdash; Concentration</div>
+    <p><strong>Question:</strong> 25 cm&sup3; of a solution contains 0.05 mol of NaOH. What is its concentration?</p>
+    <div class="step"><span class="step-num">Step 1:</span> Convert volume: 25 cm&sup3; &divide; 1000 = 0.025 dm&sup3;</div>
+    <div class="step"><span class="step-num">Step 2:</span> concentration = 0.05 &divide; 0.025 = <strong>2 mol/dm&sup3;</strong></div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; cm&sup3; and dm&sup3; (Again!)</div>
+      <p>This is the single most common error in concentration calculations. The formula uses <strong>dm&sup3;</strong>. If the question says "250 cm&sup3;", you <strong>must</strong> divide by 1000 to get 0.25 dm&sup3; before plugging in. Write the conversion as a visible step. Every time.</p>
+    </div>
+  </div>
+
+  <!-- Empirical formula -->
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Empirical Formula</div>
+      <p>The <strong>empirical formula</strong> shows the <strong>simplest whole-number ratio</strong> of atoms in a compound.</p>
+      <p style="margin-top:6px;">To find it from experimental data, follow this method every time:</p>
+      <table class="compare-table">
+        <tr>
+          <th>Step</th>
+          <th>What to Do</th>
+        </tr>
+        <tr>
+          <td>1</td>
+          <td>Write down the mass of each element (given in the question, or from percentages &mdash; assume 100 g)</td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>Divide each mass by its A&#7523; to get moles of atoms</td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>Divide every mole value by the smallest mole value &rarr; this gives the ratio</td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>If the ratio is not whole numbers, multiply through to make it whole (e.g. 1:1.5 &rarr; 2:3)</td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>Write the formula using the ratio</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="worked-example">
+    <div class="we-label">Worked Example &mdash; Empirical Formula</div>
+    <p><strong>Question:</strong> A compound is 80% carbon and 20% hydrogen by mass. Find its empirical formula.</p>
+    <div class="step"><span class="step-num">Step 1:</span> Assume 100 g &rarr; 80 g C, 20 g H</div>
+    <div class="step"><span class="step-num">Step 2:</span> Moles: C = 80&divide;12 = 6.67 mol; H = 20&divide;1 = 20 mol</div>
+    <div class="step"><span class="step-num">Step 3:</span> Divide by smallest (6.67): C = 1, H = 20&divide;6.67 = 3</div>
+    <div class="step"><span class="step-num">Step 4:</span> Ratio is 1:3 &rarr; empirical formula = <strong>CH&#8323;</strong></div>
+  </div>
+
+  <!-- Molecular formula -->
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; From Empirical to Molecular Formula</div>
+      <p>The <strong>molecular formula</strong> shows the <strong>actual number</strong> of atoms in one molecule. It is a whole-number multiple of the empirical formula.</p>
+      <div class="formula-box" style="margin-top:10px;">
+        n = M&#7523; (given) &divide; empirical formula mass<br>
+        molecular formula = empirical formula &times; n
+      </div>
+      <p style="margin-top:8px;"><strong>Example:</strong> If the empirical formula is CH&#8323; (mass = 15) and M&#7523; = 30, then n = 30 &divide; 15 = 2, so the molecular formula is C&#8322;H&#8326; (ethane).</p>
+      <p style="margin-top:6px;"><strong>For ionic compounds</strong>, the empirical formula <em>is</em> the formula. There is no "molecular formula" because ionic compounds don't form individual molecules.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Empirical formula questions appear on almost every IGCSE paper. They look hard but they always follow the same table method. If you can set up the table (element / mass / A&#7523; / moles / ratio), you will get the marks. The molecular formula is just one extra division step at the end.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Use the Table Every Time</div>
+      <p>Draw a table with rows: element, mass, A&#7523;, moles, ratio, formula. Fill it in mechanically. Even when it feels "obvious", the table keeps your working organized and prevents silly mistakes. Practise with: sulfur + oxygen &rarr; SO&#8322; (32 g S + 32 g O), and magnesium + oxygen &rarr; MgO (2.4 g Mg + 1.6 g O).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define concentration and use the formula (mol &divide; dm&sup3;)</li>
+    <li><input type="checkbox"> I always convert cm&sup3; to dm&sup3; before calculating concentration</li>
+    <li><input type="checkbox"> I can find the empirical formula from masses or percentages</li>
+    <li><input type="checkbox"> I can convert an empirical formula to a molecular formula using M&#7523;</li>
+    <li><input type="checkbox"> I know that for ionic compounds, empirical = actual formula</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: % YIELD AND % PURITY ===== -->
+<div class="section-header">
+  <span class="num">Section 5.7</span>
+  Percentage Yield and Percentage Purity
+</div>
+<div class="card">
+  <div class="intro-text">
+    In real life, chemical reactions never produce exactly as much product as the equation predicts. Some product is lost or contaminated. These two calculations tell you how good the reaction was.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; % Yield</div>
+      <p>The <strong>yield</strong> is the amount of product you actually obtain from a reaction.</p>
+      <p style="margin-top:6px;">The <strong>theoretical mass</strong> is the mass you would get if the reaction were perfect (calculated from the equation).</p>
+      <div class="formula-box" style="margin-top:10px;">
+        % yield = (actual mass of product &divide; theoretical mass of product) &times; 100%
+      </div>
+      <p style="margin-top:8px;">% yield is always less than or equal to 100%. If your answer is over 100%, you've made an error.</p>
+    </div>
+  </div>
+
+  <div class="worked-example">
+    <div class="we-label">Worked Example &mdash; % Yield</div>
+    <p><strong>Question:</strong> 1 mole of salicylic acid (M&#7523; = 138) should give 1 mole of aspirin (M&#7523; = 180). A trial using 100.0 g of salicylic acid produced 121.2 g of aspirin. What is the % yield?</p>
+    <div class="step"><span class="step-num">Step 1:</span> Moles of salicylic acid = 100.0 &divide; 138 = 0.725 mol</div>
+    <div class="step"><span class="step-num">Step 2:</span> Theoretical mass of aspirin = 0.725 &times; 180 = 130.5 g</div>
+    <div class="step"><span class="step-num">Step 3:</span> % yield = (121.2 &divide; 130.5) &times; 100 = <strong>92.9%</strong></div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; % Purity</div>
+      <p>When a product has impurities mixed in (e.g. unreacted substances), we calculate <strong>% purity</strong>.</p>
+      <div class="formula-box" style="margin-top:10px;">
+        % purity = (mass of pure product &divide; mass of impure sample) &times; 100%
+      </div>
+    </div>
+  </div>
+
+  <div class="worked-example">
+    <div class="we-label">Worked Example &mdash; % Purity</div>
+    <p><strong>Question:</strong> 10 g of chalk (mostly CaCO&#8323;) is reacted with excess HCl. 2280 cm&sup3; of CO&#8322; is collected at rtp. Find the % purity of the chalk.</p>
+    <p style="margin-top:4px;">Equation: CaCO&#8323;(s) + 2HCl(aq) &rarr; CaCl&#8322;(aq) + H&#8322;O(l) + CO&#8322;(g)</p>
+    <div class="step"><span class="step-num">Step 1:</span> Moles of CO&#8322; = 2280 &divide; 24000 = 0.095 mol</div>
+    <div class="step"><span class="step-num">Step 2:</span> From equation: 1 mol CaCO&#8323; gives 1 mol CO&#8322;, so 0.095 mol CaCO&#8323; reacted</div>
+    <div class="step"><span class="step-num">Step 3:</span> Mass of pure CaCO&#8323; = 0.095 &times; 100 = 9.5 g</div>
+    <div class="step"><span class="step-num">Step 4:</span> % purity = (9.5 &divide; 10) &times; 100 = <strong>95%</strong></div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; % Yield vs % Purity</div>
+      <p><strong>% yield</strong> answers: "How much product did I get compared to what I expected?" (actual vs theoretical).<br>
+      <strong>% purity</strong> answers: "How much of my sample is the substance I actually want?" (pure vs impure).<br>
+      They are different formulas with different purposes. Read the question carefully to know which one they want.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>In factories making medicines, a yield of 92% means 8% of expensive starting material was wasted. A purity of 78% in a drug means 22% is impurities &mdash; dangerous for patients. These calculations are used every day in real chemistry. On the exam, they are worth 3-5 marks and combine multiple skills (moles, equations, and percentages).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Two Different Starting Points</div>
+      <p>For % yield: start by finding the <strong>theoretical mass</strong> from the equation (this is the hard part), then the formula is easy. For % purity: start by working out the <strong>mass of pure substance</strong> from the experimental data (often via gas volume or titration), then the formula is easy. In both cases, the formula itself is just a fraction &times; 100. The real skill is figuring out what number goes on top and what goes on bottom.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define % yield and use the formula</li>
+    <li><input type="checkbox"> I can calculate theoretical mass from a balanced equation</li>
+    <li><input type="checkbox"> I can define % purity and use the formula</li>
+    <li><input type="checkbox"> I know the difference between % yield and % purity</li>
+    <li><input type="checkbox"> I can work backwards from gas volumes or titration data to find mass of pure substance</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 5 Notes Complete</h2>
+  <p>You've covered the mole, equation calculations, gas volumes, concentration, empirical and molecular formulae, and % yield/purity. This is the calculation backbone of IGCSE Chemistry. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

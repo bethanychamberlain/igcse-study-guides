@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Variation and Evolution &mdash; Biology Ch18</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Numbered steps */
+  .steps {
+    counter-reset: step;
+    list-style: none;
+    padding: 0;
+    margin: 8px 0;
+  }
+  .steps li {
+    counter-increment: step;
+    padding: 4px 0;
+    padding-left: 28px;
+    position: relative;
+    font-size: 14px;
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--subject);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 18</div>
+  <h1>Variation and Evolution</h1>
+  <div class="subtitle">Types of variation, mutations, natural selection, Darwin, and artificial selection &mdash; how species change over time</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 22 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 18.1: VARIATION ===== -->
+<div class="section-header">
+  <span class="num">Section 18.1</span>
+  Variation
+</div>
+<div class="card">
+  <div class="intro-text">
+    Living organisms differ from one another. These differences are called variations, and they come in two types.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Two Types of Variation</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Discontinuous Variation</th>
+          <th>Continuous Variation</th>
+        </tr>
+        <tr>
+          <td><strong>Definition</strong></td>
+          <td>Clear-cut categories with NO intermediates</td>
+          <td>A range of values with intermediates between extremes</td>
+        </tr>
+        <tr>
+          <td><strong>Type of data</strong></td>
+          <td>Qualitative (cannot be measured)</td>
+          <td>Quantitative (can be measured)</td>
+        </tr>
+        <tr>
+          <td><strong>Caused by</strong></td>
+          <td>Genes only</td>
+          <td>Genes AND environment</td>
+        </tr>
+        <tr>
+          <td><strong>Graph type</strong></td>
+          <td>Bar chart (distinct bars, no smooth curve)</td>
+          <td>Smooth bell curve (normal distribution)</td>
+        </tr>
+        <tr>
+          <td><strong>Examples</strong></td>
+          <td>Blood group (A, B, AB, O), sex (male/female)</td>
+          <td>Height, body mass, hand span, chest circumference</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Continuous vs Discontinuous</div>
+      <p>A simple test: <strong>if you can measure it with a number, it's continuous</strong>. Height = 165 cm (continuous). Blood group = A (you can't be "halfway between A and B" &mdash; discontinuous). The exam will give you a graph and ask you to identify the type &mdash; bar chart = discontinuous, smooth curve = continuous.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Phenotype Equation</div>
+      <p><strong>Phenotype = Genotype + Effects of the Environment</strong></p>
+      <p style="margin-top:6px;">This means your observable characteristics come from BOTH your genes AND your environment. A plant may have the genes for chlorophyll, but without light it won't turn green. A person may have genes for a tall build, but without adequate nutrition they won't reach their full height.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Write the phenotype equation on a sticky note and put it where you'll see it. It comes up in so many exam questions. If they ask "Why do identical twins raised apart look slightly different?" &mdash; it's because they have the same genotype but different environments.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define continuous and discontinuous variation</li>
+    <li><input type="checkbox"> I can give two examples of each type</li>
+    <li><input type="checkbox"> I know which type is genes-only vs genes-and-environment</li>
+    <li><input type="checkbox"> I can write the phenotype equation from memory</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 18.2: CAUSES OF VARIATION ===== -->
+<div class="section-header">
+  <span class="num">Section 18.2</span>
+  Causes of Variation
+</div>
+<div class="card">
+  <div class="intro-text">
+    Variation can be caused by mutations in DNA or by the mixing of genes during sexual reproduction.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Mutation</div>
+      <p><strong>Mutation</strong> = a change in a gene or chromosome. Mutations can arise from:</p>
+      <p>&bull; Mistakes in DNA copying during cell division<br>
+         &bull; Damage from environmental factors (radiation, chemicals)</p>
+      <p style="margin-top:8px;">Two types:<br>
+         &bull; <strong>Gene mutation</strong> = change in the base sequence of DNA on one chromosome. Can produce a defective protein or no protein. E.g. sickle cell anaemia (one base change in the haemoglobin gene).<br>
+         &bull; <strong>Chromosome mutation</strong> = when cell division fails to distribute chromosomes correctly (e.g. wrong number in gametes).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Mutagens</div>
+      <p><strong>Mutagens</strong> = factors that increase the rate of mutation:</p>
+      <p>&bull; <strong>Radiation</strong> &mdash; gamma rays, ultraviolet light, X-rays<br>
+         &bull; <strong>Chemicals</strong> &mdash; tars in tobacco smoke, some preservatives, certain plant hormones</p>
+      <p style="margin-top:6px;">A mutagen that causes uncontrolled cell division (cancer) is called a <strong>carcinogen</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Not all mutations are harmful. Some are <strong>beneficial</strong> &mdash; they help the organism survive better. Sickle cell is harmful as a homozygote but helpful as a heterozygote (malaria resistance). Beneficial mutations are the raw material for evolution by natural selection.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Sexual Reproduction Creates Variation</div>
+      <p>Sexual reproduction mixes genes in <strong>three ways</strong>:</p>
+      <p>&bull; <strong>Crossing over</strong> &mdash; homologous chromosomes exchange segments during meiosis, creating new allele combinations<br>
+         &bull; <strong>Independent assortment</strong> &mdash; homologous pairs line up randomly at meiosis, so different combinations end up in different gametes<br>
+         &bull; <strong>Random fertilisation</strong> &mdash; any male gamete can fuse with any female gamete</p>
+      <p style="margin-top:6px;">Together, these three mechanisms make it virtually impossible for any two gametes (except in identical twins) to be the same.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Link Back to Chapter 17</div>
+      <p>This section connects directly to meiosis (17.4). The three sources of variation from sexual reproduction all happen because of meiosis and fertilisation. If you know meiosis well, this section follows naturally.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define mutation and give an example</li>
+    <li><input type="checkbox"> I know the difference between gene and chromosome mutations</li>
+    <li><input type="checkbox"> I can name two mutagens and define carcinogen</li>
+    <li><input type="checkbox"> I can explain three ways sexual reproduction creates variation</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 18.3: ADAPTATION ===== -->
+<div class="section-header">
+  <span class="num">Section 18.3</span>
+  Adaptation and Darwin
+</div>
+<div class="card">
+  <div class="intro-text">
+    Some organisms are better suited to their environment than others. This is called adaptation, and it's the foundation of evolution.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p><strong>Adaptation</strong> = the way an organism is suited to survive in its environment. An organism well suited to its environment is said to show high <strong>fitness</strong>.</p>
+      <p style="margin-top:6px;"><strong>Adaptive feature</strong> = an inherited functional feature that increases an organism's fitness (its chance of surviving and reproducing).</p>
+      <p style="margin-top:6px;"><strong>Evolution</strong> = the change in a species over time through natural selection.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Examples of Adaptation</div>
+      <p><strong>Polar bear</strong> (adapted to cold, arctic conditions):<br>
+         &bull; White fur = camouflage for hunting + less heat radiation<br>
+         &bull; Small ears/tail = less surface area for heat loss<br>
+         &bull; Large body = more cells to generate heat<br>
+         &bull; Thick fat layer = insulation + food store<br>
+         &bull; Padded feet = insulation + grip on ice</p>
+      <p style="margin-top:8px;"><strong>Camel</strong> (adapted to hot, dry desert):<br>
+         &bull; Fat stored in hump (not under skin) = body can radiate heat<br>
+         &bull; Thin fur = allows heat loss<br>
+         &bull; Closable nostrils = keeps sand out<br>
+         &bull; Large feet with membrane = walk on sand without sinking<br>
+         &bull; Can drink 100 litres in 10 minutes when water is available</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Charles Darwin</div>
+      <p><strong>Charles Darwin</strong> (1809-1882) was a British naturalist who sailed on HMS <em>Beagle</em> (1831). His key observations were made on the <strong>Galapagos Islands</strong>, where he noticed that finches on different islands had different beaks adapted to different food sources, but all seemed related to a common ancestor.</p>
+      <p style="margin-top:6px;">Darwin proposed that species are <strong>not fixed</strong> &mdash; they change over time through <strong>natural selection</strong>. He published this in <em>The Origin of Species by Means of Natural Selection</em>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Darwin vs Lamarck</div>
+      <p><strong>Lamarck</strong> thought the environment <strong>caused</strong> the variations (e.g. giraffes stretched their necks, then passed on longer necks). <strong>Darwin</strong> said variations arise by <strong>chance</strong>, and the environment <strong>selects</strong> the best ones. Lamarck's idea was wrong &mdash; acquired characteristics cannot be inherited.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define adaptation, adaptive feature, and fitness</li>
+    <li><input type="checkbox"> I can describe 3+ adaptations of the polar bear OR camel</li>
+    <li><input type="checkbox"> I know who Darwin was and what he observed on the Galapagos</li>
+    <li><input type="checkbox"> I know the key difference between Darwin and Lamarck</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 18.4: NATURAL SELECTION ===== -->
+<div class="section-header">
+  <span class="num">Section 18.4</span>
+  Natural Selection
+</div>
+<div class="card">
+  <div class="intro-text">
+    Natural selection is the mechanism that drives evolution. It explains how populations change over time.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Natural Selection Step by Step</div>
+      <p>Learn these five steps in order:</p>
+      <ol class="steps">
+        <li><strong>Overproduction</strong> &mdash; organisms produce more offspring than can possibly survive</li>
+        <li><strong>Variation</strong> &mdash; within the population, individuals have different characteristics (due to genetic differences)</li>
+        <li><strong>Struggle for existence</strong> &mdash; organisms compete for limited resources (food, space, mates)</li>
+        <li><strong>Survival of the fittest</strong> &mdash; individuals with characteristics best suited to the environment are more likely to survive and reproduce</li>
+        <li><strong>Advantageous characteristics passed on</strong> &mdash; the well-adapted individuals breed and pass their genes to the next generation; over time, these characteristics become more common in the population</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Antibiotic Resistance</div>
+      <p>Antibiotic-resistant bacteria are a real-world example of natural selection happening right now. Some bacteria have a random mutation making them resistant. When antibiotics are used, non-resistant bacteria die, but resistant ones <strong>survive and reproduce</strong>. Over time, the whole population becomes resistant. This is why "superbugs" like MRSA are such a problem in hospitals.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How New Species Form</div>
+      <p>If two populations of the same species are <strong>separated</strong> (e.g. by a mountain range), they experience <strong>different selection pressures</strong>. Over many generations, they accumulate so many different adaptations that they can <strong>no longer interbreed</strong>. They have become <strong>separate species</strong>.</p>
+      <p style="margin-top:6px;">Example: Two populations of antelopes separated by mountains. One side has food on high branches (tall antelopes favoured), the other has predators (small, fast antelopes favoured). Eventually they become different species.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The 5-Step Chain</div>
+      <p>Many 5-6 mark questions ask you to "Explain how natural selection leads to evolution." Each of the five steps above is worth one mark. Memorise them as a chain: <strong>Over-produce &rarr; Vary &rarr; Struggle &rarr; Survive &rarr; Pass on</strong>. Practice writing all five from memory.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list all 5 steps of natural selection from memory</li>
+    <li><input type="checkbox"> I can explain antibiotic resistance as an example of natural selection</li>
+    <li><input type="checkbox"> I can explain how two populations can become separate species</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 18.5: ARTIFICIAL SELECTION ===== -->
+<div class="section-header">
+  <span class="num">Section 18.5</span>
+  Artificial Selection
+</div>
+<div class="card">
+  <div class="intro-text">
+    Humans have been selecting organisms with desirable traits for thousands of years. This is artificial selection.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Artificial Selection</div>
+      <p><strong>Artificial selection</strong> (selective breeding) = when <strong>humans</strong> choose organisms with desirable characteristics and allow only those to breed.</p>
+      <p style="margin-top:8px;">Examples:<br>
+         &bull; <strong>Jersey cattle</strong> &mdash; bred for high cream content in milk<br>
+         &bull; <strong>Dogs</strong> &mdash; all breeds are the same species, bred for different purposes (hunting, guarding, companionship)<br>
+         &bull; <strong>Wheat</strong> &mdash; bred so all stems are the same height (easier to harvest) and ears separate easily from the stalk<br>
+         &bull; <strong>Wild mustard</strong> &rarr; selectively bred into cabbage, cauliflower, broccoli, Brussels sprouts, kale, kohlrabi</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Natural vs Artificial Selection</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Natural Selection</th>
+          <th>Artificial Selection</th>
+        </tr>
+        <tr>
+          <td><strong>Agent of selection</strong></td>
+          <td>The natural environment</td>
+          <td>Humans</td>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Slow (many generations)</td>
+          <td>Much quicker</td>
+        </tr>
+        <tr>
+          <td><strong>Advantage to organism</strong></td>
+          <td>Helps it survive in the wild</td>
+          <td>May NOT help it survive in the wild (e.g. a Chihuahua)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Maintaining Variation</div>
+      <p>Artificial selection can <strong>reduce</strong> genetic variation (all individuals become very similar). This is dangerous because if a new disease appears, the whole population could be wiped out. This is why <strong>rare-breed centres</strong> and <strong>seed banks</strong> exist &mdash; to preserve genetic diversity as a safety net for the future.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Selective Breeding vs Genetic Engineering</div>
+      <p>Selective breeding uses <strong>traditional breeding</strong> (meiosis + fertilisation) to combine desired traits. Genetic engineering <strong>directly changes DNA</strong> by inserting genes from another organism. They are different processes. If the question says "selective breeding" or "artificial selection," do NOT write about cutting and pasting genes.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Exam Practice</div>
+      <p>A very common question format: "Merino sheep have thicker wool than wild sheep. Explain how artificial selection could have produced Merino sheep." Just follow the steps: (1) choose sheep with thickest wool, (2) breed them together, (3) from offspring, select those with thickest wool, (4) repeat over many generations. Simple process, easy marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define artificial selection</li>
+    <li><input type="checkbox"> I can give 3 examples of artificial selection</li>
+    <li><input type="checkbox"> I can state 3 differences between natural and artificial selection</li>
+    <li><input type="checkbox"> I know why maintaining genetic variation is important</li>
+    <li><input type="checkbox"> I can describe the steps a farmer would use to selectively breed for a trait</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 18 Notes Complete</h2>
+  <p>You've covered variation, mutations, natural selection, Darwin, and artificial selection. Now test yourself with the Chapter 18 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

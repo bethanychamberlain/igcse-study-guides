@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Number 3 &mdash; Math Ch10</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Math Ch10 &mdash; Cheat Sheet</div>
+    <h1>Number 3</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Index / Power</strong></td>
+      <td>The small number that tells you how many times to multiply. In 3<sup>4</sup>, the index is 4.</td>
+      <td class="confuse">The base (that's the big number &mdash; the 3)</td>
+    </tr>
+    <tr>
+      <td><strong>Square number</strong></td>
+      <td>A number multiplied by itself. E.g. 5<sup>2</sup> = 25.</td>
+      <td class="confuse">Square root (that's the reverse: &radic;25 = 5)</td>
+    </tr>
+    <tr>
+      <td><strong>Cube number</strong></td>
+      <td>A number multiplied by itself three times. E.g. 2<sup>3</sup> = 8.</td>
+      <td class="confuse">Cube root (&#8731;8 = 2)</td>
+    </tr>
+    <tr>
+      <td><strong>Standard form</strong></td>
+      <td>Writing a number as a &times; 10<sup>n</sup>, where 1 &le; a &lt; 10 and n is an integer.</td>
+      <td class="confuse">32 &times; 10<sup>5</sup> is NOT standard form (32 is not between 1 and 10)</td>
+    </tr>
+    <tr>
+      <td><strong>Reciprocal</strong></td>
+      <td>1 divided by the number. The reciprocal of 5 is 1/5. The reciprocal of 2/3 is 3/2.</td>
+      <td class="confuse">Negative (the reciprocal of 5 is 1/5, not &minus;5)</td>
+    </tr>
+    <tr>
+      <td><strong>Proper fraction</strong></td>
+      <td>Top number is smaller than the bottom. E.g. 3/5.</td>
+      <td class="confuse">Improper fraction (top &ge; bottom, e.g. 9/4)</td>
+    </tr>
+    <tr>
+      <td><strong>Mixed number</strong></td>
+      <td>A whole number plus a fraction. E.g. 2&frac14;.</td>
+      <td class="confuse">Improper fraction (same value, different form: 2&frac14; = 9/4)</td>
+    </tr>
+    <tr>
+      <td><strong>Substitution</strong></td>
+      <td>Replacing letters in a formula with given numbers, then calculating the result.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- RULES OF INDICES -->
+<div class="card">
+  <h2>Rules of Indices &mdash; The Complete Set</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Rule</th>
+      <th>What It Means</th>
+      <th>Example</th>
+    </tr>
+    <tr>
+      <td>x<sup>a</sup> &times; x<sup>b</sup> = x<sup>a+b</sup></td>
+      <td>Multiplying: ADD the powers</td>
+      <td>3<sup>2</sup> &times; 3<sup>4</sup> = 3<sup>6</sup></td>
+    </tr>
+    <tr>
+      <td>x<sup>a</sup> &divide; x<sup>b</sup> = x<sup>a&minus;b</sup></td>
+      <td>Dividing: SUBTRACT the powers</td>
+      <td>5<sup>6</sup> &divide; 5<sup>2</sup> = 5<sup>4</sup></td>
+    </tr>
+    <tr>
+      <td>(x<sup>a</sup>)<sup>b</sup> = x<sup>a&times;b</sup></td>
+      <td>Power of a power: MULTIPLY</td>
+      <td>(2<sup>3</sup>)<sup>2</sup> = 2<sup>6</sup></td>
+    </tr>
+    <tr>
+      <td>x<sup>0</sup> = 1</td>
+      <td>Anything to the power 0 = 1</td>
+      <td>7<sup>0</sup> = 1</td>
+    </tr>
+    <tr>
+      <td>x<sup>&minus;n</sup> = 1/x<sup>n</sup></td>
+      <td>Negative power = reciprocal</td>
+      <td>2<sup>&minus;3</sup> = 1/8</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Same Base Only</div>
+    These rules ONLY work when the <strong>base is the same</strong>. 3<sup>2</sup> &times; 3<sup>4</sup> = 3<sup>6</sup> works. But 3<sup>2</sup> &times; 5<sup>4</sup> CANNOT be simplified this way.
+  </div>
+</div>
+
+<!-- NEGATIVE NUMBERS SIGN RULES -->
+<div class="card">
+  <h2>Negative Number Sign Rules</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Signs</th>
+      <th>Result</th>
+      <th>Example</th>
+    </tr>
+    <tr>
+      <td>positive &times; positive</td>
+      <td>positive</td>
+      <td>+7 &times; +3 = +21</td>
+    </tr>
+    <tr>
+      <td>negative &times; negative</td>
+      <td>positive</td>
+      <td>&minus;6 &times; &minus;4 = +24</td>
+    </tr>
+    <tr>
+      <td>positive &times; negative</td>
+      <td>negative</td>
+      <td>+7 &times; &minus;5 = &minus;35</td>
+    </tr>
+    <tr>
+      <td>negative &times; positive</td>
+      <td>negative</td>
+      <td>&minus;8 &times; +4 = &minus;32</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Same = Positive, Different = Negative</div>
+    This rule works for multiplying, dividing, AND when two signs sit next to each other.
+    <strong>+ +</strong> = + &nbsp; <strong>&minus; &minus;</strong> = + &nbsp; <strong>+ &minus;</strong> = &minus; &nbsp; <strong>&minus; +</strong> = &minus;.
+    E.g. 3 &minus; (&minus;6) = 3 + 6 = 9.
+  </div>
+</div>
+
+<!-- FRACTION OPERATIONS -->
+<div class="card">
+  <h2>Fraction Operations &mdash; Quick Reference</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Operation</th>
+      <th>Method</th>
+      <th>Example</th>
+    </tr>
+    <tr>
+      <td>Adding</td>
+      <td>Common denominator, add tops</td>
+      <td>1/4 + 2/5 = 5/20 + 8/20 = 13/20</td>
+    </tr>
+    <tr>
+      <td>Subtracting</td>
+      <td>Common denominator, subtract tops</td>
+      <td>3/4 &minus; 1/3 = 9/12 &minus; 4/12 = 5/12</td>
+    </tr>
+    <tr>
+      <td>Multiplying</td>
+      <td>Top &times; top, bottom &times; bottom</td>
+      <td>2/3 &times; 4/5 = 8/15</td>
+    </tr>
+    <tr>
+      <td>Dividing</td>
+      <td>Keep, Flip, Change (KFC)</td>
+      <td>2/3 &divide; 4/5 = 2/3 &times; 5/4 = 10/12 = 5/6</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Common Denominator &mdash; Only for +/&minus;</div>
+    You ONLY need a common denominator for <strong>adding and subtracting</strong>. For multiplying and dividing, just go straight across (after flipping for division).
+  </div>
+</div>
+
+<!-- STANDARD FORM QUICK REFERENCE -->
+<div class="card">
+  <h2>Standard Form &mdash; Quick Reference</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Original Number</th>
+      <th>Standard Form</th>
+      <th>Power Is</th>
+    </tr>
+    <tr>
+      <td>2000</td>
+      <td>2 &times; 10<sup>3</sup></td>
+      <td>Positive (big number)</td>
+    </tr>
+    <tr>
+      <td>56 000 000</td>
+      <td>5.6 &times; 10<sup>7</sup></td>
+      <td>Positive (big number)</td>
+    </tr>
+    <tr>
+      <td>0.0004</td>
+      <td>4 &times; 10<sup>&minus;4</sup></td>
+      <td>Negative (small number)</td>
+    </tr>
+    <tr>
+      <td>0.00031</td>
+      <td>3.1 &times; 10<sup>&minus;4</sup></td>
+      <td>Negative (small number)</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Big Number = Positive Power, Small Number = Negative Power</div>
+    Move the decimal so the number is between 1 and 10. Count how many places you moved. If the original was big (moved left), power is positive. If small (moved right), power is negative.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Indices</span>
+    <span>Multiply &rarr; add powers. Divide &rarr; subtract powers. Power of power &rarr; multiply powers. Zero power = 1.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Negative power</span>
+    <span>x<sup>&minus;n</sup> means "1 over x<sup>n</sup>" &mdash; it's a reciprocal, NOT a negative number.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Standard form</span>
+    <span>Write as a &times; 10<sup>n</sup> where a is between 1 and 10 &mdash; positive power for big numbers, negative for small.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Adding fractions</span>
+    <span>Find a common denominator, convert both fractions, add the tops, keep the bottom.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Dividing fractions</span>
+    <span>Keep the first, Flip the second, Change to multiply &mdash; KFC.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Negative signs</span>
+    <span>Same signs give positive, different signs give negative &mdash; works for multiplying, dividing, and double signs.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Substitution</span>
+    <span>Replace letters with numbers, use brackets for negatives, then follow BIDMAS carefully.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Index Rules &mdash; "MAD-ZEN"</div>
+    <strong>M</strong>ultiply = <strong>A</strong>dd powers. <strong>D</strong>ivide = subtract.
+    <strong>Z</strong>ero power = 1. <strong>E</strong>xponent on exponent = multiply.
+    <strong>N</strong>egative power = reciprocal.
+  </div>
+
+  <div class="trick">
+    <div class="label">Brackets Matter! &mdash; (&minus;3)<sup>2</sup> vs &minus;3<sup>2</sup></div>
+    (&minus;3)<sup>2</sup> = 9 (the whole thing is squared). &minus;3<sup>2</sup> = &minus;9 (only the 3 is squared, then the minus is applied). Brackets change the answer completely.
+  </div>
+
+  <div class="trick">
+    <div class="label">KFC for Dividing Fractions</div>
+    <strong>K</strong>eep the first fraction. <strong>F</strong>lip the second fraction. <strong>C</strong>hange the &divide; to &times;. Then multiply straight across.
+  </div>
+
+  <div class="trick">
+    <div class="label">Standard Form Check</div>
+    Before writing your answer, ask: "Is my number between 1 and 10?" If it's 32 &times; 10<sup>5</sup>, fix it: 3.2 &times; 10<sup>6</sup>. If it's 0.5 &times; 10<sup>3</sup>, fix it: 5 &times; 10<sup>2</sup>.
+  </div>
+
+  <div class="trick">
+    <div class="label">Substitution &mdash; "Brackets Around Negatives"</div>
+    Always write negative values in brackets when substituting. v = u + at with a = &minus;3 becomes v = u + (&minus;3)t. This prevents sign errors every time.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Simplify 4<sup>3</sup> &times; 4<sup>5</sup>"</td>
+      <td>Add the powers: <strong>4<sup>8</sup></strong></td>
+    </tr>
+    <tr>
+      <td>"Evaluate 2<sup>&minus;3</sup>"</td>
+      <td>1/2<sup>3</sup> = <strong>1/8</strong> (not &minus;8)</td>
+    </tr>
+    <tr>
+      <td>"Write 0.00056 in standard form"</td>
+      <td><strong>5.6 &times; 10<sup>&minus;4</sup></strong> (moved decimal 4 places right)</td>
+    </tr>
+    <tr>
+      <td>"Calculate (3 &times; 10<sup>4</sup>) &times; (2 &times; 10<sup>5</sup>)"</td>
+      <td>3 &times; 2 = 6. 10<sup>4</sup> &times; 10<sup>5</sup> = 10<sup>9</sup>. Answer: <strong>6 &times; 10<sup>9</sup></strong></td>
+    </tr>
+    <tr>
+      <td>"Work out 2/3 &divide; 4/5"</td>
+      <td>KFC: 2/3 &times; 5/4 = 10/12 = <strong>5/6</strong></td>
+    </tr>
+    <tr>
+      <td>"What is &minus;5 &minus; (&minus;3)?"</td>
+      <td>Two negatives = positive: &minus;5 + 3 = <strong>&minus;2</strong></td>
+    </tr>
+    <tr>
+      <td>"If v = u + at, find v when u = 5, a = &minus;2, t = 4"</td>
+      <td>v = 5 + (&minus;2)(4) = 5 &minus; 8 = <strong>&minus;3</strong>. Do multiplication before addition (BIDMAS).</td>
+    </tr>
+    <tr>
+      <td>"Evaluate 5<sup>0</sup>"</td>
+      <td><strong>1</strong>. Anything to the power of 0 equals 1.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

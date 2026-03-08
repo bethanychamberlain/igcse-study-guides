@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Number 3 &mdash; Math Ch10</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  .progress-bar {
+    background: var(--card); border-radius: 10px; padding: 14px 20px;
+    margin-bottom: 20px; display: flex; align-items: center; gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track { flex: 1; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--subject); border-radius: 5px; width: 0%; transition: width 0.4s ease; }
+  .progress-bar .label { font-size: 13px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+
+  .how-to {
+    background: var(--card); border: 2px solid var(--subject); border-radius: 10px;
+    padding: 20px 24px; margin-bottom: 24px;
+  }
+  .how-to h2 { font-size: 16px; color: var(--subject-dark); margin-bottom: 10px; }
+  .how-to .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .how-to .legend-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+  .how-to .legend-icon {
+    flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 800; color: #fff;
+  }
+
+  .section-header {
+    background: var(--subject); color: #fff; border-radius: 10px 10px 0 0;
+    padding: 14px 20px; margin-top: 28px; font-size: 18px; font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7; font-size: 13px; display: block; margin-bottom: 2px;
+    text-transform: uppercase; letter-spacing: 1px;
+  }
+
+  .card {
+    background: var(--card); border-radius: 0 0 10px 10px; padding: 0;
+    margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden;
+  }
+  .card + .card { border-radius: 10px; }
+
+  .block {
+    padding: 14px 20px; border-left: 4px solid transparent;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .block + .block { border-top: 1px solid #f0f0f0; }
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 800; color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  .worked {
+    background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px;
+    padding: 12px 16px; margin: 8px 0 4px; font-size: 14px;
+  }
+  .worked .step { padding: 4px 0; display: flex; gap: 8px; }
+  .worked .step-num { font-weight: 800; color: var(--subject); min-width: 22px; }
+  .worked .step-text { flex: 1; }
+  .worked .result { margin-top: 6px; padding-top: 6px; border-top: 1px dashed #ccc; font-weight: 700; color: var(--subject-dark); }
+
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  .compare-table th {
+    background: var(--subject-light); color: var(--subject-dark);
+    padding: 8px 10px; text-align: left; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .checklist { list-style: none; padding: 14px 20px; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; font-size: 14px; }
+  .checklist input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--check-done); flex-shrink: 0; cursor: pointer; }
+
+  .intro-text { padding: 14px 20px; font-size: 14px; color: var(--text-secondary); }
+
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff; border-radius: 12px; padding: 24px; margin-top: 28px; text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Math &mdash; Chapter 10</div>
+  <h1>Number 3</h1>
+  <div class="subtitle">Powers and roots, standard form, fractions, negative numbers, and substituting into formulae</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 24 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go.</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: POWERS AND ROOTS ===== -->
+<div class="section-header">
+  <span class="num">Section 10.1</span>
+  Powers and Roots
+</div>
+<div class="card">
+  <div class="intro-text">
+    <strong>Indices</strong> (powers) are a shorthand for repeated multiplication. Instead of writing 3 &times; 3 &times; 3 &times; 3, we write 3<sup>4</sup>. The small number tells you how many times to multiply.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p><strong>Square number</strong>: a number multiplied by itself. E.g. 5<sup>2</sup> = 25.</p>
+      <p><strong>Cube number</strong>: a number multiplied by itself three times. E.g. 2<sup>3</sup> = 8.</p>
+      <p><strong>Square root (&radic;)</strong>: the reverse of squaring. &radic;25 = 5 because 5<sup>2</sup> = 25.</p>
+      <p><strong>Cube root (&#8731;)</strong>: the reverse of cubing. &#8731;8 = 2 because 2<sup>3</sup> = 8.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Rules of Indices</div>
+      <table class="compare-table">
+        <tr><th>Rule</th><th>What It Means</th><th>Example</th></tr>
+        <tr><td>x<sup>a</sup> &times; x<sup>b</sup> = x<sup>a+b</sup></td><td>Multiplying: ADD the powers</td><td>3<sup>2</sup> &times; 3<sup>4</sup> = 3<sup>6</sup></td></tr>
+        <tr><td>x<sup>a</sup> &divide; x<sup>b</sup> = x<sup>a&minus;b</sup></td><td>Dividing: SUBTRACT the powers</td><td>5<sup>6</sup> &divide; 5<sup>2</sup> = 5<sup>4</sup></td></tr>
+        <tr><td>(x<sup>a</sup>)<sup>b</sup> = x<sup>a&times;b</sup></td><td>Power of a power: MULTIPLY the powers</td><td>(2<sup>3</sup>)<sup>2</sup> = 2<sup>6</sup></td></tr>
+        <tr><td>x<sup>0</sup> = 1</td><td>Anything to the power 0 equals 1</td><td>7<sup>0</sup> = 1</td></tr>
+        <tr><td>x<sup>&minus;n</sup> = 1/x<sup>n</sup></td><td>Negative power = reciprocal</td><td>2<sup>&minus;3</sup> = 1/8</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Negative Power vs. Negative Number</div>
+      <p>2<sup>&minus;3</sup> does NOT mean &minus;8. It means 1/2<sup>3</sup> = <strong>1/8</strong>.</p>
+      <p style="margin-top:4px;">(&minus;3)<sup>2</sup> = 9 (negative times negative = positive).</p>
+      <p>&minus;3<sup>2</sup> = &minus;9 (only the 3 is squared, then the minus is applied).</p>
+      <p style="margin-top:4px;">The brackets make all the difference!</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Rules Only Work with the Same Base</div>
+      <p>You can only add/subtract indices when the <strong>base number is the same</strong>. 3<sup>2</sup> &times; 3<sup>4</sup> = 3<sup>6</sup> works. But 3<sup>2</sup> &times; 5<sup>4</sup> CANNOT be simplified using these rules. The bases (3 and 5) are different.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write repeated multiplication using index notation</li>
+    <li><input type="checkbox"> I know all five rules of indices</li>
+    <li><input type="checkbox"> I understand what negative and zero indices mean</li>
+    <li><input type="checkbox"> I can find square roots and cube roots</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: STANDARD FORM ===== -->
+<div class="section-header">
+  <span class="num">Section 10.2</span>
+  Standard Form (Scientific Notation)
+</div>
+<div class="card">
+  <div class="intro-text">
+    Standard form is a way to write very large or very small numbers neatly. It's written as <strong>a &times; 10<sup>n</sup></strong>, where 1 &le; a &lt; 10 and n is an integer.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Convert to Standard Form</div>
+      <p><strong>Step 1:</strong> Move the decimal point so the number is between 1 and 10.</p>
+      <p><strong>Step 2:</strong> Count how many places you moved it. That's your power of 10.</p>
+      <p><strong>Step 3:</strong> If the original number was big (you moved left), the power is <strong>positive</strong>. If it was small (you moved right), the power is <strong>negative</strong>.</p>
+      <div class="worked">
+        <p><strong>Large number:</strong> 2000 = 2 &times; 10<sup>3</sup> (moved decimal 3 places left)</p>
+        <p><strong>Small number:</strong> 0.0004 = 4 &times; 10<sup>&minus;4</sup> (moved decimal 4 places right)</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Calculating in Standard Form</div>
+      <p>When multiplying: multiply the numbers, add the powers of 10.</p>
+      <p>When dividing: divide the numbers, subtract the powers of 10.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> (1.5 &times; 10<sup>3</sup>) &times; (8 &times; 10<sup>6</sup>)</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">1.5 &times; 8 = 12</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">10<sup>3</sup> &times; 10<sup>6</sup> = 10<sup>9</sup></span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">12 &times; 10<sup>9</sup> &mdash; but 12 is not between 1 and 10!</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">Adjust: 12 = 1.2 &times; 10, so answer = <strong>1.2 &times; 10<sup>10</sup></strong></span></div>
+        <div class="result">Answer: 1.2 &times; 10<sup>10</sup></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; The Number Must Be Between 1 and 10</div>
+      <p>32 &times; 10<sup>5</sup> is NOT standard form because 32 is not between 1 and 10.</p>
+      <p style="margin-top:4px;">Correct: 3.2 &times; 10<sup>6</sup>.</p>
+      <p style="margin-top:4px;">0.5 &times; 10<sup>3</sup> is NOT standard form either. Correct: 5 &times; 10<sup>2</sup>.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can convert large numbers to standard form</li>
+    <li><input type="checkbox"> I can convert small numbers to standard form</li>
+    <li><input type="checkbox"> I can multiply and divide numbers in standard form</li>
+    <li><input type="checkbox"> I know to adjust the answer so a is between 1 and 10</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: FRACTIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 10.3</span>
+  Fractions
+</div>
+<div class="card">
+  <div class="intro-text">
+    This section covers adding, subtracting, multiplying, and dividing fractions &mdash; including mixed numbers and improper fractions. These are core skills that come up everywhere.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Vocabulary</div>
+      <p><strong>Proper fraction</strong>: top &lt; bottom. E.g. 3/5, 2/11.</p>
+      <p><strong>Improper fraction</strong>: top &ge; bottom. E.g. 9/4, 11/3.</p>
+      <p><strong>Mixed number</strong>: whole number + fraction. E.g. 2&frac14; = 9/4.</p>
+      <p><strong>Common denominator</strong>: the shared bottom number needed for adding/subtracting.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Four Operations</div>
+      <table class="compare-table">
+        <tr><th>Operation</th><th>Method</th></tr>
+        <tr><td>Adding / Subtracting</td><td>Find common denominator, add/subtract tops, keep bottom</td></tr>
+        <tr><td>Multiplying</td><td>Multiply tops together, multiply bottoms together</td></tr>
+        <tr><td>Dividing</td><td>Flip the second fraction, then multiply (KFC: Keep, Flip, Change)</td></tr>
+      </table>
+      <div class="worked">
+        <p><strong>Example:</strong> 3/4 + 2/5</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Common denominator: 4 &times; 5 = 20</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">3/4 = 15/20. &nbsp; 2/5 = 8/20.</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">15/20 + 8/20 = 23/20 = <strong>1 3/20</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; You Only Need a Common Denominator for +/&minus;</div>
+      <p>For <strong>adding and subtracting</strong>: you MUST find a common denominator first.</p>
+      <p style="margin-top:4px;">For <strong>multiplying</strong>: just go straight across. No common denominator needed.</p>
+      <p style="margin-top:4px;">For <strong>dividing</strong>: flip and multiply. No common denominator needed.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can add and subtract fractions with different denominators</li>
+    <li><input type="checkbox"> I can multiply fractions</li>
+    <li><input type="checkbox"> I can divide fractions (keep, flip, change)</li>
+    <li><input type="checkbox"> I can convert between mixed numbers and improper fractions</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: NEGATIVE NUMBERS ===== -->
+<div class="section-header">
+  <span class="num">Section 10.4</span>
+  Negative Numbers
+</div>
+<div class="card">
+  <div class="intro-text">
+    Negative numbers appear everywhere: temperatures, bank balances, coordinates, and especially in algebra. The rules for adding, subtracting, multiplying, and dividing with negatives are essential.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Adding and Subtracting Rules</div>
+      <p>Think of a number line. Adding moves right, subtracting moves left.</p>
+      <p style="margin-top:6px;"><strong>Subtracting a negative = adding.</strong> &nbsp; 3 &minus; (&minus;6) = 3 + 6 = 9</p>
+      <p><strong>Adding a negative = subtracting.</strong> &nbsp; &minus;4 + (&minus;5) = &minus;4 &minus; 5 = &minus;9</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Multiplying and Dividing Rules</div>
+      <table class="compare-table">
+        <tr><th>Signs</th><th>Result</th><th>Example</th></tr>
+        <tr><td>positive &times; positive</td><td>positive</td><td>+7 &times; +3 = +21</td></tr>
+        <tr><td>negative &times; negative</td><td>positive</td><td>&minus;6 &times; &minus;4 = +24</td></tr>
+        <tr><td>positive &times; negative</td><td>negative</td><td>+7 &times; &minus;5 = &minus;35</td></tr>
+        <tr><td>negative &times; positive</td><td>negative</td><td>&minus;8 &times; +4 = &minus;32</td></tr>
+      </table>
+      <p style="margin-top:8px;"><strong>Same signs = positive. Different signs = negative.</strong> This rule works for both multiplication and division.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Two Signs Next to Each Other</div>
+      <p>When you see two signs next to each other (like + &minus; or &minus; &minus;), replace them:</p>
+      <p>&bull; <strong>+ +</strong> = + &nbsp;&nbsp; <strong>&minus; &minus;</strong> = +</p>
+      <p>&bull; <strong>+ &minus;</strong> = &minus; &nbsp;&nbsp; <strong>&minus; +</strong> = &minus;</p>
+      <p style="margin-top:4px;">Same = positive. Different = negative. Same rule as multiplication.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can add and subtract negative numbers using the number line</li>
+    <li><input type="checkbox"> I know the sign rules for multiplying and dividing</li>
+    <li><input type="checkbox"> I can handle two signs next to each other</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: SUBSTITUTING INTO FORMULAE ===== -->
+<div class="section-header">
+  <span class="num">Section 10.5</span>
+  Substituting into Formulae
+</div>
+<div class="card">
+  <div class="intro-text">
+    Substitution means replacing the letters in a formula with actual numbers, then calculating the result. This is a fundamental skill used in science, engineering, and every maths exam.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Step-by-Step Method</div>
+      <p><strong>Step 1:</strong> Write down the formula.</p>
+      <p><strong>Step 2:</strong> Replace each letter with its given value. Use brackets around negative numbers.</p>
+      <p><strong>Step 3:</strong> Calculate carefully, following BIDMAS/BODMAS.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> If v = u + at, find v when u = 3, a = 4, t = 6.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">v = u + at</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">v = 3 + (4 &times; 6)</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">v = 3 + 24 = <strong>27</strong></span></div>
+        <div class="result">v = 27</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Example with Negative Values</div>
+      <div class="worked">
+        <p><strong>Example:</strong> If x = 3 and y = &minus;4, find 2x + y and xy &minus; y.</p>
+        <div class="step"><span class="step-num">a)</span><span class="step-text">2x + y = 2(3) + (&minus;4) = 6 &minus; 4 = <strong>2</strong></span></div>
+        <div class="step"><span class="step-num">b)</span><span class="step-text">xy &minus; y = (3)(&minus;4) &minus; (&minus;4) = &minus;12 + 4 = <strong>&minus;8</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; BIDMAS Order Matters</div>
+      <p>In v = u + at, you must do <strong>a &times; t first</strong> (multiplication before addition).</p>
+      <p style="margin-top:4px;">v = 3 + 4 &times; 6 = 3 + 24 = 27. NOT (3 + 4) &times; 6 = 42.</p>
+      <p style="margin-top:4px;">Always use brackets when substituting negative numbers to avoid sign errors.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Substitution appears in <strong>every IGCSE science and maths exam</strong>. Physics formulae (F = ma, v = u + at, E = mc<sup>2</sup>), chemistry calculations, distance/speed/time &mdash; they all require substitution. Get this right and you can handle them all.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can substitute positive values into a formula</li>
+    <li><input type="checkbox"> I can substitute negative values and use brackets correctly</li>
+    <li><input type="checkbox"> I follow BIDMAS when calculating after substitution</li>
+    <li><input type="checkbox"> I can use formulae involving squares, square roots, and fractions</li>
+  </ul>
+</div>
+
+<!-- ===== OVERALL STUDY TIPS ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  Key Study Strategies for Number 3
+</div>
+<div class="card">
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Know Your Index Rules Cold</div>
+      <p>The five rules of indices come up again and again. Write them on a flashcard and test yourself until you can recite them without looking. They also come up in algebra (Chapter 6) and standard form questions.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Check, Check, Check</div>
+      <p>&bull; <strong>Standard form:</strong> Is a between 1 and 10? If not, adjust.</p>
+      <p>&bull; <strong>Fractions:</strong> Is your answer simplified? Can top and bottom be divided by the same number?</p>
+      <p>&bull; <strong>Negative numbers:</strong> Check your sign by estimating. If the temperature is &minus;5&deg; and falls by 7&deg;, it MUST be colder (more negative), not warmer.</p>
+      <p>&bull; <strong>Substitution:</strong> Put your answer back in to check it makes sense.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I've read through all 5 sections</li>
+    <li><input type="checkbox"> I've written the key rules in my own notes</li>
+    <li><input type="checkbox"> I've tried at least one practice problem from each section</li>
+    <li><input type="checkbox"> I'm ready to try the quiz</li>
+  </ul>
+</div>
+
+<div class="end-card">
+  <h2>Chapter 10 Notes Complete</h2>
+  <p>You've covered powers and roots, standard form, fractions, negative numbers, and substitution. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

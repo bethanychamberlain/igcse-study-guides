@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: All the World's a Stage &mdash; English Ch4</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #16a085;
+    --pee: #d35400;
+    --pee-bg: #fef0e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+  .block-pee { border-left-color: var(--pee); background: var(--pee-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+  .block-pee .icon { background: var(--pee); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+  .block-pee .label { color: var(--pee); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Before/After comparison box */
+  .before-after {
+    padding: 14px 20px;
+  }
+  .before-after .ba-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+  .ba-box {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .ba-box.bad {
+    background: #fdedec;
+    border-left: 4px solid #e74c3c;
+  }
+  .ba-box.good {
+    background: #d1f2eb;
+    border-left: 4px solid #16a085;
+  }
+  .ba-box .ba-tag {
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .ba-box.bad .ba-tag { color: #e74c3c; }
+  .ba-box.good .ba-tag { color: #0e6655; }
+
+  /* PEE highlight box */
+  .pee-hero {
+    background: linear-gradient(135deg, #d35400, #e67e22);
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 28px 0 16px;
+    text-align: center;
+  }
+  .pee-hero h2 { font-size: 22px; margin-bottom: 6px; }
+  .pee-hero p { font-size: 14px; opacity: 0.95; }
+
+  /* PEE step boxes */
+  .pee-steps {
+    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pee-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fef0e7;
+    border-left: 4px solid #d35400;
+  }
+  .pee-step .step-letter {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #d35400;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .pee-step .step-body {
+    flex: 1;
+    font-size: 14px;
+  }
+  .pee-step .step-body strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+    .pee-hero { break-inside: avoid; break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English &mdash; Chapter 4</div>
+  <h1>&ldquo;All the World&rsquo;s a Stage&rdquo;</h1>
+  <div class="subtitle">Drama and dialogue analysis, character development, stage directions, writing for different text types</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 22 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don&rsquo;t Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: DRAMA AND THEATRE FORMS ===== -->
+<div class="section-header">
+  <span class="num">Section 4.1</span>
+  Understanding Drama and Theatre
+</div>
+<div class="card">
+  <div class="intro-text">
+    Shakespeare wrote "All the world's a stage, and all the men and women merely players." This chapter explores how drama works &mdash; from ancient traditions to modern scripts &mdash; and the skills you need to read and write about dramatic texts.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Theatre Vocabulary</div>
+      <table class="compare-table">
+        <tr><th>Term</th><th>Meaning</th></tr>
+        <tr><td><strong>Soliloquy</strong></td><td>A speech where a character speaks their thoughts aloud, alone on stage. The audience hears their inner feelings.</td></tr>
+        <tr><td><strong>Monologue</strong></td><td>A long speech by one character, addressed to other characters on stage (not private like a soliloquy).</td></tr>
+        <tr><td><strong>Stage directions</strong></td><td>Instructions in the script (usually in brackets or italics) telling actors what to do, how to move, or how to speak.</td></tr>
+        <tr><td><strong>D&eacute;nouement</strong></td><td>The final resolution of the plot &mdash; where everything is explained or wrapped up.</td></tr>
+        <tr><td><strong>Dialogue</strong></td><td>The words characters say to each other on stage. In scripts, there are no speech marks &mdash; just the character name and their words.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Knowing these terms lets you write precisely about dramatic texts. Instead of "the character talks to himself," you can say "the playwright uses a <strong>soliloquy</strong> to reveal the character's inner conflict." Precise vocabulary = higher marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Aristotle's Six Elements of Drama</div>
+      <p>The Greek philosopher Aristotle identified six key elements that make good drama. These are still used to analyse plays, films, and TV shows today:</p>
+      <p style="margin-top:6px;">
+        1. <strong>Plot</strong> &mdash; the sequence of events. Aristotle said this is the most important element.<br>
+        2. <strong>Character</strong> &mdash; the people in the drama and their personalities, flaws, strengths.<br>
+        3. <strong>Diction</strong> &mdash; the language and word choices characters use (also called dialogue).<br>
+        4. <strong>Thought</strong> &mdash; the themes and ideas the drama explores.<br>
+        5. <strong>Spectacle</strong> &mdash; everything visual: costumes, scenery, special effects, movement.<br>
+        6. <strong>Song</strong> &mdash; music, sound, rhythm in the performance.
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Use Aristotle Everywhere</div>
+      <p>Think about a film or TV show you love. Can you identify all six of Aristotle's elements in it? Try it with an anime or a Marvel film &mdash; the framework works for any story, not just ancient plays.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define soliloquy, monologue, stage directions, d&eacute;nouement, and dialogue</li>
+    <li><input type="checkbox"> I can name Aristotle's six elements of drama</li>
+    <li><input type="checkbox"> I understand that "plot" is the most important element according to Aristotle</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: TRAGEDY AND CHARACTER ===== -->
+<div class="section-header">
+  <span class="num">Section 4.2</span>
+  Tragedy, Comedy, and Flawed Characters
+</div>
+<div class="card">
+  <div class="intro-text">
+    Understanding the difference between tragedy and comedy &mdash; and the concept of a "fatal flaw" &mdash; is essential for analysing drama on the exam.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Tragedy vs Comedy</div>
+      <table class="compare-table">
+        <tr><th>Feature</th><th>Tragedy</th><th>Comedy</th></tr>
+        <tr><td><strong>Plot direction</strong></td><td>Good to bad &mdash; reversal of fortune</td><td>Bad to good &mdash; complications to happy ending</td></tr>
+        <tr><td><strong>Ending</strong></td><td>Suffering, death, or despair</td><td>Resolution, marriage, everyone "happy ever after"</td></tr>
+        <tr><td><strong>Effect on audience</strong></td><td>Fear and pity (Aristotle's terms)</td><td>Laughter and relief</td></tr>
+        <tr><td><strong>Hero's flaw</strong></td><td>Has a <strong>fatal flaw</strong> that leads to downfall</td><td>Has flaws but overcomes them</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Fatal Flaw</div>
+      <p>A <strong>fatal flaw</strong> (also called <em>hamartia</em>) is a weakness in a hero's character that leads to their downfall. The audience can either <strong>sympathise</strong> (feel sorry for them when they knowingly make mistakes) or <strong>empathise</strong> (feel their pain when they unknowingly make mistakes).</p>
+      <p style="margin-top:6px;"><strong>Examples:</strong> Macbeth's fatal flaw is ambition. Gatsby's is his obsessive desire to recapture the past. In modern TV, a character who lies to protect someone but destroys everything &mdash; that's a fatal flaw too.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Sympathy vs Empathy</div>
+      <p><strong>Sympathy</strong> = you feel sorry FOR someone. "I feel bad for them."<br>
+      <strong>Empathy</strong> = you feel WITH someone. "I understand how they feel because I can imagine being in their situation."<br>
+      In exam answers, use the right word. Empathy is deeper than sympathy.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can explain the difference between tragedy and comedy</li>
+    <li><input type="checkbox"> I know what a "fatal flaw" is and can give an example</li>
+    <li><input type="checkbox"> I understand the difference between sympathy and empathy</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: READING SCRIPTS AND STAGE DIRECTIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 4.3</span>
+  Reading Scripts and Stage Directions
+</div>
+<div class="card">
+  <div class="intro-text">
+    Scripts look different from novels. There are no speech marks, no "he said" &mdash; just character names and their lines. Learning to read this format is a skill you need for the exam.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Features of a Script</div>
+      <p>
+        &bull; Character names appear in the <strong>left margin</strong> before their lines<br>
+        &bull; <strong>No speech marks</strong> &mdash; lines are written as direct speech without quotation marks<br>
+        &bull; <strong>Stage directions</strong> are in brackets or italics (e.g. <em>(angrily)</em> or <em>(crossing to window)</em>)<br>
+        &bull; Scenes begin with setting information for the director and stage manager<br>
+        &bull; Dialogue is written to sound like <strong>real conversation</strong> &mdash; short, interrupted, emotional
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Stage Directions Tell You</div>
+      <p>Stage directions are NOT just instructions for actors. They reveal <strong>character emotions</strong> and <strong>power dynamics</strong>. Modern playwrights use adverbs in stage directions to show HOW a character speaks:</p>
+      <p style="margin-top:6px;">
+        &bull; <em>(uneasily)</em> &mdash; the character is nervous, perhaps hiding something<br>
+        &bull; <em>(cutting in, massively)</em> &mdash; the character is dominant, controlling the conversation<br>
+        &bull; <em>(dryly)</em> &mdash; sarcasm or detachment<br>
+        &bull; <em>(distressed)</em> &mdash; genuine emotional pain
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">PEE In Action &mdash; Analysing Stage Directions</div>
+      <p><strong>P:</strong> The playwright uses stage directions to reveal the shifting power balance between the Inspector and Gerald. <strong>E:</strong> Gerald speaks "(rather uneasily)" and "(with an effort)" while the Inspector "(cutting in, massively)" takes control. <strong>E:</strong> The contrast in these adverbs shows that Gerald is losing confidence and trying to maintain composure, while the Inspector is completely in command. The word "massively" suggests the Inspector's authority is overwhelming, making the reader feel the weight of his moral judgement crushing Gerald's pretence of innocence.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>On the exam, if you're given a script extract, commenting on stage directions (not just the dialogue) shows the examiner you can read at a deeper level. Most students ignore stage directions entirely &mdash; don't be one of them.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can identify the key features of a script layout</li>
+    <li><input type="checkbox"> I understand that stage directions reveal character emotions and power dynamics</li>
+    <li><input type="checkbox"> I can write a PEE paragraph about stage directions</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: REGISTER AND AUDIENCE ===== -->
+<div class="section-header">
+  <span class="num">Section 4.4</span>
+  Register, Audience, and Purpose
+</div>
+<div class="card">
+  <div class="intro-text">
+    Every piece of writing has an <strong>audience</strong> (who it's for) and a <strong>purpose</strong> (what it's trying to do). The <strong>register</strong> &mdash; the level of formality &mdash; must match both.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Register</div>
+      <p><strong>Register</strong> = the style of language used to suit a particular situation. It is created by a combination of <strong>diction</strong> (word choice), <strong>tone</strong> (formal, neutral, or informal), and <strong>syntax</strong> (sentence structure).</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Formal register:</strong> academic essays, letters of complaint, reports. No slang, no contractions.<br>
+        &bull; <strong>Neutral register:</strong> news articles, informative writing. Clear and factual.<br>
+        &bull; <strong>Informal register:</strong> blogs, personal letters, dialogue between friends. May include slang, contractions, colloquial language.
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Audience Factors</div>
+      <p>When a writer targets an audience, they consider: <strong>age</strong>, <strong>social background</strong>, <strong>education level</strong>, <strong>cultural background</strong>, and <strong>prior knowledge</strong>. Shakespeare's genius was writing for both educated nobles and uneducated groundlings at the same time &mdash; mixing high poetry with crude humour.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Audience vs Purpose</div>
+      <p><strong>Audience</strong> = WHO is reading or watching. <strong>Purpose</strong> = WHY the writer wrote it (to inform, to persuade, to entertain, to describe). The exam often asks about both. Make sure you address the right one. If the question says "Who is the intended audience?" do NOT write about what the text is trying to do &mdash; that's purpose.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Register Test</div>
+      <p>When you read any text, ask: "Could I swap this text into a different context?" Would this advertisement work as a school essay? Would this formal letter work as a blog post? If not, you've identified the register. Practice spotting register shifts &mdash; it's a quick exam win.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define register and name three levels (formal, neutral, informal)</li>
+    <li><input type="checkbox"> I can identify the audience and purpose of a text</li>
+    <li><input type="checkbox"> I know the difference between audience and purpose</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: DIRECTED WRITING ===== -->
+<div class="section-header">
+  <span class="num">Section 4.5</span>
+  Directed Writing &mdash; Articles, Letters, and Reports
+</div>
+<div class="card">
+  <div class="intro-text">
+    In the exam, you may be asked to write an article, a letter, or another text type using information from a passage. This is <strong>directed writing</strong> &mdash; you must match the correct format AND include the content they ask for.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Article Writing Checklist</div>
+      <p>When writing an article (e.g. for a blog, magazine, or newspaper):</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Headline</strong> &mdash; attention-grabbing, often a question or strong statement<br>
+        &bull; <strong>Opening paragraph</strong> &mdash; hook the reader, introduce the topic<br>
+        &bull; <strong>Body paragraphs</strong> &mdash; each paragraph covers one point, with evidence or examples<br>
+        &bull; <strong>Appropriate register</strong> &mdash; match the publication (blog = informal, broadsheet = formal)<br>
+        &bull; <strong>Conclusion</strong> &mdash; sum up or leave the reader with something to think about<br>
+        &bull; <strong>Word count</strong> &mdash; stick to it. The exam typically asks for 250-350 words.
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Formal Letter Format</div>
+      <p>
+        &bull; Start with <strong>Dear Mr/Mrs/Ms...</strong> (if you know the name) or <strong>Dear Sir/Madam</strong> (if you don't)<br>
+        &bull; End with <strong>Yours sincerely</strong> (if you used their name) or <strong>Yours faithfully</strong> (if you used Sir/Madam)<br>
+        &bull; State your purpose in the first sentence<br>
+        &bull; Keep paragraphs focused &mdash; one point per paragraph<br>
+        &bull; Be polite but firm &mdash; never rude, even in a complaint letter
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The "Bullet Points" Trick</div>
+      <p>Directed writing questions always give you bullet points of what to include. Turn each bullet point into a paragraph. If there are 3 bullet points, write 3 body paragraphs (plus an intro and conclusion). This guarantees you cover everything and don't miss marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the structure of an article (headline, hook, body, conclusion)</li>
+    <li><input type="checkbox"> I know when to use "Yours sincerely" vs "Yours faithfully"</li>
+    <li><input type="checkbox"> I understand the "bullet point to paragraph" strategy</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: COMPARING TEXTS ===== -->
+<div class="section-header">
+  <span class="num">Section 4.6</span>
+  Comparing Texts with Different Purposes
+</div>
+<div class="card">
+  <div class="intro-text">
+    Chapter 4 presents multiple texts about the same topic (e.g. drama schools) but with different purposes. The exam tests whether you can compare how writers achieve different effects.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Advertisement vs Article</div>
+      <table class="compare-table">
+        <tr><th>Feature</th><th>Advertisement</th><th>Newspaper Article</th></tr>
+        <tr><td><strong>Purpose</strong></td><td>To persuade (buy this, join this)</td><td>To inform (here are the facts)</td></tr>
+        <tr><td><strong>Language</strong></td><td>Positive, enthusiastic, persuasive (e.g. "Don't miss your chance!")</td><td>Balanced, quotes from multiple viewpoints</td></tr>
+        <tr><td><strong>Tone</strong></td><td>Exciting, aspirational</td><td>Neutral or analytical</td></tr>
+        <tr><td><strong>Bias</strong></td><td>One-sided &mdash; only positive</td><td>May present opposing views</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">PEE In Action &mdash; Comparing Purposes</div>
+      <p><strong>P:</strong> While both texts discuss drama training, their purposes are fundamentally different. <strong>E:</strong> The advertisement uses persuasive language such as "award-winning" and "Don't miss your chance!" whereas the article quotes a director saying drama schools are "a waste of time and money." <strong>E:</strong> The advertisement's enthusiastic, one-sided language is designed to attract applicants by making them feel excited about a potential career. In contrast, the article presents both sides of the debate, allowing the reader to form their own opinion. This difference in purpose changes the register, word choice, and tone of each text entirely.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can identify the purpose of different text types (persuade, inform, entertain)</li>
+    <li><input type="checkbox"> I can compare how two texts on the same topic use language differently</li>
+    <li><input type="checkbox"> I can write a comparative PEE paragraph weaving both texts together</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7: KEY TAKEAWAY ===== -->
+<div class="section-header">
+  <span class="num">Key Takeaway</span>
+  Reading Drama Like an Analyst
+</div>
+<div class="card">
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">The #1 Thing to Remember</div>
+      <p style="font-size:16px;"><strong>In drama, EVERYTHING is a deliberate choice by the writer.</strong></p>
+      <p style="margin-top:8px;">The dialogue, the stage directions, the register, even the silences &mdash; the playwright chose each one for a reason. Your job is to explain WHY they made that choice and WHAT EFFECT it has on the audience. Don't just describe what happens ("Sheila cries"). Explain the effect ("Sheila's distress reveals her genuine guilt, which contrasts with Gerald's self-serving attempts to minimise his involvement, making the audience sympathise with her more").</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Watch and Analyse</div>
+      <p>Pick any scene from a show you watch. Pause it and ask: What is each character's purpose in this scene? How does the way they speak reveal who they are? What would an audience feel at this moment? This is the same skill the exam tests &mdash; you're just practising it with content you enjoy.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I understand that every element of drama is a deliberate choice</li>
+    <li><input type="checkbox"> I can explain the EFFECT of a writer's choices, not just describe them</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 4 Notes Complete</h2>
+  <p>You've covered drama vocabulary, tragedy and comedy, reading scripts, register, directed writing, and comparing texts. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

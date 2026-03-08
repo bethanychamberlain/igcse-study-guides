@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Atoms Combining &mdash; Chemistry Ch3</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Chemistry Ch3 &mdash; Cheat Sheet</div>
+    <h1>Atoms Combining</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Ionic bond</strong></td>
+      <td>Strong electrostatic attraction between <strong>oppositely charged ions</strong>, formed by <strong>electron transfer</strong> (metal + non-metal).</td>
+      <td class="confuse">Covalent bond (sharing, not transferring)</td>
+    </tr>
+    <tr>
+      <td><strong>Covalent bond</strong></td>
+      <td>A <strong>shared pair of electrons</strong> between two non-metal atoms. Both nuclei attract the shared pair.</td>
+      <td class="confuse">Ionic bond (transfer, not sharing)</td>
+    </tr>
+    <tr>
+      <td><strong>Metallic bond</strong></td>
+      <td>Attraction between <strong>positive metal ions</strong> and a <strong>sea of delocalised electrons</strong>.</td>
+      <td class="confuse">Ionic bond (metallic has no anions &mdash; just + ions and free electrons)</td>
+    </tr>
+    <tr>
+      <td><strong>Ion</strong></td>
+      <td>A charged particle &mdash; atom that has gained or lost electrons. Proton count does NOT change.</td>
+      <td class="confuse">Atom (an atom is neutral; an ion has a charge)</td>
+    </tr>
+    <tr>
+      <td><strong>Cation</strong></td>
+      <td>Positive ion &mdash; atom that <strong>lost</strong> electrons (metals). E.g. Na&#8314;, Mg&#178;&#8314;.</td>
+      <td class="confuse">Anion (negative &mdash; gained electrons)</td>
+    </tr>
+    <tr>
+      <td><strong>Anion</strong></td>
+      <td>Negative ion &mdash; atom that <strong>gained</strong> electrons (non-metals). E.g. Cl&#8315;, O&#178;&#8315;.</td>
+      <td class="confuse">Cation (positive &mdash; lost electrons)</td>
+    </tr>
+    <tr>
+      <td><strong>Molecule</strong></td>
+      <td>Two or more atoms held together by covalent bonds. E.g. H&#8322;O, CO&#8322;.</td>
+      <td class="confuse">Lattice (ionic compounds form lattices, NOT molecules)</td>
+    </tr>
+    <tr>
+      <td><strong>Allotropes</strong></td>
+      <td>Different physical forms of the <strong>same element</strong>. E.g. diamond and graphite are both carbon.</td>
+      <td class="confuse">Isotopes (same element, different neutrons &mdash; that's Chapter 2)</td>
+    </tr>
+    <tr>
+      <td><strong>Delocalised electrons</strong></td>
+      <td>Electrons that are free to move through the whole structure (not attached to one atom).</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: THREE TYPES OF BONDING -->
+<div class="card">
+  <h2>Ionic vs Covalent vs Metallic &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Ionic</th>
+      <th>Covalent (molecular)</th>
+      <th>Metallic</th>
+    </tr>
+    <tr>
+      <td>Who bonds?</td>
+      <td>Metal + non-metal</td>
+      <td>Non-metal + non-metal</td>
+      <td>Metal + metal</td>
+    </tr>
+    <tr>
+      <td>What happens?</td>
+      <td>Electrons <strong>transferred</strong></td>
+      <td>Electrons <strong>shared</strong></td>
+      <td>Electrons <strong>delocalised</strong></td>
+    </tr>
+    <tr>
+      <td>Structure</td>
+      <td>Giant ionic lattice</td>
+      <td>Small molecules</td>
+      <td>Giant metallic lattice</td>
+    </tr>
+    <tr>
+      <td>Melting point</td>
+      <td>High</td>
+      <td>Low</td>
+      <td>High</td>
+    </tr>
+    <tr>
+      <td>Conducts electricity?</td>
+      <td>Only when melted or dissolved</td>
+      <td>No (never)</td>
+      <td>Yes (always)</td>
+    </tr>
+    <tr>
+      <td>Why conducts / doesn't?</td>
+      <td>Ions free to move only when melted/dissolved</td>
+      <td>No free ions or electrons</td>
+      <td>Delocalised electrons free to move</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Ionic Solids Don't Conduct</div>
+    <strong>Solid</strong> ionic compounds do NOT conduct &mdash; the ions are locked in the lattice. They only conduct when <strong>melted</strong> or <strong>dissolved</strong> because the ions become <strong>free to move</strong>. Write the exact phrase: "ions are free to move to carry the charge."
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: DIAMOND vs GRAPHITE -->
+<div class="card">
+  <h2>Diamond vs Graphite &mdash; Both Carbon!</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Diamond</th>
+      <th>Graphite</th>
+    </tr>
+    <tr>
+      <td>Bonds per C atom</td>
+      <td>4 (tetrahedral)</td>
+      <td>3 (flat hexagonal layers)</td>
+    </tr>
+    <tr>
+      <td>Structure</td>
+      <td>Rigid 3D network</td>
+      <td>Layers with weak forces between</td>
+    </tr>
+    <tr>
+      <td>Hardness</td>
+      <td>Very hard (hardest natural substance)</td>
+      <td>Soft and slippery (layers slide)</td>
+    </tr>
+    <tr>
+      <td>Conducts electricity?</td>
+      <td>No (all electrons in bonds)</td>
+      <td>Yes (4th electron is delocalised)</td>
+    </tr>
+    <tr>
+      <td>Melting point</td>
+      <td>Very high (3550&deg;C)</td>
+      <td>Very high</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; "Weak Bonds" in Graphite</div>
+    Never say graphite is soft "because it has weak bonds." The covalent bonds <strong>within the layers are strong</strong>. It's the forces <strong>between</strong> the layers that are weak, allowing them to slide.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Why atoms bond</span>
+    <span>To get a full outer shell of electrons, like the noble gases (8 electrons, or 2 for helium).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Ionic bonding</span>
+    <span>Metal gives its outer electrons to a non-metal, creating positive and negative ions that attract each other.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Covalent bonding</span>
+    <span>Two non-metals share electron pairs so both atoms end up with full outer shells.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Metallic bonding</span>
+    <span>Metal atoms release outer electrons into a "sea" &mdash; positive ions sit in a sea of free electrons, held by attraction.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Why metals conduct</span>
+    <span>Delocalised electrons are free to move through the lattice, carrying charge as a current.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Why metals are malleable</span>
+    <span>Layers of ions slide over each other without breaking the metallic bond &mdash; the electron sea moves with them.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Diatomic elements</span>
+    <span>Elements whose molecules are pairs of atoms: H&#8322;, O&#8322;, N&#8322;, Cl&#8322;, I&#8322;.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Which Bonding? 3-Second Test</div>
+    <strong>Metal + non-metal = ionic.</strong> <strong>Non-metal + non-metal = covalent.</strong> <strong>Metal + metal = metallic.</strong> Just check which side of the zig-zag line each element sits on. Done.
+  </div>
+
+  <div class="trick">
+    <div class="label">Positive Cat, Negative An</div>
+    <strong>Cat</strong>ion = <strong>positive</strong> ion. <strong>An</strong>ion = <strong>negative</strong> ion. Remember: a cat is positive (friendly!). "An" = a negative.
+  </div>
+
+  <div class="trick">
+    <div class="label">How Many Bonds? Count What's Missing</div>
+    Number of covalent bonds = electrons needed to fill the outer shell. H needs 1 = 1 bond. O needs 2 = 2 bonds. N needs 3 = 3 bonds. C needs 4 = 4 bonds. Use this to check your dot-and-cross diagrams.
+  </div>
+
+  <div class="trick">
+    <div class="label">Ionic Formula Shortcut</div>
+    Write the ion charges, then criss-cross: Al&#179;&#8314; and O&#178;&#8315; &rarr; Al&#8322;O&#8323;. The charge of one becomes the subscript of the other. Total charge must be zero.
+  </div>
+
+  <div class="trick">
+    <div class="label">NaCl Is NOT "Molecules"</div>
+    Never say "sodium chloride molecules." NaCl is ionic &mdash; it forms a <strong>lattice of ions</strong>, not individual molecules. Only covalent substances form molecules.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Describe how an ionic bond forms in NaCl"</td>
+      <td>Sodium <strong>loses 1 electron</strong> to form Na&#8314;. Chlorine <strong>gains 1 electron</strong> to form Cl&#8315;. Both get full outer shells. The <strong>strong electrostatic attraction</strong> between the oppositely charged ions is the ionic bond</td>
+    </tr>
+    <tr>
+      <td>"Why does a Na&#8314; ion have a charge of 1+?"</td>
+      <td>It has <strong>11 protons</strong> (+) and only <strong>10 electrons</strong> (&minus;), so the overall charge is 1+ (number of protons NEVER changes)</td>
+    </tr>
+    <tr>
+      <td>"What is a covalent bond?"</td>
+      <td>A <strong>shared pair of electrons</strong> between two atoms</td>
+    </tr>
+    <tr>
+      <td>"Explain why NaCl has a high melting point"</td>
+      <td>NaCl has a <strong>giant ionic lattice</strong> with <strong>strong electrostatic forces</strong> between oppositely charged ions. A lot of energy is needed to overcome these forces</td>
+    </tr>
+    <tr>
+      <td>"Why does NaCl conduct when dissolved but not as a solid?"</td>
+      <td>Solid: ions are <strong>fixed in the lattice</strong> and cannot move. Dissolved: ions are <strong>free to move</strong> and carry the charge</td>
+    </tr>
+    <tr>
+      <td>"Why do covalent substances have low melting points?"</td>
+      <td>The <strong>intermolecular forces</strong> (forces between molecules) are <strong>weak</strong> and easy to overcome. Note: the covalent bonds themselves are strong &mdash; it's the forces <strong>between</strong> molecules that are weak</td>
+    </tr>
+    <tr>
+      <td>"Why is diamond hard but graphite soft?"</td>
+      <td>Diamond: each C bonded to <strong>4 others</strong> in a rigid 3D network. Graphite: C bonded to <strong>3 others</strong> in layers &mdash; weak forces between layers let them <strong>slide</strong></td>
+    </tr>
+    <tr>
+      <td>"Why does graphite conduct electricity?"</td>
+      <td>Each carbon uses only 3 of its 4 outer electrons for bonding. The 4th electron is <strong>delocalised</strong> (free to move), carrying charge as a current</td>
+    </tr>
+    <tr>
+      <td>"Explain why metals are good conductors"</td>
+      <td>Metal atoms lose outer electrons, which become <strong>delocalised</strong>. These delocalised electrons are <strong>free to move</strong> through the lattice, carrying charge as a current</td>
+    </tr>
+    <tr>
+      <td>"Data table: identify the type of bonding"</td>
+      <td>High melting point + conducts when melted/dissolved = <strong>ionic</strong>. Low melting point + never conducts = <strong>molecular covalent</strong>. High melting point + always conducts = <strong>metallic</strong></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

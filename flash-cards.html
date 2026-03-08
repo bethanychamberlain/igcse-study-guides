@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flash Cards — IGCSE Word Roots</title>
+<style>
+  :root {
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --hero-dark: #2c3e50;
+    --hero-mid: #34495e;
+    --green: #27ae60;
+    --green-light: #e8f8f0;
+    --red: #e74c3c;
+    --red-light: #fdedec;
+    --blue: #2e86c1;
+    --blue-light: #eaf2f8;
+    --purple: #8e44ad;
+    --purple-light: #f4ecf7;
+    --orange: #e67e22;
+    --orange-light: #fef5e7;
+    --teal: #16a085;
+    --teal-light: #e8f6f3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    width: 100%;
+    max-width: 560px;
+    margin-bottom: 20px;
+  }
+  .header h1 {
+    font-size: 22px;
+    color: var(--hero-dark);
+  }
+  .header p {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  /* Controls bar */
+  .controls {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .filter-btn {
+    padding: 6px 14px;
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    background: var(--card);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .filter-btn:hover { border-color: var(--hero-dark); color: var(--hero-dark); }
+  .filter-btn.active {
+    background: var(--hero-dark);
+    color: #fff;
+    border-color: var(--hero-dark);
+  }
+  .filter-btn.active[data-filter="prefix"] { background: var(--red); border-color: var(--red); }
+  .filter-btn.active[data-filter="suffix"] { background: var(--purple); border-color: var(--purple); }
+  .filter-btn.active[data-filter="root"] { background: var(--blue); border-color: var(--blue); }
+  .filter-btn.active[data-filter="english"] { background: var(--teal); border-color: var(--teal); }
+  .filter-btn.active[data-filter="spanish"] { background: var(--orange); border-color: var(--orange); }
+
+  /* Mode toggle */
+  .mode-row {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    justify-content: center;
+  }
+  .mode-btn {
+    padding: 6px 16px;
+    border: 2px solid var(--blue);
+    border-radius: 8px;
+    background: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--blue);
+    transition: all 0.15s;
+  }
+  .mode-btn:hover { background: var(--blue-light); }
+  .mode-btn.active { background: var(--blue); color: #fff; }
+
+  /* Progress bar */
+  .progress-bar {
+    width: 100%;
+    max-width: 560px;
+    margin-bottom: 16px;
+  }
+  .progress-track {
+    height: 8px;
+    background: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+    display: flex;
+  }
+  .progress-known {
+    height: 100%;
+    background: var(--green);
+    transition: width 0.3s;
+  }
+  .progress-learning {
+    height: 100%;
+    background: var(--orange);
+    transition: width 0.3s;
+  }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .progress-label .known { color: var(--green); font-weight: 600; }
+  .progress-label .learning { color: var(--orange); font-weight: 600; }
+
+  /* Card area */
+  .card-area {
+    width: 100%;
+    max-width: 560px;
+    perspective: 1000px;
+    margin-bottom: 20px;
+  }
+  .card-counter {
+    text-align: center;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    font-weight: 600;
+  }
+
+  .card-flipper {
+    width: 100%;
+    min-height: 280px;
+    position: relative;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    transition: transform 0.5s;
+  }
+  .card-flipper.flipped {
+    transform: rotateY(180deg);
+  }
+
+  .card-front, .card-back {
+    position: absolute;
+    width: 100%;
+    min-height: 280px;
+    backface-visibility: hidden;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 28px;
+    text-align: center;
+  }
+  .card-front {
+    background: var(--card);
+  }
+  .card-back {
+    background: var(--card);
+    transform: rotateY(180deg);
+  }
+
+  .card-type-badge {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    padding: 3px 12px;
+    border-radius: 12px;
+    color: #fff;
+    margin-bottom: 16px;
+  }
+  .card-type-badge.prefix { background: var(--red); }
+  .card-type-badge.suffix { background: var(--purple); }
+  .card-type-badge.root { background: var(--blue); }
+  .card-type-badge.english { background: var(--teal); }
+  .card-type-badge.spanish { background: var(--orange); }
+
+  .card-front .word-part {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--hero-dark);
+    margin-bottom: 12px;
+    line-height: 1.1;
+  }
+  .card-front .prompt {
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+  .card-front .tap-hint {
+    font-size: 11px;
+    color: #bbb;
+    margin-top: 20px;
+  }
+
+  .card-back .meaning {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--hero-dark);
+    margin-bottom: 10px;
+  }
+  .card-back .hook {
+    font-size: 15px;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 16px;
+  }
+  .card-back .examples {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    max-width: 440px;
+  }
+
+  /* Reverse mode */
+  .reverse .card-front .word-part { font-size: 32px; }
+  .reverse .card-back .meaning { font-size: 48px; }
+
+  /* Action buttons */
+  .actions {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  .action-btn {
+    flex: 1;
+    padding: 14px 16px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .action-btn:active { transform: scale(0.97); }
+
+  .btn-learning {
+    background: var(--orange-light);
+    color: var(--orange);
+    border: 2px solid var(--orange);
+  }
+  .btn-learning:hover { background: var(--orange); color: #fff; }
+
+  .btn-known {
+    background: var(--green-light);
+    color: var(--green);
+    border: 2px solid var(--green);
+  }
+  .btn-known:hover { background: var(--green); color: #fff; }
+
+  .btn-skip {
+    background: #f0f0f0;
+    color: var(--text-secondary);
+    border: 2px solid var(--border);
+    flex: 0.5;
+  }
+  .btn-skip:hover { background: #e0e0e0; }
+
+  /* Keyboard hints */
+  .kb-hint {
+    font-size: 10px;
+    opacity: 0.6;
+    font-weight: 400;
+    display: block;
+  }
+
+  /* Shuffle / reset */
+  .util-row {
+    width: 100%;
+    max-width: 560px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 16px;
+  }
+  .util-btn {
+    padding: 8px 18px;
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    background: var(--card);
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    color: var(--text-secondary);
+    transition: all 0.15s;
+  }
+  .util-btn:hover { border-color: var(--hero-dark); color: var(--hero-dark); }
+
+  /* Done screen */
+  .done-screen {
+    width: 100%;
+    max-width: 560px;
+    background: var(--card);
+    border-radius: 16px;
+    padding: 40px 28px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    display: none;
+  }
+  .done-screen h2 {
+    font-size: 24px;
+    color: var(--hero-dark);
+    margin-bottom: 8px;
+  }
+  .done-screen .score {
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--green);
+    margin: 12px 0;
+  }
+  .done-screen p {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 20px;
+  }
+  .done-screen .restart-btn {
+    padding: 12px 28px;
+    background: var(--hero-dark);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    margin: 4px;
+  }
+  .done-screen .restart-btn:hover { background: var(--hero-mid); }
+  .done-screen .restart-btn.review {
+    background: var(--orange);
+  }
+  .done-screen .restart-btn.download {
+    background: var(--blue);
+  }
+  .done-screen .restart-btn.download:hover {
+    background: var(--hero-mid);
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; }
+    .header, .controls, .mode-row, .progress-bar, .actions, .util-row, .done-screen { display: none !important; }
+    .card-area { perspective: none; max-width: 100%; }
+    .card-flipper { transform: none !important; min-height: auto; position: static; }
+    .card-front, .card-back {
+      position: static;
+      backface-visibility: visible;
+      transform: none !important;
+      min-height: auto;
+      box-shadow: none;
+      border: 2px solid #ddd;
+      margin-bottom: 12px;
+      padding: 16px;
+      break-inside: avoid;
+    }
+    .card-type-badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+
+  @media (max-width: 500px) {
+    .card-front .word-part { font-size: 36px; }
+    .card-back .meaning { font-size: 24px; }
+    .card-front, .card-back { min-height: 240px; padding: 24px 20px; }
+    .actions { flex-direction: column; }
+    .btn-skip { flex: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Flash Cards</h1>
+  <p>120 word parts to decode any IGCSE exam word</p>
+</div>
+
+<!-- Filter buttons -->
+<div class="controls" id="filters">
+  <button class="filter-btn active" data-filter="all" onclick="setFilter('all')">All</button>
+  <button class="filter-btn" data-filter="prefix" onclick="setFilter('prefix')">Prefixes</button>
+  <button class="filter-btn" data-filter="suffix" onclick="setFilter('suffix')">Suffixes</button>
+  <button class="filter-btn" data-filter="root" onclick="setFilter('root')">Roots</button>
+  <button class="filter-btn" data-filter="english" onclick="setFilter('english')">English</button>
+  <button class="filter-btn" data-filter="spanish" onclick="setFilter('spanish')">Spanish</button>
+</div>
+
+<!-- Mode toggle -->
+<div class="mode-row">
+  <button class="mode-btn active" id="modeNormal" onclick="setMode('normal')">Word Part &rarr; Meaning</button>
+  <button class="mode-btn" id="modeReverse" onclick="setMode('reverse')">Meaning &rarr; Word Part</button>
+</div>
+
+<!-- Progress bar -->
+<div class="progress-bar">
+  <div class="progress-track">
+    <div class="progress-known" id="progressKnown" style="width:0%"></div>
+    <div class="progress-learning" id="progressLearning" style="width:0%"></div>
+  </div>
+  <div class="progress-label">
+    <span>Known: <span class="known" id="knownCount">0</span></span>
+    <span>Remaining: <span id="remainingCount">0</span></span>
+    <span>Still learning: <span class="learning" id="learningCount">0</span></span>
+  </div>
+</div>
+
+<!-- Card -->
+<div class="card-area" id="cardArea">
+  <div class="card-counter" id="cardCounter">1 / 120</div>
+  <div class="card-flipper" id="cardFlipper" onclick="flipCard()">
+    <div class="card-front" id="cardFront">
+      <div class="card-type-badge prefix" id="frontBadge">PREFIX</div>
+      <div class="word-part" id="frontWord">photo-</div>
+      <div class="prompt" id="frontPrompt">What does this mean?</div>
+      <div class="tap-hint">Tap to flip &middot; Space bar</div>
+    </div>
+    <div class="card-back" id="cardBack">
+      <div class="card-type-badge prefix" id="backBadge">PREFIX</div>
+      <div class="meaning" id="backMeaning">light</div>
+      <div class="hook" id="backHook">photograph = light writing</div>
+      <div class="examples" id="backExamples">photosynthesis, photon, phototropism</div>
+    </div>
+  </div>
+</div>
+
+<!-- Action buttons -->
+<div class="actions" id="actions">
+  <button class="action-btn btn-learning" onclick="markCard('learning')">
+    Still Learning
+    <span class="kb-hint">[1]</span>
+  </button>
+  <button class="action-btn btn-skip" onclick="markCard('skip')">
+    Skip
+    <span class="kb-hint">[&rarr;]</span>
+  </button>
+  <button class="action-btn btn-known" onclick="markCard('known')">
+    Got It!
+    <span class="kb-hint">[2]</span>
+  </button>
+</div>
+
+<!-- Utility buttons -->
+<div class="util-row">
+  <button class="util-btn" onclick="shuffleDeck()">Shuffle</button>
+  <button class="util-btn" onclick="reviewLearning()">Review "Still Learning"</button>
+  <button class="util-btn" onclick="resetAll()">Reset All</button>
+</div>
+
+<!-- Done screen -->
+<div class="done-screen" id="doneScreen">
+  <h2>Deck Complete!</h2>
+  <div class="score" id="doneScore">0%</div>
+  <p id="doneSummary">You knew 0 out of 0 cards</p>
+  <button class="restart-btn download" id="saveBtn" onclick="downloadCSV()">Save Results</button>
+  <button class="restart-btn" style="font-size:12px;padding:8px 16px" onclick="changeSaveFolder()">Change save folder</button>
+  <button class="restart-btn review" onclick="reviewLearning()" id="doneReviewBtn">Review "Still Learning" Cards</button>
+  <button class="restart-btn" onclick="resetAll()">Start Over</button>
+</div>
+
+<script>
+// ============================================================
+// CARD DATA
+// ============================================================
+var ALL_CARDS = [
+  // ---- PREFIXES (42) ----
+  {type:"prefix", word:"a- / an-", meaning:"without, not", hook:"\"a\" = absent", examples:"anaerobic, abiotic, anion"},
+  {type:"prefix", word:"anti-", meaning:"against", hook:"anti-hero fights against", examples:"antibiotic, antibody, antiseptic"},
+  {type:"prefix", word:"auto-", meaning:"self", hook:"auto-pilot = flies itself", examples:"autotroph, autobiography"},
+  {type:"prefix", word:"bi-", meaning:"two", hook:"bicycle = two wheels", examples:"binomial, bilateral, biography"},
+  {type:"prefix", word:"bio-", meaning:"life", hook:"biology = study of life", examples:"biodegradable, biotechnology, biomass"},
+  {type:"prefix", word:"chloro-", meaning:"green", hook:"chlorine pool = greenish", examples:"chlorophyll, chloroplast"},
+  {type:"prefix", word:"co- / con-", meaning:"together, with", hook:"co-operate = work together", examples:"condensation, compound, codominance"},
+  {type:"prefix", word:"contra-", meaning:"against, opposite", hook:"contradict = say opposite", examples:"contrast, contradict, counterargument"},
+  {type:"prefix", word:"de-", meaning:"remove, down, reverse", hook:"delete = remove", examples:"decompose, deforest, denature"},
+  {type:"prefix", word:"di-", meaning:"two", hook:"di = dos (Spanish 2!)", examples:"dioxide, diploid, disaccharide"},
+  {type:"prefix", word:"dis-", meaning:"apart, not", hook:"disconnect = pull apart", examples:"dissolve, distillation, displacement"},
+  {type:"prefix", word:"ecto-", meaning:"outside", hook:"ecto = exit = outside", examples:"ectothermic (cold-blooded)"},
+  {type:"prefix", word:"electro-", meaning:"electric", hook:"electricity!", examples:"electrolysis, electrode, electromagnetic"},
+  {type:"prefix", word:"endo-", meaning:"inside, within", hook:"endo sounds like in-do", examples:"endothermic, endocrine"},
+  {type:"prefix", word:"epi-", meaning:"upon, above, outer", hook:"epic = above ordinary", examples:"epidermis (outer skin layer)"},
+  {type:"prefix", word:"eu-", meaning:"true, good", hook:"euphoria = truly good feeling", examples:"eukaryote, eutrophication"},
+  {type:"prefix", word:"ex- / exo-", meaning:"out, outside", hook:"exit = go out", examples:"exothermic, excretion, exhale"},
+  {type:"prefix", word:"hetero-", meaning:"different", hook:"hetero = not the same", examples:"heterozygous, heterotroph"},
+  {type:"prefix", word:"homo-", meaning:"same", hook:"homogeneous = all same", examples:"homozygous, homologous"},
+  {type:"prefix", word:"hydro-", meaning:"water", hook:"hydrate = add water", examples:"hydrolysis, hydrocarbon, hydrogen"},
+  {type:"prefix", word:"hyper-", meaning:"over, excess", hook:"hyperactive = too active", examples:"hypertonic, hyperbole"},
+  {type:"prefix", word:"hypo-", meaning:"under, below", hook:"opposite of hyper", examples:"hypotonic, hypothesis, hypothermia"},
+  {type:"prefix", word:"in- / im-", meaning:"not, into", hook:"impossible = not possible", examples:"impermeable, incomplete, insoluble"},
+  {type:"prefix", word:"inter-", meaning:"between", hook:"internet = between networks", examples:"intercostal, intermolecular"},
+  {type:"prefix", word:"intra-", meaning:"within", hook:"intranet = within one network", examples:"intracellular, intramolecular"},
+  {type:"prefix", word:"iso-", meaning:"equal", hook:"isosceles = equal sides", examples:"isotope, isotonic, isomer"},
+  {type:"prefix", word:"mal-", meaning:"bad, wrong", hook:"malware = bad software", examples:"malnutrition, malignant"},
+  {type:"prefix", word:"micro-", meaning:"small", hook:"microphone = small sound", examples:"microscope, microorganism"},
+  {type:"prefix", word:"mono-", meaning:"one", hook:"monopoly = one owner", examples:"monosaccharide, monomer, monoxide"},
+  {type:"prefix", word:"multi-", meaning:"many", hook:"multiplayer = many players", examples:"multicellular"},
+  {type:"prefix", word:"photo-", meaning:"light", hook:"photograph = light writing", examples:"photosynthesis, phototropism, photon"},
+  {type:"prefix", word:"poly-", meaning:"many", hook:"polygon = many angles", examples:"polymer, polysaccharide"},
+  {type:"prefix", word:"pre-", meaning:"before", hook:"preview = see before", examples:"predict, precipitate"},
+  {type:"prefix", word:"pro-", meaning:"before, forward", hook:"progress = move forward", examples:"prokaryote, product, protease"},
+  {type:"prefix", word:"re-", meaning:"again, back", hook:"replay = play again", examples:"reversible, reproduce, respiration, redox"},
+  {type:"prefix", word:"semi-", meaning:"half, partly", hook:"semi-final = halfway", examples:"semi-permeable, semicircle"},
+  {type:"prefix", word:"sub-", meaning:"under, below", hook:"submarine = under the sea", examples:"sublimation, substrate, subatomic"},
+  {type:"prefix", word:"super-", meaning:"above, beyond", hook:"superhero = beyond normal", examples:"supersaturated, supernova"},
+  {type:"prefix", word:"thermo-", meaning:"heat", hook:"thermos flask = keeps heat", examples:"thermometer, exothermic, thermal"},
+  {type:"prefix", word:"trans-", meaning:"across", hook:"transport = carry across", examples:"transpiration, translocation, transformer"},
+  {type:"prefix", word:"tri-", meaning:"three", hook:"triangle = three angles", examples:"triangle, triple bond, triglyceride"},
+  {type:"prefix", word:"uni-", meaning:"one", hook:"unicorn = one horn", examples:"unicellular, universal indicator"},
+
+  // ---- SUFFIXES (26) ----
+  {type:"suffix", word:"-ase", meaning:"enzyme", hook:"always an enzyme!", examples:"amylase, protease, lipase, lactase"},
+  {type:"suffix", word:"-ate", meaning:"salt with oxygen", hook:"-ate has an O", examples:"sulfate, nitrate, carbonate, phosphate"},
+  {type:"suffix", word:"-tion / -sion", meaning:"process, action", hook:"action \u2192 -tion", examples:"evaporation, oxidation, erosion"},
+  {type:"suffix", word:"-cyte", meaning:"cell", hook:"cyto = cell, -cyte = a cell", examples:"phagocyte, lymphocyte, erythrocyte"},
+  {type:"suffix", word:"-gen", meaning:"producer, creator", hook:"generator = creates", examples:"pathogen, hydrogen, oxygen, allergen"},
+  {type:"suffix", word:"-ide", meaning:"2-element compound", hook:"-ide = inside (just 2)", examples:"chloride, oxide, sulphide, hydroxide"},
+  {type:"suffix", word:"-ine", meaning:"chemical substance", hook:"medicine ends in -ine", examples:"chlorine, adrenaline, caffeine"},
+  {type:"suffix", word:"-ism", meaning:"condition, system", hook:"organism = living system", examples:"metabolism, organism, tropism, magnetism"},
+  {type:"suffix", word:"-itis", meaning:"inflammation", hook:"-itis = it IS swollen!", examples:"bronchitis, arthritis, hepatitis"},
+  {type:"suffix", word:"-logy", meaning:"study of", hook:"-logy = logic of a subject", examples:"biology, ecology, technology"},
+  {type:"suffix", word:"-lysis", meaning:"splitting apart", hook:"analysis = break apart", examples:"hydrolysis, electrolysis, dialysis"},
+  {type:"suffix", word:"-mer", meaning:"part, unit", hook:"partner \u2192 part-mer", examples:"polymer, monomer, isomer"},
+  {type:"suffix", word:"-meter", meaning:"measure", hook:"metre stick measures", examples:"thermometer, voltmeter, ammeter"},
+  {type:"suffix", word:"-oid", meaning:"resembling", hook:"android = resembles a man", examples:"asteroid, humanoid, thyroid"},
+  {type:"suffix", word:"-ose", meaning:"sugar", hook:"-ose = oh so sweet", examples:"glucose, fructose, sucrose, lactose"},
+  {type:"suffix", word:"-osis", meaning:"condition, process", hook:"-osis = ongoing thing", examples:"osmosis, mitosis, meiosis"},
+  {type:"suffix", word:"-phyll", meaning:"leaf", hook:"a leaf = a fill of green", examples:"chlorophyll, mesophyll"},
+  {type:"suffix", word:"-plasm", meaning:"formed material", hook:"plasma = living goo", examples:"cytoplasm, protoplasm"},
+  {type:"suffix", word:"-scope", meaning:"to look, to view", hook:"scope it out = look at it", examples:"microscope, stethoscope, oscilloscope"},
+  {type:"suffix", word:"-synthesis", meaning:"putting together", hook:"synthesizer puts sounds together", examples:"photosynthesis, biosynthesis"},
+  {type:"suffix", word:"-troph", meaning:"feed, nourish", hook:"trophy feeds your ego", examples:"autotroph, heterotroph, eutrophication"},
+  {type:"suffix", word:"-vore", meaning:"eater", hook:"devour = eat greedily", examples:"herbivore, carnivore, omnivore"},
+  {type:"suffix", word:"-phage", meaning:"eat, devour", hook:"Pac-Man is a phage!", examples:"phagocyte, bacteriophage"},
+  {type:"suffix", word:"-philic", meaning:"loving, attracted to", hook:"Philadelphia = city of love", examples:"hydrophilic (water-loving)"},
+  {type:"suffix", word:"-phobic", meaning:"fearing, repelled by", hook:"phobia = fear", examples:"hydrophobic (water-fearing)"},
+  {type:"suffix", word:"-graphy", meaning:"writing, recording", hook:"autograph = self-writing", examples:"chromatography, biography, autobiography"},
+
+  // ---- ROOTS - science (27) ----
+  {type:"root", word:"aer", meaning:"air", hook:"aerial = in the air", examples:"aerobic, anaerobic"},
+  {type:"root", word:"aqua", meaning:"water", hook:"aquarium = water tank", examples:"aquatic, aqueous"},
+  {type:"root", word:"cardi", meaning:"heart", hook:"cardiac arrest = heart stops", examples:"cardiac, cardiovascular"},
+  {type:"root", word:"carn", meaning:"flesh, meat", hook:"chili con carne = with meat", examples:"carnivore"},
+  {type:"root", word:"chrom", meaning:"colour", hook:"Chrome logo = colourful", examples:"chromosome, chromatography"},
+  {type:"root", word:"cyt / cyto", meaning:"cell", hook:"city of cells", examples:"cytoplasm, phagocyte, lymphocyte"},
+  {type:"root", word:"derm", meaning:"skin", hook:"dermatologist = skin doctor", examples:"epidermis, dermis"},
+  {type:"root", word:"gastr", meaning:"stomach", hook:"gastric flu = stomach flu", examples:"gastric juice, gastrointestinal"},
+  {type:"root", word:"gen / gene", meaning:"birth, produce", hook:"generation = birth of new", examples:"gene, genetics, genotype, hydrogen"},
+  {type:"root", word:"glyc", meaning:"sugar, sweet", hook:"glycerine = sweet liquid", examples:"glycogen, glycolysis, triglyceride"},
+  {type:"root", word:"haem", meaning:"blood", hook:"haemorrhage = blood loss", examples:"haemoglobin, haemophilia"},
+  {type:"root", word:"herb", meaning:"plant, grass", hook:"herb garden = plants", examples:"herbivore, herbicide"},
+  {type:"root", word:"kin / kine", meaning:"movement", hook:"kinetic = moving", examples:"kinetic energy, kinase"},
+  {type:"root", word:"morph", meaning:"shape, form", hook:"Power Rangers morph!", examples:"metamorphosis, morphology"},
+  {type:"root", word:"neur", meaning:"nerve", hook:"neural = nerve-related", examples:"neuron, neurotransmitter"},
+  {type:"root", word:"nuc / nucle", meaning:"centre, kernel", hook:"nucleus = centre", examples:"nucleus, nucleon, nuclear"},
+  {type:"root", word:"oxy / oxi", meaning:"oxygen", hook:"oxygen!", examples:"oxidation, oxygen, deoxygenated"},
+  {type:"root", word:"path", meaning:"disease, feeling", hook:"sympathy = feeling with", examples:"pathogen, pathology, empathy"},
+  {type:"root", word:"phot", meaning:"light", hook:"photo = captured light", examples:"photon, photosynthesis"},
+  {type:"root", word:"pulmo", meaning:"lung", hook:"pulmonary = lung-related", examples:"pulmonary artery/vein"},
+  {type:"root", word:"ren", meaning:"kidney", hook:"renal = kidney ward", examples:"renal artery, renal capsule"},
+  {type:"root", word:"sacchar", meaning:"sugar", hook:"saccharin = fake sugar", examples:"monosaccharide, polysaccharide"},
+  {type:"root", word:"spir", meaning:"breathe", hook:"inspire = breathe in", examples:"respiration, transpiration"},
+  {type:"root", word:"stom", meaning:"mouth, opening", hook:"stomach starts at mouth", examples:"stomach, stomata"},
+  {type:"root", word:"terr", meaning:"earth, land", hook:"terrain = type of land", examples:"terrestrial, territory"},
+  {type:"root", word:"vas / vascul", meaning:"vessel, tube", hook:"vase = a vessel", examples:"cardiovascular, vascular bundle"},
+  {type:"root", word:"vol / volt", meaning:"turn, energy", hook:"revolve = turn around", examples:"volt, voltmeter, revolution, evolution"},
+
+  // ---- ENGLISH ROOTS (11) ----
+  {type:"english", word:"bene-", meaning:"good, well", hook:"benefit = good thing", examples:"benevolent, beneficial, benefactor"},
+  {type:"english", word:"dict", meaning:"say, speak", hook:"dictionary = book of sayings", examples:"contradict, predict, diction"},
+  {type:"english", word:"duc / duct", meaning:"lead", hook:"conductor leads orchestra", examples:"introduction, deduct, induce"},
+  {type:"english", word:"fac / fect", meaning:"make, do", hook:"factory = place that makes", examples:"effect, factor, manufacture"},
+  {type:"english", word:"loc", meaning:"place", hook:"location = a place", examples:"local, location, translocation"},
+  {type:"english", word:"man / manu", meaning:"hand", hook:"manual = by hand", examples:"manufacture, manuscript, manipulate"},
+  {type:"english", word:"narr", meaning:"tell", hook:"narrator tells the story", examples:"narrative, narrator, narration"},
+  {type:"english", word:"scrib / script", meaning:"write", hook:"scribble = write messily", examples:"describe, script, manuscript"},
+  {type:"english", word:"spec / spect", meaning:"look, see", hook:"spectacles = glasses", examples:"perspective, inspect, spectrum"},
+  {type:"english", word:"ver / veri", meaning:"true", hook:"very = truly", examples:"verify, verdict"},
+  {type:"english", word:"voc / vok", meaning:"voice, call", hook:"vocal = using voice", examples:"evoke, provocative, advocate"},
+
+  // ---- SPANISH COGNATE PATTERNS (7) ----
+  {type:"spanish", word:"-tion \u2192 -ci\u00f3n", meaning:"English -tion = Spanish -ci\u00f3n", hook:"education \u2192 educaci\u00f3n", examples:"information \u2192 informaci\u00f3n"},
+  {type:"spanish", word:"-ty \u2192 -dad", meaning:"English -ty = Spanish -dad", hook:"university \u2192 universidad", examples:"liberty \u2192 libertad, city \u2192 ciudad"},
+  {type:"spanish", word:"-ous \u2192 -oso", meaning:"English -ous = Spanish -oso", hook:"famous \u2192 famoso", examples:"nervous \u2192 nervioso, delicious \u2192 delicioso"},
+  {type:"spanish", word:"-ment \u2192 -mento", meaning:"English -ment = Spanish -mento", hook:"apartment \u2192 apartamento", examples:"moment \u2192 momento"},
+  {type:"spanish", word:"-al \u2192 -al", meaning:"Same ending!", hook:"natural \u2192 natural", examples:"normal \u2192 normal, hospital \u2192 hospital"},
+  {type:"spanish", word:"-ble \u2192 -ble", meaning:"Same ending!", hook:"possible \u2192 posible", examples:"terrible \u2192 terrible"},
+  {type:"spanish", word:"-ist \u2192 -ista", meaning:"English -ist = Spanish -ista", hook:"artist \u2192 artista", examples:"tourist \u2192 turista, dentist \u2192 dentista"}
+];
+
+// ============================================================
+// STATE
+// ============================================================
+var currentFilter = 'all';
+var currentMode = 'normal';
+var deck = [];
+var currentIndex = 0;
+var isFlipped = false;
+var known = {};
+var learning = {};
+var results = [];
+var sessionStartTime = null;
+var cardStartTime = null;
+var saveDirHandle = null; // File System Access API — picked once, reused
+
+// Persist the chosen folder across browser sessions using IndexedDB
+function openHandleDB() {
+  return new Promise(function(resolve, reject) {
+    var req = indexedDB.open('flashcard-settings', 1);
+    req.onupgradeneeded = function() { req.result.createObjectStore('handles'); };
+    req.onsuccess = function() { resolve(req.result); };
+    req.onerror = function() { reject(req.error); };
+  });
+}
+async function saveDirHandleToDB(handle) {
+  var db = await openHandleDB();
+  var tx = db.transaction('handles', 'readwrite');
+  tx.objectStore('handles').put(handle, 'saveDir');
+}
+async function loadDirHandleFromDB() {
+  try {
+    var db = await openHandleDB();
+    return new Promise(function(resolve) {
+      var tx = db.transaction('handles', 'readonly');
+      var req = tx.objectStore('handles').get('saveDir');
+      req.onsuccess = function() { resolve(req.result || null); };
+      req.onerror = function() { resolve(null); };
+    });
+  } catch(e) { return null; }
+}
+
+function getFilteredCards() {
+  if (currentFilter === 'all') return ALL_CARDS.slice();
+  return ALL_CARDS.filter(function(c) { return c.type === currentFilter; });
+}
+
+function buildDeck() {
+  var filtered = getFilteredCards();
+  deck = [];
+  for (var i = 0; i < filtered.length; i++) {
+    deck.push({card: filtered[i], originalIndex: ALL_CARDS.indexOf(filtered[i])});
+  }
+  shuffleArray(deck);
+  currentIndex = 0;
+  known = {};
+  learning = {};
+  results = [];
+  sessionStartTime = Date.now();
+  cardStartTime = null;
+  showCard();
+  updateProgress();
+  document.getElementById('doneScreen').style.display = 'none';
+  document.getElementById('cardArea').style.display = 'block';
+  document.getElementById('actions').style.display = 'flex';
+}
+
+function shuffleArray(arr) {
+  for (var i = arr.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var tmp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = tmp;
+  }
+}
+
+function showCard() {
+  if (currentIndex >= deck.length) {
+    showDone();
+    return;
+  }
+  var entry = deck[currentIndex];
+  var c = entry.card;
+
+  isFlipped = false;
+  document.getElementById('cardFlipper').classList.remove('flipped');
+  document.getElementById('cardArea').classList.remove('reverse');
+
+  var frontBadge = document.getElementById('frontBadge');
+  var backBadge = document.getElementById('backBadge');
+  frontBadge.className = 'card-type-badge ' + c.type;
+  backBadge.className = 'card-type-badge ' + c.type;
+  frontBadge.textContent = c.type.toUpperCase();
+  backBadge.textContent = c.type.toUpperCase();
+
+  if (currentMode === 'normal') {
+    document.getElementById('frontWord').textContent = c.word;
+    document.getElementById('frontPrompt').textContent = 'What does this mean?';
+    document.getElementById('backMeaning').textContent = c.meaning;
+    document.getElementById('backHook').textContent = c.hook;
+    document.getElementById('backExamples').textContent = c.examples;
+  } else {
+    document.getElementById('cardArea').classList.add('reverse');
+    document.getElementById('frontWord').textContent = c.meaning;
+    document.getElementById('frontPrompt').textContent = 'What word part is this?';
+    document.getElementById('backMeaning').textContent = c.word;
+    document.getElementById('backHook').textContent = c.hook;
+    document.getElementById('backExamples').textContent = c.examples;
+  }
+
+  document.getElementById('cardCounter').textContent = (currentIndex + 1) + ' / ' + deck.length;
+  cardStartTime = Date.now();
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('cardFlipper').classList.toggle('flipped');
+}
+
+function markCard(status) {
+  if (currentIndex >= deck.length) return;
+  var entry = deck[currentIndex];
+  var oi = entry.originalIndex;
+  var secondsOnCard = cardStartTime ? Math.round((Date.now() - cardStartTime) / 1000) : 0;
+  results.push({
+    card: entry.card,
+    status: status,
+    seconds: secondsOnCard
+  });
+  if (status === 'known') {
+    known[oi] = true;
+    delete learning[oi];
+  } else if (status === 'learning') {
+    learning[oi] = true;
+    delete known[oi];
+  }
+  currentIndex++;
+  updateProgress();
+  showCard();
+}
+
+function updateProgress() {
+  var total = deck.length;
+  var knownCount = 0;
+  var learningCount = 0;
+  for (var i = 0; i < deck.length; i++) {
+    var oi = deck[i].originalIndex;
+    if (known[oi]) knownCount++;
+    if (learning[oi]) learningCount++;
+  }
+  var knownPct = total > 0 ? (knownCount / total * 100) : 0;
+  var learningPct = total > 0 ? (learningCount / total * 100) : 0;
+  document.getElementById('progressKnown').style.width = knownPct + '%';
+  document.getElementById('progressLearning').style.width = learningPct + '%';
+  document.getElementById('knownCount').textContent = knownCount;
+  document.getElementById('learningCount').textContent = learningCount;
+  document.getElementById('remainingCount').textContent = Math.max(0, total - knownCount - learningCount);
+}
+
+function showDone() {
+  document.getElementById('cardArea').style.display = 'none';
+  document.getElementById('actions').style.display = 'none';
+  var screen = document.getElementById('doneScreen');
+  screen.style.display = 'block';
+
+  var total = deck.length;
+  var knownCount = 0;
+  var learningCount = 0;
+  for (var i = 0; i < deck.length; i++) {
+    var oi = deck[i].originalIndex;
+    if (known[oi]) knownCount++;
+    if (learning[oi]) learningCount++;
+  }
+  var pct = total > 0 ? Math.round(knownCount / total * 100) : 0;
+  document.getElementById('doneScore').textContent = pct + '%';
+  document.getElementById('doneSummary').textContent =
+    'You knew ' + knownCount + ' out of ' + total + ' cards' +
+    (learningCount > 0 ? ' \u2014 ' + learningCount + ' still need practice' : '');
+
+  var reviewBtn = document.getElementById('doneReviewBtn');
+  reviewBtn.style.display = learningCount > 0 ? 'inline-block' : 'none';
+}
+
+// ---- CONTROLS ----
+
+function setFilter(f) {
+  currentFilter = f;
+  var btns = document.querySelectorAll('.filter-btn');
+  for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
+  document.querySelector('[data-filter="' + f + '"]').classList.add('active');
+  buildDeck();
+}
+
+function setMode(m) {
+  currentMode = m;
+  document.getElementById('modeNormal').classList.toggle('active', m === 'normal');
+  document.getElementById('modeReverse').classList.toggle('active', m === 'reverse');
+  showCard();
+}
+
+function shuffleDeck() {
+  shuffleArray(deck);
+  currentIndex = 0;
+  known = {};
+  learning = {};
+  results = [];
+  sessionStartTime = Date.now();
+  cardStartTime = null;
+  updateProgress();
+  showCard();
+  document.getElementById('doneScreen').style.display = 'none';
+  document.getElementById('cardArea').style.display = 'block';
+  document.getElementById('actions').style.display = 'flex';
+}
+
+function reviewLearning() {
+  var learningCards = [];
+  for (var i = 0; i < deck.length; i++) {
+    if (learning[deck[i].originalIndex]) {
+      learningCards.push(deck[i]);
+    }
+  }
+  if (learningCards.length === 0) {
+    alert('No cards marked as "Still Learning". Start a new round!');
+    return;
+  }
+  deck = learningCards;
+  shuffleArray(deck);
+  currentIndex = 0;
+  known = {};
+  learning = {};
+  for (var j = 0; j < deck.length; j++) {
+    learning[deck[j].originalIndex] = true;
+  }
+  updateProgress();
+  showCard();
+  document.getElementById('doneScreen').style.display = 'none';
+  document.getElementById('cardArea').style.display = 'block';
+  document.getElementById('actions').style.display = 'flex';
+}
+
+function resetAll() {
+  buildDeck();
+}
+
+// ---- CSV EXPORT (appends to single study-results.csv) ----
+var RESULTS_FILENAME = 'study-results.csv';
+var CSV_HEADERS = 'Date,Time,Type,Subject,Chapter,Item,Response,Result,Self-Rating,Seconds';
+
+function buildNewRows() {
+  var now = new Date();
+  var dateStr = now.toLocaleDateString('en-US');
+  var timeStr = now.toLocaleTimeString('en-US');
+  var lines = [];
+  for (var i = 0; i < results.length; i++) {
+    var r = results[i];
+    var item = r.card.word + (currentMode === 'normal' ? ' → ?' : ' ← ' + r.card.meaning);
+    lines.push([
+      dateStr,
+      timeStr,
+      'flashcard',
+      'Word Roots',
+      currentFilter === 'all' ? 'All' : currentFilter,
+      '"' + item.replace(/"/g, '""') + '"',
+      '',
+      r.status,
+      '',
+      r.seconds
+    ].join(','));
+  }
+  return lines.join('\n');
+}
+
+async function ensureDirHandle() {
+  // Try to restore previously chosen folder from IndexedDB
+  if (!saveDirHandle) {
+    saveDirHandle = await loadDirHandleFromDB();
+  }
+  // Verify we still have permission
+  if (saveDirHandle) {
+    var perm = await saveDirHandle.queryPermission({mode: 'readwrite'});
+    if (perm !== 'granted') {
+      perm = await saveDirHandle.requestPermission({mode: 'readwrite'});
+    }
+    if (perm !== 'granted') saveDirHandle = null;
+  }
+  // If no saved handle, ask user to pick a folder
+  if (!saveDirHandle) {
+    saveDirHandle = await window.showDirectoryPicker({id: 'study-results', mode: 'readwrite'});
+    await saveDirHandleToDB(saveDirHandle);
+  }
+  return saveDirHandle;
+}
+
+async function downloadCSV() {
+  var newRows = buildNewRows();
+  var saveBtn = document.getElementById('saveBtn');
+
+  // Try File System Access API (Chrome/Edge) — append to study-results.csv
+  if (window.showDirectoryPicker) {
+    try {
+      var dirHandle = await ensureDirHandle();
+      // Try to read existing file
+      var existingCSV = '';
+      try {
+        var existingHandle = await dirHandle.getFileHandle(RESULTS_FILENAME);
+        var file = await existingHandle.getFile();
+        existingCSV = await file.text();
+      } catch(e) { /* file doesn't exist yet — that's fine */ }
+
+      // Build final content: headers + existing rows + new rows
+      var finalCSV;
+      if (existingCSV && existingCSV.trim().length > 0) {
+        // File exists — append new rows (no duplicate headers)
+        finalCSV = existingCSV.trimEnd() + '\n' + newRows;
+      } else {
+        // New file — add headers
+        finalCSV = CSV_HEADERS + '\n' + newRows;
+      }
+
+      var fileHandle = await dirHandle.getFileHandle(RESULTS_FILENAME, {create: true});
+      var writable = await fileHandle.createWritable();
+      await writable.write(finalCSV);
+      await writable.close();
+      if (saveBtn) {
+        saveBtn.textContent = 'Saved!';
+        setTimeout(function() { saveBtn.textContent = 'Save Results'; }, 2000);
+      }
+      return;
+    } catch (err) {
+      if (err.name === 'AbortError') return;
+    }
+  }
+
+  // Fallback: download a standalone file (browsers without File System Access API)
+  var csv = CSV_HEADERS + '\n' + newRows;
+  var blob = new Blob([csv], {type: 'text/csv'});
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  var now = new Date();
+  a.download = 'study-results-' + now.toISOString().slice(0,10) + '.csv';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+async function changeSaveFolder() {
+  if (!window.showDirectoryPicker) { alert('Your browser does not support folder picking. Use Chrome or Edge.'); return; }
+  try {
+    saveDirHandle = await window.showDirectoryPicker({id: 'study-results', mode: 'readwrite'});
+    await saveDirHandleToDB(saveDirHandle);
+    alert('Save folder updated!');
+  } catch(e) { /* user cancelled */ }
+}
+
+// ---- KEYBOARD SHORTCUTS ----
+document.addEventListener('keydown', function(e) {
+  if (e.key === ' ' || e.key === 'Enter') {
+    e.preventDefault();
+    flipCard();
+  } else if (e.key === '1') {
+    markCard('learning');
+  } else if (e.key === '2') {
+    markCard('known');
+  } else if (e.key === 'ArrowRight' || e.key === '3') {
+    markCard('skip');
+  } else if (e.key === 'ArrowLeft') {
+    if (currentIndex > 0) {
+      currentIndex--;
+      showCard();
+    }
+  }
+});
+
+// ---- INIT ----
+buildDeck();
+</script>
+
+</body>
+</html>

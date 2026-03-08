@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Acids, Bases, and Salts &mdash; Chemistry Ch11</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 11</div>
+  <h1>Acids, Bases, and Salts</h1>
+  <div class="subtitle">Acids, alkalis, pH, neutralisation, oxides, making salts, and titration calculations &mdash; the reactions that underpin all of chemistry</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 28 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: ACIDS AND BASES ===== -->
+<div class="section-header">
+  <span class="num">Section 11.1</span>
+  Acids and Bases
+</div>
+<div class="card">
+  <div class="intro-text">
+    Acids and bases are two huge groups of chemicals. You need to know what they are, how to identify them, and the common ones you'll meet in the lab.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Are Acids?</div>
+      <p><strong>Acids</strong> are <strong>non-metal compounds</strong> dissolved in water. They are <strong>corrosive</strong> (especially when concentrated) and can eat away metals, cloth, and skin.</p>
+      <p style="margin-top:8px;"><strong>The four main lab acids and their formulae:</strong></p>
+      <table class="compare-table">
+        <tr><th>Acid</th><th>Formula</th><th>Gives these salts</th></tr>
+        <tr><td>Sulfuric acid</td><td>H&#8322;SO&#8324; (aq)</td><td>Sulfates</td></tr>
+        <tr><td>Hydrochloric acid</td><td>HCl (aq)</td><td>Chlorides</td></tr>
+        <tr><td>Nitric acid</td><td>HNO&#8323; (aq)</td><td>Nitrates</td></tr>
+        <tr><td>Ethanoic acid</td><td>CH&#8323;COOH (aq)</td><td>Ethanoates</td></tr>
+      </table>
+      <p style="margin-top:6px;">Other everyday acids: <strong>citric acid</strong> (lemons), <strong>lactic acid</strong> (yoghurt), <strong>carbonic acid</strong> (fizzy drinks).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Are Bases?</div>
+      <p><strong>Bases</strong> are <strong>oxides and hydroxides of metals</strong>. They react with acids to give a salt and water.</p>
+      <p style="margin-top:6px;">Examples: calcium oxide (CaO), magnesium oxide (MgO), sodium hydroxide (NaOH), magnesium hydroxide Mg(OH)&#8322;.</p>
+      <p style="margin-top:6px;">Most bases are <strong>insoluble</strong> in water. But the soluble ones have a special name: <strong>alkalis</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Alkalis</div>
+      <p><strong>Alkalis are soluble bases. They are hydroxides.</strong></p>
+      <p style="margin-top:6px;">The three main lab alkalis:</p>
+      <p>&bull; Calcium hydroxide &mdash; Ca(OH)&#8322; (aq) &mdash; its solution is called <strong>limewater</strong><br>
+         &bull; Sodium hydroxide &mdash; NaOH (aq)<br>
+         &bull; Potassium hydroxide &mdash; KOH (aq)</p>
+      <p style="margin-top:6px;">Alkalis are also corrosive. They attack skin and some metals. They can do <strong>more harm than acids</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Indicators</div>
+      <table class="compare-table">
+        <tr><th>Indicator</th><th>In Acid</th><th>In Alkali</th></tr>
+        <tr><td><strong>Litmus</strong></td><td style="color:#c0392b; font-weight:700;">Red</td><td style="color:#2980b9; font-weight:700;">Blue</td></tr>
+        <tr><td><strong>Methyl orange</strong></td><td style="color:#c0392b; font-weight:700;">Red</td><td style="color:#b8770e; font-weight:700;">Yellow</td></tr>
+        <tr><td><strong>Thymolphthalein</strong></td><td>Colourless</td><td style="color:#2980b9; font-weight:700;">Blue</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Base vs Alkali</div>
+      <p>All alkalis are bases, but <strong>not all bases are alkalis</strong>. A base is any metal oxide or hydroxide. An alkali is specifically a base that <strong>dissolves in water</strong>. Copper oxide is a base but NOT an alkali (it's insoluble).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Memory Trick for Litmus</div>
+      <p>Think: <strong>"Acids turn litmus Red"</strong> &mdash; both "acid" and "red" are short, punchy words. If you remember that one, the other is automatic (alkalis turn litmus blue). For the exam: acid = red, alkali = blue.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the four main lab acids and write their formulae</li>
+    <li><input type="checkbox"> I can define a base and give examples</li>
+    <li><input type="checkbox"> I can define an alkali and explain how it differs from a base</li>
+    <li><input type="checkbox"> I know the colour changes for litmus, methyl orange, and thymolphthalein</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: A CLOSER LOOK AT ACIDS AND ALKALIS ===== -->
+<div class="section-header">
+  <span class="num">Section 11.2</span>
+  The pH Scale, Strong and Weak Acids
+</div>
+<div class="card">
+  <div class="intro-text">
+    What makes an acid acidic? What makes an alkali alkaline? It all comes down to ions. This section also covers the pH scale and the difference between strong and weak acids.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Ions That Matter</div>
+      <p><strong>All acids contain hydrogen ions, H&#8314;.</strong> That is what makes them acidic.</p>
+      <p style="margin-top:6px;">For example, hydrochloric acid dissociates in water:<br>
+         HCl (aq) &rarr; H&#8314; (aq) + Cl&#8315; (aq)</p>
+      <p style="margin-top:8px;"><strong>All alkalis contain hydroxide ions, OH&#8315;.</strong> That is what makes them alkaline.</p>
+      <p style="margin-top:6px;">For example, sodium hydroxide dissolves and separates:<br>
+         NaOH (aq) &rarr; Na&#8314; (aq) + OH&#8315; (aq)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The pH Scale</div>
+      <p>The <strong>pH scale</strong> runs from <strong>0 to 14</strong> and measures how acidic or alkaline a solution is.</p>
+      <table class="compare-table">
+        <tr><th>pH Range</th><th>Type</th><th>Ion Responsible</th></tr>
+        <tr><td><strong>Below 7</strong> (0&ndash;6)</td><td>Acidic</td><td>H&#8314; ions &mdash; more H&#8314; = lower pH = stronger acid</td></tr>
+        <tr><td><strong>Exactly 7</strong></td><td>Neutral</td><td>Equal H&#8314; and OH&#8315;</td></tr>
+        <tr><td><strong>Above 7</strong> (8&ndash;14)</td><td>Alkaline</td><td>OH&#8315; ions &mdash; more OH&#8315; = higher pH = stronger alkali</td></tr>
+      </table>
+      <p style="margin-top:6px;">Pure water has pH 7 (neutral). A sugar solution is also neutral. Stomach acid has a pH of about 2.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Universal Indicator</div>
+      <p><strong>Universal indicator</strong> is a mixture of dyes that changes colour across the full pH range. It tells you the actual pH, not just "acid or alkali."</p>
+      <p style="margin-top:6px;">Colour sequence: <strong style="color:#c0392b;">red</strong> (pH 1&ndash;2) &rarr; <strong style="color:#e67e22;">orange</strong> (3) &rarr; <strong style="color:#f1c40f;">yellow</strong> (4&ndash;5) &rarr; <strong style="color:#7dcea0;">yellowish-green</strong> (6) &rarr; <strong style="color:#27ae60;">green</strong> (7) &rarr; <strong style="color:#5dade2;">greenish-blue</strong> (8&ndash;9) &rarr; <strong style="color:#2e86c1;">blue</strong> (10&ndash;11) &rarr; <strong style="color:#6c3483;">violet</strong> (12&ndash;13)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Strong vs Weak Acids</div>
+      <p><strong>A strong acid is completely dissociated into ions in solution.</strong><br>
+         Example: HCl (aq) &rarr; H&#8314; (aq) + Cl&#8315; (aq) &mdash; 100% dissociation. All molecules split into ions.</p>
+      <p style="margin-top:8px;"><strong>A weak acid is only partially dissociated into ions in solution.</strong><br>
+         Example: CH&#8323;COOH (aq) &#8652; H&#8314; (aq) + CH&#8323;COO&#8315; (aq) &mdash; the reaction is reversible. At equilibrium, many molecules remain intact. So there are fewer H&#8314; ions, which means a <strong>higher pH</strong> (less acidic) than a strong acid at the same concentration.</p>
+      <p style="margin-top:8px;"><strong>Strong acids:</strong> hydrochloric acid, sulfuric acid, nitric acid.<br>
+         <strong>Weak acids:</strong> ethanoic acid, citric acid, carbonic acid.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Strong/Weak vs Concentrated/Dilute</div>
+      <p><strong>Strong/weak</strong> = how much the acid dissociates (splits into ions). This is a property of the acid itself.<br>
+         <strong>Concentrated/dilute</strong> = how much acid is dissolved in water (amount per volume). You CAN have a concentrated weak acid (lots of ethanoic acid in a small volume) or a dilute strong acid (a tiny amount of HCl in lots of water).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam loves to give you two acids at the same concentration and ask why they have different pH values. The answer: one is a <strong>strong acid</strong> (fully dissociated, more H&#8314; ions, lower pH) and the other is a <strong>weak acid</strong> (partially dissociated, fewer H&#8314; ions, higher pH). Learn this pattern.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know that H&#8314; ions cause acidity and OH&#8315; ions cause alkalinity</li>
+    <li><input type="checkbox"> I can describe the pH scale (0&ndash;14) and what each region means</li>
+    <li><input type="checkbox"> I can describe what universal indicator does and its colour range</li>
+    <li><input type="checkbox"> I can define strong and weak acids and give examples of each</li>
+    <li><input type="checkbox"> I know the difference between strong/weak and concentrated/dilute</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: REACTIONS OF ACIDS AND BASES ===== -->
+<div class="section-header">
+  <span class="num">Section 11.3</span>
+  The Reactions of Acids and Bases
+</div>
+<div class="card">
+  <div class="intro-text">
+    Acids react with metals, bases, and carbonates. Each reaction follows a predictable pattern with a word equation AND a chemical equation. This is the section you must absolutely nail &mdash; word equations come up on every exam paper.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Which Acid Gives Which Salt?</div>
+      <p>The name of the salt depends on the acid you start with:</p>
+      <p>&bull; <strong>Hydrochloric acid</strong> &rarr; gives <strong>chlorides</strong><br>
+         &bull; <strong>Sulfuric acid</strong> &rarr; gives <strong>sulfates</strong><br>
+         &bull; <strong>Nitric acid</strong> &rarr; gives <strong>nitrates</strong></p>
+      <p style="margin-top:6px;">The first part of the salt name comes from the metal or base. So: hydrochloric acid + sodium hydroxide &rarr; <strong>sodium chloride</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Reaction 1: Acid + Metal</div>
+      <p><strong>Word equation:</strong><br>
+         acid + metal &rarr; <strong>salt + hydrogen</strong></p>
+      <p style="margin-top:8px;"><strong>Example (word):</strong><br>
+         magnesium + sulfuric acid &rarr; magnesium sulfate + hydrogen</p>
+      <p style="margin-top:6px;"><strong>Example (chemical):</strong><br>
+         Mg (s) + H&#8322;SO&#8324; (aq) &rarr; MgSO&#8324; (aq) + H&#8322; (g)</p>
+      <p style="margin-top:6px;">The metal <strong>displaces</strong> the hydrogen from the acid. You see bubbling (hydrogen gas).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Reaction 2: Acid + Base</div>
+      <p><strong>Word equation:</strong><br>
+         acid + base &rarr; <strong>salt + water</strong></p>
+      <p style="margin-top:8px;"><strong>Example with an alkali (soluble base):</strong><br>
+         hydrochloric acid + sodium hydroxide &rarr; sodium chloride + water<br>
+         HCl (aq) + NaOH (aq) &rarr; NaCl (aq) + H&#8322;O (l)</p>
+      <p style="margin-top:8px;"><strong>Example with an insoluble base:</strong><br>
+         sulfuric acid + copper(II) oxide &rarr; copper(II) sulfate + water<br>
+         H&#8322;SO&#8324; (aq) + CuO (s) &rarr; CuSO&#8324; (aq) + H&#8322;O (l)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Reaction 3: Acid + Carbonate</div>
+      <p><strong>Word equation:</strong><br>
+         acid + carbonate &rarr; <strong>salt + water + carbon dioxide</strong></p>
+      <p style="margin-top:8px;"><strong>Example (word):</strong><br>
+         calcium carbonate + hydrochloric acid &rarr; calcium chloride + water + carbon dioxide</p>
+      <p style="margin-top:6px;"><strong>Example (chemical):</strong><br>
+         CaCO&#8323; (s) + 2HCl (aq) &rarr; CaCl&#8322; (aq) + H&#8322;O (l) + CO&#8322; (g)</p>
+      <p style="margin-top:6px;">You see fizzing/bubbling (CO&#8322; gas being released).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Products of Each Reaction</div>
+      <p>&bull; Acid + metal = salt + <strong>hydrogen</strong> (just two products, and hydrogen gas bubbles off)<br>
+         &bull; Acid + base = salt + <strong>water</strong> (just two products)<br>
+         &bull; Acid + carbonate = salt + <strong>water + carbon dioxide</strong> (three products!)<br>
+         The carbonate reaction is the only one with <strong>three</strong> products. Don't forget the CO&#8322;.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Neutralisation</div>
+      <p><strong>Neutralisation</strong> is a reaction between an acid and a base (or carbonate) that produces <strong>water</strong>.</p>
+      <p style="margin-top:6px;">Acid + base = neutralisation (produces water). Acid + carbonate = also neutralisation (produces water + CO&#8322;).<br>
+         But acid + metal is <strong>NOT</strong> a neutralisation &mdash; it does not produce water.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Neutralisation in Real Life</div>
+      <p>&bull; <strong>Toothpaste</strong> contains bases to neutralise acids made by mouth bacteria (prevents tooth decay)<br>
+         &bull; <strong>Indigestion tablets</strong> contain bases (e.g. magnesium hydroxide) to neutralise excess stomach acid<br>
+         &bull; <strong>Lime (calcium oxide)</strong> is spread on soil to neutralise acidic soil so crops can grow</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Write Equations From Scratch</div>
+      <p>Practice writing 6 different word equations from memory: pick an acid (HCl, H&#8322;SO&#8324;, HNO&#8323;) and react it with (a) a metal, (b) a base, (c) a carbonate. Follow the pattern: acid name tells you the salt. If you can do this for all three acids, you own the exam questions. Cover the answers and try right now.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the word equation for acid + metal</li>
+    <li><input type="checkbox"> I can write the word equation for acid + base</li>
+    <li><input type="checkbox"> I can write the word equation for acid + carbonate</li>
+    <li><input type="checkbox"> I know which acid gives chlorides, sulfates, and nitrates</li>
+    <li><input type="checkbox"> I can define neutralisation and explain why acid + metal is NOT neutralisation</li>
+    <li><input type="checkbox"> I can give three real-life examples of neutralisation</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: A CLOSER LOOK AT NEUTRALISATION & OXIDES ===== -->
+<div class="section-header">
+  <span class="num">Sections 11.4 &ndash; 11.5</span>
+  Ionic Equations, Proton Transfer, and Oxides
+</div>
+<div class="card">
+  <div class="intro-text">
+    Now we look deeper at what actually happens during neutralisation (at the ion level), and classify the different types of oxides.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Ionic Equation for Neutralisation</div>
+      <p>When an acid reacts with a <strong>soluble base (alkali)</strong>, the key reaction is:</p>
+      <p style="margin-top:6px;"><strong>H&#8314; (aq) + OH&#8315; (aq) &rarr; H&#8322;O (l)</strong></p>
+      <p style="margin-top:6px;">This is the <strong>ionic equation</strong>. The other ions (e.g. Na&#8314; and Cl&#8315;) are just floating in solution &mdash; they don't react. They are called <strong>spectator ions</strong>.</p>
+      <p style="margin-top:8px;">When an acid reacts with an <strong>insoluble base</strong> (like MgO), the ionic equation is:</p>
+      <p style="margin-top:6px;"><strong>2H&#8314; (aq) + O&#178;&#8315; (s) &rarr; H&#8322;O (l)</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Proton Donors and Acceptors</div>
+      <p>An H&#8314; ion is just a <strong>proton</strong> (a hydrogen atom that has lost its one electron).</p>
+      <p style="margin-top:6px;">In neutralisation, the acid <strong>donates</strong> protons (H&#8314;) and the base <strong>accepts</strong> them.</p>
+      <p style="margin-top:6px;">This gives us a more precise definition:<br>
+         &bull; <strong>Acids are proton donors</strong><br>
+         &bull; <strong>Bases are proton acceptors</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Types of Oxides</div>
+      <table class="compare-table">
+        <tr><th>Type</th><th>Made From</th><th>Reacts With</th><th>Examples</th></tr>
+        <tr><td><strong>Basic oxides</strong></td><td>Metals + oxygen</td><td>Acids (to give salt + water)</td><td>CaO, CuO, MgO, Fe&#8322;O&#8323;</td></tr>
+        <tr><td><strong>Acidic oxides</strong></td><td>Non-metals + oxygen</td><td>Water (to give acids) / Alkalis</td><td>CO&#8322;, SO&#8322;, P&#8324;O&#8321;&#8320;</td></tr>
+        <tr><td><strong>Amphoteric oxides</strong></td><td>Certain metals</td><td>Both acids AND alkalis</td><td>Al&#8322;O&#8323;, ZnO</td></tr>
+        <tr><td><strong>Neutral oxides</strong></td><td>Some non-metals</td><td>Neither acids nor bases</td><td>CO, N&#8322;O (laughing gas)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Amphoteric</div>
+      <p><strong>Amphoteric</strong> means it reacts with <strong>both</strong> acids and alkalis. The two examples to remember are <strong>aluminium oxide (Al&#8322;O&#8323;)</strong> and <strong>zinc oxide (ZnO)</strong>. The exam will expect you to name both.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Acid Rain</div>
+      <p>Non-metal oxides like SO&#8322; and NO&#8322; are released by burning fossil fuels. They dissolve in rainwater to form acids (sulfuric acid, nitric acid), creating <strong>acid rain</strong>. This is a direct application of "non-metals form acidic oxides" and comes up regularly in exams.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; How to Write Ionic Equations</div>
+      <p>Three steps: (1) Write the full balanced equation. (2) Split all aqueous ionic compounds into their ions. (3) Cross out any ion that appears on both sides &mdash; those are spectator ions. What's left is the ionic equation. Practice with HCl + NaOH, then try H&#8322;SO&#8324; + KOH.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the ionic equation for acid + alkali: H&#8314; + OH&#8315; &rarr; H&#8322;O</li>
+    <li><input type="checkbox"> I can define spectator ions</li>
+    <li><input type="checkbox"> I know that acids are proton donors and bases are proton acceptors</li>
+    <li><input type="checkbox"> I can classify oxides as basic, acidic, amphoteric, or neutral</li>
+    <li><input type="checkbox"> I can name two amphoteric oxides</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: MAKING SALTS ===== -->
+<div class="section-header">
+  <span class="num">Sections 11.6 &ndash; 11.7</span>
+  Making Salts &mdash; Methods and Solubility Rules
+</div>
+<div class="card">
+  <div class="intro-text">
+    How do you actually make a specific salt in the lab? The method depends on whether the salt is soluble or insoluble, and what starting materials you use. This is one of the most heavily examined practical topics.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Solubility Rules</div>
+      <table class="compare-table">
+        <tr><th>Soluble</th><th>Insoluble</th></tr>
+        <tr><td><strong>All</strong> sodium, potassium, and ammonium salts</td><td>&mdash;</td></tr>
+        <tr><td><strong>All</strong> nitrates</td><td>&mdash;</td></tr>
+        <tr><td><strong>All</strong> chlorides, bromides, iodides</td><td><strong>Except</strong> silver and lead halides</td></tr>
+        <tr><td><strong>All</strong> sulfates</td><td><strong>Except</strong> calcium, barium, and lead sulfate</td></tr>
+        <tr><td>Sodium, potassium, and ammonium carbonates</td><td><strong>All other</strong> carbonates are insoluble</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Method 1: Making a Soluble Salt from a Metal</div>
+      <p><strong>Steps (e.g. making zinc sulfate from zinc + dilute sulfuric acid):</strong></p>
+      <p>1. Add <strong>excess</strong> zinc to the acid in a beaker &mdash; it dissolves and hydrogen bubbles off<br>
+         2. When bubbling stops, all the acid is used up. Filter off the excess zinc<br>
+         3. Heat the solution to evaporate some water, then cool &mdash; crystals form</p>
+      <p style="margin-top:6px;">Zn (s) + H&#8322;SO&#8324; (aq) &rarr; ZnSO&#8324; (aq) + H&#8322; (g)</p>
+      <p style="margin-top:6px;"><em>This works for Mg, Al, Zn, Fe. NOT for Na, K, Ca (too reactive/violent) or Cu, Ag, Au (too unreactive).</em></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Method 2: Making a Soluble Salt from an Insoluble Base or Carbonate</div>
+      <p><strong>Steps (e.g. making copper(II) sulfate from copper(II) oxide + dilute sulfuric acid):</strong></p>
+      <p>1. Warm dilute acid. Add <strong>excess</strong> insoluble base (or carbonate) &mdash; it dissolves, solution turns blue<br>
+         2. When no more dissolves, all the acid is used up. Filter off excess solid<br>
+         3. Heat filtrate to get a saturated solution, then cool &mdash; blue crystals of CuSO&#8324;.5H&#8322;O form</p>
+      <p style="margin-top:6px;">CuO (s) + H&#8322;SO&#8324; (aq) &rarr; CuSO&#8324; (aq) + H&#8322;O (l)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Method 3: Making a Soluble Salt from an Alkali (Titration)</div>
+      <p>Both reactants are <strong>soluble</strong>, so you cannot filter off excess. You need a <strong>titration</strong>.</p>
+      <p style="margin-top:6px;"><strong>Steps (e.g. making sodium chloride from NaOH + HCl):</strong></p>
+      <p>1. Pipette 25 cm&sup3; of alkali into a flask. Add indicator (e.g. thymolphthalein &mdash; blue in alkali)<br>
+         2. Add acid from a burette until indicator changes colour (blue &rarr; colourless) &mdash; the <strong>end-point</strong>. Record the volume.<br>
+         3. Repeat <strong>without</strong> indicator, using the exact volume found. (Indicator would be an impurity in the salt.)<br>
+         4. Evaporate the solution to get salt crystals</p>
+      <p style="margin-top:6px;">NaOH (aq) + HCl (aq) &rarr; NaCl (aq) + H&#8322;O (l)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Method 4: Making an Insoluble Salt by Precipitation</div>
+      <p><strong>Precipitation</strong> occurs when you mix two solutions and an <strong>insoluble product</strong> (the precipitate) forms.</p>
+      <p style="margin-top:6px;"><strong>Steps (e.g. making barium sulfate):</strong></p>
+      <p>1. Mix solutions of barium chloride and magnesium sulfate<br>
+         2. A white precipitate of barium sulfate forms immediately<br>
+         3. Filter to collect the precipitate<br>
+         4. Rinse with distilled water, then dry in a warm oven</p>
+      <p style="margin-top:6px;">BaCl&#8322; (aq) + MgSO&#8324; (aq) &rarr; BaSO&#8324; (s) + MgCl&#8322; (aq)</p>
+      <p style="margin-top:6px;"><strong>Ionic equation:</strong> Ba&#178;&#8314; (aq) + SO&#8324;&#178;&#8315; (aq) &rarr; BaSO&#8324; (s)</p>
+      <p style="margin-top:6px;"><strong>Rule:</strong> To make an insoluble salt, mix a solution containing its <strong>positive ion</strong> with a solution containing its <strong>negative ion</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Hydrated and Anhydrous Salts</div>
+      <p><strong>Hydrated</strong> salts have water molecules bonded into their crystals. This water is called <strong>water of crystallisation</strong>.</p>
+      <p style="margin-top:6px;">Example: CuSO&#8324;.5H&#8322;O (blue crystals &mdash; hydrated copper(II) sulfate).</p>
+      <p style="margin-top:6px;">Heating drives off the water, leaving the <strong>anhydrous</strong> (water-free) salt &mdash; CuSO&#8324; (white powder).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; When to Use Which Method</div>
+      <p>&bull; Starting with a metal, insoluble base, or insoluble carbonate? <strong>Add excess, then filter.</strong><br>
+         &bull; Starting with an alkali (soluble base)? <strong>You must do a titration</strong> because both reactants are solutions &mdash; you can't filter off excess.<br>
+         &bull; Need an insoluble salt? <strong>Precipitation</strong> &mdash; mix two solutions.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Solubility Rules Are Exam Gold</div>
+      <p>Memorise the solubility table. A quick trick: <strong>N</strong>itrates, <strong>S</strong>odium, <strong>P</strong>otassium, <strong>A</strong>mmonium are <strong>always soluble</strong> (think "N-SPA"). For the exceptions, remember <strong>"SLP"</strong> for insoluble halides/sulfates: <strong>S</strong>ilver, <strong>L</strong>ead, (and for sulfates) <strong>B</strong>arium + <strong>C</strong>alcium.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list the solubility rules for salts</li>
+    <li><input type="checkbox"> I can describe how to make a soluble salt from a metal + acid (excess, filter, crystallise)</li>
+    <li><input type="checkbox"> I can describe how to make a soluble salt from an insoluble base/carbonate + acid</li>
+    <li><input type="checkbox"> I can explain why titration is needed when using an alkali</li>
+    <li><input type="checkbox"> I can describe how to make an insoluble salt by precipitation</li>
+    <li><input type="checkbox"> I can define hydrated, anhydrous, and water of crystallisation</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: TITRATION CALCULATIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 11.8</span>
+  Finding Concentration by Titration
+</div>
+<div class="card">
+  <div class="intro-text">
+    Titration isn't just a method for making salts &mdash; it's also used to calculate the concentration of an unknown acid or alkali. Follow the four steps carefully, and the calculation becomes routine.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Formulae</div>
+      <p><strong>Concentration (mol/dm&sup3;) = number of moles &divide; volume in dm&sup3;</strong></p>
+      <p style="margin-top:6px;">To convert cm&sup3; to dm&sup3;: divide by 1000. So 25 cm&sup3; = 0.025 dm&sup3;.</p>
+      <p style="margin-top:6px;">Number of moles = concentration &times; volume (in dm&sup3;).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Four-Step Titration Calculation</div>
+      <p><strong>Worked example:</strong> 27.8 cm&sup3; of HCl neutralises 25 cm&sup3; of 1 mol/dm&sup3; Na&#8322;CO&#8323;. Find the concentration of HCl.</p>
+      <p style="margin-top:8px;"><strong>Step 1:</strong> Calculate moles of the known substance.<br>
+         25 cm&sup3; of 1 mol/dm&sup3; Na&#8322;CO&#8323; = 25/1000 &times; 1 = <strong>0.025 mol</strong></p>
+      <p style="margin-top:6px;"><strong>Step 2:</strong> Find the molar ratio from the equation.<br>
+         2HCl + Na&#8322;CO&#8323; &rarr; 2NaCl + H&#8322;O + CO&#8322;<br>
+         Ratio: 2 moles HCl to 1 mole Na&#8322;CO&#8323;</p>
+      <p style="margin-top:6px;"><strong>Step 3:</strong> Calculate moles of the unknown.<br>
+         0.025 mol Na&#8322;CO&#8323; &times; 2 = <strong>0.05 mol HCl</strong></p>
+      <p style="margin-top:6px;"><strong>Step 4:</strong> Calculate concentration.<br>
+         Volume of HCl = 27.8 cm&sup3; = 0.0278 dm&sup3;<br>
+         Concentration = 0.05 &divide; 0.0278 = <strong>1.8 mol/dm&sup3;</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Titration calculations are worth 4&ndash;6 marks on the exam and follow the same four steps every time. If you practise the method, it's free marks. The solution with the <strong>known</strong> concentration is called the <strong>standard solution</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; cm&sup3; vs dm&sup3;</div>
+      <p>The most common mistake is forgetting to convert cm&sup3; to dm&sup3;. <strong>Always</strong> divide by 1000 before using the formula. 25 cm&sup3; = 0.025 dm&sup3;. 27.8 cm&sup3; = 0.0278 dm&sup3;. Write out the conversion every time until it becomes automatic.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Always Write the Four Steps</div>
+      <p>Even if you can do the maths in your head, <strong>write out all four steps on the exam paper</strong>. Each step earns a mark. If your final answer is wrong but your method is right, you still get most of the marks. Label each step clearly: "Step 1: Moles of ...", "Step 2: Ratio from equation...", etc.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can convert cm&sup3; to dm&sup3; by dividing by 1000</li>
+    <li><input type="checkbox"> I can calculate moles from concentration and volume</li>
+    <li><input type="checkbox"> I can use a molar ratio from a balanced equation</li>
+    <li><input type="checkbox"> I can follow all four steps of a titration calculation to find concentration</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 11 Notes Complete</h2>
+  <p>You've covered acids, bases, pH, neutralisation, oxides, making salts, and titration calculations. Now test yourself with the quiz &mdash; and remember, word equations are your biggest weapon on this exam.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

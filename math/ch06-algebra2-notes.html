@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Algebra 2 &mdash; Math Ch6</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Worked example boxes */
+  .worked {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0 4px;
+    font-size: 14px;
+  }
+  .worked .step {
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    min-width: 22px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .result {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #ccc;
+    font-weight: 700;
+    color: var(--subject-dark);
+  }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Mathematics &mdash; Chapter 6</div>
+  <h1>Algebra 2</h1>
+  <div class="subtitle">Factorising, simultaneous equations, sequences, rearranging formulae, algebraic fractions, and linear graphs</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 24 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: FACTORISING ===== -->
+<div class="section-header">
+  <span class="num">Section 6.1</span>
+  Factorising Expressions
+</div>
+<div class="card">
+  <div class="intro-text">
+    Factorising is the <strong>opposite of expanding brackets</strong>. You take an expression and rewrite it with brackets by pulling out the common factor. Think of it as "un-multiplying."
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Factorising Means</div>
+      <p><strong>Factorising</strong> means finding what's shared by every term, taking it outside a bracket, and writing what's left inside the bracket.</p>
+      <p style="margin-top:6px;">If you expand the bracket and get back to the original expression, you did it right.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Step-by-Step Method</div>
+      <p><strong>Step 1:</strong> Look at each term. What number and/or letter appears in ALL of them?</p>
+      <p><strong>Step 2:</strong> Write that common factor outside the bracket.</p>
+      <p><strong>Step 3:</strong> Divide each original term by the common factor. Write the results inside the bracket.</p>
+      <p><strong>Step 4:</strong> CHECK &mdash; expand the bracket. You should get back to the original expression.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Factorise 3xy &minus; 2x</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Terms are <strong>3xy</strong> and <strong>2x</strong>. Both contain <strong>x</strong>.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Common factor = <strong>x</strong>. Write it outside: x( ... )</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">3xy &divide; x = <strong>3y</strong>. &nbsp; 2x &divide; x = <strong>2</strong>. &nbsp; Keep the minus sign!</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">Answer: <strong>x(3y &minus; 2)</strong></span></div>
+        <div class="step"><span class="step-num">Check:</span><span class="step-text">x &times; 3y = 3xy. &nbsp; x &times; (&minus;2) = &minus;2x. &nbsp; 3xy &minus; 2x. Correct!</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Always Check by Expanding</div>
+      <p>Every single time you factorise, expand your answer to check. This is your safety net. Even on the exam, if you have 30 seconds spare, expand to verify. If it doesn't match the original, you made an error.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Signs Matter</div>
+      <p>Watch the <strong>minus signs</strong> carefully. If the original expression has a minus, the minus goes <em>inside</em> the bracket.</p>
+      <p style="margin-top:4px;">6a &minus; 9ab = <strong>3a(2 &minus; 3b)</strong> &larr; the minus is inside, not outside.</p>
+      <p style="margin-top:4px;">Check: 3a &times; 2 = 6a. 3a &times; (&minus;3b) = &minus;9ab. Correct!</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Finding the Biggest Common Factor</div>
+      <p>Always take out the <strong>highest common factor (HCF)</strong>, not just any common factor.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Factorise 12x<sup>2</sup> + 8x</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Numbers: HCF of 12 and 8 = <strong>4</strong>. Letters: both have at least one <strong>x</strong>.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Common factor = <strong>4x</strong></span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">12x<sup>2</sup> &divide; 4x = <strong>3x</strong>. &nbsp; 8x &divide; 4x = <strong>2</strong>.</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">Answer: <strong>4x(3x + 2)</strong></span></div>
+        <div class="step"><span class="step-num">Check:</span><span class="step-text">4x &times; 3x = 12x<sup>2</sup>. &nbsp; 4x &times; 2 = 8x. &nbsp; 12x<sup>2</sup> + 8x. Correct!</span></div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can explain what factorising means in my own words</li>
+    <li><input type="checkbox"> I can find the common factor in an expression</li>
+    <li><input type="checkbox"> I can factorise a two-term expression and check by expanding</li>
+    <li><input type="checkbox"> I know to watch the minus signs carefully</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: SIMULTANEOUS EQUATIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 6.2</span>
+  Simultaneous Equations
+</div>
+<div class="card">
+  <div class="intro-text">
+    "Simultaneous" means "at the same time." You have two equations and two unknowns. You need to find the values of both unknowns that make <strong>both</strong> equations true at the same time.
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Simultaneous equations are worth <strong>4&ndash;5 marks</strong> on the IGCSE exam. They appear almost every year. Learn the method and you pick up easy marks &mdash; the steps are always the same.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Elimination Method (Step by Step)</div>
+      <p>The goal: <strong>make one variable disappear</strong> so you only have one unknown left.</p>
+      <p style="margin-top:6px;"><strong>Step 1: Label the equations.</strong> Call them (1) and (2).</p>
+      <p><strong>Step 2: Make the coefficients match.</strong> Multiply one or both equations so that the number in front of one variable is the same in both equations.</p>
+      <p><strong>Step 3: Add or subtract.</strong> If the matching coefficients have the <strong>same sign</strong>, <strong>subtract</strong> one equation from the other. If they have <strong>different signs</strong>, <strong>add</strong> the equations.</p>
+      <p><strong>Step 4: Solve.</strong> You now have one equation with one unknown. Solve it.</p>
+      <p><strong>Step 5: Substitute back.</strong> Put the value you found into either original equation to find the other variable.</p>
+      <p><strong>Step 6: CHECK.</strong> Put both values into the <em>other</em> original equation. If it works, you're right.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Full Worked Example</div>
+      <div class="worked">
+        <p><strong>Solve simultaneously:</strong> &nbsp; 3x &minus; 2y = 3 &nbsp; ... (1) &nbsp; and &nbsp; x + 4y = 8 &nbsp; ... (2)</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>Label:</strong> Equation (1): 3x &minus; 2y = 3. &nbsp; Equation (2): x + 4y = 8.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text"><strong>Match coefficients of x:</strong> Multiply equation (2) by 3 so both have 3x.<br>
+          (2) &times; 3: &nbsp; 3x + 12y = 24 &nbsp; ... call this (3)</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text"><strong>Subtract:</strong> Both have +3x (same sign), so subtract.<br>
+          (3) &minus; (1): &nbsp; (3x + 12y) &minus; (3x &minus; 2y) = 24 &minus; 3<br>
+          3x + 12y &minus; 3x + 2y = 21<br>
+          14y = 21</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text"><strong>Solve for y:</strong> &nbsp; y = 21 &divide; 14 = <strong>1.5</strong></span></div>
+        <div class="step"><span class="step-num">5.</span><span class="step-text"><strong>Substitute y = 1.5 into (2):</strong> &nbsp; x + 4(1.5) = 8 &nbsp;&rarr;&nbsp; x + 6 = 8 &nbsp;&rarr;&nbsp; <strong>x = 2</strong></span></div>
+        <div class="step"><span class="step-num">6.</span><span class="step-text"><strong>Check in (1):</strong> &nbsp; 3(2) &minus; 2(1.5) = 6 &minus; 3 = 3. Correct!</span></div>
+        <div class="result">Answer: x = 2, y = 1.5</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; When to Add vs. Subtract</div>
+      <p>"<strong>Same sign? Subtract.</strong> &nbsp; <strong>Different signs? Add.</strong>"</p>
+      <p style="margin-top:4px;">If both equations have <strong>+2y</strong>, you subtract one from the other to eliminate y.</p>
+      <p>If one has <strong>+2y</strong> and the other has <strong>&minus;2y</strong>, you add them together to eliminate y.</p>
+      <p style="margin-top:6px;">Memory trick: <strong>S</strong>ame <strong>S</strong>ign <strong>S</strong>ubtract. <strong>D</strong>ifferent signs a<strong>D</strong>d.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Write Every Single Step</div>
+      <p>Do NOT try to do simultaneous equations in your head. Write out every line. On the exam, even if your final answer is wrong, you get marks for correct working. One line per step = maximum marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Substitution Method (Alternative)</div>
+      <p>Use this when one equation already has a variable on its own (like x = ... or y = ...).</p>
+      <p style="margin-top:6px;"><strong>Step 1:</strong> Rearrange one equation to get a variable by itself: e.g., x = 8 &minus; 4y</p>
+      <p><strong>Step 2:</strong> Replace that variable in the other equation with the expression.</p>
+      <p><strong>Step 3:</strong> Solve the resulting equation (it'll only have one variable).</p>
+      <p><strong>Step 4:</strong> Substitute back to find the other variable.</p>
+      <div class="worked">
+        <p><strong>Same example using substitution:</strong></p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">From (2): x = 8 &minus; 4y</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Put into (1): 3(8 &minus; 4y) &minus; 2y = 3</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">24 &minus; 12y &minus; 2y = 3 &nbsp;&rarr;&nbsp; 24 &minus; 14y = 3 &nbsp;&rarr;&nbsp; &minus;14y = &minus;21 &nbsp;&rarr;&nbsp; y = 1.5</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">x = 8 &minus; 4(1.5) = 8 &minus; 6 = 2</span></div>
+        <div class="result">Same answer: x = 2, y = 1.5</div>
+      </div>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can solve simultaneous equations by elimination</li>
+    <li><input type="checkbox"> I know when to add vs. subtract (same sign subtract, different signs add)</li>
+    <li><input type="checkbox"> I can solve by substitution when one variable is already isolated</li>
+    <li><input type="checkbox"> I always check my answer in the other equation</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: SEQUENCES AND NTH TERM ===== -->
+<div class="section-header">
+  <span class="num">Section 6.3</span>
+  Sequences and nth Term
+</div>
+<div class="card">
+  <div class="intro-text">
+    A <strong>sequence</strong> is a list of numbers that follow a pattern. The <strong>nth term</strong> is a formula that lets you find any term in the sequence without listing them all out.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p><strong>Common difference (d)</strong> = the amount you add each time to get from one term to the next.</p>
+      <p><strong>Arithmetic sequence</strong> = a sequence where the common difference is the same between every pair of terms.</p>
+      <p><strong>nth term</strong> = a formula that gives you the value of any term. Written as something like <strong>4n + 3</strong> where n is the position number (1st, 2nd, 3rd...).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Find the nth Term</div>
+      <p><strong>Step 1:</strong> Find the <strong>common difference (d)</strong>. Subtract the first term from the second.</p>
+      <p><strong>Step 2:</strong> The nth term starts with <strong>dn</strong>. (If d = 4, write 4n.)</p>
+      <p><strong>Step 3:</strong> Work out what you need to add or subtract. Compare the first term to d &times; 1.</p>
+      <p><strong>Step 4:</strong> Write the full formula: <strong>nth term = dn + (adjustment)</strong></p>
+      <p><strong>Step 5:</strong> CHECK &mdash; put n = 1, n = 2, n = 3 into your formula. You should get the original sequence.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find the nth term of: 7, 11, 15, 19, ...</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>Common difference:</strong> 11 &minus; 7 = <strong>4</strong></span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">So the formula starts with <strong>4n</strong></span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">When n = 1: 4 &times; 1 = 4. But the first term is 7. So we need to <strong>add 3</strong>.</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text"><strong>nth term = 4n + 3</strong></span></div>
+        <div class="step"><span class="step-num">Check:</span><span class="step-text">n=1: 4(1)+3 = 7. &nbsp; n=2: 4(2)+3 = 11. &nbsp; n=3: 4(3)+3 = 15. &nbsp; n=4: 4(4)+3 = 19. All correct!</span></div>
+        <div class="result">nth term = 4n + 3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; n Is the Position, Not the Term</div>
+      <p><strong>n</strong> is the position number: 1st, 2nd, 3rd, etc. It is NOT the value of the term.</p>
+      <p style="margin-top:4px;">In the sequence 7, 11, 15, 19 ... the 3rd term is 15. So when n = 3, the term = 15. Don't mix these up.</p>
+      <p style="margin-top:4px;">If they ask "What is the 50th term?", you put <strong>n = 50</strong> into your formula: 4(50) + 3 = 203.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Quick Way to Remember</div>
+      <p>The common difference is always the number in front of n. The adjustment is always what you add or subtract to make the first term work. Just two numbers to find.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can find the common difference in a sequence</li>
+    <li><input type="checkbox"> I can write the nth term formula</li>
+    <li><input type="checkbox"> I can use the nth term to find the 50th or 100th term</li>
+    <li><input type="checkbox"> I always check my formula against the first 3 terms</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: REARRANGING FORMULAE ===== -->
+<div class="section-header">
+  <span class="num">Section 6.4</span>
+  Rearranging Formulae
+</div>
+<div class="card">
+  <div class="intro-text">
+    Rearranging a formula means getting a different letter on its own on one side of the equals sign. The golden rule: <strong>whatever you do to one side, you must do to the other side.</strong>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Golden Rule</div>
+      <p><strong>An equation is like a set of scales.</strong> Both sides must stay balanced. If you add 5 to one side, you add 5 to the other. If you divide one side by 3, you divide the other by 3.</p>
+      <p style="margin-top:6px;">The operations you use to rearrange are the <strong>opposite</strong> (inverse) of what's currently happening:</p>
+      <table class="compare-table">
+        <tr><th>If the letter is being...</th><th>You undo it by...</th></tr>
+        <tr><td>Added (+)</td><td>Subtracting (&minus;) from both sides</td></tr>
+        <tr><td>Subtracted (&minus;)</td><td>Adding (+) to both sides</td></tr>
+        <tr><td>Multiplied (&times;)</td><td>Dividing (&divide;) both sides</td></tr>
+        <tr><td>Divided (&divide;)</td><td>Multiplying (&times;) both sides</td></tr>
+        <tr><td>Squared (<sup>2</sup>)</td><td>Square rooting both sides</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Step-by-Step Method</div>
+      <p><strong>Step 1:</strong> Identify which letter you want to make the subject (get on its own).</p>
+      <p><strong>Step 2:</strong> Look at what's happening to that letter. Undo each operation in <strong>reverse order</strong> (undo addition/subtraction first, then multiplication/division, then powers).</p>
+      <p><strong>Step 3:</strong> Do the same operation to <strong>both sides</strong> each time.</p>
+      <p><strong>Step 4:</strong> Keep going until the letter is on its own.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Make x the subject of: y = 3x + 7</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Want: x on its own. Currently x is multiplied by 3, then 7 is added.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Undo the +7 first: &nbsp; y &minus; 7 = 3x</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">Undo the &times;3: &nbsp; (y &minus; 7) &divide; 3 = x</span></div>
+        <div class="result">x = (y &minus; 7) / 3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Order Matters When Rearranging</div>
+      <p>Undo operations in <strong>reverse order of BIDMAS/BODMAS</strong>:</p>
+      <p style="margin-top:4px;">1. Undo <strong>addition/subtraction</strong> first</p>
+      <p>2. Then undo <strong>multiplication/division</strong></p>
+      <p>3. Then undo <strong>powers/roots</strong> last</p>
+      <p style="margin-top:6px;">This is the opposite order from how you'd calculate. Think of it like peeling off layers &mdash; the last thing that was done to x is the first thing you undo.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Harder Example with Squares</div>
+      <div class="worked">
+        <p><strong>Example:</strong> I = M(k<sup>2</sup> + c<sup>2</sup>). &nbsp; Rearrange to make k the subject.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Want k on its own. Currently: k is squared, c<sup>2</sup> is added, then multiplied by M.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Undo &times;M: &nbsp; I / M = k<sup>2</sup> + c<sup>2</sup></span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">Undo +c<sup>2</sup>: &nbsp; (I / M) &minus; c<sup>2</sup> = k<sup>2</sup></span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">Undo the square (take square root): &nbsp; k = &radic;( I/M &minus; c<sup>2</sup> )</span></div>
+        <div class="result">k = &radic;( I/M &minus; c<sup>2</sup> )</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Write Every Step on a New Line</div>
+      <p>Never try to rearrange in one jump. Write a new line for each operation you do. This way, if you make a mistake, you can spot exactly where it went wrong. Also, the examiner can give you method marks for each correct step.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I understand the "scales" rule &mdash; same to both sides</li>
+    <li><input type="checkbox"> I can rearrange a simple formula like y = mx + c to make x the subject</li>
+    <li><input type="checkbox"> I know to undo operations in reverse order</li>
+    <li><input type="checkbox"> I can handle formulae with squares and square roots</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: ALGEBRAIC FRACTIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 6.5</span>
+  Algebraic Fractions
+</div>
+<div class="card">
+  <div class="intro-text">
+    Algebraic fractions work exactly like normal fractions &mdash; same rules for simplifying, adding, and subtracting. The only difference is that the numbers are replaced by letters and expressions.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Simplifying Algebraic Fractions</div>
+      <p>To simplify: <strong>cancel any factor that appears in both the top and the bottom.</strong></p>
+      <div class="worked">
+        <p><strong>Example:</strong> Simplify (p/t) &divide; (2/t)</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Dividing by a fraction = flip it and multiply: &nbsp; (p/t) &times; (t/2)</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Multiply tops: p &times; t = pt. &nbsp; Multiply bottoms: t &times; 2 = 2t.</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">Cancel t from top and bottom: &nbsp; pt / 2t = <strong>p/2</strong></span></div>
+        <div class="result">Answer: p/2</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Adding and Subtracting Algebraic Fractions</div>
+      <p>Same rule as normal fractions: <strong>you need a common denominator.</strong></p>
+      <p style="margin-top:6px;"><strong>Step 1:</strong> Find the lowest common denominator (LCD).</p>
+      <p><strong>Step 2:</strong> Multiply top and bottom of each fraction to get that denominator.</p>
+      <p><strong>Step 3:</strong> Add or subtract the tops. Keep the denominator the same.</p>
+      <p><strong>Step 4:</strong> Simplify if possible.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Simplify &nbsp; 3x/4 &minus; (x&minus;1)/2</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>LCD</strong> of 4 and 2 = <strong>4</strong></span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">First fraction already has denominator 4: &nbsp; 3x/4<br>Second fraction: multiply top and bottom by 2: &nbsp; 2(x&minus;1)/4</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">Subtract the tops: &nbsp; [3x &minus; 2(x&minus;1)] / 4</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">Expand the bracket: &nbsp; [3x &minus; 2x + 2] / 4 = <strong>(x + 2) / 4</strong></span></div>
+        <div class="result">Answer: (x + 2) / 4</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Brackets When Subtracting</div>
+      <p>When you subtract a fraction, the minus sign applies to the <strong>entire top</strong>, not just the first term. Use brackets!</p>
+      <p style="margin-top:4px;">3x/4 &minus; (x&minus;1)/2 &nbsp;&rarr;&nbsp; the minus hits both the x AND the &minus;1.</p>
+      <p style="margin-top:4px;">&minus;(x &minus; 1) = <strong>&minus;x + 1</strong> &nbsp; (NOT &minus;x &minus; 1)</p>
+      <p style="margin-top:4px;">This is the number one mistake on algebraic fractions. Always use brackets when subtracting.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can simplify algebraic fractions by cancelling common factors</li>
+    <li><input type="checkbox"> I remember that dividing = flip and multiply</li>
+    <li><input type="checkbox"> I can add/subtract algebraic fractions using a common denominator</li>
+    <li><input type="checkbox"> I use brackets when subtracting fractions to avoid sign errors</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: LINEAR GRAPHS ===== -->
+<div class="section-header">
+  <span class="num">Section 6.6</span>
+  Linear Graphs
+</div>
+<div class="card">
+  <div class="intro-text">
+    A <strong>linear graph</strong> is a straight line. Every straight line can be described by the equation <strong>y = mx + c</strong>, where m is the gradient (slope) and c is the y-intercept (where the line crosses the y-axis).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; y = mx + c</div>
+      <p><strong>m</strong> = the <strong>gradient</strong> (how steep the line is). A positive m means the line goes uphill left to right. A negative m means downhill.</p>
+      <p><strong>c</strong> = the <strong>y-intercept</strong> (where the line crosses the y-axis). This is the value of y when x = 0.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> y = 2x + 3</p>
+        <div class="step"><span class="step-num"></span><span class="step-text">Gradient (m) = <strong>2</strong> &rarr; for every 1 you go right, the line goes up by 2.</span></div>
+        <div class="step"><span class="step-num"></span><span class="step-text">y-intercept (c) = <strong>3</strong> &rarr; the line crosses the y-axis at (0, 3).</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Finding the Gradient</div>
+      <p><strong>Gradient = rise / run</strong> = (change in y) / (change in x)</p>
+      <p style="margin-top:6px;">Pick two points on the line, say (x<sub>1</sub>, y<sub>1</sub>) and (x<sub>2</sub>, y<sub>2</sub>).</p>
+      <p><strong>Gradient = (y<sub>2</sub> &minus; y<sub>1</sub>) / (x<sub>2</sub> &minus; x<sub>1</sub>)</strong></p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find the gradient of the line through (1, 3) and (4, 9).</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Rise: 9 &minus; 3 = 6</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Run: 4 &minus; 1 = 3</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">Gradient = 6 / 3 = <strong>2</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Plot a Linear Graph</div>
+      <p><strong>Step 1:</strong> Make a table of values. Pick 3 or 4 values for x (e.g., 0, 1, 2, 3).</p>
+      <p><strong>Step 2:</strong> Substitute each x into the equation to find y.</p>
+      <p><strong>Step 3:</strong> Plot each (x, y) point on the grid.</p>
+      <p><strong>Step 4:</strong> Join the points with a straight line using a ruler.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Plot y = 2x + 1</p>
+        <table class="compare-table" style="max-width:300px;">
+          <tr><th>x</th><th>2x + 1</th><th>y</th></tr>
+          <tr><td>0</td><td>2(0) + 1</td><td>1</td></tr>
+          <tr><td>1</td><td>2(1) + 1</td><td>3</td></tr>
+          <tr><td>2</td><td>2(2) + 1</td><td>5</td></tr>
+          <tr><td>3</td><td>2(3) + 1</td><td>7</td></tr>
+        </table>
+        <p style="margin-top:6px;">Plot points: (0,1), (1,3), (2,5), (3,7). Join with a ruler. Done.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Gradient vs. y-Intercept</div>
+      <p>In <strong>y = 3x + 5</strong>: the gradient is 3 (the number attached to x), the y-intercept is 5 (the number on its own).</p>
+      <p style="margin-top:4px;">In <strong>y = &minus;2x + 7</strong>: the gradient is &minus;2 (negative = line goes downhill), the y-intercept is 7.</p>
+      <p style="margin-top:4px;">In <strong>y = x &minus; 4</strong>: the gradient is 1 (there's a hidden 1 in front of x), the y-intercept is &minus;4.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Always Use a Ruler</div>
+      <p>On the exam, a wobbly freehand line loses marks. Always use a ruler. And plot at least 3 points &mdash; if one is wrong, you'll notice because it won't line up with the others.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can identify gradient and y-intercept from y = mx + c</li>
+    <li><input type="checkbox"> I can calculate gradient from two points</li>
+    <li><input type="checkbox"> I can make a table of values and plot a straight line</li>
+    <li><input type="checkbox"> I know to use a ruler and plot at least 3 points</li>
+  </ul>
+</div>
+
+<!-- ===== OVERALL STUDY TIPS ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  Key Study Strategies for Algebra
+</div>
+<div class="card">
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">The Number One Rule</div>
+      <p><strong>Write every step down.</strong> Algebra is not a subject you can do in your head. The students who lose marks are the ones who try to skip steps. The students who get full marks write out every single line, even when it feels "obvious." This also means the examiner can give you partial marks if you make a small error at the end.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Letters Are Just Numbers You Don't Know Yet</div>
+      <p>If algebra feels confusing, try replacing the letters with actual numbers first to understand what's happening. For example, if you need to rearrange y = 3x + 7, try it with y = 3(2) + 7 = 13 first. See how the operations work with real numbers, then do it with letters.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Check, Check, Check</div>
+      <p>Every topic in this chapter has a way to check your answer:</p>
+      <p>&bull; <strong>Factorising:</strong> Expand the brackets &mdash; should get the original.</p>
+      <p>&bull; <strong>Simultaneous equations:</strong> Put both values into the OTHER equation.</p>
+      <p>&bull; <strong>nth term:</strong> Plug n=1, n=2, n=3 into your formula.</p>
+      <p>&bull; <strong>Rearranging:</strong> Substitute a number in and see if both versions give the same result.</p>
+      <p>&bull; <strong>Fractions:</strong> Try with simple numbers to see if your answer makes sense.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I've read through all 6 sections</li>
+    <li><input type="checkbox"> I've written the key methods in my own notes</li>
+    <li><input type="checkbox"> I've tried at least one practice problem from each section</li>
+    <li><input type="checkbox"> I'm ready to try the cheat sheet and self-test quiz</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 6 Notes Complete</h2>
+  <p>You've covered factorising, simultaneous equations, sequences, rearranging formulae, algebraic fractions, and linear graphs. Now try the cheat sheet for a quick review, then test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

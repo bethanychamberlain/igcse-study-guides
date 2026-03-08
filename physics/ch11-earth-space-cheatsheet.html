@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: The Earth in Space &mdash; Physics Ch11</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* State flow (reused for star life cycle) */
+  .state-flow {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .state-flow .flow-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px;
+    background: var(--subject-light);
+    border-radius: 6px;
+  }
+  .state-flow .flow-from {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 110px;
+  }
+  .state-flow .flow-arrow {
+    color: var(--subject);
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .state-flow .flow-to {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 110px;
+  }
+  .state-flow .flow-name {
+    flex: 1;
+    font-style: italic;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Physics Ch11 &mdash; Cheat Sheet</div>
+    <h1>The Earth in Space</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Light year</strong></td>
+      <td>The distance light travels in one year (9.5 &times; 10<sup>12</sup> km). A unit of <strong>distance</strong>.</td>
+      <td class="confuse">It is NOT a unit of time</td>
+    </tr>
+    <tr>
+      <td><strong>Galaxy</strong></td>
+      <td>A huge system of billions of stars held together by gravity. Ours is the Milky Way.</td>
+      <td class="confuse">Solar System (that is just one star and its planets)</td>
+    </tr>
+    <tr>
+      <td><strong>Nebula</strong></td>
+      <td>A cloud of gas and dust in space where stars are born.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Red giant</strong></td>
+      <td>A star that has expanded and cooled after running low on hydrogen fuel. Larger but cooler surface.</td>
+      <td class="confuse">Red supergiant (much more massive stars &mdash; end in supernovae)</td>
+    </tr>
+    <tr>
+      <td><strong>Supernova</strong></td>
+      <td>A massive explosion when a large star collapses and rebounds. Spreads heavy elements into space.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>White dwarf</strong></td>
+      <td>The hot, dense remnant core of a medium-mass star (like the Sun) after it sheds its outer layers.</td>
+      <td class="confuse">Neutron star (that is the remnant of a much bigger star, after a supernova)</td>
+    </tr>
+    <tr>
+      <td><strong>Black hole</strong></td>
+      <td>An object so dense that nothing, not even light, can escape its gravity. Formed from the most massive stars.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Red shift</strong></td>
+      <td>Light from a galaxy moving away from us is stretched towards the red end of the spectrum. Greater red shift = moving away faster.</td>
+      <td class="confuse">Blue shift (galaxy moving towards us &mdash; rarely tested)</td>
+    </tr>
+    <tr>
+      <td><strong>CMBR</strong></td>
+      <td>Cosmic Microwave Background Radiation &mdash; faint microwave radiation from every direction, the afterglow of the Big Bang.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Comet</strong></td>
+      <td>An icy body in a highly elliptical orbit around the Sun. Develops a visible tail when near the Sun.</td>
+      <td class="confuse">Meteor (burns up in atmosphere) or meteorite (reaches the ground)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: INNER vs OUTER PLANETS -->
+<div class="card">
+  <h2>Inner vs Outer Planets</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Inner (Mercury&ndash;Mars)</th>
+      <th>Outer (Jupiter&ndash;Neptune)</th>
+    </tr>
+    <tr>
+      <td>Size</td>
+      <td>Small</td>
+      <td>Large</td>
+    </tr>
+    <tr>
+      <td>Made of</td>
+      <td>Rock and iron (terrestrial)</td>
+      <td>Mainly gas (gas giants)</td>
+    </tr>
+    <tr>
+      <td>Density</td>
+      <td>High</td>
+      <td>Low</td>
+    </tr>
+    <tr>
+      <td>Surface</td>
+      <td>Solid</td>
+      <td>No solid surface</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; Planet Order</div>
+    <strong>M</strong>y <strong>V</strong>ery <strong>E</strong>asy <strong>M</strong>ethod <strong>J</strong>ust <strong>S</strong>peeds <strong>U</strong>p <strong>N</strong>aming.
+    (Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune.)
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: GEOSTATIONARY vs LOW ORBIT -->
+<div class="card">
+  <h2>Geostationary vs Low Orbit Satellites</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Geostationary</th>
+      <th>Low Orbit</th>
+    </tr>
+    <tr>
+      <td>Height</td>
+      <td>35,900 km above equator</td>
+      <td>A few hundred km</td>
+    </tr>
+    <tr>
+      <td>Period</td>
+      <td>24 hours (matches Earth's rotation)</td>
+      <td>About 90 minutes</td>
+    </tr>
+    <tr>
+      <td>Position</td>
+      <td>Stays above the same point</td>
+      <td>Moves across the sky</td>
+    </tr>
+    <tr>
+      <td>Used for</td>
+      <td>Communications (TV, phone)</td>
+      <td>Weather, GPS, Earth monitoring</td>
+    </tr>
+  </table>
+</div>
+
+<!-- STAR LIFE CYCLES -->
+<div class="card">
+  <h2>Star Life Cycles &mdash; Two Paths</h2>
+
+  <p style="font-size:13px; color:var(--subject-dark); font-weight:700; margin-bottom:6px;">Sun-Sized Star (Medium Mass):</p>
+  <div class="state-flow">
+    <div class="flow-row">
+      <span class="flow-from">Nebula</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Protostar</span>
+      <span class="flow-name">(gravity pulls gas together)</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Protostar</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Main sequence</span>
+      <span class="flow-name">(fusion begins: H &rarr; He)</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Main sequence</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Red giant</span>
+      <span class="flow-name">(swells up, cools)</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Red giant</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">White dwarf</span>
+      <span class="flow-name">(outer layers drift off; hot dense core remains)</span>
+    </div>
+  </div>
+
+  <p style="font-size:13px; color:var(--subject-dark); font-weight:700; margin-bottom:6px; margin-top:14px;">Massive Star:</p>
+  <div class="state-flow">
+    <div class="flow-row">
+      <span class="flow-from">Nebula</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Protostar</span>
+      <span class="flow-name">(same start as above)</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Protostar</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Main sequence</span>
+      <span class="flow-name">(burns hotter and faster)</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Main sequence</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Red supergiant</span>
+      <span class="flow-name">(swells even larger)</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Red supergiant</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Supernova</span>
+      <span class="flow-name">(huge explosion)</span>
+    </div>
+    <div class="flow-row">
+      <span class="flow-from">Supernova</span>
+      <span class="flow-arrow">&rarr;</span>
+      <span class="flow-to">Neutron star or Black hole</span>
+      <span class="flow-name">(depends on remaining mass)</span>
+    </div>
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Day and night</span>
+    <span>The Earth rotates on its axis once every 24 hours &mdash; the side facing the Sun gets day, the other gets night.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Seasons</span>
+    <span>The Earth's axis is tilted 23.5&deg;, so each hemisphere takes turns being tilted towards the Sun as Earth orbits.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Moon phases</span>
+    <span>The Moon reflects sunlight; we see different amounts of the lit half as it orbits Earth every 29.5 days.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Gravity and orbits</span>
+    <span>The Sun's gravitational pull provides the centripetal force that keeps planets moving in curved paths.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Red shift</span>
+    <span>Light from distant galaxies is shifted to longer (redder) wavelengths because they are moving away &mdash; the Universe is expanding.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Big Bang</span>
+    <span>All matter started from a single hot dense point and has been expanding ever since &mdash; evidence: red shift + CMBR.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Orbital speed</span>
+    <span>Speed = 2&pi;r / T &mdash; further from the Sun means slower speed and longer orbital period.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Seasons Are About Tilt, NOT Distance</div>
+    If seasons were caused by distance, both hemispheres would have summer at the same time. They don't &mdash; when it is summer in the Northern Hemisphere, it is winter in the Southern. The cause is the <strong>23.5&deg; tilt</strong> of Earth's axis.
+  </div>
+
+  <div class="trick">
+    <div class="label">Two Reasons Summer Is Warmer</div>
+    1. Sun's rays hit the surface more <strong>directly</strong> (less spread out).
+    2. More <strong>hours of daylight</strong>.
+    Both of these are caused by the axial tilt, not by distance.
+  </div>
+
+  <div class="trick">
+    <div class="label">Scale of the Universe (Smallest to Largest)</div>
+    Moon &rarr; Earth &rarr; Sun &rarr; Solar System &rarr; Milky Way Galaxy &rarr; Universe.
+    "The Sun is at the centre of the Solar System, which is part of a galaxy called the Milky Way, which is part of the Universe."
+  </div>
+
+  <div class="trick">
+    <div class="label">Big Bang Evidence = Red Shift + CMBR</div>
+    You need BOTH for full marks.
+    (1) <strong>Red shift</strong>: galaxies moving apart &rarr; Universe is expanding &rarr; must have started from one point.
+    (2) <strong>CMBR</strong>: faint microwave radiation from every direction &rarr; the afterglow of the Big Bang.
+  </div>
+
+  <div class="trick">
+    <div class="label">Comets Speed Up Near the Sun</div>
+    Comets in elliptical orbits go <strong>fastest</strong> when closest to the Sun (gravitational pull is strongest, GPE converts to KE) and <strong>slowest</strong> when furthest away.
+  </div>
+</div>
+
+<!-- KEY FORMULAS -->
+<div class="card">
+  <h2>Key Formulas (with Units)</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:40%;">Formula</th>
+      <th style="width:35%;">What It Tells You</th>
+      <th style="width:25%;">Units</th>
+    </tr>
+    <tr>
+      <td><strong>orbital speed = 2&pi;r / T</strong></td>
+      <td>Speed of an object in orbit</td>
+      <td>m/s, m, s</td>
+    </tr>
+    <tr>
+      <td><strong>H<sub>0</sub> = v / d</strong></td>
+      <td>Hubble constant (recession speed / distance)</td>
+      <td>km/s per Mpc</td>
+    </tr>
+    <tr>
+      <td><strong>Age of Universe &asymp; 1 / H<sub>0</sub></strong></td>
+      <td>Approximate age of the Universe (~13.8 billion years)</td>
+      <td>seconds (or years)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Explain why we have day and night"</td>
+      <td>The Earth <strong>rotates on its axis</strong> every 24 hours; half faces the Sun (day), half faces away (night)</td>
+    </tr>
+    <tr>
+      <td>"Explain why we have seasons"</td>
+      <td>The Earth's axis is <strong>tilted at 23.5&deg;</strong>; the tilted hemisphere gets more direct sunlight and longer days = summer</td>
+    </tr>
+    <tr>
+      <td>"Are seasons caused by distance from the Sun?"</td>
+      <td><strong>NO.</strong> If they were, both hemispheres would have summer at the same time. Seasons are caused by the <strong>tilt</strong>.</td>
+    </tr>
+    <tr>
+      <td>"What is a light year?"</td>
+      <td>The <strong>distance</strong> light travels in one year (9.5 &times; 10<sup>12</sup> km). It is a unit of <strong>distance</strong>, not time.</td>
+    </tr>
+    <tr>
+      <td>"Describe the life cycle of a Sun-like star"</td>
+      <td>Nebula &rarr; protostar &rarr; main sequence &rarr; <strong>red giant</strong> &rarr; <strong>white dwarf</strong></td>
+    </tr>
+    <tr>
+      <td>"Describe the life cycle of a massive star"</td>
+      <td>Nebula &rarr; protostar &rarr; main sequence &rarr; red supergiant &rarr; <strong>supernova</strong> &rarr; <strong>neutron star or black hole</strong></td>
+    </tr>
+    <tr>
+      <td>"What is red shift?"</td>
+      <td>Light from galaxies moving away is stretched to longer wavelengths (towards red). Greater distance = greater red shift = faster recession.</td>
+    </tr>
+    <tr>
+      <td>"State two pieces of evidence for the Big Bang"</td>
+      <td>(1) <strong>Red shift</strong> shows galaxies are moving apart. (2) <strong>CMBR</strong> is the remnant radiation from the Big Bang.</td>
+    </tr>
+    <tr>
+      <td>"Why do communications satellites use geostationary orbits?"</td>
+      <td>The satellite stays above the <strong>same point</strong> on Earth, so dish aerials can point at it without moving</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

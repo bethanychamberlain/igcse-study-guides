@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Electricity &mdash; Physics Ch8</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #2e86c1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Formula highlight */
+  .formula {
+    display: inline-block;
+    background: #fff;
+    border: 2px solid var(--subject);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--subject-dark);
+    margin: 8px 0;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* Worked example */
+  .worked {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 13px;
+    border: 1px solid #e0e0e0;
+  }
+  .worked .step {
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    font-size: 12px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .step-text code {
+    background: var(--subject-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Physics &mdash; Chapter 8</div>
+  <h1>Electricity</h1>
+  <div class="subtitle">Charge, circuits, V = IR, series vs parallel, P = IV, E = VIt, and mains safety &mdash; the BIG chapter</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 34 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: CHARGE, CONDUCTORS & ELECTRIC FIELDS (8.1-8.3) ===== -->
+<div class="section-header">
+  <span class="num">Sections 8.1 &ndash; 8.3</span>
+  Charge, Conductors, and Electric Fields
+</div>
+<div class="card">
+  <div class="intro-text">
+    Everything electrical starts here: what charge is, how it moves, and the fields it creates. This is the foundation for the whole chapter.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Two Types of Charge</div>
+      <p>There are two types of electric charge: <strong>positive (+)</strong> and <strong>negative (&minus;)</strong>.</p>
+      <p style="margin-top:6px;"><strong>Like charges repel; unlike charges attract.</strong><br>
+         The closer the charges, the greater the force between them.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Where Charges Come From</div>
+      <p>Atoms contain <strong>protons</strong> (+), <strong>neutrons</strong> (no charge), and <strong>electrons</strong> (&minus;). Normally atoms are neutral (equal + and &minus;). When materials are rubbed together, <strong>electrons transfer</strong> from one to the other. One gains electrons (becomes negative), the other loses electrons (becomes positive).</p>
+      <p style="margin-top:6px;">Rubbing does not <em>create</em> charge &mdash; it just <em>separates</em> charges that are already there.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Conductors vs Insulators</div>
+      <table class="compare-table">
+        <tr>
+          <th>Conductors</th>
+          <th>Insulators</th>
+        </tr>
+        <tr>
+          <td>Let electrons pass through them</td>
+          <td>Electrons are tightly held, cannot move</td>
+        </tr>
+        <tr>
+          <td>Metals (copper, silver, aluminium)</td>
+          <td>Plastics, glass, rubber, dry air</td>
+        </tr>
+        <tr>
+          <td>Have <strong>free electrons</strong></td>
+          <td>Easy to charge by rubbing (charge stays put)</td>
+        </tr>
+      </table>
+      <p style="margin-top:6px;"><strong>Semiconductors</strong> (silicon, germanium) are in between &mdash; poor conductors when cold, better when warm.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Electric Fields</div>
+      <p>An <strong>electric field</strong> is the region around a charged object where another charge would feel a force. Field lines point <strong>away from positive</strong> and <strong>towards negative</strong>. The closer the field lines, the stronger the field.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Electrostatic charge has real uses: electrostatic precipitators clean smoke from factory chimneys, and photocopiers/laser printers use static charge to place ink. The exam loves asking about practical applications of static charge.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Electrons vs Current Direction</div>
+      <p>Electrons are negative. They flow from &minus; to +. But <strong>conventional current direction</strong> is defined as + to &minus;. The exam uses conventional current unless it specifically says "electron flow." Don't mix them up.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know: like charges repel, unlike attract</li>
+    <li><input type="checkbox"> I can explain charging by rubbing (electrons transfer)</li>
+    <li><input type="checkbox"> I know the difference between conductors and insulators</li>
+    <li><input type="checkbox"> I know electric field lines point away from + and towards &minus;</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: CURRENT, VOLTAGE & CHARGE (8.4-8.5) ===== -->
+<div class="section-header">
+  <span class="num">Sections 8.4 &ndash; 8.5</span>
+  Current, Voltage, and Charge
+</div>
+<div class="card">
+  <div class="intro-text">
+    Now we get to circuits. Current, voltage, and charge are the three big ideas you need before tackling any circuit problem.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Current</div>
+      <p><strong>Current</strong> is a flow of charge (electrons in a metal). It is measured in <strong>amperes (A)</strong> using an <strong>ammeter</strong> connected in <strong>series</strong>.</p>
+      <p style="margin-top:6px;">The current is the same at all points in a simple (series) circuit.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Charge and Current Formula</div>
+      <div class="formula">Q = I x t</div>
+      <p><strong>Q</strong> = charge (coulombs, C)<br>
+         <strong>I</strong> = current (amperes, A)<br>
+         <strong>t</strong> = time (seconds, s)</p>
+      <p style="margin-top:6px;">1 ampere = 1 coulomb per second. The SI unit of charge is the <strong>coulomb (C)</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example (Charge)</div>
+      <p>A current of 3 A flows for 20 seconds. How much charge passes?</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the formula: <code>Q = I x t</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Substitute: <code>Q = 3 x 20</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Calculate: <code>Q = 60 C</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Potential Difference (Voltage)</div>
+      <p><strong>Potential difference (p.d.)</strong> is the work done per unit charge. It is measured in <strong>volts (V)</strong> using a <strong>voltmeter</strong> connected in <strong>parallel</strong> across a component.</p>
+      <div class="formula">V = W / Q</div>
+      <p><strong>V</strong> = potential difference (volts, V)<br>
+         <strong>W</strong> = work done / energy transferred (joules, J)<br>
+         <strong>Q</strong> = charge (coulombs, C)</p>
+      <p style="margin-top:6px;">If the p.d. across a lamp is 6 V, then 6 joules of energy are transferred for every coulomb of charge that passes through it.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; E.M.F. and P.D. Rule</div>
+      <p><strong>E.m.f. (electromotive force)</strong> is the p.d. across a cell/battery when no current flows. In a circuit:</p>
+      <p style="margin-top:6px;">The <strong>sum of the p.d.s across the components</strong> equals the <strong>p.d. across the battery</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Ammeter vs Voltmeter</div>
+      <p><strong>Ammeter</strong>: connected in <strong>series</strong> (in line with the component). Measures current (A).<br>
+         <strong>Voltmeter</strong>: connected in <strong>parallel</strong> (across the component). Measures p.d. (V).<br>
+         If you swap them round, you get wrong readings and might damage the ammeter.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Milliamps</div>
+      <p>1000 mA = 1 A. If the exam gives you milliamps, divide by 1000 before using it in any formula. Example: 500 mA = 0.5 A.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write Q = It from memory and know all units</li>
+    <li><input type="checkbox"> I know V = W/Q and what "1 volt" means (1 joule per coulomb)</li>
+    <li><input type="checkbox"> I know ammeter = series, voltmeter = parallel</li>
+    <li><input type="checkbox"> I know p.d.s across components add up to the battery p.d.</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: RESISTANCE & OHM'S LAW (8.6-8.8) ===== -->
+<div class="section-header">
+  <span class="num">Sections 8.6 &ndash; 8.8</span>
+  Resistance and Ohm's Law
+</div>
+<div class="card">
+  <div class="intro-text">
+    Resistance is what opposes current flow. V = IR is probably the single most important equation in this chapter &mdash; you will use it constantly.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p><strong>Resistance</strong> is a measure of how much a component opposes the flow of current. It is measured in <strong>ohms (&Omega;)</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Big Formula</div>
+      <div class="formula">V = I x R</div>
+      <p><strong>V</strong> = potential difference (volts, V)<br>
+         <strong>I</strong> = current (amperes, A)<br>
+         <strong>R</strong> = resistance (ohms, &Omega;)</p>
+      <p style="margin-top:6px;">This can be rearranged:<br>
+         <strong>I = V / R</strong> &nbsp;&nbsp;and&nbsp;&nbsp; <strong>R = V / I</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example (V = IR)</div>
+      <p>A 12 &Omega; resistor has a p.d. of 6 V across it. What is the current?</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the formula: <code>I = V / R</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Substitute: <code>I = 6 / 12</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Calculate: <code>I = 0.5 A</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Ohm's Law</div>
+      <p><strong>Ohm's law:</strong> The current through a metal conductor is proportional to the p.d. across it, <em>provided the temperature stays constant</em>.</p>
+      <p style="margin-top:6px;">On a graph, this gives a <strong>straight line through the origin</strong>. The resistance stays constant.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Factors Affecting Resistance</div>
+      <p>The resistance of a wire depends on:</p>
+      <p>&bull; <strong>Length</strong> &mdash; longer = more resistance (double length = double resistance)<br>
+         &bull; <strong>Cross-sectional area</strong> &mdash; thinner = more resistance (half area = double resistance)<br>
+         &bull; <strong>Material</strong> &mdash; nichrome has more resistance than copper<br>
+         &bull; <strong>Temperature</strong> &mdash; for metals, higher temp = more resistance</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Special Components</div>
+      <table class="compare-table">
+        <tr>
+          <th>Component</th>
+          <th>How Its Resistance Changes</th>
+        </tr>
+        <tr>
+          <td><strong>Thermistor</strong></td>
+          <td>High resistance when cold, low resistance when hot</td>
+        </tr>
+        <tr>
+          <td><strong>LDR</strong> (light-dependent resistor)</td>
+          <td>High resistance in the dark, low resistance in bright light</td>
+        </tr>
+        <tr>
+          <td><strong>Diode</strong></td>
+          <td>Very low resistance in one direction (forward), very high in the other (reverse)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The VIR Triangle</div>
+      <p>Draw a triangle with V on top, I and R on the bottom. Cover the letter you want to find:<br>
+         &bull; Cover V &rarr; V = I x R<br>
+         &bull; Cover I &rarr; I = V / R<br>
+         &bull; Cover R &rarr; R = V / I<br>
+         Practise using this until you can rearrange without thinking.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Ohm's Law is NOT V = IR</div>
+      <p>V = IR is just a formula &mdash; it always works. <strong>Ohm's law</strong> is the specific statement that current is proportional to p.d. at constant temperature. A filament lamp does NOT obey Ohm's law (its resistance changes as it heats up), but you can still use V = IR for it at any given moment.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write V = IR and rearrange it three ways</li>
+    <li><input type="checkbox"> I can state Ohm's law (current proportional to p.d. at constant temp)</li>
+    <li><input type="checkbox"> I know the 4 factors affecting resistance of a wire</li>
+    <li><input type="checkbox"> I know how thermistors, LDRs, and diodes work</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: SERIES AND PARALLEL CIRCUITS (8.9-8.10) ===== -->
+<div class="section-header">
+  <span class="num">Sections 8.9 &ndash; 8.10</span>
+  Series and Parallel Circuits
+</div>
+<div class="card">
+  <div class="intro-text">
+    This is where your exam results told us you struggle. Series and parallel circuits have different rules. You MUST know both sets of rules cold.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Series vs Parallel Rules</div>
+      <table class="compare-table">
+        <tr>
+          <th></th>
+          <th>Series</th>
+          <th>Parallel</th>
+        </tr>
+        <tr>
+          <td><strong>Current</strong></td>
+          <td>Same through all components</td>
+          <td>Splits at junctions; total = sum of branches</td>
+        </tr>
+        <tr>
+          <td><strong>Voltage (p.d.)</strong></td>
+          <td>Shared between components; sum = battery p.d.</td>
+          <td>Same across each branch</td>
+        </tr>
+        <tr>
+          <td><strong>Resistance</strong></td>
+          <td>R<sub>total</sub> = R<sub>1</sub> + R<sub>2</sub> (adds up, gets bigger)</td>
+          <td>R<sub>total</sub> = (R<sub>1</sub> x R<sub>2</sub>) / (R<sub>1</sub> + R<sub>2</sub>) (gets smaller)</td>
+        </tr>
+        <tr>
+          <td><strong>If one breaks</strong></td>
+          <td>Everything stops (circuit broken)</td>
+          <td>Other branches keep working</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example (Series)</div>
+      <p>Two resistors (3 &Omega; and 6 &Omega;) in series with an 18 V battery. Find the current and p.d. across each.</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Total resistance: <code>R = 3 + 6 = 9 &Omega;</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Current: <code>I = V / R = 18 / 9 = 2 A</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">P.d. across 3 &Omega;: <code>V = IR = 2 x 3 = 6 V</code></span></div>
+        <div class="step"><span class="step-num">4.</span> <span class="step-text">P.d. across 6 &Omega;: <code>V = IR = 2 x 6 = 12 V</code></span></div>
+        <div class="step"><span class="step-num">5.</span> <span class="step-text">Check: <code>6 + 12 = 18 V</code> (matches battery) &#10003;</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example (Parallel)</div>
+      <p>Two resistors (3 &Omega; and 6 &Omega;) in parallel with an 18 V battery. Find the currents.</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Each resistor gets the full 18 V</span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Current in 3 &Omega;: <code>I = 18 / 3 = 6 A</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Current in 6 &Omega;: <code>I = 18 / 6 = 3 A</code></span></div>
+        <div class="step"><span class="step-num">4.</span> <span class="step-text">Total current from battery: <code>I = 6 + 3 = 9 A</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Which Quantity is the SAME?</div>
+      <p>This is the number one mistake students make:<br>
+         &bull; <strong>Series:</strong> same <strong>CURRENT</strong>, different voltages<br>
+         &bull; <strong>Parallel:</strong> same <strong>VOLTAGE</strong>, different currents<br>
+         Memorise it: <strong>S = same I</strong> (series, same I). <strong>P = same V</strong> (parallel, same V).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Parallel Resistance Shortcut</div>
+      <p>For two resistors in parallel: <strong>product over sum</strong>.<br>
+         R = (R<sub>1</sub> x R<sub>2</sub>) / (R<sub>1</sub> + R<sub>2</sub>)<br>
+         Example: 3 &Omega; and 6 &Omega; in parallel = (3 x 6) / (3 + 6) = 18 / 9 = 2 &Omega;.<br>
+         The combined resistance is always <strong>less than the smallest</strong> individual resistor.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state all the rules for series circuits (current same, voltages add, resistances add)</li>
+    <li><input type="checkbox"> I can state all the rules for parallel circuits (voltage same, currents add, resistance decreases)</li>
+    <li><input type="checkbox"> I solved the series worked example and got the right answers</li>
+    <li><input type="checkbox"> I solved the parallel worked example and got the right answers</li>
+    <li><input type="checkbox"> I know: series = same current, parallel = same voltage</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: ELECTRICAL POWER AND ENERGY (8.12) ===== -->
+<div class="section-header">
+  <span class="num">Section 8.12</span>
+  Electrical Power and Energy
+</div>
+<div class="card">
+  <div class="intro-text">
+    Power tells you how fast energy is transferred. These are calculation-heavy sections &mdash; use the three-step method every time.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Power Formula</div>
+      <div class="formula">P = I x V</div>
+      <p><strong>P</strong> = power (watts, W)<br>
+         <strong>I</strong> = current (amperes, A)<br>
+         <strong>V</strong> = potential difference (volts, V)</p>
+      <p style="margin-top:6px;">Power is the rate of energy transfer. 1 watt = 1 joule per second.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example (Power)</div>
+      <p>A lamp has 12 V across it and 2 A flowing through it. What is the power?</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the formula: <code>P = I x V</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Substitute: <code>P = 2 x 12</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Calculate: <code>P = 24 W</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Energy Formula</div>
+      <div class="formula">E = V x I x t</div>
+      <p><strong>E</strong> = energy transferred (joules, J)<br>
+         <strong>V</strong> = potential difference (volts, V)<br>
+         <strong>I</strong> = current (amperes, A)<br>
+         <strong>t</strong> = time (seconds, s)</p>
+      <p style="margin-top:6px;">Since P = IV, this is the same as <strong>E = P x t</strong> (energy = power x time).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example (Energy)</div>
+      <p>A 12 V heater draws 2 A for 60 seconds. How much energy is transferred?</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the formula: <code>E = V x I x t</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Substitute: <code>E = 12 x 2 x 60</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Calculate: <code>E = 1440 J</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Kilowatt-Hour</div>
+      <p>Electricity companies measure energy in <strong>kilowatt-hours (kWh)</strong>, not joules.<br>
+         1 kWh = the energy used by a 1 kW appliance running for 1 hour.<br>
+         <strong>1 kWh = 3,600,000 J</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Which Formula to Use?</div>
+      <p>If the question asks for <strong>power</strong> &rarr; use <strong>P = IV</strong><br>
+         If the question asks for <strong>energy</strong> &rarr; use <strong>E = IVt</strong> or <strong>E = Pt</strong><br>
+         If they give you power and time but not current &rarr; use <strong>E = Pt</strong><br>
+         Always check: is the time in seconds or hours? Convert if needed.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write P = IV from memory</li>
+    <li><input type="checkbox"> I can write E = VIt from memory</li>
+    <li><input type="checkbox"> I know what a kilowatt-hour is</li>
+    <li><input type="checkbox"> I solved both worked examples correctly</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: MAINS ELECTRICITY & SAFETY (8.13) ===== -->
+<div class="section-header">
+  <span class="num">Section 8.13</span>
+  Mains Electricity and Safety
+</div>
+<div class="card">
+  <div class="intro-text">
+    This section is less about calculations and more about knowing safety features. It comes up on almost every exam paper as a short-answer question.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; A.C. vs D.C.</div>
+      <p><strong>Direct current (d.c.)</strong> flows in one direction only (e.g. from a battery).<br>
+         <strong>Alternating current (a.c.)</strong> flows backwards and forwards repeatedly (e.g. mains supply).<br>
+         Mains frequency: 50 Hz (UK/Europe) or 60 Hz (US).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Three Wires</div>
+      <table class="compare-table">
+        <tr>
+          <th>Wire</th>
+          <th>What It Does</th>
+        </tr>
+        <tr>
+          <td><strong>Live (line)</strong></td>
+          <td>Carries the alternating current to the appliance. Goes between + and &minus; voltage.</td>
+        </tr>
+        <tr>
+          <td><strong>Neutral</strong></td>
+          <td>Completes the circuit. Kept at zero voltage.</td>
+        </tr>
+        <tr>
+          <td><strong>Earth (ground)</strong></td>
+          <td>Safety wire. Connects metal case to ground. Carries current away if a fault occurs.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Safety Features</div>
+      <p>&bull; <strong>Fuse:</strong> Thin wire in the live wire that melts and breaks the circuit if the current is too high. Protects against overheating/fire.<br>
+         &bull; <strong>Circuit breaker (trip switch):</strong> Does the same as a fuse but can be reset. Uses an electromagnet.<br>
+         &bull; <strong>Earth wire:</strong> If the live wire touches the metal case, current flows to earth, which blows the fuse.<br>
+         &bull; <strong>Double insulation:</strong> Plastic casing means no exposed metal, so no earth wire needed.<br>
+         &bull; <strong>RCD (residual current device):</strong> Detects difference between live and neutral currents; cuts off very quickly.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Where the Switch and Fuse Go</div>
+      <p>Both the switch and the fuse are in the <strong>live wire</strong>, NOT the neutral. This is so that when either operates, the appliance is disconnected from the dangerous live supply. If they were in the neutral, the appliance would still be connected to live voltage even when switched off.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Fuse Size</div>
+      <p>The exam often asks you to choose the correct fuse (3 A or 13 A). Use P = IV to find the current, then pick the fuse that is <strong>slightly above</strong> the normal current. Example: a 500 W, 230 V hairdryer takes I = P/V = 500/230 = 2.2 A, so use a <strong>3 A fuse</strong> (not 13 A, which would not blow in a fault).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Electrical Hazards</div>
+      <p>&bull; Frayed or damaged wiring &rarr; overheating, fire<br>
+         &bull; Water near sockets/plugs &rarr; electrocution risk (water conducts)<br>
+         &bull; Overloaded sockets / long extension leads coiled up &rarr; overheating<br>
+         &bull; Accidentally cutting cables &rarr; electrocution risk, use RCD</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the difference between a.c. and d.c.</li>
+    <li><input type="checkbox"> I can name and describe the three wires (live, neutral, earth)</li>
+    <li><input type="checkbox"> I can explain how a fuse and earth wire work together</li>
+    <li><input type="checkbox"> I know the switch and fuse go in the live wire</li>
+    <li><input type="checkbox"> I can calculate which fuse to use (P = IV, then pick the right size)</li>
+  </ul>
+</div>
+
+<!-- ===== THE BIG FORMULA TABLE ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  The Big Formula Table
+</div>
+<div class="card">
+  <div class="intro-text">
+    This chapter has more formulas than any other. Copy this table into your notes and learn to reproduce it from memory.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Quantity</th>
+          <th>Formula</th>
+          <th>Units</th>
+        </tr>
+        <tr>
+          <td><strong>Charge</strong></td>
+          <td>Q = I x t</td>
+          <td>C (coulombs)</td>
+        </tr>
+        <tr>
+          <td><strong>P.D. (voltage)</strong></td>
+          <td>V = W / Q</td>
+          <td>V (volts)</td>
+        </tr>
+        <tr>
+          <td><strong>Resistance</strong></td>
+          <td>V = I x R</td>
+          <td>&Omega; (ohms)</td>
+        </tr>
+        <tr>
+          <td><strong>Power</strong></td>
+          <td>P = I x V</td>
+          <td>W (watts)</td>
+        </tr>
+        <tr>
+          <td><strong>Energy</strong></td>
+          <td>E = V x I x t</td>
+          <td>J (joules)</td>
+        </tr>
+        <tr>
+          <td><strong>Series resistance</strong></td>
+          <td>R = R<sub>1</sub> + R<sub>2</sub></td>
+          <td>&Omega;</td>
+        </tr>
+        <tr>
+          <td><strong>Parallel resistance</strong></td>
+          <td>R = (R<sub>1</sub> x R<sub>2</sub>) / (R<sub>1</sub> + R<sub>2</sub>)</td>
+          <td>&Omega;</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Real Test</div>
+      <p>Close your book. Write out all seven formulas from memory on a blank piece of paper. Include what each letter stands for and the units. Then try a calculation with each one. If you can do this perfectly, you are ready for the exam questions on electricity.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the formula table into my notes</li>
+    <li><input type="checkbox"> I can write all seven formulas from memory</li>
+    <li><input type="checkbox"> I tried at least one calculation with each formula</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 8 Notes Complete</h2>
+  <p>You've covered charge, conductors, circuits, resistance, Ohm's law, series and parallel circuits, power, energy, and mains safety. This is the biggest chapter &mdash; now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Reacting Masses and Chemical Equations &mdash; Chemistry Ch4</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--subject);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline {
+    background: white;
+    color: var(--subject-dark);
+    border: 2px solid var(--subject);
+  }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tier header */
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+
+  .tier-header .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+
+  .tier-header .info {
+    flex: 1;
+  }
+  .tier-header h2 {
+    font-size: 16px;
+    margin: 0;
+  }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+
+  .tier-header .marks {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+
+  .q-text {
+    flex: 1;
+    font-size: 14px;
+  }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  /* Answer area */
+  .q-answer {
+    padding: 0 20px 16px;
+    display: none;
+  }
+  .q-answer.visible {
+    display: block;
+  }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Self-rating */
+  .self-rate {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .self-rate .rate-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .rate-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 2px solid #ddd;
+      background: white;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+  }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  /* Answer lines for print */
+  .answer-lines {
+    display: none;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines {
+      display: block;
+      padding: 4px 20px 16px;
+    }
+    .answer-lines .line {
+      border-bottom: 1px solid #d0d0d0;
+      height: 26px;
+    }
+    .tier-header { break-after: avoid; }
+  }
+
+  /* Quiz guide */
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .quiz-guide .guide-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .rating-scale {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .rating-scale .rs-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-scale .rs-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry Ch4 &mdash; Self-Test Quiz</div>
+  <h1>Reacting Masses and Chemical Equations</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name it. Intermediate = explain and calculate. Advanced = multi-step calculations and reasoning.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> in the answers show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each on the exam. Get these right and you're building a solid base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">Name the compounds formed from these pairs of elements: (a) sodium and chlorine, (b) hydrogen and bromine, (c) magnesium and oxygen.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>Sodium chloride</strong> [1] &mdash; metal first, non-metal ending in -ide.<br>
+      (b) <strong>Hydrogen bromide</strong> [1] &mdash; hydrogen is always named first when paired with another non-metal.<br>
+      (c) <strong>Magnesium oxide</strong> [1] &mdash; metal first, non-metal ending in -ide.
+      <div class="mark-hint">The -ide ending tells you there are only two elements. If you see -ate or -ite, there's oxygen in there too (that's a later chapter).</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">Write the chemical formulae for: (a) water, (b) carbon dioxide, (c) ammonia, (d) magnesium chloride.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>H&#8322;O</strong> [1]<br>
+      (b) <strong>CO&#8322;</strong> [1]<br>
+      (c) <strong>NH&#8323;</strong> [1]<br>
+      (d) <strong>MgCl&#8322;</strong> [1] &mdash; Mg has valency 2, Cl has valency 1, so you need two Cl to balance one Mg.
+      <div class="mark-hint">Water, CO&#8322;, and ammonia are "just memorise them" formulae. MgCl&#8322; you can work out from valencies: Mg is Group II (valency 2), Cl is Group VII (valency 1), so criss-cross gives MgCl&#8322;.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">What do these state symbols mean? (a)&nbsp;(s) &nbsp; (b)&nbsp;(l) &nbsp; (c)&nbsp;(g) &nbsp; (d)&nbsp;(aq)</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>Solid</strong>, (b) <strong>Liquid</strong>, (c) <strong>Gas</strong>, (d) <strong>Aqueous solution</strong> (dissolved in water) [1 for all four correct, 1 for explaining aqueous].
+      <div class="mark-hint">The tricky one is (aq). "Aqueous" just means "dissolved in water." If salt is dissolved in water, you write NaCl (aq), not NaCl (l). It's still a solid substance, just dissolved.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">Define <strong>relative atomic mass (A<sub>r</sub>)</strong> and state the standard atom it is compared to.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      The relative atomic mass is the <strong>average mass</strong> of the atoms of an element [1], compared to <strong>1/12 the mass of a carbon-12 atom</strong> [1].
+      <div class="mark-hint">Two key parts: (1) it's an average (because of isotopes) and (2) it's relative to carbon-12. If you forget the "average" part, you lose a mark. If you just say "compared to carbon" without specifying 1/12 of carbon-12, you lose the other mark.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Calculate It?</h2>
+    <div class="marks">Worth 3-4 marks each. Show your working clearly &mdash; method marks matter even if the final answer is wrong.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">Balance the following equations:<br>(a) Na + Cl&#8322; &rarr; NaCl<br>(b) H&#8322; + O&#8322; &rarr; H&#8322;O<br>(c) Al + O&#8322; &rarr; Al&#8322;O&#8323;</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>2Na + Cl&#8322; &rarr; 2NaCl</strong> [1]<br>
+      Cl is balanced (2 each side). Na needs a 2 on the left to match the 2 on the right.<br><br>
+      (b) <strong>2H&#8322; + O&#8322; &rarr; 2H&#8322;O</strong> [1]<br>
+      O: 2 on left, 1 on right &rarr; put 2 in front of H&#8322;O. Now H: 2 on left, 4 on right &rarr; put 2 in front of H&#8322;.<br><br>
+      (c) <strong>4Al + 3O&#8322; &rarr; 2Al&#8322;O&#8323;</strong> [1]<br>
+      Al&#8322;O&#8323; has 2 Al and 3 O. Put 2 in front of Al&#8322;O&#8323;: 4 Al and 6 O on right. So 4Al on left, and 3O&#8322; gives 6 O on left. Balanced!
+      <div class="mark-hint">Remember: never change the subscript numbers inside a formula. Only add big numbers in front. For part (c), this is one of the trickier ones &mdash; the trick is to balance Al&#8322;O&#8323; by doubling it first so you get even numbers to work with.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Calculate the relative molecular mass (M<sub>r</sub>) of: (a) sulfuric acid, H&#8322;SO&#8324; &nbsp; (b) calcium hydroxide, Ca(OH)&#8322;<br><em>(A<sub>r</sub> values: H = 1, S = 32, O = 16, Ca = 40)</em></div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a) H&#8322;SO&#8324;</strong><br>
+      H: 2 &times; 1 = 2<br>
+      S: 1 &times; 32 = 32<br>
+      O: 4 &times; 16 = 64<br>
+      M<sub>r</sub> = 2 + 32 + 64 = <strong>98</strong> [2]<br><br>
+      <strong>(b) Ca(OH)&#8322;</strong><br>
+      Ca: 1 &times; 40 = 40<br>
+      O: 2 &times; 16 = 32 &nbsp;(the 2 outside the bracket multiplies both O and H)<br>
+      H: 2 &times; 1 = 2<br>
+      M<sub>r</sub> = 40 + 32 + 2 = <strong>74</strong> [2]
+      <div class="mark-hint">For (b), the bracket is the key. (OH)&#8322; means 2 oxygen atoms AND 2 hydrogen atoms. If you wrote O = 16 and H = 1, you forgot the bracket and your answer would be 57 &mdash; wrong. Always expand the brackets first.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">Calculate the percentage of oxygen in magnesium oxide, MgO.<br><em>(A<sub>r</sub> values: Mg = 24, O = 16)</em></div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Step 1:</strong> M<sub>r</sub> of MgO = 24 + 16 = <strong>40</strong> [1]<br>
+      <strong>Step 2:</strong> Mass of oxygen in formula = <strong>16</strong> [1]<br>
+      <strong>Step 3:</strong> % oxygen = (16 &divide; 40) &times; 100 = <strong>40%</strong> [1]
+      <div class="mark-hint">Always show these three steps: (1) find M<sub>r</sub>, (2) identify the element's mass, (3) divide and multiply by 100. Even if you get the final number wrong, you can get 2 out of 3 marks for correct method. Also: you can check by calculating % Mg = (24 &divide; 40) &times; 100 = 60%. Does 40% + 60% = 100%? Yes. Good.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Apply It?</h2>
+    <div class="marks">Worth 5-6 marks each. These need multi-step calculations with full working. This is where exam grades are won or lost.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">Iron reacts with excess sulfuric acid: Fe + H&#8322;SO&#8324; &rarr; FeSO&#8324; + H&#8322;. If 5 g of iron gives 13.6 g of iron(II) sulfate, calculate: (a) How much iron(II) sulfate can be obtained from 10 g of iron? (b) How much iron is needed to make 136 g of iron(II) sulfate?</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> 5 g Fe gives 13.6 g FeSO&#8324;<br>
+      10 g Fe is &times;2, so: 13.6 &times; 2 = <strong>27.2 g of iron(II) sulfate</strong> [2]<br><br>
+      <strong>(b)</strong> 5 g Fe gives 13.6 g FeSO&#8324;<br>
+      136 g FeSO&#8324; is &times;10, so: 5 &times; 10 = <strong>50 g of iron</strong> [2]
+      <div class="mark-hint">The ratio method: find the scale factor (how many times bigger or smaller), then apply it to the other quantity. Always write down the original ratio first, then show the multiplication. Two lines of working = two marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">Calculate the percentage composition by mass of each element in calcium carbonate, CaCO&#8323;.<br><em>(A<sub>r</sub> values: Ca = 40, C = 12, O = 16)</em></div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Step 1:</strong> M<sub>r</sub> of CaCO&#8323; = 40 + 12 + (3 &times; 16) = 40 + 12 + 48 = <strong>100</strong> [1]<br><br>
+      <strong>Step 2: % Calcium</strong> = (40 &divide; 100) &times; 100 = <strong>40%</strong> [1]<br><br>
+      <strong>Step 3: % Carbon</strong> = (12 &divide; 100) &times; 100 = <strong>12%</strong> [1]<br><br>
+      <strong>Step 4: % Oxygen</strong> = (48 &divide; 100) &times; 100 = <strong>48%</strong> [1]<br><br>
+      <strong>Check:</strong> 40% + 12% + 48% = 100% &#10003; [1]
+      <div class="mark-hint">This is a very clean example because M<sub>r</sub> = 100, which makes the percentages obvious. On the exam, the numbers won't always be this nice, so always show division &times; 100. The "check" that they add to 100% is worth doing &mdash; it catches errors and some mark schemes give credit for it.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">A sample of lead(II) bromide weighed 15 g. It was found to contain only 13.5 g of lead(II) bromide, with the rest being impurity. (a) Calculate the percentage purity of the sample. (b) What mass of impurity did the sample contain? (c) If a factory needs 54 g of pure lead(II) bromide, what mass of this impure sample must they use?</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a)</strong> % purity = (mass of pure substance &divide; total mass) &times; 100<br>
+      = (13.5 &divide; 15) &times; 100 = <strong>90%</strong> [2]<br><br>
+      <strong>(b)</strong> Mass of impurity = total mass &minus; pure mass = 15 &minus; 13.5 = <strong>1.5 g</strong> [1]<br><br>
+      <strong>(c)</strong> The sample is 90% pure, so only 90/100 of any sample is usable.<br>
+      We need 54 g pure, so: mass of impure sample = 54 &divide; 0.9 = <strong>60 g</strong> [2]<br>
+      (Check: 90% of 60 g = 54 g &#10003;)
+      <div class="mark-hint">Part (c) is the reverse calculation &mdash; they give you the pure amount and ask for the impure total. Divide by the fraction (0.9), don't multiply. A common error is doing 54 &times; 0.9 = 48.6, which gives you LESS than what you need, not more. If the sample is impure, you always need MORE of it, so the answer must be bigger than 54.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle answers
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  // Click question to toggle its answer
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  // Self-rating
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    // Update button styles
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

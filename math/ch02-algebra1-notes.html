@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Algebra 1 &mdash; Math Ch2</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #e74c3c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Worked example boxes */
+  .worked {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0 4px;
+    font-size: 14px;
+  }
+  .worked .step {
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    min-width: 22px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .result {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #ccc;
+    font-weight: 700;
+    color: var(--subject-dark);
+  }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Mathematics &mdash; Chapter 2</div>
+  <h1>Algebra 1</h1>
+  <div class="subtitle">Sequences, solving equations, drawing graphs, and straight-line equations (y = mx + c)</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 28 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: SEQUENCES ===== -->
+<div class="section-header">
+  <span class="num">Section 2.1</span>
+  Sequences
+</div>
+<div class="card">
+  <div class="intro-text">
+    A <strong>sequence</strong> is a list of numbers that follow a rule. Your job is to spot the rule, continue the pattern, and write a formula (the <strong>nth term</strong>) that gives you any term without listing them all out.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What "nth Term" Means</div>
+      <p><strong>n</strong> = the position number (1st, 2nd, 3rd, ...).</p>
+      <p><strong>nth term</strong> = a formula that gives you the value at position n.</p>
+      <p style="margin-top:4px;">Example: If the nth term is <strong>3n + 1</strong>, then:</p>
+      <p>&bull; 1st term (n=1): 3(1) + 1 = <strong>4</strong></p>
+      <p>&bull; 2nd term (n=2): 3(2) + 1 = <strong>7</strong></p>
+      <p>&bull; 3rd term (n=3): 3(3) + 1 = <strong>10</strong></p>
+      <p style="margin-top:4px;">So the sequence is: 4, 7, 10, 13, ... &mdash; you add 3 each time.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Find the nth Term (Step by Step)</div>
+      <p>This method works for any sequence where you add the same amount each time (an <strong>arithmetic</strong> or <strong>linear</strong> sequence):</p>
+      <p style="margin-top:6px;"><strong>Step 1:</strong> Find the <strong>common difference</strong> (what you add each time). Call it <strong>d</strong>.</p>
+      <p><strong>Step 2:</strong> The formula starts with <strong>dn</strong>.</p>
+      <p><strong>Step 3:</strong> Work out the adjustment: plug in n = 1. Compare <strong>d &times; 1</strong> to the actual first term. The difference is your adjustment.</p>
+      <p><strong>Step 4:</strong> Write: <strong>nth term = dn + adjustment</strong></p>
+      <p><strong>Step 5:</strong> CHECK &mdash; put n = 1, 2, 3 into your formula and make sure you get the original sequence.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find the nth term of: 5, 9, 13, 17, ...</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>Common difference (d):</strong> 9 &minus; 5 = <strong>4</strong></span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Formula starts with <strong>4n</strong></span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">When n=1: 4 &times; 1 = 4. But the first term is 5. Adjustment = 5 &minus; 4 = <strong>+1</strong></span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text"><strong>nth term = 4n + 1</strong></span></div>
+        <div class="step"><span class="step-num">Check:</span><span class="step-text">n=1: 4+1=5. n=2: 8+1=9. n=3: 12+1=13. n=4: 16+1=17. All correct!</span></div>
+        <div class="result">nth term = 4n + 1</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Another Example (Negative Adjustment)</div>
+      <div class="worked">
+        <p><strong>Example:</strong> Find the nth term of: 3, 7, 11, 15, ...</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>d</strong> = 7 &minus; 3 = <strong>4</strong></span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Starts with <strong>4n</strong></span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">n=1: 4 &times; 1 = 4. First term is 3. Adjustment = 3 &minus; 4 = <strong>&minus;1</strong></span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text"><strong>nth term = 4n &minus; 1</strong></span></div>
+        <div class="step"><span class="step-num">Check:</span><span class="step-text">n=1: 4&minus;1=3. n=2: 8&minus;1=7. n=3: 12&minus;1=11. Correct!</span></div>
+        <div class="result">nth term = 4n &minus; 1</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Position vs. Value</div>
+      <p><strong>n</strong> is the <strong>position</strong> (1st, 2nd, 3rd...). The <strong>term</strong> is the <strong>value</strong> at that position.</p>
+      <p style="margin-top:4px;">In the sequence 5, 9, 13, 17: the term at position 3 is 13. So n = 3, and the term = 13.</p>
+      <p style="margin-top:4px;">If they ask "What is the 100th term?", put <strong>n = 100</strong> into your formula: 4(100) + 1 = 401.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Two Numbers, That's All</div>
+      <p>The nth term of a linear sequence is always <strong>dn + something</strong>. You just need to find two numbers: the common difference (d) and the adjustment. That's it. Practice five sequences and this will feel automatic.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Nth term questions appear on almost every IGCSE paper. They're worth <strong>3&ndash;4 marks</strong> and follow the exact same method every time. Once you've got it, it's guaranteed marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can find the common difference of a sequence</li>
+    <li><input type="checkbox"> I can write the nth term formula step by step</li>
+    <li><input type="checkbox"> I can use the nth term to find any term (e.g., the 50th)</li>
+    <li><input type="checkbox"> I always check my formula by plugging in n = 1, 2, 3</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: SOLVING EQUATIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 2.2</span>
+  Solving Equations
+</div>
+<div class="card">
+  <div class="intro-text">
+    Solving an equation means finding the value of the letter (usually x) that makes the equation true. Think of it like a puzzle: what number goes in the gap to make both sides balance?
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Balance Rule</div>
+      <p><strong>Whatever you do to one side, you must do to the other side.</strong></p>
+      <p style="margin-top:6px;">An equation is like a set of scales. Both sides are currently balanced. To keep them balanced, every operation you do must happen on BOTH sides.</p>
+      <p style="margin-top:4px;">To "undo" an operation, use its <strong>inverse</strong> (opposite):</p>
+      <table class="compare-table">
+        <tr><th>Operation</th><th>Inverse</th></tr>
+        <tr><td>+ (add)</td><td>&minus; (subtract)</td></tr>
+        <tr><td>&minus; (subtract)</td><td>+ (add)</td></tr>
+        <tr><td>&times; (multiply)</td><td>&divide; (divide)</td></tr>
+        <tr><td>&divide; (divide)</td><td>&times; (multiply)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; One-Step Equations</div>
+      <div class="worked">
+        <p><strong>Example 1:</strong> Solve x + 7 = 12</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">x is being <strong>added to</strong> 7. Inverse: subtract 7 from both sides.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">x + 7 &minus; 7 = 12 &minus; 7</span></div>
+        <div class="result">x = 5</div>
+      </div>
+      <div class="worked" style="margin-top:12px;">
+        <p><strong>Example 2:</strong> Solve 3x = 18</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">x is being <strong>multiplied by</strong> 3. Inverse: divide both sides by 3.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">3x &divide; 3 = 18 &divide; 3</span></div>
+        <div class="result">x = 6</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Two-Step Equations</div>
+      <p>When the letter has two things happening to it, <strong>undo them in reverse order</strong>. Undo the addition/subtraction first, then the multiplication/division.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Solve 4x &minus; 3 = 17</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">x is multiplied by 4, then 3 is subtracted. Undo in reverse: add 3 first.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text"><strong>Add 3 to both sides:</strong> 4x &minus; 3 + 3 = 17 + 3 &rarr; 4x = 20</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text"><strong>Divide both sides by 4:</strong> 4x &divide; 4 = 20 &divide; 4</span></div>
+        <div class="result">x = 5</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Equations with x on Both Sides</div>
+      <p>If x appears on both sides, <strong>collect the x terms on one side first</strong>.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Solve 5x + 2 = 3x + 10</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>Get x terms together:</strong> subtract 3x from both sides. &rarr; 2x + 2 = 10</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text"><strong>Subtract 2 from both sides:</strong> 2x = 8</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text"><strong>Divide both sides by 2:</strong> x = 4</span></div>
+        <div class="step"><span class="step-num">Check:</span><span class="step-text">Left: 5(4)+2 = 22. Right: 3(4)+10 = 22. Both sides equal. Correct!</span></div>
+        <div class="result">x = 4</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Equations with Brackets</div>
+      <p><strong>Expand the brackets first</strong>, then solve as normal.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Solve 3(2x &minus; 1) = 15</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>Expand:</strong> 3 &times; 2x = 6x. &nbsp; 3 &times; (&minus;1) = &minus;3. &nbsp; So: 6x &minus; 3 = 15</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text"><strong>Add 3:</strong> 6x = 18</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text"><strong>Divide by 6:</strong> x = 3</span></div>
+        <div class="step"><span class="step-num">Check:</span><span class="step-text">3(2&times;3 &minus; 1) = 3(6&minus;1) = 3(5) = 15. Correct!</span></div>
+        <div class="result">x = 3</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Expanding Brackets with Negatives</div>
+      <p>When you expand a bracket with a negative sign, the sign of <strong>every term inside</strong> flips:</p>
+      <p style="margin-top:4px;">&minus;2(x &minus; 3) = &minus;2x <strong>+ 6</strong> &nbsp; (NOT &minus;2x &minus; 6)</p>
+      <p style="margin-top:4px;">The minus times the minus gives a plus. This is the most common algebra mistake. Always be extra careful with negative signs.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Always Check Your Answer</div>
+      <p>After solving, <strong>substitute your answer back into the original equation</strong>. Both sides should be equal. If they're not, you made an error somewhere &mdash; go back and find it. This takes 15 seconds and catches mistakes before the examiner does.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can solve one-step equations</li>
+    <li><input type="checkbox"> I can solve two-step equations</li>
+    <li><input type="checkbox"> I can solve equations with x on both sides</li>
+    <li><input type="checkbox"> I can expand brackets and then solve</li>
+    <li><input type="checkbox"> I always check by substituting back in</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: DRAWING GRAPHS ===== -->
+<div class="section-header">
+  <span class="num">Section 2.3</span>
+  Drawing Graphs
+</div>
+<div class="card">
+  <div class="intro-text">
+    Graphs are pictures of equations. Every equation like y = 2x + 1 draws a line on a grid. You need to be able to <strong>make a table of values</strong>, <strong>plot the points</strong>, and <strong>draw the line</strong>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Draw a Graph (Step by Step)</div>
+      <p><strong>Step 1:</strong> Make a table. Write the x values you're given (usually &minus;3 to 3 or similar).</p>
+      <p><strong>Step 2:</strong> Substitute each x value into the equation to find y.</p>
+      <p><strong>Step 3:</strong> Plot each (x, y) point on the grid. Use a sharp pencil and make a small cross at each point.</p>
+      <p><strong>Step 4:</strong> Join the points. For a straight line, use a <strong>ruler</strong>. For a curve, draw a smooth freehand curve through all points.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Draw the graph of y = 2x + 1 for x = &minus;2 to 3.</p>
+        <table class="compare-table" style="max-width:400px;">
+          <tr><th>x</th><th>2x + 1</th><th>y</th></tr>
+          <tr><td>&minus;2</td><td>2(&minus;2) + 1 = &minus;4 + 1</td><td>&minus;3</td></tr>
+          <tr><td>&minus;1</td><td>2(&minus;1) + 1 = &minus;2 + 1</td><td>&minus;1</td></tr>
+          <tr><td>0</td><td>2(0) + 1 = 0 + 1</td><td>1</td></tr>
+          <tr><td>1</td><td>2(1) + 1 = 2 + 1</td><td>3</td></tr>
+          <tr><td>2</td><td>2(2) + 1 = 4 + 1</td><td>5</td></tr>
+          <tr><td>3</td><td>2(3) + 1 = 6 + 1</td><td>7</td></tr>
+        </table>
+        <p style="margin-top:6px;">Plot the points: (&minus;2, &minus;3), (&minus;1, &minus;1), (0, 1), (1, 3), (2, 5), (3, 7). Join with a ruler.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Negative Numbers in Tables</div>
+      <p>When x is negative, be very careful with signs:</p>
+      <p style="margin-top:4px;">2 &times; (&minus;3) = <strong>&minus;6</strong> &nbsp; (positive times negative = negative)</p>
+      <p>&minus;3 + 1 = <strong>&minus;2</strong> &nbsp; (not &minus;4)</p>
+      <p style="margin-top:4px;">If your graph has a point that clearly doesn't fit the line, go back and <strong>recheck that calculation</strong>. It's almost always a sign error.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; At Least 3 Points</div>
+      <p>Always plot at least 3 points. If all 3 lie on a straight line, your calculations are probably right. If one doesn't line up, one of your calculations has an error &mdash; recheck it.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can make a table of values from an equation</li>
+    <li><input type="checkbox"> I can plot points accurately on a grid</li>
+    <li><input type="checkbox"> I use a ruler for straight lines</li>
+    <li><input type="checkbox"> I check my graph by making sure all points lie on the line</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: GRADIENT AND y = mx + c ===== -->
+<div class="section-header">
+  <span class="num">Section 2.4</span>
+  Gradient and y = mx + c
+</div>
+<div class="card">
+  <div class="intro-text">
+    Every straight line can be described by the equation <strong>y = mx + c</strong>. The two letters m and c tell you everything about the line: how steep it is and where it crosses the y-axis.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What m and c Mean</div>
+      <p><strong>m = the gradient</strong> (slope/steepness). It tells you how much y increases when x increases by 1.</p>
+      <p style="margin-top:4px;">&bull; If m is <strong>positive</strong>, the line goes <strong>uphill</strong> (left to right).</p>
+      <p>&bull; If m is <strong>negative</strong>, the line goes <strong>downhill</strong>.</p>
+      <p>&bull; If m is <strong>zero</strong>, the line is <strong>horizontal</strong> (flat).</p>
+      <p style="margin-top:6px;"><strong>c = the y-intercept</strong>. This is where the line crosses the y-axis. It's the value of y when x = 0.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Reading m and c from an Equation</div>
+      <div class="worked">
+        <p><strong>Examples:</strong></p>
+        <div class="step"><span class="step-num"></span><span class="step-text">y = 3x + 2: &nbsp; gradient = <strong>3</strong>, y-intercept = <strong>2</strong></span></div>
+        <div class="step"><span class="step-num"></span><span class="step-text">y = &minus;x + 5: &nbsp; gradient = <strong>&minus;1</strong>, y-intercept = <strong>5</strong></span></div>
+        <div class="step"><span class="step-num"></span><span class="step-text">y = &frac12;x: &nbsp; gradient = <strong>&frac12;</strong>, y-intercept = <strong>0</strong> (line goes through the origin)</span></div>
+        <div class="step"><span class="step-num"></span><span class="step-text">y = 4: &nbsp; gradient = <strong>0</strong>, y-intercept = <strong>4</strong> (horizontal line)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Calculate the Gradient</div>
+      <p><strong>Gradient = rise &divide; run = (change in y) &divide; (change in x)</strong></p>
+      <p style="margin-top:6px;">Pick any two points on the line: (x<sub>1</sub>, y<sub>1</sub>) and (x<sub>2</sub>, y<sub>2</sub>).</p>
+      <p><strong>Gradient = (y<sub>2</sub> &minus; y<sub>1</sub>) &divide; (x<sub>2</sub> &minus; x<sub>1</sub>)</strong></p>
+      <div class="worked">
+        <p><strong>Example:</strong> A line passes through (2, 5) and (6, 13). Find the gradient.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Rise: 13 &minus; 5 = <strong>8</strong></span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Run: 6 &minus; 2 = <strong>4</strong></span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">Gradient = 8 &divide; 4 = <strong>2</strong></span></div>
+        <div class="result">Gradient = 2</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Finding the Equation of a Line</div>
+      <p>If you know the gradient and y-intercept, just plug them into y = mx + c.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> A line has gradient 3 and crosses the y-axis at (0, &minus;2). Find its equation.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">m = 3, c = &minus;2</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">y = mx + c = 3x + (&minus;2)</span></div>
+        <div class="result">y = 3x &minus; 2</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Gradient vs. y-Intercept</div>
+      <p>In <strong>y = 5 &minus; 2x</strong>, the gradient is <strong>&minus;2</strong> (the number attached to x) and the y-intercept is <strong>5</strong>. The equation is the same as y = &minus;2x + 5, just written in a different order. Always look for the number attached to x to find the gradient.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Gradient Sign</div>
+      <p>When calculating gradient, the order matters. If you subtract in one direction for y, you must subtract in the <strong>same direction</strong> for x.</p>
+      <p style="margin-top:4px;">Using (2, 5) and (6, 13): either do (13&minus;5)/(6&minus;2) = 8/4 = 2, or (5&minus;13)/(2&minus;6) = &minus;8/&minus;4 = 2. Both give the same answer. But don't mix them up: (13&minus;5)/(2&minus;6) = 8/&minus;4 = <strong>&minus;2</strong> is WRONG.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Quick Sketch</div>
+      <p>To quickly sketch a line from y = mx + c: mark the y-intercept (c) on the y-axis, then use the gradient to find one more point. If m = 2, go 1 right and 2 up. If m = &minus;3, go 1 right and 3 down. Join with a ruler. Done.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can identify m (gradient) and c (y-intercept) from y = mx + c</li>
+    <li><input type="checkbox"> I can calculate the gradient from two points</li>
+    <li><input type="checkbox"> I know positive gradient = uphill, negative = downhill</li>
+    <li><input type="checkbox"> I can write the equation of a line given gradient and y-intercept</li>
+  </ul>
+</div>
+
+<!-- ===== OVERALL STUDY TIPS ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  Key Study Strategies for Algebra
+</div>
+<div class="card">
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Letters Are Just Numbers in Disguise</div>
+      <p>If algebra feels abstract, <strong>replace the letters with numbers first</strong> to understand what's happening. For example, if 4x &minus; 3 = 17 feels confusing, think: "What number times 4, minus 3, gives 17?" You might guess 5. Then the algebra method just does that guessing systematically.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">One Line Per Step</div>
+      <p><strong>Write every step on a new line.</strong> This is the single most important habit in algebra. If you try to do two steps at once, you'll make mistakes and lose marks. One step per line = maximum marks even if you get the final answer wrong.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Check Everything</div>
+      <p>Every topic here has a built-in check:</p>
+      <p>&bull; <strong>Sequences:</strong> Put n=1, n=2, n=3 into your nth term formula.</p>
+      <p>&bull; <strong>Equations:</strong> Substitute your answer back into the original equation.</p>
+      <p>&bull; <strong>Graphs:</strong> Check that all your plotted points lie on the line.</p>
+      <p>&bull; <strong>Gradient:</strong> Does the sign match the direction of the line? (Uphill = positive)</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I've read through all 4 sections</li>
+    <li><input type="checkbox"> I've written the key methods in my own notes</li>
+    <li><input type="checkbox"> I've tried at least one practice problem from each section</li>
+    <li><input type="checkbox"> I'm ready to test myself with the quiz</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 2 Notes Complete</h2>
+  <p>You've covered sequences, solving equations, drawing graphs, and y = mx + c. Now test yourself with the quiz. Remember: write every step, check every answer.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

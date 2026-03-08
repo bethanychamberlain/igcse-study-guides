@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Reproduction &mdash; Biology Ch16</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch16 &mdash; Cheat Sheet</div>
+    <h1>Reproduction</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Gamete</strong></td>
+      <td>A sex cell (sperm or ovum) that is haploid &mdash; has half the normal number of chromosomes.</td>
+      <td class="confuse">Zygote (that's a fertilised egg &mdash; diploid)</td>
+    </tr>
+    <tr>
+      <td><strong>Fertilisation</strong></td>
+      <td>The fusion of a male gamete nucleus with a female gamete nucleus to form a zygote.</td>
+      <td class="confuse">Pollination (that's just pollen landing on the stigma &mdash; no fusion yet)</td>
+    </tr>
+    <tr>
+      <td><strong>Pollination</strong></td>
+      <td>Transfer of pollen from an anther to a stigma.</td>
+      <td class="confuse">Fertilisation (pollination comes FIRST; fertilisation is the actual fusion of nuclei)</td>
+    </tr>
+    <tr>
+      <td><strong>Ovule</strong></td>
+      <td>Structure inside the ovary of a flower that contains the female gamete. Becomes the seed after fertilisation.</td>
+      <td class="confuse">Ovary (the ovary contains the ovule; the ovary becomes the fruit)</td>
+    </tr>
+    <tr>
+      <td><strong>Germination</strong></td>
+      <td>The development of a seed into a new young plant. Needs water, oxygen, and suitable temperature.</td>
+      <td class="confuse">Pollination or fertilisation (germination happens to seeds, not flowers)</td>
+    </tr>
+    <tr>
+      <td><strong>Placenta</strong></td>
+      <td>Disc-shaped organ connecting fetus to uterus wall via the umbilical cord. Exchanges nutrients, oxygen, and waste.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Implantation</strong></td>
+      <td>Embedding of the embryo into the uterus lining, about 6 days after fertilisation.</td>
+      <td class="confuse">Fertilisation (fertilisation happens in the oviduct; implantation happens in the uterus)</td>
+    </tr>
+    <tr>
+      <td><strong>Ovulation</strong></td>
+      <td>Release of a mature ovum from the ovary on Day 14 of the menstrual cycle, triggered by a surge of LH.</td>
+      <td class="confuse">Menstruation (that's the shedding of the uterus lining &mdash; Days 1&ndash;5)</td>
+    </tr>
+    <tr>
+      <td><strong>Oestrogen</strong></td>
+      <td>Hormone from the ovary that repairs and thickens the uterus lining during Days 5&ndash;14.</td>
+      <td class="confuse">Progesterone (that maintains the lining AFTER ovulation)</td>
+    </tr>
+    <tr>
+      <td><strong>Progesterone</strong></td>
+      <td>Hormone from the corpus luteum that maintains the uterus lining and inhibits FSH. Drop in progesterone triggers menstruation.</td>
+      <td class="confuse">Oestrogen (oestrogen builds up the lining; progesterone maintains it)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: SEXUAL vs ASEXUAL -->
+<div class="card">
+  <h2>Sexual vs Asexual Reproduction</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Sexual</th>
+      <th>Asexual</th>
+    </tr>
+    <tr>
+      <td>Parents</td>
+      <td>Two (male + female)</td>
+      <td>One</td>
+    </tr>
+    <tr>
+      <td>Gametes?</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Fertilisation?</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Offspring</td>
+      <td>Genetically different</td>
+      <td>Genetically identical (clones)</td>
+    </tr>
+    <tr>
+      <td>Cell division</td>
+      <td>Meiosis (to make gametes)</td>
+      <td>Mitosis</td>
+    </tr>
+    <tr>
+      <td>Advantage</td>
+      <td>Variation &rarr; adaptation</td>
+      <td>Fast, only one parent needed</td>
+    </tr>
+    <tr>
+      <td>Disadvantage</td>
+      <td>Slower, needs two parents</td>
+      <td>No variation &rarr; all vulnerable to same disease</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: INSECT vs WIND POLLINATION -->
+<div class="card">
+  <h2>Insect-Pollinated vs Wind-Pollinated Flowers</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Insect-Pollinated</th>
+      <th>Wind-Pollinated</th>
+    </tr>
+    <tr>
+      <td>Petals</td>
+      <td>Large, bright, scented</td>
+      <td>Small, dull, no scent</td>
+    </tr>
+    <tr>
+      <td>Pollen</td>
+      <td>Sticky, large grains, small amounts</td>
+      <td>Light, smooth grains, huge amounts</td>
+    </tr>
+    <tr>
+      <td>Anthers</td>
+      <td>Stiff, inside flower</td>
+      <td>Dangling outside flower</td>
+    </tr>
+    <tr>
+      <td>Stigma</td>
+      <td>Flat, inside flower</td>
+      <td>Long, feathery, hanging outside</td>
+    </tr>
+    <tr>
+      <td>Nectar?</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">After fertilisation</span>
+    <span>The ovule becomes a seed and the ovary becomes a fruit &mdash; learn this pair, it's guaranteed marks.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Pollen tube</span>
+    <span>After pollination, a tube grows down through the style so the male gamete can reach and fuse with the female gamete in the ovule.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Sperm features</span>
+    <span>Tail for swimming, many mitochondria for energy, acrosome with enzymes to penetrate the egg.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Placenta rule</span>
+    <span>Maternal and fetal blood NEVER mix &mdash; materials cross by diffusion across a thin membrane.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Menstrual cycle</span>
+    <span>28-day cycle: menstruation (Days 1&ndash;5), repair (5&ndash;14), ovulation (Day 14), maintenance (14&ndash;28).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">HIV vs AIDS</span>
+    <span>HIV is the virus; AIDS is the condition that develops later when the immune system fails &mdash; they are not the same thing.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Oxytocin</span>
+    <span>Hormone from the pituitary gland that triggers uterus contractions during labour.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Germination Needs WOT</div>
+    <strong>W</strong>ater, <strong>O</strong>xygen, <strong>T</strong>emperature. Light is NOT needed for germination &mdash; that's a classic wrong answer.
+  </div>
+
+  <div class="trick">
+    <div class="label">Ovule &rarr; Seed, Ovary &rarr; Fruit</div>
+    Think: the <strong>small</strong> thing (ovule) becomes the <strong>small</strong> thing (seed). The <strong>big</strong> thing (ovary) becomes the <strong>big</strong> thing (fruit). Small &rarr; small, big &rarr; big.
+  </div>
+
+  <div class="trick">
+    <div class="label">Oestrogen = Builds, Progesterone = Protects</div>
+    <strong>O</strong>estrogen = <strong>O</strong>n (builds it up). <strong>P</strong>rogesterone = <strong>P</strong>reserves (keeps the lining maintained). When progesterone drops, the lining sheds.
+  </div>
+
+  <div class="trick">
+    <div class="label">LH = Launch</div>
+    <strong>L</strong>H = <strong>L</strong>aunches the egg. A surge of LH on Day 14 triggers ovulation (the egg is "launched" from the ovary).
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"What is the difference between pollination and fertilisation?"</td>
+      <td>Pollination = pollen lands on stigma. Fertilisation = <strong>fusion of male and female gamete nuclei</strong>. Pollination comes first.</td>
+    </tr>
+    <tr>
+      <td>"Why do sperm have many mitochondria?"</td>
+      <td>To release energy (by respiration) for <strong>swimming / movement of the tail</strong></td>
+    </tr>
+    <tr>
+      <td>"State the conditions needed for germination"</td>
+      <td>Water, oxygen, suitable temperature. <strong>NOT light</strong>.</td>
+    </tr>
+    <tr>
+      <td>"What happens to the ovule / ovary after fertilisation?"</td>
+      <td>Ovule &rarr; <strong>seed</strong>. Ovary &rarr; <strong>fruit</strong>. Petals, stamens, stigma, style wither.</td>
+    </tr>
+    <tr>
+      <td>"Why should a pregnant woman not smoke?"</td>
+      <td>Nicotine crosses the placenta &rarr; reduces oxygen in blood &rarr; less oxygen for fetus &rarr; <strong>lower birth weight</strong></td>
+    </tr>
+    <tr>
+      <td>"Do maternal and fetal blood mix?"</td>
+      <td><strong>No.</strong> Materials cross by diffusion across the placenta membrane.</td>
+    </tr>
+    <tr>
+      <td>"Where does fertilisation occur in humans?"</td>
+      <td>In the <strong>oviduct</strong> (Fallopian tube), usually the first third.</td>
+    </tr>
+    <tr>
+      <td>"Explain why clones are vulnerable to disease"</td>
+      <td>All genetically identical &rarr; <strong>no variation</strong> &rarr; if one is affected, all will be. Example: Irish Potato Famine.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

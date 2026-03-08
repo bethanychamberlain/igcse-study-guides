@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Study Guides — IGCSE Review</title>
+<style>
+  :root {
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --biology: #27ae60;
+    --biology-light: #e8f8f0;
+    --biology-dark: #1e8449;
+    --chemistry: #8e44ad;
+    --chemistry-light: #f4ecf7;
+    --chemistry-dark: #6c3483;
+    --physics: #2e86c1;
+    --physics-light: #eaf2f8;
+    --physics-dark: #1a5276;
+    --english: #16a085;
+    --english-light: #e8f6f3;
+    --english-dark: #0e6655;
+    --spanish: #e67e22;
+    --spanish-light: #fef5e7;
+    --spanish-dark: #b8610a;
+    --math: #e74c3c;
+    --math-light: #fdedec;
+    --math-dark: #c0392b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 24px;
+    background: var(--bg);
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+    padding: 32px 24px;
+    background: linear-gradient(135deg, #2c3e50, #34495e);
+    color: #fff;
+    border-radius: 16px;
+  }
+  .header h1 { font-size: 28px; margin-bottom: 6px; }
+  .header p { font-size: 15px; opacity: 0.85; }
+  .header .stats {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .header .stat { text-align: center; }
+  .header .stat-num { font-size: 28px; font-weight: 800; }
+  .header .stat-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.7;
+  }
+
+  /* How it works */
+  .how-it-works {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .how-it-works h2 { font-size: 16px; margin-bottom: 12px; color: #2c3e50; }
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .step {
+    text-align: center;
+    padding: 16px 12px;
+    background: #f8f9fa;
+    border-radius: 10px;
+  }
+  .step .num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: #2c3e50; color: #fff;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 800; margin-bottom: 8px;
+  }
+  .step .step-title { font-weight: 700; font-size: 14px; margin-bottom: 4px; }
+  .step .step-desc { font-size: 12px; color: var(--text-secondary); }
+
+  /* Legend */
+  .legend {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px 24px;
+    margin-bottom: 28px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .legend-label { font-size: 13px; font-weight: 700; color: var(--text-secondary); }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .legend-icon {
+    width: 26px; height: 26px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800; color: #fff;
+  }
+  .legend-icon.n { background: #2c3e50; }
+  .legend-icon.c { background: #7f8c8d; }
+  .legend-icon.q { background: #95a5a6; }
+
+  /* Subject sections */
+  .subject-section {
+    background: var(--card);
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .subject-header {
+    padding: 14px 24px;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+  }
+  .subject-header h2 { font-size: 18px; font-weight: 700; }
+  .subject-header .ch-count {
+    font-size: 12px;
+    opacity: 0.85;
+    background: rgba(255,255,255,0.2);
+    padding: 3px 12px;
+    border-radius: 12px;
+  }
+  .subject-header .toggle {
+    font-size: 18px;
+    font-weight: 300;
+    transition: transform 0.2s;
+  }
+  .subject-section.collapsed .toggle { transform: rotate(-90deg); }
+  .subject-section.collapsed .chapter-list { display: none; }
+
+  .biology .subject-header { background: linear-gradient(135deg, var(--biology-dark), var(--biology)); }
+  .chemistry .subject-header { background: linear-gradient(135deg, var(--chemistry-dark), var(--chemistry)); }
+  .physics .subject-header { background: linear-gradient(135deg, var(--physics-dark), var(--physics)); }
+  .english .subject-header { background: linear-gradient(135deg, var(--english-dark), var(--english)); }
+  .spanish .subject-header { background: linear-gradient(135deg, var(--spanish-dark), var(--spanish)); }
+  .math .subject-header { background: linear-gradient(135deg, var(--math-dark), var(--math)); }
+
+  /* Chapter rows */
+  .chapter-list { padding: 8px 16px; }
+  .ch-row {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    border-radius: 8px;
+    transition: background 0.1s;
+  }
+  .ch-row:hover { background: #f8f9fa; }
+  .ch-row + .ch-row { border-top: 1px solid #f0f0f0; }
+  .ch-num {
+    width: 28px;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .ch-name {
+    flex: 1;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 0 12px;
+  }
+  .ch-links { display: flex; gap: 6px; flex-shrink: 0; }
+  .ch-btn {
+    width: 30px; height: 30px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 800;
+    text-decoration: none;
+    transition: transform 0.1s, box-shadow 0.1s;
+    border: 2px solid;
+  }
+  .ch-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  /* Button colors per subject */
+  .biology .ch-btn.n { background: var(--biology); color: #fff; border-color: var(--biology); }
+  .biology .ch-btn.c { background: #fff; color: var(--biology-dark); border-color: var(--biology); }
+  .biology .ch-btn.q { background: var(--biology-dark); color: #fff; border-color: var(--biology-dark); }
+
+  .chemistry .ch-btn.n { background: var(--chemistry); color: #fff; border-color: var(--chemistry); }
+  .chemistry .ch-btn.c { background: #fff; color: var(--chemistry-dark); border-color: var(--chemistry); }
+  .chemistry .ch-btn.q { background: var(--chemistry-dark); color: #fff; border-color: var(--chemistry-dark); }
+
+  .physics .ch-btn.n { background: var(--physics); color: #fff; border-color: var(--physics); }
+  .physics .ch-btn.c { background: #fff; color: var(--physics-dark); border-color: var(--physics); }
+  .physics .ch-btn.q { background: var(--physics-dark); color: #fff; border-color: var(--physics-dark); }
+
+  .english .ch-btn.n { background: var(--english); color: #fff; border-color: var(--english); }
+  .english .ch-btn.c { background: #fff; color: var(--english-dark); border-color: var(--english); }
+  .english .ch-btn.q { background: var(--english-dark); color: #fff; border-color: var(--english-dark); }
+
+  .spanish .ch-btn.n { background: var(--spanish); color: #fff; border-color: var(--spanish); }
+  .spanish .ch-btn.c { background: #fff; color: var(--spanish-dark); border-color: var(--spanish); }
+  .spanish .ch-btn.q { background: var(--spanish-dark); color: #fff; border-color: var(--spanish-dark); }
+
+  .math .ch-btn.n { background: var(--math); color: #fff; border-color: var(--math); }
+  .math .ch-btn.c { background: #fff; color: var(--math-dark); border-color: var(--math); }
+  .math .ch-btn.q { background: var(--math-dark); color: #fff; border-color: var(--math-dark); }
+
+  /* Footer */
+  .footer {
+    text-align: center;
+    margin-top: 32px;
+    padding: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  @media (max-width: 600px) {
+    .steps { grid-template-columns: 1fr; }
+    .legend { flex-direction: column; align-items: flex-start; gap: 8px; }
+    .ch-name { font-size: 13px; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    .subject-section { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .subject-header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    .ch-btn { border: 1px solid #999 !important; background: #fff !important; color: #333 !important; }
+    .ch-btn:hover { transform: none; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>IGCSE Study Guides</h1>
+  <p>Notes, cheat sheets, and quizzes &mdash; every chapter, every subject</p>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">6</div>
+      <div class="stat-label">Subjects</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">77</div>
+      <div class="stat-label">Chapters</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">231</div>
+      <div class="stat-label">Study Guides</div>
+    </div>
+  </div>
+</div>
+
+<div class="how-it-works">
+  <h2>How to Use These</h2>
+  <div class="steps">
+    <div class="step">
+      <div class="num">1</div>
+      <div class="step-title">Read &amp; Take Notes</div>
+      <div class="step-desc">Open the Notes guide while reading the textbook. Follow the prompts and tick the checkboxes.</div>
+    </div>
+    <div class="step">
+      <div class="num">2</div>
+      <div class="step-title">Review the Cheat Sheet</div>
+      <div class="step-desc">Use the Cheat Sheet to refresh your memory. Pin it to your wall or keep it in your folder.</div>
+    </div>
+    <div class="step">
+      <div class="num">3</div>
+      <div class="step-title">Test Yourself</div>
+      <div class="step-desc">Take the Quiz without looking at notes. Rate yourself honestly. Repeat until it feels easy.</div>
+    </div>
+  </div>
+</div>
+
+<div class="legend">
+  <span class="legend-label">Key:</span>
+  <div class="legend-item">
+    <div class="legend-icon n">N</div>
+    <span>Note-Taking Guide</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-icon c">C</div>
+    <span>Cheat Sheet</span>
+  </div>
+  <div class="legend-item">
+    <div class="legend-icon q">Q</div>
+    <span>Self-Test Quiz</span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- BIOLOGY — 21 chapters                                         -->
+<!-- ============================================================ -->
+<div class="subject-section biology">
+  <div class="subject-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <h2>Biology</h2>
+    <span class="ch-count">21 chapters</span>
+    <span class="toggle">&#9660;</span>
+  </div>
+  <div class="chapter-list">
+    <div class="ch-row">
+      <span class="ch-num">1</span>
+      <span class="ch-name">Classification</span>
+      <div class="ch-links">
+        <a href="biology/ch01-classification-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch01-classification-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch01-classification-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">2</span>
+      <span class="ch-name">Cells</span>
+      <div class="ch-links">
+        <a href="biology/ch02-cells-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch02-cells-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch02-cells-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">3</span>
+      <span class="ch-name">Movement In and Out of Cells</span>
+      <div class="ch-links">
+        <a href="biology/ch03-movement-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch03-movement-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch03-movement-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">4</span>
+      <span class="ch-name">Biological Molecules</span>
+      <div class="ch-links">
+        <a href="biology/ch04-biological-molecules-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch04-biological-molecules-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch04-biological-molecules-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">5</span>
+      <span class="ch-name">Enzymes</span>
+      <div class="ch-links">
+        <a href="biology/ch05-enzymes-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch05-enzymes-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch05-enzymes-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">6</span>
+      <span class="ch-name">Photosynthesis</span>
+      <div class="ch-links">
+        <a href="biology/ch06-photosynthesis-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch06-photosynthesis-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch06-photosynthesis-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">7</span>
+      <span class="ch-name">Human Nutrition</span>
+      <div class="ch-links">
+        <a href="biology/ch07-human-nutrition-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch07-human-nutrition-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch07-human-nutrition-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">8</span>
+      <span class="ch-name">Plant Transport</span>
+      <div class="ch-links">
+        <a href="biology/ch08-plant-transport-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch08-plant-transport-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch08-plant-transport-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">9</span>
+      <span class="ch-name">Circulation</span>
+      <div class="ch-links">
+        <a href="biology/ch09-circulation-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch09-circulation-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch09-circulation-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">10</span>
+      <span class="ch-name">Diseases and Immunity</span>
+      <div class="ch-links">
+        <a href="biology/ch10-diseases-immunity-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch10-diseases-immunity-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch10-diseases-immunity-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">11</span>
+      <span class="ch-name">Respiration</span>
+      <div class="ch-links">
+        <a href="biology/ch11-respiration-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch11-respiration-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch11-respiration-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">12</span>
+      <span class="ch-name">Gas Exchange</span>
+      <div class="ch-links">
+        <a href="biology/ch12-gas-exchange-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch12-gas-exchange-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch12-gas-exchange-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">13</span>
+      <span class="ch-name">Excretion</span>
+      <div class="ch-links">
+        <a href="biology/ch13-excretion-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch13-excretion-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch13-excretion-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">14</span>
+      <span class="ch-name">Coordination and Response</span>
+      <div class="ch-links">
+        <a href="biology/ch14-coordination-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch14-coordination-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch14-coordination-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">15</span>
+      <span class="ch-name">Drugs and Antibiotics</span>
+      <div class="ch-links">
+        <a href="biology/ch15-antibiotics-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch15-antibiotics-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch15-antibiotics-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">16</span>
+      <span class="ch-name">Reproduction</span>
+      <div class="ch-links">
+        <a href="biology/ch16-reproduction-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch16-reproduction-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch16-reproduction-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">17</span>
+      <span class="ch-name">Inheritance</span>
+      <div class="ch-links">
+        <a href="biology/ch17-inheritance-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch17-inheritance-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch17-inheritance-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">18</span>
+      <span class="ch-name">Variation and Evolution</span>
+      <div class="ch-links">
+        <a href="biology/ch18-variation-evolution-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch18-variation-evolution-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch18-variation-evolution-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">19</span>
+      <span class="ch-name">Ecology</span>
+      <div class="ch-links">
+        <a href="biology/ch19-ecology-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch19-ecology-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch19-ecology-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">20</span>
+      <span class="ch-name">Human Impacts on the Environment</span>
+      <div class="ch-links">
+        <a href="biology/ch20-human-impacts-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch20-human-impacts-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch20-human-impacts-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">21</span>
+      <span class="ch-name">Biotechnology</span>
+      <div class="ch-links">
+        <a href="biology/ch21-biotechnology-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="biology/ch21-biotechnology-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="biology/ch21-biotechnology-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- CHEMISTRY — 19 chapters                                       -->
+<!-- ============================================================ -->
+<div class="subject-section chemistry">
+  <div class="subject-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <h2>Chemistry</h2>
+    <span class="ch-count">19 chapters</span>
+    <span class="toggle">&#9660;</span>
+  </div>
+  <div class="chapter-list">
+    <div class="ch-row">
+      <span class="ch-num">1</span>
+      <span class="ch-name">States of Matter</span>
+      <div class="ch-links">
+        <a href="chemistry/ch01-states-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch01-states-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch01-states-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">2</span>
+      <span class="ch-name">Atoms, Elements and Compounds</span>
+      <div class="ch-links">
+        <a href="chemistry/ch02-atoms-elements-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch02-atoms-elements-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch02-atoms-elements-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">3</span>
+      <span class="ch-name">Atoms Combining</span>
+      <div class="ch-links">
+        <a href="chemistry/ch03-atoms-combining-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch03-atoms-combining-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch03-atoms-combining-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">4</span>
+      <span class="ch-name">Reacting Masses</span>
+      <div class="ch-links">
+        <a href="chemistry/ch04-reacting-masses-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch04-reacting-masses-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch04-reacting-masses-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">5</span>
+      <span class="ch-name">Using Moles</span>
+      <div class="ch-links">
+        <a href="chemistry/ch05-using-moles-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch05-using-moles-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch05-using-moles-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">6</span>
+      <span class="ch-name">Redox Reactions</span>
+      <div class="ch-links">
+        <a href="chemistry/ch06-redox-reactions-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch06-redox-reactions-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch06-redox-reactions-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">7</span>
+      <span class="ch-name">Electrolysis</span>
+      <div class="ch-links">
+        <a href="chemistry/ch07-electrolysis-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch07-electrolysis-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch07-electrolysis-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">8</span>
+      <span class="ch-name">Energy Changes</span>
+      <div class="ch-links">
+        <a href="chemistry/ch08-energy-changes-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch08-energy-changes-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch08-energy-changes-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">9</span>
+      <span class="ch-name">Rate of Reaction</span>
+      <div class="ch-links">
+        <a href="chemistry/ch09-rate-of-reaction-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch09-rate-of-reaction-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch09-rate-of-reaction-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">10</span>
+      <span class="ch-name">Reversible Reactions and Equilibrium</span>
+      <div class="ch-links">
+        <a href="chemistry/ch10-reversible-equilibrium-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch10-reversible-equilibrium-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch10-reversible-equilibrium-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">11</span>
+      <span class="ch-name">Acids, Bases and Salts</span>
+      <div class="ch-links">
+        <a href="chemistry/ch11-acids-bases-salts-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch11-acids-bases-salts-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch11-acids-bases-salts-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">12</span>
+      <span class="ch-name">The Periodic Table</span>
+      <div class="ch-links">
+        <a href="chemistry/ch12-periodic-table-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch12-periodic-table-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch12-periodic-table-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">13</span>
+      <span class="ch-name">Metals and Their Behaviour</span>
+      <div class="ch-links">
+        <a href="chemistry/ch13-metals-behaviour-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch13-metals-behaviour-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch13-metals-behaviour-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">14</span>
+      <span class="ch-name">Extracting Metals</span>
+      <div class="ch-links">
+        <a href="chemistry/ch14-extracting-metals-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch14-extracting-metals-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch14-extracting-metals-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">15</span>
+      <span class="ch-name">The Environment</span>
+      <div class="ch-links">
+        <a href="chemistry/ch15-environment-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch15-environment-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch15-environment-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">16</span>
+      <span class="ch-name">Organic Chemistry</span>
+      <div class="ch-links">
+        <a href="chemistry/ch16-organic-chemistry-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch16-organic-chemistry-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch16-organic-chemistry-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">17</span>
+      <span class="ch-name">Polymers</span>
+      <div class="ch-links">
+        <a href="chemistry/ch17-polymers-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch17-polymers-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch17-polymers-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">18</span>
+      <span class="ch-name">Separation and Purification</span>
+      <div class="ch-links">
+        <a href="chemistry/ch18-separation-purification-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch18-separation-purification-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch18-separation-purification-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">19</span>
+      <span class="ch-name">Experiments and Chemical Tests</span>
+      <div class="ch-links">
+        <a href="chemistry/ch19-experiments-tests-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="chemistry/ch19-experiments-tests-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="chemistry/ch19-experiments-tests-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHYSICS — 11 chapters                                         -->
+<!-- ============================================================ -->
+<div class="subject-section physics">
+  <div class="subject-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <h2>Physics</h2>
+    <span class="ch-count">11 chapters</span>
+    <span class="toggle">&#9660;</span>
+  </div>
+  <div class="chapter-list">
+    <div class="ch-row">
+      <span class="ch-num">1</span>
+      <span class="ch-name">Measurements and Units</span>
+      <div class="ch-links">
+        <a href="physics/ch01-measurements-units-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch01-measurements-units-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch01-measurements-units-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">2</span>
+      <span class="ch-name">Forces and Motion</span>
+      <div class="ch-links">
+        <a href="physics/ch02-forces-motion-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch02-forces-motion-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch02-forces-motion-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">3</span>
+      <span class="ch-name">Forces and Pressure</span>
+      <div class="ch-links">
+        <a href="physics/ch03-forces-pressure-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch03-forces-pressure-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch03-forces-pressure-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">4</span>
+      <span class="ch-name">Energy</span>
+      <div class="ch-links">
+        <a href="physics/ch04-energy-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch04-energy-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch04-energy-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">5</span>
+      <span class="ch-name">Thermal Effects</span>
+      <div class="ch-links">
+        <a href="physics/ch05-thermal-effects-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch05-thermal-effects-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch05-thermal-effects-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">6</span>
+      <span class="ch-name">Waves and Sound</span>
+      <div class="ch-links">
+        <a href="physics/ch06-waves-sounds-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch06-waves-sounds-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch06-waves-sounds-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">7</span>
+      <span class="ch-name">Rays and Waves</span>
+      <div class="ch-links">
+        <a href="physics/ch07-rays-waves-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch07-rays-waves-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch07-rays-waves-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">8</span>
+      <span class="ch-name">Electricity</span>
+      <div class="ch-links">
+        <a href="physics/ch08-electricity-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch08-electricity-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch08-electricity-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">9</span>
+      <span class="ch-name">Magnets and Currents</span>
+      <div class="ch-links">
+        <a href="physics/ch09-magnets-currents-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch09-magnets-currents-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch09-magnets-currents-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">10</span>
+      <span class="ch-name">Radioactivity</span>
+      <div class="ch-links">
+        <a href="physics/ch10-radioactivity-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch10-radioactivity-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch10-radioactivity-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">11</span>
+      <span class="ch-name">Earth and Space</span>
+      <div class="ch-links">
+        <a href="physics/ch11-earth-space-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="physics/ch11-earth-space-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="physics/ch11-earth-space-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MATH — 11 chapters                                            -->
+<!-- ============================================================ -->
+<div class="subject-section math">
+  <div class="subject-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <h2>Math</h2>
+    <span class="ch-count">11 chapters</span>
+    <span class="toggle">&#9660;</span>
+  </div>
+  <div class="chapter-list">
+    <div class="ch-row">
+      <span class="ch-num">1</span>
+      <span class="ch-name">Shape and Space 1</span>
+      <div class="ch-links">
+        <a href="math/ch01-shape-space1-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch01-shape-space1-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch01-shape-space1-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">2</span>
+      <span class="ch-name">Algebra 1</span>
+      <div class="ch-links">
+        <a href="math/ch02-algebra1-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch02-algebra1-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch02-algebra1-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">3</span>
+      <span class="ch-name">Number 1</span>
+      <div class="ch-links">
+        <a href="math/ch03-number1-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch03-number1-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch03-number1-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">4</span>
+      <span class="ch-name">Handling Data 1</span>
+      <div class="ch-links">
+        <a href="math/ch04-handling-data1-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch04-handling-data1-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch04-handling-data1-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">5</span>
+      <span class="ch-name">Shape and Space 2</span>
+      <div class="ch-links">
+        <a href="math/ch05-shape-space2-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch05-shape-space2-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch05-shape-space2-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">6</span>
+      <span class="ch-name">Algebra 2</span>
+      <div class="ch-links">
+        <a href="math/ch06-algebra2-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch06-algebra2-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch06-algebra2-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">7</span>
+      <span class="ch-name">Number 2</span>
+      <div class="ch-links">
+        <a href="math/ch07-number2-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch07-number2-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch07-number2-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">8</span>
+      <span class="ch-name">Probability</span>
+      <div class="ch-links">
+        <a href="math/ch08-probability-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch08-probability-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch08-probability-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">9</span>
+      <span class="ch-name">Shape and Space 3</span>
+      <div class="ch-links">
+        <a href="math/ch09-shape-space3-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch09-shape-space3-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch09-shape-space3-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">10</span>
+      <span class="ch-name">Number 3</span>
+      <div class="ch-links">
+        <a href="math/ch10-number3-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch10-number3-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch10-number3-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">11</span>
+      <span class="ch-name">Using and Applying Mathematics</span>
+      <div class="ch-links">
+        <a href="math/ch11-using-applying-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="math/ch11-using-applying-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="math/ch11-using-applying-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- ENGLISH — 9 chapters                                          -->
+<!-- ============================================================ -->
+<div class="subject-section english">
+  <div class="subject-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <h2>English</h2>
+    <span class="ch-count">9 chapters</span>
+    <span class="toggle">&#9660;</span>
+  </div>
+  <div class="chapter-list">
+    <div class="ch-row">
+      <span class="ch-num">1</span>
+      <span class="ch-name">Travellers' Tales</span>
+      <div class="ch-links">
+        <a href="english/ch01-travellers-tales-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch01-travellers-tales-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch01-travellers-tales-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">2</span>
+      <span class="ch-name">World of Nature</span>
+      <div class="ch-links">
+        <a href="english/ch02-world-of-nature-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch02-world-of-nature-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch02-world-of-nature-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">3</span>
+      <span class="ch-name">Points of View</span>
+      <div class="ch-links">
+        <a href="english/ch03-points-of-view-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch03-points-of-view-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch03-points-of-view-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">4</span>
+      <span class="ch-name">All the World</span>
+      <div class="ch-links">
+        <a href="english/ch04-all-the-world-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch04-all-the-world-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch04-all-the-world-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">5</span>
+      <span class="ch-name">Family and Friends</span>
+      <div class="ch-links">
+        <a href="english/ch05-family-friends-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch05-family-friends-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch05-family-friends-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">6</span>
+      <span class="ch-name">Material World</span>
+      <div class="ch-links">
+        <a href="english/ch06-material-world-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch06-material-world-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch06-material-world-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">7</span>
+      <span class="ch-name">Believe It or Not</span>
+      <div class="ch-links">
+        <a href="english/ch07-believe-it-or-not-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch07-believe-it-or-not-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch07-believe-it-or-not-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">8</span>
+      <span class="ch-name">World Famous</span>
+      <div class="ch-links">
+        <a href="english/ch08-world-famous-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch08-world-famous-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch08-world-famous-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">9</span>
+      <span class="ch-name">Endings</span>
+      <div class="ch-links">
+        <a href="english/ch09-endings-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="english/ch09-endings-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="english/ch09-endings-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SPANISH — 6 chapters                                          -->
+<!-- ============================================================ -->
+<div class="subject-section spanish">
+  <div class="subject-header" onclick="this.parentElement.classList.toggle('collapsed')">
+    <h2>Spanish</h2>
+    <span class="ch-count">6 chapters</span>
+    <span class="toggle">&#9660;</span>
+  </div>
+  <div class="chapter-list">
+    <div class="ch-row">
+      <span class="ch-num">1</span>
+      <span class="ch-name">My Home</span>
+      <div class="ch-links">
+        <a href="spanish/ch01-my-home-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="spanish/ch01-my-home-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="spanish/ch01-my-home-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">2</span>
+      <span class="ch-name">Family and Friends</span>
+      <div class="ch-links">
+        <a href="spanish/ch02-family-friends-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="spanish/ch02-family-friends-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="spanish/ch02-family-friends-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">3</span>
+      <span class="ch-name">Home Town</span>
+      <div class="ch-links">
+        <a href="spanish/ch03-home-town-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="spanish/ch03-home-town-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="spanish/ch03-home-town-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">4</span>
+      <span class="ch-name">Spanish Schools</span>
+      <div class="ch-links">
+        <a href="spanish/ch04-spanish-schools-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="spanish/ch04-spanish-schools-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="spanish/ch04-spanish-schools-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">5</span>
+      <span class="ch-name">International Travel</span>
+      <div class="ch-links">
+        <a href="spanish/ch05-international-travel-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="spanish/ch05-international-travel-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="spanish/ch05-international-travel-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">&bull;</span>
+      <span class="ch-name">Grammar: Ser vs Estar</span>
+      <div class="ch-links">
+        <a href="spanish/ser-estar-notes.html" class="ch-btn n" title="Notes">N</a>
+        <a href="spanish/ser-estar-cheatsheet.html" class="ch-btn c" title="Cheat Sheet">C</a>
+        <a href="spanish/ser-estar-quiz.html" class="ch-btn q" title="Quiz">Q</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- CROSS-SUBJECT RESOURCES                                       -->
+<!-- ============================================================ -->
+<div class="subject-section" style="margin-top: 8px;">
+  <div class="subject-header" style="background: linear-gradient(135deg, #2c3e50, #34495e);" onclick="this.parentElement.classList.toggle('collapsed')">
+    <h2>Cross-Subject Tools</h2>
+    <span class="ch-count">Useful everywhere</span>
+    <span class="toggle">&#9660;</span>
+  </div>
+  <div class="chapter-list">
+    <div class="ch-row">
+      <span class="ch-num">&star;</span>
+      <span class="ch-name">Word Roots, Prefixes &amp; Suffixes &mdash; Reference Sheet</span>
+      <div class="ch-links">
+        <a href="word-roots-cheatsheet.html" class="ch-btn" style="background:#2c3e50; color:#fff; border-color:#2c3e50; width:auto; padding:0 10px; font-size:10px;" title="Cheat Sheet">OPEN</a>
+      </div>
+    </div>
+    <div class="ch-row">
+      <span class="ch-num">&star;</span>
+      <span class="ch-name">Flash Cards &mdash; Interactive Word Roots Drill</span>
+      <div class="ch-links">
+        <a href="flash-cards.html" class="ch-btn" style="background:#2e86c1; color:#fff; border-color:#2e86c1; width:auto; padding:0 10px; font-size:10px;" title="Flash Cards">DRILL</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  Study Guides for IGCSE Review &mdash; Open any file directly or print to PDF
+</div>
+
+</body>
+</html>

@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Shape &amp; Space 1 &mdash; Math Ch1</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #e74c3c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Worked example boxes */
+  .worked {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0 4px;
+    font-size: 14px;
+  }
+  .worked .step {
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    min-width: 22px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .result {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #ccc;
+    font-weight: 700;
+    color: var(--subject-dark);
+  }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Mathematics &mdash; Chapter 1</div>
+  <h1>Shape &amp; Space 1</h1>
+  <div class="subtitle">Angle facts, polygons, symmetry, circles, area, volume, surface area, and scale drawing</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 28 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: ANGLE FACTS ===== -->
+<div class="section-header">
+  <span class="num">Section 1.1</span>
+  Angle Facts
+</div>
+<div class="card">
+  <div class="intro-text">
+    Angles are the foundation of geometry. Before you can tackle polygons, circles, or anything else in this chapter, you need these basic angle facts <strong>memorised</strong>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Five Key Angle Facts</div>
+      <p><strong>1. Angles on a straight line</strong> add up to <strong>180&deg;</strong>.</p>
+      <p><strong>2. Angles at a point</strong> add up to <strong>360&deg;</strong>.</p>
+      <p><strong>3. Vertically opposite angles</strong> are <strong>equal</strong>.</p>
+      <p><strong>4. Angles in a triangle</strong> add up to <strong>180&deg;</strong>.</p>
+      <p><strong>5. Angles in a quadrilateral</strong> add up to <strong>360&deg;</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Parallel Line Angle Facts</div>
+      <p>When a line crosses two parallel lines, it creates special angle pairs:</p>
+      <p><strong>Alternate angles</strong> (Z-angles) are <strong>equal</strong>. They make a Z shape.</p>
+      <p><strong>Corresponding angles</strong> (F-angles) are <strong>equal</strong>. They make an F shape.</p>
+      <p><strong>Co-interior angles</strong> (C-angles or allied angles) add up to <strong>180&deg;</strong>. They make a C or U shape.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw the Letters</div>
+      <p>When you see parallel lines on the exam, <strong>draw the Z, F, or C</strong> on the diagram to identify the angle type. This makes it obvious which rule to use and shows the examiner your reasoning.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <div class="worked">
+        <p><strong>Example:</strong> Two parallel lines are crossed by a transversal. One angle is 65&deg;. Find the co-interior angle.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Co-interior angles add up to <strong>180&deg;</strong>.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Missing angle = 180&deg; &minus; 65&deg; = <strong>115&deg;</strong>.</span></div>
+        <div class="result">Answer: 115&deg;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Alternate vs. Corresponding</div>
+      <p><strong>Alternate</strong> angles are on <strong>opposite sides</strong> of the transversal (Z shape). <strong>Corresponding</strong> angles are on the <strong>same side</strong> (F shape). Both are equal, but you must name the correct one on the exam to get the mark.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list the five basic angle facts from memory</li>
+    <li><input type="checkbox"> I know the three parallel line angle rules (alternate, corresponding, co-interior)</li>
+    <li><input type="checkbox"> I can find missing angles using these rules and show my working</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: ANGLES IN POLYGONS ===== -->
+<div class="section-header">
+  <span class="num">Section 1.2</span>
+  Angles in Polygons
+</div>
+<div class="card">
+  <div class="intro-text">
+    A <strong>polygon</strong> is any flat shape with straight sides. Triangles (3 sides), quadrilaterals (4), pentagons (5), hexagons (6), etc. There are two key formulae you need.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Interior Angle Sum</div>
+      <p><strong>Sum of interior angles = (n &minus; 2) &times; 180&deg;</strong></p>
+      <p style="margin-top:4px;">where n = the number of sides.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find the sum of interior angles in a hexagon (6 sides).</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Sum = (6 &minus; 2) &times; 180&deg; = 4 &times; 180&deg;</span></div>
+        <div class="result">Answer: 720&deg;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Regular Polygons</div>
+      <p>A <strong>regular polygon</strong> has all sides equal and all angles equal.</p>
+      <p style="margin-top:4px;"><strong>Each interior angle = (n &minus; 2) &times; 180&deg; &divide; n</strong></p>
+      <p><strong>Each exterior angle = 360&deg; &divide; n</strong></p>
+      <p style="margin-top:4px;">And remember: <strong>interior + exterior = 180&deg;</strong> (they always add up to a straight line).</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find each interior angle of a regular octagon (8 sides).</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Each interior angle = (8 &minus; 2) &times; 180&deg; &divide; 8 = 6 &times; 180&deg; &divide; 8</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">= 1080&deg; &divide; 8</span></div>
+        <div class="result">Answer: 135&deg;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The polygon angle question appears on nearly every IGCSE paper, usually worth <strong>3&ndash;4 marks</strong>. If you memorise the two formulae, it's free marks every time.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Interior vs. Exterior</div>
+      <p>The <strong>interior angle</strong> is the one INSIDE the polygon. The <strong>exterior angle</strong> is the one you'd turn through if you walked along the edge. They are NOT the same thing. Always check which one the question asks for.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can calculate the sum of interior angles using (n &minus; 2) &times; 180&deg;</li>
+    <li><input type="checkbox"> I can find each interior and exterior angle of a regular polygon</li>
+    <li><input type="checkbox"> I know that interior + exterior = 180&deg;</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: SYMMETRY ===== -->
+<div class="section-header">
+  <span class="num">Section 1.3</span>
+  Symmetry
+</div>
+<div class="card">
+  <div class="intro-text">
+    There are two types of symmetry you need to know: <strong>line symmetry</strong> (reflective) and <strong>rotational symmetry</strong>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Two Types of Symmetry</div>
+      <p><strong>Line symmetry:</strong> A shape has a line of symmetry if you can fold it along that line and both halves match exactly. The number of lines of symmetry is how many different ways you can fold it.</p>
+      <p style="margin-top:6px;"><strong>Rotational symmetry:</strong> A shape has rotational symmetry if you can rotate it less than 360&deg; and it looks the same. The <strong>order</strong> is how many times it looks the same during a full turn.</p>
+      <table class="compare-table">
+        <tr><th>Shape</th><th>Lines of symmetry</th><th>Order of rotational symmetry</th></tr>
+        <tr><td>Equilateral triangle</td><td>3</td><td>3</td></tr>
+        <tr><td>Square</td><td>4</td><td>4</td></tr>
+        <tr><td>Rectangle</td><td>2</td><td>2</td></tr>
+        <tr><td>Regular pentagon</td><td>5</td><td>5</td></tr>
+        <tr><td>Regular hexagon</td><td>6</td><td>6</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Use Tracing Paper</div>
+      <p>On the exam, you can use tracing paper to check rotational symmetry. Trace the shape, put your pencil on the centre, and rotate. Count how many times it matches before you get back to the start.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can identify lines of symmetry on a shape</li>
+    <li><input type="checkbox"> I can state the order of rotational symmetry</li>
+    <li><input type="checkbox"> I know the symmetry properties of common shapes</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: CIRCLE CALCULATIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 1.4</span>
+  Circle Calculations
+</div>
+<div class="card">
+  <div class="intro-text">
+    Two formulae to learn for circles. Once you know these, you can also find arc lengths and sector areas. Learn the vocab first: <strong>radius</strong> (centre to edge), <strong>diameter</strong> (edge to edge through centre), <strong>circumference</strong> (distance around the outside).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Two Circle Formulae</div>
+      <p><strong>Circumference = &pi; &times; d</strong> &nbsp; (or 2&pi;r)</p>
+      <p><strong>Area = &pi; &times; r&sup2;</strong></p>
+      <p style="margin-top:6px;">where d = diameter, r = radius. Remember: <strong>d = 2r</strong> (the diameter is always twice the radius).</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find the circumference and area of a circle with radius 5 cm.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>Circumference</strong> = 2 &times; &pi; &times; 5 = 10&pi; = <strong>31.4 cm</strong> (1 d.p.)</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text"><strong>Area</strong> = &pi; &times; 5&sup2; = 25&pi; = <strong>78.5 cm&sup2;</strong> (1 d.p.)</span></div>
+        <div class="result">C = 31.4 cm, A = 78.5 cm&sup2;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Radius vs. Diameter</div>
+      <p>If the question gives you the <strong>diameter</strong>, you must <strong>halve it</strong> to get the radius before using the area formula. This is the single most common mistake on circle questions. Always check: did they give me r or d?</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Arc Length and Sector Area</div>
+      <p>A <strong>sector</strong> is a "slice" of a circle (like a pizza slice). An <strong>arc</strong> is the curved edge of that slice.</p>
+      <p style="margin-top:6px;"><strong>Arc length = (&theta; / 360) &times; &pi;d</strong></p>
+      <p><strong>Sector area = (&theta; / 360) &times; &pi;r&sup2;</strong></p>
+      <p style="margin-top:4px;">where &theta; is the angle of the sector in degrees.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find the arc length of a sector with radius 8 cm and angle 90&deg;.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Arc length = (90 / 360) &times; &pi; &times; 16</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">= (1/4) &times; 16&pi; = 4&pi;</span></div>
+        <div class="result">Answer: 4&pi; = 12.6 cm (1 d.p.)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Fraction Trick</div>
+      <p>Arc length and sector area are just <strong>a fraction of the full circle</strong>. The fraction is always &theta;/360. So find the full circumference or area first, then multiply by the fraction. Easy.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can calculate circumference using C = &pi;d</li>
+    <li><input type="checkbox"> I can calculate area using A = &pi;r&sup2;</li>
+    <li><input type="checkbox"> I always check whether the question gives radius or diameter</li>
+    <li><input type="checkbox"> I can find arc length and sector area using the fraction &theta;/360</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: AREA OF 2D SHAPES ===== -->
+<div class="section-header">
+  <span class="num">Section 1.5</span>
+  Area of 2D Shapes
+</div>
+<div class="card">
+  <div class="intro-text">
+    You need to know the area formulae for the key shapes. The exam won't give you these on the formula sheet for Core level &mdash; you must memorise them.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Area Formulae</div>
+      <table class="compare-table">
+        <tr><th>Shape</th><th>Formula</th></tr>
+        <tr><td>Rectangle</td><td>A = length &times; width</td></tr>
+        <tr><td>Triangle</td><td>A = &frac12; &times; base &times; height</td></tr>
+        <tr><td>Parallelogram</td><td>A = base &times; perpendicular height</td></tr>
+        <tr><td>Trapezium</td><td>A = &frac12; &times; (a + b) &times; h</td></tr>
+        <tr><td>Circle</td><td>A = &pi;r&sup2;</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Perpendicular Height</div>
+      <p>The <strong>height</strong> in a triangle or parallelogram must be the <strong>perpendicular</strong> (vertical) height, NOT the slant height. The height is always at a right angle to the base. If you use the slant side by accident, you'll get the wrong answer.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Compound Shapes</div>
+      <p>For compound (composite) shapes, <strong>split them into simple shapes</strong>, work out each area separately, then add (or subtract) them.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> An L-shaped room is 8 m long and 5 m wide, with a 3 m &times; 2 m rectangle cut from one corner.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Full rectangle area: 8 &times; 5 = 40 m&sup2;</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Cut-out area: 3 &times; 2 = 6 m&sup2;</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">L-shape area: 40 &minus; 6 = <strong>34 m&sup2;</strong></span></div>
+        <div class="result">Answer: 34 m&sup2;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Units Matter</div>
+      <p>Area is always in <strong>squared units</strong> (cm&sup2;, m&sup2;). If lengths are in cm, area is in cm&sup2;. If you mix up units (e.g., one side in cm and one in m), your answer will be completely wrong. Convert first, then calculate.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the area formulae for rectangle, triangle, parallelogram, trapezium, and circle</li>
+    <li><input type="checkbox"> I always use perpendicular height, not slant height</li>
+    <li><input type="checkbox"> I can find the area of compound shapes by splitting and adding/subtracting</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: VOLUME AND SURFACE AREA ===== -->
+<div class="section-header">
+  <span class="num">Section 1.6</span>
+  Volume and Surface Area
+</div>
+<div class="card">
+  <div class="intro-text">
+    Volume measures how much space a 3D shape takes up. Surface area is the total area of all its faces. These questions are worth good marks on the exam.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Volume Formulae</div>
+      <table class="compare-table">
+        <tr><th>Shape</th><th>Volume</th></tr>
+        <tr><td>Cuboid</td><td>V = length &times; width &times; height</td></tr>
+        <tr><td>Prism (any)</td><td>V = cross-section area &times; length</td></tr>
+        <tr><td>Cylinder</td><td>V = &pi;r&sup2; &times; h</td></tr>
+      </table>
+      <p style="margin-top:8px;"><strong>Key idea:</strong> A prism is any 3D shape with the same cross-section all the way through. A cylinder is a circular prism. A cuboid is a rectangular prism. So really, you just need <strong>one formula: V = area of cross-section &times; length</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Surface Area</div>
+      <p><strong>Surface area = sum of the areas of all faces.</strong></p>
+      <p style="margin-top:6px;">For a <strong>cuboid</strong>: SA = 2(lw + lh + wh)</p>
+      <p>For a <strong>cylinder</strong>: SA = 2&pi;r&sup2; + 2&pi;rh &nbsp; (two circles + the curved part)</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find the volume and surface area of a cylinder with radius 3 cm and height 10 cm.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text"><strong>Volume</strong> = &pi; &times; 3&sup2; &times; 10 = &pi; &times; 9 &times; 10 = 90&pi; = <strong>283 cm&sup3;</strong> (3 s.f.)</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text"><strong>Surface area</strong> = 2&pi;(3)&sup2; + 2&pi;(3)(10) = 18&pi; + 60&pi; = 78&pi; = <strong>245 cm&sup2;</strong> (3 s.f.)</span></div>
+        <div class="result">V = 283 cm&sup3;, SA = 245 cm&sup2;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Volume Units vs. Area Units</div>
+      <p>Volume is in <strong>cubed units</strong> (cm&sup3;, m&sup3;). Surface area is in <strong>squared units</strong> (cm&sup2;, m&sup2;). If you write cm&sup2; for a volume answer, you lose a mark even if the number is right.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Cylinder Curved Surface</div>
+      <p>If you unroll the curved surface of a cylinder, it becomes a rectangle. The width is the circumference (2&pi;r) and the height is h. So the curved surface area = 2&pi;rh. Visualising this helps you remember the formula.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know V = cross-section area &times; length for any prism</li>
+    <li><input type="checkbox"> I can calculate the volume of a cylinder</li>
+    <li><input type="checkbox"> I can find the surface area of a cuboid and a cylinder</li>
+    <li><input type="checkbox"> I always use the correct units (cm&sup3; for volume, cm&sup2; for area)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7: SCALE DRAWING ===== -->
+<div class="section-header">
+  <span class="num">Section 1.7</span>
+  Scale Drawing and Nets
+</div>
+<div class="card">
+  <div class="intro-text">
+    Scale drawings use a ratio to represent real-life objects at a smaller (or larger) size. Nets are flat patterns that fold up to make 3D shapes.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Working with Scales</div>
+      <p>A scale like <strong>1 : 500</strong> means 1 cm on the drawing represents 500 cm (= 5 m) in real life.</p>
+      <p style="margin-top:6px;"><strong>Drawing &rarr; Real:</strong> multiply by the scale factor.</p>
+      <p><strong>Real &rarr; Drawing:</strong> divide by the scale factor.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> A map has a scale of 1 : 20 000. Two towns are 8 cm apart on the map. What is the real distance?</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Real distance = 8 &times; 20 000 = 160 000 cm</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Convert: 160 000 cm &divide; 100 = 1 600 m &divide; 1 000 = <strong>1.6 km</strong></span></div>
+        <div class="result">Answer: 1.6 km</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Unit Conversions with Scales</div>
+      <p>Scale ratios are in the <strong>same unit</strong>. 1 : 500 means 1 cm to 500 cm, NOT 1 cm to 500 m. Always convert to useful units (m or km) after you've done the multiplication.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Nets</div>
+      <p>A <strong>net</strong> is the flat shape that folds up into a 3D shape. Common nets to recognise:</p>
+      <p>&bull; <strong>Cube</strong>: 6 connected squares (there are 11 possible arrangements)</p>
+      <p>&bull; <strong>Cuboid</strong>: 6 rectangles (3 pairs of matching rectangles)</p>
+      <p>&bull; <strong>Triangular prism</strong>: 2 triangles + 3 rectangles</p>
+      <p>&bull; <strong>Cylinder</strong>: 2 circles + 1 rectangle (the height = cylinder height, the width = circumference)</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Bearings in Scale Drawings</div>
+      <p>Bearings are measured <strong>clockwise from North</strong> and always written as <strong>3 digits</strong> (e.g., 045&deg;, not 45&deg;). If a scale drawing question involves bearings, use a protractor from the North line and measure clockwise.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can use a scale ratio to convert between drawing and real distances</li>
+    <li><input type="checkbox"> I can convert between cm, m, and km</li>
+    <li><input type="checkbox"> I can identify and draw nets of common 3D shapes</li>
+    <li><input type="checkbox"> I know how bearings work (3 digits, clockwise from North)</li>
+  </ul>
+</div>
+
+<!-- ===== OVERALL STUDY TIPS ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  Key Study Strategies for Shape &amp; Space
+</div>
+<div class="card">
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Draw Diagrams</div>
+      <p>If the question doesn't give you a diagram, <strong>draw one yourself</strong>. Label everything &mdash; sides, angles, measurements. A good diagram is worth 2 minutes of thinking time saved.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Show Your Formulae</div>
+      <p>Before you start calculating, <strong>write down the formula you're using</strong>. This gets you a method mark even if you make a calculation error. Example: write "A = &pi;r&sup2;" before plugging in numbers.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Check Your Units</div>
+      <p>At the end of every answer, ask yourself: "Are my units correct?" Length = cm or m. Area = cm&sup2; or m&sup2;. Volume = cm&sup3; or m&sup3;. Angles = degrees (&deg;). This is the easiest mark to lose and the easiest to keep.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I've read through all 7 sections</li>
+    <li><input type="checkbox"> I've written the key formulae in my own notes</li>
+    <li><input type="checkbox"> I've tried at least one practice problem from each section</li>
+    <li><input type="checkbox"> I'm ready to test myself with the quiz</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 1 Notes Complete</h2>
+  <p>You've covered angle facts, polygons, symmetry, circles, area, volume, surface area, and scale drawing. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Gas Exchange &mdash; Biology Ch12</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch12 &mdash; Cheat Sheet</div>
+    <h1>Gas Exchange</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Gas exchange</strong></td>
+      <td>The swapping of O&#8322; and CO&#8322; between an organism and its environment, across a gas exchange surface.</td>
+      <td class="confuse">Respiration (chemical reactions inside cells) or breathing (physical air movement)</td>
+    </tr>
+    <tr>
+      <td><strong>Alveoli</strong></td>
+      <td>Tiny air sacs at the end of bronchioles where gas exchange happens. Walls are one cell thick.</td>
+      <td class="confuse">Bronchioles (those are the tubes leading TO the alveoli)</td>
+    </tr>
+    <tr>
+      <td><strong>Trachea</strong></td>
+      <td>The windpipe. Kept open by C-shaped rings of cartilage. Carries air to the bronchi.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Bronchi</strong></td>
+      <td>Two tubes (one to each lung) that branch off from the trachea.</td>
+      <td class="confuse">Bronchioles (smaller branches of the bronchi)</td>
+    </tr>
+    <tr>
+      <td><strong>Diaphragm</strong></td>
+      <td>A sheet of muscle below the lungs. Contracts (flattens) during inhalation, relaxes (domes up) during exhalation.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Haemoglobin</strong></td>
+      <td>Protein in red blood cells that picks up O&#8322; to form oxyhaemoglobin.</td>
+      <td class="confuse">Carboxyhaemoglobin (haemoglobin + carbon monoxide &mdash; that's the bad one from smoking)</td>
+    </tr>
+    <tr>
+      <td><strong>Goblet cells</strong></td>
+      <td>Cells that produce sticky mucus to trap dust, bacteria, and particles in the airways.</td>
+      <td class="confuse">Ciliated cells (those have cilia that sweep the mucus away)</td>
+    </tr>
+    <tr>
+      <td><strong>Cilia</strong></td>
+      <td>Tiny hair-like structures on ciliated cells that beat in a wave to sweep mucus up and away from the lungs.</td>
+      <td class="confuse">Goblet cells (those make the mucus; cilia move it)</td>
+    </tr>
+    <tr>
+      <td><strong>Tar</strong></td>
+      <td>Sticky substance in cigarette smoke. Contains carcinogens. Damages cilia and coats alveoli.</td>
+      <td class="confuse">Nicotine (that's the addictive chemical, not the cancer-causing one)</td>
+    </tr>
+    <tr>
+      <td><strong>Carbon monoxide</strong></td>
+      <td>Gas in cigarette smoke that binds to haemoglobin more strongly than O&#8322;, reducing blood's O&#8322;-carrying capacity.</td>
+      <td class="confuse">Carbon dioxide (CO&#8322; is a normal waste product; CO is the toxic one from smoke)</td>
+    </tr>
+    <tr>
+      <td><strong>Emphysema</strong></td>
+      <td>Disease where alveolar walls are destroyed, reducing surface area for gas exchange. Causes breathlessness.</td>
+      <td class="confuse">Bronchitis (that's inflammation of the bronchi with excess mucus)</td>
+    </tr>
+    <tr>
+      <td><strong>Epidemiology</strong></td>
+      <td>The study of patterns of disease in populations &mdash; used to find links between lifestyle and illness.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: INHALATION vs EXHALATION -->
+<div class="card">
+  <h2>Breathing In vs Breathing Out</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Inhalation (Breathing In)</th>
+      <th>Exhalation (Breathing Out)</th>
+    </tr>
+    <tr>
+      <td>External intercostals</td>
+      <td>Contract</td>
+      <td>Relax</td>
+    </tr>
+    <tr>
+      <td>Internal intercostals</td>
+      <td>Relax</td>
+      <td>Contract (forced breathing only)</td>
+    </tr>
+    <tr>
+      <td>Rib cage</td>
+      <td>Moves up and out</td>
+      <td>Moves down and in</td>
+    </tr>
+    <tr>
+      <td>Diaphragm</td>
+      <td>Contracts (flattens / moves down)</td>
+      <td>Relaxes (domes up)</td>
+    </tr>
+    <tr>
+      <td>Chest volume</td>
+      <td>Increases</td>
+      <td>Decreases</td>
+    </tr>
+    <tr>
+      <td>Lung pressure</td>
+      <td>Decreases (below atmospheric)</td>
+      <td>Increases (above atmospheric)</td>
+    </tr>
+    <tr>
+      <td>Air movement</td>
+      <td>Air rushes IN</td>
+      <td>Air pushed OUT</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; The Syringe</div>
+    Think of a syringe: pull the plunger out = volume up = pressure drops = air rushes in. Push the plunger in = volume down = pressure rises = air pushed out. That's exactly what the rib cage and diaphragm do.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: INHALED vs EXHALED AIR -->
+<div class="card">
+  <h2>Inhaled Air vs Exhaled Air</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Gas</th>
+      <th>Inhaled</th>
+      <th>Exhaled</th>
+      <th>Why?</th>
+    </tr>
+    <tr>
+      <td>Oxygen</td>
+      <td>21%</td>
+      <td>~18%</td>
+      <td style="text-align:left;">O&#8322; absorbed into blood at alveoli</td>
+    </tr>
+    <tr>
+      <td>Carbon dioxide</td>
+      <td>0.04%</td>
+      <td>~3&ndash;4%</td>
+      <td style="text-align:left;">CO&#8322; diffuses from blood into alveoli</td>
+    </tr>
+    <tr>
+      <td>Nitrogen</td>
+      <td>78%</td>
+      <td>78%</td>
+      <td style="text-align:left;">Not used by the body</td>
+    </tr>
+    <tr>
+      <td>Water vapour</td>
+      <td>Variable</td>
+      <td>Saturated</td>
+      <td style="text-align:left;">Water evaporates from moist alveolar lining</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Gas exchange</span>
+    <span>O&#8322; and CO&#8322; swapping across a surface by diffusion &mdash; not the same as breathing or respiration.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Alveoli</span>
+    <span>Millions of tiny air sacs with thin walls, huge surface area, moist lining, and rich blood supply &mdash; perfect for gas exchange.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Air pathway</span>
+    <span>Nose &rarr; larynx &rarr; trachea &rarr; bronchi &rarr; bronchioles &rarr; alveoli.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Goblet + cilia</span>
+    <span>Goblet cells make mucus to trap dirt; cilia sweep it up and out &mdash; your airways' cleaning crew.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Carbon monoxide</span>
+    <span>Binds to haemoglobin 200x more strongly than O&#8322; &mdash; the sneaky damage from smoking that your lungs can't fix.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Emphysema</span>
+    <span>Alveoli walls destroyed by smoking &rarr; less surface area &rarr; can't get enough O&#8322; &rarr; constant breathlessness.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Correlation &#8800; causation</span>
+    <span>A link between smoking and cancer doesn't automatically prove cause &mdash; but the evidence is so strong that scientists accept it.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">5 Features of a Good Gas Exchange Surface</div>
+    <strong>T</strong>hin, <strong>L</strong>arge area, <strong>M</strong>oist, <strong>B</strong>lood supply, <strong>V</strong>entilated. Think "<strong>TaLk More Before Vaping</strong>" &mdash; ironic for a chapter about lung damage.
+  </div>
+
+  <div class="trick">
+    <div class="label">Airway Order</div>
+    <strong>N</strong>ose &rarr; <strong>L</strong>arynx &rarr; <strong>T</strong>rachea &rarr; <strong>B</strong>ronchi &rarr; <strong>B</strong>ronchioles &rarr; <strong>A</strong>lveoli. "<strong>N</strong>ever <strong>L</strong>et <strong>T</strong>he <strong>B</strong>ig <strong>B</strong>oy <strong>A</strong>sk" &mdash; silly, but it sticks.
+  </div>
+
+  <div class="trick">
+    <div class="label">Smoking's Three Villains</div>
+    <strong>T</strong>ar = <strong>T</strong>umours (cancer). <strong>N</strong>icotine = <strong>N</strong>eed it (addiction). <strong>CO</strong> = <strong>C</strong>an't carry <strong>O</strong>xygen. Each letter matches the harm.
+  </div>
+
+  <div class="trick">
+    <div class="label">Diaphragm Direction</div>
+    Breathe <strong>IN</strong> = diaphragm goes <strong>DOWN</strong> (contracts flat). Think "IN = DOWN" (like you're pulling air down into your body).
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Describe features that make alveoli efficient for gas exchange"</td>
+      <td><strong>Thin walls</strong> (short diffusion distance), <strong>large surface area</strong> (millions of alveoli), <strong>moist</strong>, <strong>good blood supply</strong>, <strong>well ventilated</strong></td>
+    </tr>
+    <tr>
+      <td>"Describe how oxygen gets from the alveolus into the blood"</td>
+      <td>O&#8322; <strong>diffuses</strong> down its concentration gradient from alveolar air (high) into blood (low), then binds to <strong>haemoglobin</strong> forming oxyhaemoglobin</td>
+    </tr>
+    <tr>
+      <td>"What happens during inhalation?"</td>
+      <td>External intercostals <strong>contract</strong>, ribs move <strong>up and out</strong>, diaphragm <strong>contracts and flattens</strong>, volume <strong>increases</strong>, pressure <strong>drops</strong>, air rushes <strong>in</strong></td>
+    </tr>
+    <tr>
+      <td>"Why does exhaled air have more CO&#8322; than inhaled air?"</td>
+      <td>CO&#8322; is produced by <strong>respiration</strong> in cells, carried in the blood, and <strong>diffuses</strong> from blood into the alveoli</td>
+    </tr>
+    <tr>
+      <td>"How does carbon monoxide in cigarette smoke affect the blood?"</td>
+      <td>CO binds to <strong>haemoglobin</strong> forming carboxyhaemoglobin, reducing the blood's ability to <strong>carry oxygen</strong>; the heart must work harder</td>
+    </tr>
+    <tr>
+      <td>"Explain how smoking causes emphysema"</td>
+      <td>Tar/smoke damages and <strong>destroys alveolar walls</strong>, reducing <strong>surface area</strong> for gas exchange &rarr; less O&#8322; enters blood &rarr; breathlessness</td>
+    </tr>
+    <tr>
+      <td>"What is the role of goblet cells and cilia?"</td>
+      <td><strong>Goblet cells</strong> produce mucus that traps particles; <strong>cilia</strong> beat to sweep mucus up and out of the airways</td>
+    </tr>
+    <tr>
+      <td>"Why can't we prove smoking causes cancer with a lab experiment?"</td>
+      <td>It would be <strong>unethical</strong> to deliberately expose humans to a known harmful substance. We use <strong>epidemiological studies</strong> instead.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

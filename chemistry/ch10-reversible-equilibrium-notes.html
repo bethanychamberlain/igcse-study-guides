@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Reversible Reactions &amp; Equilibrium &mdash; Chemistry Ch10</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 10</div>
+  <h1>Reversible Reactions and Equilibrium</h1>
+  <div class="subtitle">Reversible reactions, dynamic equilibrium, Le Chatelier's principle, the Haber process, and the Contact process &mdash; how industry fights chemistry to get the yield it wants</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 18 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: REVERSIBLE REACTIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 10.1</span>
+  Reversible Reactions
+</div>
+<div class="card">
+  <div class="intro-text">
+    Most reactions you've studied so far go in one direction &mdash; reactants turn into products and that's that. But some reactions can go <strong>both ways</strong>. These are called reversible reactions, and understanding them is the key to this entire chapter.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p>A <strong>reversible reaction</strong> is a reaction that can go in both directions &mdash; the products can react to re-form the original reactants. You can change the direction of the reaction by changing the conditions.</p>
+      <p style="margin-top:8px;">We use the symbol <strong>&#8652;</strong> (two half-arrows) instead of a single arrow (&rarr;) to show that a reaction is reversible.</p>
+      <p style="margin-top:8px;">&bull; The reaction from left to right is the <strong>forward reaction</strong><br>
+         &bull; The reaction from right to left is the <strong>reverse reaction</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Examples</div>
+      <p><strong>Example 1: Copper(II) sulfate</strong><br>
+         Blue <em>hydrated</em> copper(II) sulfate &rarr; heat &rarr; white <em>anhydrous</em> copper(II) sulfate + water<br>
+         Add water back &rarr; turns blue again<br>
+         CuSO&#8324;&middot;5H&#8322;O (s) &#8652; CuSO&#8324; (s) + 5H&#8322;O (l)<br>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:blue;">blue</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:#888;">white</span></p>
+      <p style="margin-top:8px;"><strong>Example 2: Cobalt(II) chloride</strong><br>
+         Pink <em>hydrated</em> cobalt(II) chloride &rarr; heat &rarr; blue <em>anhydrous</em> cobalt(II) chloride + water<br>
+         Add water back &rarr; turns pink again<br>
+         CoCl&#8322;&middot;6H&#8322;O (s) &#8652; CoCl&#8322; (s) + 6H&#8322;O (l)<br>
+         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:#d63384;">pink</span> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span style="color:blue;">blue</span></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Testing for Water</div>
+      <p>Anhydrous copper(II) sulfate and anhydrous cobalt(II) chloride can be used to <strong>test for the presence of water</strong>. If the liquid contains water:</p>
+      <p style="margin-top:4px;">&bull; Anhydrous copper(II) sulfate turns from <strong>white to blue</strong><br>
+         &bull; Anhydrous cobalt(II) chloride paper turns from <strong>blue to pink</strong></p>
+      <p style="margin-top:4px;">But these tests only show that water is <strong>present</strong> &mdash; they do not tell you whether it is pure water.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Dynamic Equilibrium</div>
+      <p>When a reversible reaction takes place in a <strong>closed system</strong> (nothing can escape), it reaches a state of <strong>dynamic equilibrium</strong>.</p>
+      <p style="margin-top:6px;"><strong>"Equilibrium"</strong> means no overall change &mdash; the amounts of reactants and products remain steady.</p>
+      <p style="margin-top:6px;"><strong>"Dynamic"</strong> means both reactions are still happening at the particle level &mdash; the forward and reverse reactions are both taking place, but <strong>at the same rate</strong>.</p>
+      <p style="margin-top:8px;">A reversible reaction in a closed system is at equilibrium when:<br>
+         &bull; The forward and reverse reactions take place <strong>at the same rate</strong><br>
+         &bull; The concentrations of reactants and products are <strong>no longer changing</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Equilibrium Does Not Mean Equal</div>
+      <p>"Equilibrium" does <strong>not</strong> mean that the amounts of reactants and products are equal. It means the amounts have <strong>stopped changing</strong>. There could be much more product than reactant, or vice versa &mdash; the key is that the ratio is now constant because both reactions happen at the same rate.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Closed System Required</div>
+      <p>Equilibrium can only be reached in a <strong>closed system</strong> where no particles can escape. In an open system, products leave and the reaction just keeps going one way. This is actually what factories do on purpose &mdash; they remove the product so equilibrium is never reached and the forward reaction keeps going.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam loves to ask: "What is meant by dynamic equilibrium?" You need <strong>both</strong> words explained: <em>dynamic</em> = forward and reverse reactions are still occurring; <em>equilibrium</em> = at the same rate, so no overall change in concentrations. Miss either part and you lose a mark.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Colour Pairs</div>
+      <p>Make flashcards for the two colour-change examples. One side: "Hydrated copper(II) sulfate &mdash; colour?" Other side: "Blue. Anhydrous = white." Do the same for cobalt(II) chloride (pink &harr; blue). These come up constantly in exams, and mixing up the colours is an easy way to throw away marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define a reversible reaction and name the symbol used</li>
+    <li><input type="checkbox"> I can write the equations for copper(II) sulfate and cobalt(II) chloride reversible reactions</li>
+    <li><input type="checkbox"> I can describe the colour changes in both examples</li>
+    <li><input type="checkbox"> I can explain what "dynamic equilibrium" means (both words)</li>
+    <li><input type="checkbox"> I know that equilibrium requires a closed system</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: SHIFTING THE EQUILIBRIUM ===== -->
+<div class="section-header">
+  <span class="num">Section 10.2</span>
+  Shifting the Equilibrium
+</div>
+<div class="card">
+  <div class="intro-text">
+    Reversible reactions never go to completion &mdash; they reach equilibrium. But industry needs high yields. The solution: change the conditions to <strong>shift</strong> the equilibrium towards the products side. This idea has a name: <strong>Le Chatelier's principle</strong>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Le Chatelier's Principle</div>
+      <p><strong>When a reversible reaction is at equilibrium and you make a change, the system acts to oppose the change and restore equilibrium. A new equilibrium mixture forms.</strong></p>
+      <p style="margin-top:6px;">In simpler terms: if you push the system one way, it pushes back. But the pushback is never complete &mdash; you end up with a <em>new</em> balance point, shifted in the direction you wanted.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Change You Make</th>
+          <th>Effect on Equilibrium</th>
+          <th>Why</th>
+        </tr>
+        <tr>
+          <td><strong>Increase temperature</strong></td>
+          <td>Favours the <strong>endothermic</strong> direction</td>
+          <td>System absorbs the extra heat to oppose the change</td>
+        </tr>
+        <tr>
+          <td><strong>Decrease temperature</strong></td>
+          <td>Favours the <strong>exothermic</strong> direction</td>
+          <td>System releases heat to oppose the cooling</td>
+        </tr>
+        <tr>
+          <td><strong>Increase pressure</strong> (gases only)</td>
+          <td>Favours the side with <strong>fewer gas molecules</strong></td>
+          <td>Fewer molecules = lower pressure, opposing the increase</td>
+        </tr>
+        <tr>
+          <td><strong>Decrease pressure</strong> (gases only)</td>
+          <td>Favours the side with <strong>more gas molecules</strong></td>
+          <td>More molecules = higher pressure, opposing the decrease</td>
+        </tr>
+        <tr>
+          <td><strong>Increase concentration</strong> of a reactant</td>
+          <td>Shifts towards <strong>products</strong></td>
+          <td>System uses up the extra reactant</td>
+        </tr>
+        <tr>
+          <td><strong>Remove product</strong></td>
+          <td>Shifts towards <strong>products</strong></td>
+          <td>System makes more product to replace what was removed</td>
+        </tr>
+        <tr>
+          <td><strong>Add a catalyst</strong></td>
+          <td><strong>No shift</strong> &mdash; no change in yield</td>
+          <td>Catalyst speeds up both forward and reverse equally; equilibrium reached faster, but position unchanged</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Applying It to Ammonia</div>
+      <p>N&#8322; (g) + 3H&#8322; (g) &#8652; 2NH&#8323; (g) &nbsp;&nbsp; forward reaction is <strong>exothermic</strong></p>
+      <p style="margin-top:6px;"><strong>Temperature:</strong> Lower temperature favours the exothermic (forward) direction &rarr; more ammonia. But too low = reaction is too slow.</p>
+      <p style="margin-top:4px;"><strong>Pressure:</strong> Left side has 4 gas molecules (1 + 3), right side has 2. Higher pressure favours fewer molecules &rarr; shifts right &rarr; more ammonia.</p>
+      <p style="margin-top:4px;"><strong>Concentration:</strong> Removing ammonia as it forms shifts equilibrium towards products &rarr; more ammonia made.</p>
+      <p style="margin-top:4px;"><strong>Catalyst:</strong> Iron catalyst gets to equilibrium faster, but does not change the yield.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Rate vs Yield</div>
+      <p>A <strong>catalyst</strong> speeds up the rate (how fast equilibrium is reached) but does <strong>not</strong> change the yield (how much product you get at equilibrium). Temperature changes <strong>both</strong> &mdash; it changes the rate AND the yield. Students often say "a catalyst increases the yield" &mdash; that's <strong>wrong</strong> and costs marks every time.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This is one of the highest-mark topics on the exam. They'll give you a reaction equation, tell you it's exothermic or endothermic, and ask: "What happens to the yield if you increase the temperature / pressure?" You need to (1) state which way the equilibrium shifts, (2) explain <em>why</em> using Le Chatelier's principle, and (3) say whether yield increases or decreases. Three steps, three marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Count the Molecules</div>
+      <p>For pressure questions, always count the gas molecules on each side of the equation. Write the numbers above the equation: e.g. "4 molecules &#8652; 2 molecules." High pressure favours the smaller number. If both sides have the <em>same</em> number of gas molecules, pressure has no effect on the yield.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state Le Chatelier's principle in my own words</li>
+    <li><input type="checkbox"> I can predict the effect of changing temperature on yield (need to know exo/endothermic)</li>
+    <li><input type="checkbox"> I can predict the effect of changing pressure on yield (count gas molecules)</li>
+    <li><input type="checkbox"> I can explain why changing concentration or removing product shifts equilibrium</li>
+    <li><input type="checkbox"> I know that a catalyst does NOT change the yield</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: THE HABER PROCESS ===== -->
+<div class="section-header">
+  <span class="num">Section 10.3</span>
+  The Haber Process
+</div>
+<div class="card">
+  <div class="intro-text">
+    The Haber process is the industrial method for making <strong>ammonia</strong> (NH&#8323;) from nitrogen and hydrogen. It's the most famous example of Le Chatelier's principle applied in the real world &mdash; and it comes up on almost every IGCSE Chemistry exam.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Reaction</div>
+      <p><strong>N&#8322; (g) + 3H&#8322; (g) &#8652; 2NH&#8323; (g)</strong> &nbsp;&nbsp; forward reaction is <strong>exothermic</strong></p>
+      <p style="margin-top:6px;"><strong>Sources of reactants:</strong><br>
+         &bull; <strong>Nitrogen:</strong> from the air (air is ~80% nitrogen; oxygen is removed by burning hydrogen: 2H&#8322; + O&#8322; &rarr; 2H&#8322;O)<br>
+         &bull; <strong>Hydrogen:</strong> from reacting natural gas (methane) with steam: CH&#8324; + 2H&#8322;O &rarr; CO&#8322; + 4H&#8322;, or from cracking hydrocarbons</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Five Steps</div>
+      <p><strong>1.</strong> Nitrogen and hydrogen are <strong>mixed and scrubbed</strong> (cleaned) to remove impurities<br>
+         <strong>2.</strong> The mixture is <strong>compressed</strong> to 200 atmospheres by pumps<br>
+         <strong>3.</strong> The compressed gases pass through the <strong>converter</strong> &mdash; a round tank with beds of <strong>iron catalyst</strong> at <strong>450&deg;C</strong>. Less than 30% is converted to ammonia<br>
+         <strong>4.</strong> The mixture is <strong>cooled</strong>. Ammonia condenses to a liquid and is removed. Unreacted N&#8322; and H&#8322; are <strong>recycled</strong> back to the converter<br>
+         <strong>5.</strong> Ammonia is stored as a liquid under pressure</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why These Conditions?</div>
+      <table class="compare-table">
+        <tr>
+          <th>Condition</th>
+          <th>Chosen Value</th>
+          <th>Why Not the "Ideal" Value?</th>
+        </tr>
+        <tr>
+          <td><strong>Temperature</strong></td>
+          <td>450&deg;C (moderate)</td>
+          <td>Lower temp = higher yield, but reaction is too slow. 450&deg;C is a <strong>compromise</strong> between yield and rate.</td>
+        </tr>
+        <tr>
+          <td><strong>Pressure</strong></td>
+          <td>200 atmospheres (high)</td>
+          <td>Higher pressure = higher yield (4 molecules &rarr; 2 molecules). 400 atm gives better yield but needs expensive, dangerous equipment. 200 atm is a <strong>compromise</strong> between yield, safety, and cost.</td>
+        </tr>
+        <tr>
+          <td><strong>Catalyst</strong></td>
+          <td>Iron</td>
+          <td>Speeds up the reaction (gets to equilibrium faster). Does NOT change the yield.</td>
+        </tr>
+        <tr>
+          <td><strong>Removal</strong></td>
+          <td>Ammonia condensed and removed; unreacted gases recycled</td>
+          <td>Removing product shifts equilibrium to the right. Recycling means the final overall yield is almost 100%.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Most of the world's ammonia is used to make <strong>fertilisers</strong>. The rest goes into dyes, pesticides, and other chemicals. Without the Haber process, modern agriculture could not feed the world's population. Exam questions often ask you to <strong>explain why</strong> the conditions are chosen, not just <strong>state</strong> them &mdash; so always include the compromise reasoning.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Converter vs Closed System</div>
+      <p>The converter in the Haber process is <strong>not</strong> a closed system. Gases flow through it continuously, ammonia is removed, and unreacted gases are recycled. Equilibrium is <strong>never fully reached</strong> in the converter &mdash; that's the whole point. The system is designed to keep the forward reaction going.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The "Compromise" Word</div>
+      <p>If the exam asks "Why is 450&deg;C used?" your answer must include the word <strong>compromise</strong>. Say: "450&deg;C is a compromise. A lower temperature would give a higher yield because the forward reaction is exothermic, but the rate would be too slow. 450&deg;C gives a reasonable rate while still producing a useful yield." That's a full-mark answer.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the equation for the Haber process with state symbols</li>
+    <li><input type="checkbox"> I know where the nitrogen and hydrogen come from</li>
+    <li><input type="checkbox"> I can state the conditions: 450&deg;C, 200 atm, iron catalyst</li>
+    <li><input type="checkbox"> I can explain why each condition is chosen (using Le Chatelier's + compromise)</li>
+    <li><input type="checkbox"> I can explain how removing ammonia and recycling gases pushes yield towards 100%</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: THE CONTACT PROCESS ===== -->
+<div class="section-header">
+  <span class="num">Section 10.4</span>
+  The Contact Process
+</div>
+<div class="card">
+  <div class="intro-text">
+    The Contact process makes <strong>sulfuric acid</strong> (H&#8322;SO&#8324;) &mdash; the world's most-produced chemical. Like the Haber process, it's built around a reversible reaction and uses Le Chatelier's principle to maximise the yield.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Key Steps</div>
+      <p><strong>Raw materials:</strong> sulfur (or sulfur dioxide from roasting metal sulfide ores), air, and water</p>
+      <p style="margin-top:6px;"><strong>Step 1:</strong> Burn sulfur in air &rarr; sulfur dioxide<br>
+         S (s) + O&#8322; (g) &rarr; SO&#8322; (g)</p>
+      <p style="margin-top:4px;"><strong>Step 2:</strong> Mix sulfur dioxide with more air</p>
+      <p style="margin-top:4px;"><strong>Step 3 (KEY REACTION):</strong> Pass over a catalyst of <strong>vanadium(V) oxide</strong> at <strong>450&deg;C</strong><br>
+         <strong>2SO&#8322; (g) + O&#8322; (g) &#8652; 2SO&#8323; (g)</strong> &nbsp;&nbsp; forward reaction is <strong>exothermic</strong></p>
+      <p style="margin-top:4px;"><strong>Step 4:</strong> Dissolve sulfur trioxide in concentrated sulfuric acid &rarr; <strong>oleum</strong> (thick fuming liquid)</p>
+      <p style="margin-top:4px;"><strong>Step 5:</strong> Mix oleum carefully with water &rarr; concentrated sulfuric acid<br>
+         H&#8322;O (l) + SO&#8323; (g) &rarr; H&#8322;SO&#8324; (l)</p>
+      <p style="margin-top:6px;">Unreacted SO&#8322; from step 3 is <strong>recycled</strong> back over the catalyst beds. Final yield is over 99%.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why These Conditions?</div>
+      <table class="compare-table">
+        <tr>
+          <th>Condition</th>
+          <th>Chosen Value</th>
+          <th>Why?</th>
+        </tr>
+        <tr>
+          <td><strong>Temperature</strong></td>
+          <td>450&deg;C</td>
+          <td>Forward reaction is exothermic, so lower temp = higher yield. But the catalyst is inactive below 400&deg;C. 450&deg;C is the <strong>compromise</strong>.</td>
+        </tr>
+        <tr>
+          <td><strong>Pressure</strong></td>
+          <td>2 atmospheres (low)</td>
+          <td>3 gas molecules &rarr; 2, so higher pressure helps yield. But the yield at 2 atm is already very high, so raising pressure further is not worth the cost.</td>
+        </tr>
+        <tr>
+          <td><strong>Catalyst</strong></td>
+          <td>Vanadium(V) oxide (V&#8322;O&#8325;)</td>
+          <td>Speeds up the reaction. Does NOT change the yield. Multiple beds of catalyst give maximum contact.</td>
+        </tr>
+        <tr>
+          <td><strong>Removal</strong></td>
+          <td>SO&#8323; dissolved in H&#8322;SO&#8324;; unreacted SO&#8322; recycled</td>
+          <td>Removing product shifts equilibrium right. Recycling gives over 99% final yield.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Why Not Add Water Directly to SO&#8323;?</div>
+      <p>Sulfur trioxide reacts <strong>violently</strong> with water, producing a thick, deadly acid mist. For safety, the SO&#8323; is dissolved in <strong>concentrated sulfuric acid</strong> first (making oleum), then the oleum is carefully diluted with water. The exam sometimes asks about safety precautions in the Contact process &mdash; this is the answer.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Haber vs Contact</div>
+      <p>Students mix these up all the time. Keep them straight:</p>
+      <p style="margin-top:4px;">&bull; <strong>Haber</strong> = ammonia (NH&#8323;), iron catalyst, 200 atm, 450&deg;C<br>
+         &bull; <strong>Contact</strong> = sulfuric acid (H&#8322;SO&#8324;), vanadium(V) oxide catalyst, 2 atm, 450&deg;C</p>
+      <p style="margin-top:4px;">Both use 450&deg;C. The big difference is the <strong>pressure</strong> (200 atm vs 2 atm) and the <strong>catalyst</strong> (iron vs V&#8322;O&#8325;).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Sulfuric acid is used in fertilisers, paints, detergents, plastics, dyes, and car batteries. The exam may ask you to compare the Haber and Contact processes &mdash; same principle (Le Chatelier + compromise), different details. If you can explain one, you can explain the other.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Make a Side-by-Side Table</div>
+      <p>Draw a two-column table: Haber on the left, Contact on the right. Row headings: Product, Equation, Temperature, Pressure, Catalyst, Why not higher/lower temp, Uses. Fill it in from memory. If you can complete both columns without looking, you're ready for the exam. Both processes follow the exact same logic &mdash; learn the pattern, not just the facts.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the key equation for the Contact process with state symbols</li>
+    <li><input type="checkbox"> I can name the raw materials and the catalyst (vanadium(V) oxide)</li>
+    <li><input type="checkbox"> I can state the conditions: 450&deg;C, 2 atm, V&#8322;O&#8325;</li>
+    <li><input type="checkbox"> I can explain why each condition is chosen (exothermic + compromise)</li>
+    <li><input type="checkbox"> I can explain the safety reason for dissolving SO&#8323; in acid (not water)</li>
+    <li><input type="checkbox"> I can compare the Haber and Contact processes from memory</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 10 Notes Complete</h2>
+  <p>You've covered reversible reactions, dynamic equilibrium, Le Chatelier's principle, the Haber process, and the Contact process. Now test yourself with the Chapter 10 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

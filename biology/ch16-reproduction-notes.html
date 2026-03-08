@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Reproduction &mdash; Biology Ch16</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 16</div>
+  <h1>Reproduction</h1>
+  <div class="subtitle">Asexual vs sexual reproduction, plant reproduction, human reproductive systems, the menstrual cycle, pregnancy, birth, and STIs &mdash; the biggest chapter in the course</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 30 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">This is a BIG chapter (16.1&ndash;16.12). Work through it in chunks &mdash; don't try to do it all in one sitting. Tick the checkboxes as you go.</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: ASEXUAL vs SEXUAL ===== -->
+<div class="section-header">
+  <span class="num">Sections 16.1 &ndash; 16.2</span>
+  Asexual vs Sexual Reproduction
+</div>
+<div class="card">
+  <div class="intro-text">
+    All living organisms reproduce. There are two fundamentally different methods, and the exam will ask you to compare them.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p><strong>Reproduction</strong> = the generation of new individuals of the same species.</p>
+      <p style="margin-top:6px;"><strong>Sexual reproduction</strong> = involves the fusion of <strong>gametes</strong> (sex cells) from two parents. Produces offspring that are genetically <strong>different</strong> from each other and from the parents.</p>
+      <p style="margin-top:6px;"><strong>Asexual reproduction</strong> = involves only <strong>one parent</strong>, no gametes, no fertilisation. All offspring are genetically <strong>identical</strong> to the parent (clones).</p>
+      <p style="margin-top:6px;"><strong>Gametes</strong> = sex cells. They are <strong>haploid</strong> (have half the normal number of chromosomes).</p>
+      <p style="margin-top:6px;"><strong>Fertilisation</strong> = the fusion (joining together) of a male gamete and a female gamete to produce a <strong>zygote</strong> (which is diploid).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Sexual</th>
+          <th>Asexual</th>
+        </tr>
+        <tr>
+          <td><strong>Parents</strong></td>
+          <td>Two (male + female)</td>
+          <td>One</td>
+        </tr>
+        <tr>
+          <td><strong>Gametes?</strong></td>
+          <td>Yes</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Fertilisation?</strong></td>
+          <td>Yes</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Offspring</strong></td>
+          <td>Genetically different (variation)</td>
+          <td>Genetically identical (clones)</td>
+        </tr>
+        <tr>
+          <td><strong>Cell division</strong></td>
+          <td>Meiosis (to make gametes)</td>
+          <td>Mitosis</td>
+        </tr>
+        <tr>
+          <td><strong>Advantage</strong></td>
+          <td>Variation &rarr; adaptation</td>
+          <td>Fast, only one parent needed</td>
+        </tr>
+        <tr>
+          <td><strong>Disadvantage</strong></td>
+          <td>Slower, needs two parents</td>
+          <td>No variation &rarr; vulnerable to disease</td>
+        </tr>
+        <tr>
+          <td><strong>Example</strong></td>
+          <td>Humans, flowering plants</td>
+          <td>Strawberry runners, bacteria</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The Irish Potato Famine (1845) is the textbook's example of why asexual reproduction can be dangerous: all the potatoes were clones, so when a disease hit, it killed <em>all</em> of them. This is a good example to use in an exam answer about disadvantages of asexual reproduction.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Clone Definition</div>
+      <p>A <strong>clone</strong> is a group of cells (or organisms) that are <strong>genetically identical</strong>. It is NOT just "a cell produced by asexual reproduction" &mdash; that's incomplete. The key word is <em>genetically identical</em>.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define sexual and asexual reproduction</li>
+    <li><input type="checkbox"> I can define gamete, fertilisation, and zygote</li>
+    <li><input type="checkbox"> I can list advantages and disadvantages of each type</li>
+    <li><input type="checkbox"> I can explain why clones are vulnerable to disease (no variation)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: PLANT REPRODUCTION ===== -->
+<div class="section-header">
+  <span class="num">Sections 16.2 &ndash; 16.5</span>
+  Plant Reproduction: Flowers, Pollination, Fertilisation, and Germination
+</div>
+<div class="card">
+  <div class="intro-text">
+    Flowering plants reproduce sexually using highly specialised structures called flowers. You need to know the parts, the process, and the differences between insect- and wind-pollinated flowers.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Parts of a Flower</div>
+      <p><strong>Male parts (stamen):</strong></p>
+      <p>&bull; <strong>Anther</strong> &mdash; produces pollen grains (male gametes)</p>
+      <p>&bull; <strong>Filament</strong> &mdash; stalk that holds up the anther</p>
+      <p style="margin-top:6px;"><strong>Female parts (carpel):</strong></p>
+      <p>&bull; <strong>Stigma</strong> &mdash; sticky platform where pollen lands</p>
+      <p>&bull; <strong>Style</strong> &mdash; stalk connecting stigma to ovary</p>
+      <p>&bull; <strong>Ovary</strong> &mdash; contains <strong>ovules</strong> (which contain the female gametes)</p>
+      <p style="margin-top:6px;"><strong>Other parts:</strong></p>
+      <p>&bull; <strong>Petals</strong> &mdash; attract insects (coloured, scented, with nectaries)</p>
+      <p>&bull; <strong>Sepals</strong> &mdash; protect the flower bud</p>
+      <p>&bull; <strong>Nectary</strong> &mdash; produces nectar (sugary solution) to attract insects</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Pollination</div>
+      <p><strong>Pollination</strong> = the transfer of pollen from an <strong>anther</strong> to a <strong>stigma</strong>.</p>
+      <p style="margin-top:6px;"><strong>Self-pollination</strong> = pollen transferred within the <strong>same flower</strong> (efficient but less variation).</p>
+      <p><strong>Cross-pollination</strong> = pollen transferred to a <strong>different plant</strong> of the same species (risky but more genetic variation).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Insect vs Wind Pollination</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Insect-Pollinated</th>
+          <th>Wind-Pollinated</th>
+        </tr>
+        <tr>
+          <td><strong>Petals</strong></td>
+          <td>Large, bright, scented</td>
+          <td>Small, dull, no scent</td>
+        </tr>
+        <tr>
+          <td><strong>Pollen</strong></td>
+          <td>Small amounts, sticky, large grains</td>
+          <td>Huge amounts, light, smooth grains</td>
+        </tr>
+        <tr>
+          <td><strong>Anthers</strong></td>
+          <td>Stiff, inside flower</td>
+          <td>Dangling outside flower</td>
+        </tr>
+        <tr>
+          <td><strong>Stigma</strong></td>
+          <td>Flat, inside flower</td>
+          <td>Long, feathery, hanging outside</td>
+        </tr>
+        <tr>
+          <td><strong>Nectar?</strong></td>
+          <td>Yes</td>
+          <td>No</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Pollination vs Fertilisation</div>
+      <p><strong>Pollination</strong> = pollen lands on the stigma. <strong>Fertilisation</strong> = the male and female nuclei actually fuse (join). Pollination comes FIRST. They are NOT the same thing. This is a very common exam mistake.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Fertilisation in Plants</div>
+      <p>After pollination, a <strong>pollen tube</strong> grows down through the style to reach the ovule. The male gamete travels down the pollen tube and fuses with the female gamete in the ovule. This is fertilisation.</p>
+      <p style="margin-top:6px;"><strong>After fertilisation:</strong></p>
+      <p>&bull; The <strong>ovule</strong> becomes a <strong>seed</strong> (contains the embryo + food store + seed coat/testa)</p>
+      <p>&bull; The <strong>ovary</strong> becomes a <strong>fruit</strong> (helps disperse the seed)</p>
+      <p>&bull; The petals, sepals, stamens, stigma, and style wither away</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Germination</div>
+      <p><strong>Germination</strong> = the development of a seed into a new young plant.</p>
+      <p style="margin-top:6px;"><strong>Conditions needed:</strong> water, oxygen (for aerobic respiration), and a suitable temperature (for enzymes).</p>
+      <p style="margin-top:6px;"><strong>What happens:</strong> Water enters through the micropyle &rarr; activates enzymes &rarr; enzymes convert insoluble food stores to soluble ones &rarr; seed swells and testa splits &rarr; radicle (root) grows down, plumule (shoot) grows up.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Memory Hooks</div>
+      <p><strong>"Ovule &rarr; Seed, Ovary &rarr; Fruit"</strong> &mdash; memorise this pair. The exam will definitely test it.</p>
+      <p style="margin-top:4px;"><strong>Germination needs WOT:</strong> Water, Oxygen, Temperature. Light is NOT needed (that's a common wrong answer).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can label the parts of a flower and state their functions</li>
+    <li><input type="checkbox"> I can define pollination and distinguish it from fertilisation</li>
+    <li><input type="checkbox"> I can compare insect-pollinated and wind-pollinated flowers</li>
+    <li><input type="checkbox"> I know what happens after fertilisation (ovule &rarr; seed, ovary &rarr; fruit)</li>
+    <li><input type="checkbox"> I can state the conditions needed for germination (water, oxygen, temperature)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: HUMAN REPRODUCTIVE SYSTEMS ===== -->
+<div class="section-header">
+  <span class="num">Section 16.6</span>
+  Human Reproductive Systems
+</div>
+<div class="card">
+  <div class="intro-text">
+    You need to know the structures and functions of both the male and female reproductive systems. The exam will ask you to label diagrams and compare gametes.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Male Reproductive System</div>
+      <p>&bull; <strong>Testes</strong> &mdash; produce sperm and testosterone. Held outside the body in the <strong>scrotum</strong> (2&ndash;3&deg;C cooler than body = ideal for sperm production).</p>
+      <p>&bull; <strong>Sperm duct (vas deferens)</strong> &mdash; carries sperm from testis to urethra.</p>
+      <p>&bull; <strong>Prostate gland</strong> &mdash; produces seminal fluid (99.5% of semen; sperm = 0.5%).</p>
+      <p>&bull; <strong>Urethra</strong> &mdash; carries semen (or urine) to the tip of the penis. A valve prevents both at the same time.</p>
+      <p>&bull; <strong>Penis</strong> &mdash; delivers sperm to the female reproductive system.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Female Reproductive System</div>
+      <p>&bull; <strong>Ovaries</strong> &mdash; produce ova (eggs) and the hormones oestrogen and progesterone.</p>
+      <p>&bull; <strong>Oviduct (Fallopian tube)</strong> &mdash; carries the ovum from the ovary towards the uterus. <strong>Fertilisation usually occurs here</strong> (in the first third).</p>
+      <p>&bull; <strong>Uterus (womb)</strong> &mdash; where the embryo/fetus develops during pregnancy.</p>
+      <p>&bull; <strong>Cervix</strong> &mdash; ring of muscle at the neck of the uterus; keeps fetus inside; dilates during birth.</p>
+      <p>&bull; <strong>Vagina (birth canal)</strong> &mdash; receives the penis during intercourse; the baby passes through during birth.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Comparing Gametes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Sperm</th>
+          <th>Ovum (egg)</th>
+        </tr>
+        <tr>
+          <td><strong>Size</strong></td>
+          <td>Very small</td>
+          <td>Much larger</td>
+        </tr>
+        <tr>
+          <td><strong>Numbers</strong></td>
+          <td>Millions (300 million per ejaculation)</td>
+          <td>One per month</td>
+        </tr>
+        <tr>
+          <td><strong>Mobility</strong></td>
+          <td>Motile (has a flagellum/tail)</td>
+          <td>Non-motile (does not move on its own)</td>
+        </tr>
+        <tr>
+          <td><strong>Food store</strong></td>
+          <td>Very little</td>
+          <td>Large cytoplasm with food stores</td>
+        </tr>
+        <tr>
+          <td><strong>Special features</strong></td>
+          <td>Acrosome (enzymes), many mitochondria</td>
+          <td>Jelly coat, haploid nucleus</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam loves to ask: "Why do sperm have many <strong>mitochondria</strong>?" Answer: to release energy (from respiration) for swimming/movement of the flagellum. Another favourite: "Why are millions of sperm produced but only one ovum per month?" Answer: most sperm die on the journey; producing millions ensures at least one reaches the ovum.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can label the male reproductive system and state each part's function</li>
+    <li><input type="checkbox"> I can label the female reproductive system and state each part's function</li>
+    <li><input type="checkbox"> I can compare sperm and ova (size, number, mobility, features)</li>
+    <li><input type="checkbox"> I know where fertilisation occurs (oviduct)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: MENSTRUAL CYCLE & CONCEPTION ===== -->
+<div class="section-header">
+  <span class="num">Sections 16.7 &ndash; 16.8</span>
+  The Menstrual Cycle and Conception
+</div>
+<div class="card">
+  <div class="intro-text">
+    The menstrual cycle is a 28-day hormone-controlled process. This is one of the hardest topics in biology because there are four hormones to keep track of. Break it into phases.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Four Phases</div>
+      <p><strong>1. Menstruation (Days 1&ndash;5):</strong> The uterus lining breaks down and is shed, along with blood. Triggered by a <strong>decrease in progesterone</strong>.</p>
+      <p style="margin-top:6px;"><strong>2. Repair phase (Days 5&ndash;14):</strong> The uterus lining thickens and develops more blood vessels. Triggered by an increase in <strong>oestrogen</strong>.</p>
+      <p style="margin-top:6px;"><strong>3. Ovulation (Day 14):</strong> A mature ovum is released from the ovary into the oviduct. Triggered by a surge of <strong>LH</strong> (luteinising hormone) from the pituitary gland.</p>
+      <p style="margin-top:6px;"><strong>4. Receptive/Premenstrual phase (Days 14&ndash;28):</strong> The uterus lining is maintained, ready for implantation. Maintained by <strong>progesterone</strong> (from the corpus luteum). If no fertilisation occurs, progesterone drops and the cycle starts again.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Four Hormones</div>
+      <p><strong>FSH</strong> (follicle stimulating hormone) &mdash; from the pituitary gland &rarr; stimulates a follicle to develop in the ovary.</p>
+      <p style="margin-top:4px;"><strong>Oestrogen</strong> &mdash; from the ovary &rarr; repairs and thickens the uterus lining; triggers LH release.</p>
+      <p style="margin-top:4px;"><strong>LH</strong> (luteinising hormone) &mdash; from the pituitary gland &rarr; triggers <strong>ovulation</strong> and development of the corpus luteum.</p>
+      <p style="margin-top:4px;"><strong>Progesterone</strong> &mdash; from the corpus luteum (in the ovary) &rarr; <strong>maintains</strong> the uterus lining for implantation. Also <strong>inhibits FSH</strong> (feedback inhibition &mdash; prevents another egg developing).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Oestrogen vs Progesterone</div>
+      <p><strong>Oestrogen</strong> = <strong>builds up</strong> the lining (repair phase). <strong>Progesterone</strong> = <strong>maintains</strong> the lining (after ovulation). When progesterone drops, the lining breaks down = menstruation. They are NOT interchangeable.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Conception</div>
+      <p><strong>Copulation</strong> (sexual intercourse) delivers sperm to the female reproductive system. The ovum travels along the oviduct, moved by <strong>peristalsis</strong> (muscle contractions) and <strong>cilia</strong> (tiny hair-like structures). Fertilisation usually occurs in the first third of the oviduct.</p>
+      <p style="margin-top:6px;">The fertilised ovum (<strong>zygote</strong>) divides repeatedly as it travels towards the uterus. After about 6 days, it becomes a ball of cells (embryo) and embeds in the uterus lining. This embedding is called <strong>implantation</strong>. <strong>Conception</strong> = the moment implantation is complete.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Timeline Sketch</div>
+      <p>Draw a timeline from Day 1 to Day 28. Mark: menstruation (Days 1&ndash;5), ovulation (Day 14), and the lining thickness. Write each hormone's name where it peaks. This visual is worth drawing before every practice exam &mdash; it takes 30 seconds and prevents mistakes.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the four phases of the menstrual cycle</li>
+    <li><input type="checkbox"> I can state the role of each hormone (FSH, LH, oestrogen, progesterone)</li>
+    <li><input type="checkbox"> I know that ovulation occurs on Day 14</li>
+    <li><input type="checkbox"> I can explain the difference between fertilisation and conception</li>
+    <li><input type="checkbox"> I know where fertilisation occurs (oviduct) and what implantation is</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: PREGNANCY & BIRTH ===== -->
+<div class="section-header">
+  <span class="num">Sections 16.9 &ndash; 16.11</span>
+  Pregnancy, Placenta, and Birth
+</div>
+<div class="card">
+  <div class="intro-text">
+    Once the embryo implants, it develops for about 9 months (the gestation period). The placenta is the key organ that keeps the fetus alive.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Placenta</div>
+      <p>The <strong>placenta</strong> is a disc-shaped organ that forms from the embryo and the uterus lining. It is connected to the fetus by the <strong>umbilical cord</strong>.</p>
+      <p style="margin-top:6px;"><strong>Functions of the placenta:</strong></p>
+      <p>&bull; <strong>Exchange of materials:</strong> oxygen and nutrients (glucose, amino acids) pass from mother &rarr; fetus; carbon dioxide and urea pass from fetus &rarr; mother.</p>
+      <p>&bull; <strong>Barrier:</strong> maternal and fetal blood do NOT mix. They are separated by a thin membrane. This protects the fetus from the mother's blood pressure and immune system.</p>
+      <p>&bull; <strong>Produces hormones</strong> (oestrogen and progesterone) to maintain pregnancy.</p>
+      <p>&bull; <strong>Antibodies</strong> cross the placenta late in pregnancy, giving the baby some immunity.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Blood Mixing</div>
+      <p>The mother's blood and the fetus's blood <strong>NEVER mix</strong>. Materials cross the placenta by diffusion across the membrane. If a question asks "Do the bloods mix?", the answer is always <strong>no</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Protecting the Fetus</div>
+      <p>&bull; <strong>Amniotic sac</strong> &mdash; membrane surrounding the fetus.</p>
+      <p>&bull; <strong>Amniotic fluid</strong> &mdash; protects against mechanical shock, drying out, and temperature changes.</p>
+      <p style="margin-top:6px;"><strong>Harmful substances that CAN cross the placenta:</strong></p>
+      <p>&bull; <strong>Nicotine</strong> (from smoking) &mdash; reduces oxygen transport, causing low birth weight.</p>
+      <p>&bull; <strong>Alcohol</strong> &mdash; can damage the developing nervous system.</p>
+      <p>&bull; <strong>Rubella virus</strong> (German measles) &mdash; damages brain and nervous system.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Birth (Labour)</div>
+      <p><strong>Labour</strong> has three stages, controlled by hormones:</p>
+      <p style="margin-top:4px;"><strong>1.</strong> Uterus muscles begin <strong>contractions</strong>, stimulated by <strong>oxytocin</strong> (from the pituitary gland). Progesterone levels fall (it was preventing contractions). The amniotic sac breaks ("waters breaking") and the cervix dilates.</p>
+      <p style="margin-top:4px;"><strong>2.</strong> Stronger contractions push the baby through the cervix and vagina (birth canal), usually head first.</p>
+      <p style="margin-top:4px;"><strong>3.</strong> The placenta detaches from the uterus wall and is delivered as the <strong>afterbirth</strong>. The umbilical cord is clamped and cut.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Exam questions often ask about harmful substances crossing the placenta. A common question: "Explain why a pregnant woman should not smoke." Answer: nicotine crosses the placenta &rarr; reduces oxygen carried by the blood &rarr; less oxygen for the fetus &rarr; lower birth weight.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Draw a simple diagram of the placenta with arrows showing what crosses in each direction. Mother &rarr; fetus: oxygen, glucose, amino acids, antibodies. Fetus &rarr; mother: CO&#8322;, urea. Label the villi, umbilical cord, and note "bloods do not mix."</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state the four functions of the placenta</li>
+    <li><input type="checkbox"> I know that maternal and fetal blood do NOT mix</li>
+    <li><input type="checkbox"> I can name three harmful substances that cross the placenta</li>
+    <li><input type="checkbox"> I can describe the three stages of labour</li>
+    <li><input type="checkbox"> I know that oxytocin stimulates contractions and progesterone falls</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: STIs ===== -->
+<div class="section-header">
+  <span class="num">Section 16.12</span>
+  Sexually Transmitted Infections (STIs)
+</div>
+<div class="card">
+  <div class="intro-text">
+    STIs are diseases spread by body fluids through sexual contact. You need to know examples, symptoms, and prevention methods.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Two Key STIs</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Gonorrhoea</th>
+          <th>HIV / AIDS</th>
+        </tr>
+        <tr>
+          <td><strong>Caused by</strong></td>
+          <td>Bacterium</td>
+          <td>Virus (HIV)</td>
+        </tr>
+        <tr>
+          <td><strong>Symptoms</strong></td>
+          <td>Pain when urinating, discharge</td>
+          <td>Flu-like illness; immune system fails over time</td>
+        </tr>
+        <tr>
+          <td><strong>Transmission</strong></td>
+          <td>Unprotected sex</td>
+          <td>Unprotected sex, blood contact, mother to child, shared needles</td>
+        </tr>
+        <tr>
+          <td><strong>Treatment</strong></td>
+          <td>Antibiotics (but resistant strains developing)</td>
+          <td>No cure; antiviral drugs slow progression</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Prevention</div>
+      <p>&bull; Use a <strong>condom</strong> (barrier method) during sexual intercourse</p>
+      <p>&bull; Know the sexual history of partners</p>
+      <p>&bull; Have a medical check if symptoms appear</p>
+      <p>&bull; Community-level: education programmes, testing, vaccine development</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>HIV</strong> is the <strong>virus</strong>. <strong>AIDS</strong> is the <strong>condition</strong> that develops later when the immune system fails. They are not the same thing. HIV+ does not mean the person has AIDS yet.</p>
+      <p style="margin-top:4px;">Also: gonorrhoea is <strong>bacterial</strong> (treatable with antibiotics). HIV is <strong>viral</strong> (no cure, antibiotics won't work).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name one bacterial STI and one viral STI</li>
+    <li><input type="checkbox"> I know the difference between HIV and AIDS</li>
+    <li><input type="checkbox"> I can explain why gonorrhoea can be treated with antibiotics but HIV cannot</li>
+    <li><input type="checkbox"> I can state how STIs are prevented</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 16 Notes Complete</h2>
+  <p>You've covered asexual vs sexual reproduction, plant reproduction, human reproductive systems, the menstrual cycle, pregnancy and birth, and STIs. This was the biggest chapter &mdash; well done for getting through it. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

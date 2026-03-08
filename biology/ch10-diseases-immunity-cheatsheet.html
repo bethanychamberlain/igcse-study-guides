@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Diseases &amp; Immunity &mdash; Biology Ch10</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch10 &mdash; Cheat Sheet</div>
+    <h1>Diseases &amp; Immunity</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Pathogen</strong></td>
+      <td>An organism that causes disease. Types: bacteria, viruses, fungi, protoctists.</td>
+      <td class="confuse">Antigen (an antigen is the marker protein on the pathogen's surface, not the pathogen itself)</td>
+    </tr>
+    <tr>
+      <td><strong>Antigen</strong></td>
+      <td>A protein or carbohydrate on a pathogen's surface that the immune system recognises as foreign.</td>
+      <td class="confuse">Antibody (antibodies are Y-shaped proteins made by lymphocytes that BIND to antigens)</td>
+    </tr>
+    <tr>
+      <td><strong>Antibody</strong></td>
+      <td>A Y-shaped protein produced by lymphocytes. Each antibody is specific to one antigen.</td>
+      <td class="confuse">Antigen (antigen is on the pathogen; antibody is made by the body to fight it)</td>
+    </tr>
+    <tr>
+      <td><strong>Phagocyte</strong></td>
+      <td>White blood cell that engulfs and digests pathogens (phagocytosis).</td>
+      <td class="confuse">Lymphocyte (lymphocytes make antibodies; phagocytes eat pathogens)</td>
+    </tr>
+    <tr>
+      <td><strong>Lymphocyte</strong></td>
+      <td>White blood cell that produces antibodies specific to a pathogen's antigen.</td>
+      <td class="confuse">Phagocyte (phagocytes eat; lymphocytes launch antibodies)</td>
+    </tr>
+    <tr>
+      <td><strong>Memory cell</strong></td>
+      <td>A lymphocyte that remains in the body after infection. Enables a faster, stronger response if the same pathogen returns.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Vaccine</strong></td>
+      <td>A weakened or dead form of a pathogen (or its antigens) injected to stimulate antibody production and memory cell formation.</td>
+      <td class="confuse">Antibiotic (antibiotics treat bacterial infections AFTER they happen; vaccines prevent them)</td>
+    </tr>
+    <tr>
+      <td><strong>Active immunity</strong></td>
+      <td>The body makes its own antibodies (and memory cells). Long-lasting. Happens by infection or vaccination.</td>
+      <td class="confuse">Passive immunity (receives ready-made antibodies from someone else &mdash; no memory cells, short-term)</td>
+    </tr>
+    <tr>
+      <td><strong>Passive immunity</strong></td>
+      <td>The body receives ready-made antibodies (e.g. from mother via placenta/breast milk, or by injection). Short-term.</td>
+      <td class="confuse">Active immunity (body makes its own; passive = borrowed)</td>
+    </tr>
+    <tr>
+      <td><strong>Fibrinogen</strong></td>
+      <td>An inactive protein dissolved in plasma. Converted to fibrin (active mesh) during blood clotting.</td>
+      <td class="confuse">Fibrin (fibrin is the active form that makes the mesh &mdash; fibrinogen is the inactive precursor)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: ACTIVE vs PASSIVE IMMUNITY -->
+<div class="card">
+  <h2>Active vs Passive Immunity &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Active Immunity</th>
+      <th>Passive Immunity</th>
+    </tr>
+    <tr>
+      <td>Source of antibodies</td>
+      <td>Body makes its OWN</td>
+      <td>Receives READY-MADE from elsewhere</td>
+    </tr>
+    <tr>
+      <td>Natural example</td>
+      <td>Catching the disease and recovering</td>
+      <td>Mother's antibodies via placenta or breast milk</td>
+    </tr>
+    <tr>
+      <td>Artificial example</td>
+      <td>Vaccination</td>
+      <td>Injection of antibodies (e.g. anti-tetanus serum)</td>
+    </tr>
+    <tr>
+      <td>Memory cells?</td>
+      <td>Yes &mdash; long-term protection</td>
+      <td>No &mdash; short-term only</td>
+    </tr>
+    <tr>
+      <td>Speed</td>
+      <td>Slow start (days to make antibodies)</td>
+      <td>Instant (antibodies already made)</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Active = Own, Passive = Borrowed</div>
+    The key test: did the body make its own antibodies? If <strong>yes</strong> = active (with memory cells, lasts a long time). If <strong>no</strong> (antibodies came from outside) = passive (no memory cells, wears off quickly).
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: PATHOGEN TYPES -->
+<div class="card">
+  <h2>Types of Pathogen &mdash; Know One Example Each</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Type</th>
+      <th>Size</th>
+      <th>Example Disease</th>
+      <th>How It Spreads</th>
+    </tr>
+    <tr>
+      <td>Virus</td>
+      <td>~1 nm (smallest)</td>
+      <td>Influenza, AIDS</td>
+      <td>Droplets / body fluids</td>
+    </tr>
+    <tr>
+      <td>Bacterium</td>
+      <td>~1 &micro;m</td>
+      <td>Cholera, food poisoning</td>
+      <td>Contaminated water / food</td>
+    </tr>
+    <tr>
+      <td>Protoctist</td>
+      <td>Up to 1 mm</td>
+      <td>Malaria</td>
+      <td>Mosquito vector</td>
+    </tr>
+    <tr>
+      <td>Fungus</td>
+      <td>Variable</td>
+      <td>Athlete's foot</td>
+      <td>Direct contact</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Pathogen</span>
+    <span>Any organism that causes disease &mdash; it's a parasite that harms its host by releasing toxins or destroying cells.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Antibodies</span>
+    <span>Y-shaped proteins made by lymphocytes; each one is specific to one antigen and can clump, burst, or neutralise pathogens.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Phagocytosis</span>
+    <span>A phagocyte flows around a pathogen, encloses it in a vacuole, and digests it with enzymes.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Blood clotting</span>
+    <span>Damaged platelets release enzymes &rarr; fibrinogen converts to fibrin &rarr; mesh traps RBCs &rarr; scab forms.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Vaccination</span>
+    <span>Inject weakened/dead pathogen &rarr; lymphocytes make antibodies + memory cells &rarr; second exposure gets a faster, stronger response.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Herd immunity</span>
+    <span>When enough people are vaccinated, the pathogen can't find hosts to infect, so even unvaccinated people are protected.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Antibiotics</span>
+    <span>Kill bacteria by disrupting their cell processes, but do NOT work on viruses because viruses replicate inside host cells.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Antigen vs Antibody &mdash; "Anti-GEN = Generated by pathogen"</div>
+    The <strong>anti-GEN</strong> is what the pathogen <strong>gen</strong>erates (its surface marker). The <strong>anti-BODY</strong> is what your <strong>body</strong> makes to fight it. Antigen = on the bad guy. Antibody = your weapon.
+  </div>
+
+  <div class="trick">
+    <div class="label">The Defence Layers (Outside In)</div>
+    Think of a castle: <strong>1. Walls</strong> = skin, mucus, stomach acid (barriers). <strong>2. Guards</strong> = phagocytes (eat invaders). <strong>3. Archers</strong> = lymphocytes (launch antibodies from a distance). <strong>4. Memory</strong> = memory cells (remember the enemy for next time).
+  </div>
+
+  <div class="trick">
+    <div class="label">Clotting Sequence: "PEF-MS"</div>
+    <strong>P</strong>latelets damaged &rarr; <strong>E</strong>nzymes released &rarr; <strong>F</strong>ibrinogen converts to fibrin &rarr; <strong>M</strong>esh of fibres traps red blood cells &rarr; <strong>S</strong>cab forms. Five steps, five letters.
+  </div>
+
+  <div class="trick">
+    <div class="label">Why Antibiotics Don't Work on Viruses</div>
+    Antibiotics attack bacterial structures (like cell walls). Viruses have no cell walls &mdash; they hide inside YOUR cells and use YOUR machinery to reproduce. It's like trying to shoot the burglar when he's hiding behind your own family.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"What is a pathogen?"</td>
+      <td>An organism that <strong>causes disease</strong>. It is a parasite that harms its host.</td>
+    </tr>
+    <tr>
+      <td>"Describe how phagocytes defend against pathogens"</td>
+      <td>Phagocyte <strong>engulfs</strong> pathogen into a vacuole &rarr; <strong>digestive enzymes</strong> break it down</td>
+    </tr>
+    <tr>
+      <td>"Why are antibodies described as specific?"</td>
+      <td>Each antibody has a <strong>unique shape</strong> that binds to only <strong>one type of antigen</strong></td>
+    </tr>
+    <tr>
+      <td>"Explain how vaccination leads to immunity"</td>
+      <td>Vaccine (weakened pathogen) &rarr; lymphocytes produce antibodies &rarr; <strong>memory cells</strong> formed &rarr; second exposure triggers faster, stronger response</td>
+    </tr>
+    <tr>
+      <td>"Distinguish between active and passive immunity"</td>
+      <td>Active: body makes <strong>own</strong> antibodies, memory cells, <strong>long-term</strong>. Passive: receives <strong>ready-made</strong> antibodies, no memory, <strong>short-term</strong></td>
+    </tr>
+    <tr>
+      <td>"Why can't antibiotics treat influenza?"</td>
+      <td>Influenza is caused by a <strong>virus</strong>. Antibiotics only work on <strong>bacteria</strong>.</td>
+    </tr>
+    <tr>
+      <td>"What is herd immunity?"</td>
+      <td>If enough people are vaccinated, the pathogen can't spread because there are <strong>too few susceptible hosts</strong></td>
+    </tr>
+    <tr>
+      <td>"Describe the role of platelets in blood clotting"</td>
+      <td>Platelets release <strong>enzymes</strong> that convert fibrinogen to <strong>fibrin</strong>, forming a mesh that traps RBCs to seal the wound</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

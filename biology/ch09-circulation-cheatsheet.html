@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Circulation &mdash; Biology Ch9</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch9 &mdash; Cheat Sheet</div>
+    <h1>Circulation</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Double circulation</strong></td>
+      <td>Blood passes through the heart twice for each complete circuit: once to the lungs (pulmonary), once to the body (systemic).</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Artery</strong></td>
+      <td>Thick-walled, elastic blood vessel carrying blood away from the heart at high pressure.</td>
+      <td class="confuse">Vein (thin walls, valves, carries blood towards the heart)</td>
+    </tr>
+    <tr>
+      <td><strong>Vein</strong></td>
+      <td>Thin-walled blood vessel with valves, carrying blood back towards the heart at low pressure.</td>
+      <td class="confuse">Artery (thick walls, no valves, high pressure)</td>
+    </tr>
+    <tr>
+      <td><strong>Capillary</strong></td>
+      <td>Tiny vessel (one cell thick) that connects arteries to veins. Where exchange of substances happens.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Haemoglobin</strong></td>
+      <td>The iron-containing protein inside red blood cells that binds to oxygen (forming oxyhaemoglobin).</td>
+      <td class="confuse">Red blood cell (haemoglobin is inside the RBC &mdash; it's not the cell itself)</td>
+    </tr>
+    <tr>
+      <td><strong>Plasma</strong></td>
+      <td>The liquid part of blood. Transports dissolved glucose, amino acids, urea, CO&#8322;, hormones, and heat.</td>
+      <td class="confuse">Tissue fluid (tissue fluid is plasma squeezed out of capillaries &mdash; it lacks RBCs and large proteins)</td>
+    </tr>
+    <tr>
+      <td><strong>Phagocyte</strong></td>
+      <td>White blood cell that engulfs and digests pathogens (phagocytosis). Has lobed nucleus.</td>
+      <td class="confuse">Lymphocyte (that makes antibodies &mdash; different job)</td>
+    </tr>
+    <tr>
+      <td><strong>Lymphocyte</strong></td>
+      <td>White blood cell that produces antibodies (specific proteins) to fight infection.</td>
+      <td class="confuse">Phagocyte (that physically eats pathogens &mdash; different job)</td>
+    </tr>
+    <tr>
+      <td><strong>Platelet</strong></td>
+      <td>Cell fragment that triggers blood clotting when a vessel is damaged. Converts fibrinogen to fibrin.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Coronary artery</strong></td>
+      <td>The artery that supplies the heart muscle itself with oxygenated blood. Blockage = heart attack.</td>
+      <td class="confuse">Aorta (the aorta carries blood to the whole body &mdash; coronary arteries branch off it to feed the heart muscle)</td>
+    </tr>
+    <tr>
+      <td><strong>Atheroma</strong></td>
+      <td>Fatty deposit that builds up inside coronary arteries, narrowing them and restricting blood flow.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: BLOOD VESSELS -->
+<div class="card">
+  <h2>Artery vs Vein vs Capillary &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Artery</th>
+      <th>Vein</th>
+      <th>Capillary</th>
+    </tr>
+    <tr>
+      <td>Direction</td>
+      <td>Away from heart</td>
+      <td>Towards heart</td>
+      <td>Links arteries to veins</td>
+    </tr>
+    <tr>
+      <td>Wall</td>
+      <td>Thick, muscular, elastic</td>
+      <td>Thin</td>
+      <td>One cell thick</td>
+    </tr>
+    <tr>
+      <td>Lumen</td>
+      <td>Narrow</td>
+      <td>Wide</td>
+      <td>Very narrow (one RBC wide)</td>
+    </tr>
+    <tr>
+      <td>Pressure</td>
+      <td>High</td>
+      <td>Low</td>
+      <td>Low</td>
+    </tr>
+    <tr>
+      <td>Valves?</td>
+      <td>No (except semilunar)</td>
+      <td>Yes &mdash; prevent backflow</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Blood type</td>
+      <td>Oxygenated*</td>
+      <td>Deoxygenated*</td>
+      <td>Mixed (exchange here)</td>
+    </tr>
+  </table>
+  <p style="font-size:11px; color:var(--text-secondary); margin-top:6px;">*Exceptions: pulmonary artery carries deoxygenated blood; pulmonary vein carries oxygenated blood.</p>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; The Pulmonary Exception</div>
+    The <strong>pulmonary artery</strong> carries <em>deoxygenated</em> blood and the <strong>pulmonary vein</strong> carries <em>oxygenated</em> blood. "Artery" and "vein" refer to <strong>direction</strong> (away from / towards heart), NOT the type of blood inside.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: BLOOD COMPONENTS -->
+<div class="card">
+  <h2>Components of Blood &mdash; What Does What</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Component</th>
+      <th>Function</th>
+      <th>Key Feature</th>
+    </tr>
+    <tr>
+      <td>Red blood cells</td>
+      <td>Carry O&#8322; (as oxyhaemoglobin)</td>
+      <td>No nucleus, biconcave disc, contains haemoglobin</td>
+    </tr>
+    <tr>
+      <td>Phagocytes (WBC)</td>
+      <td>Engulf and digest pathogens</td>
+      <td>Lobed nucleus, digestive enzymes</td>
+    </tr>
+    <tr>
+      <td>Lymphocytes (WBC)</td>
+      <td>Produce antibodies</td>
+      <td>Large round nucleus</td>
+    </tr>
+    <tr>
+      <td>Platelets</td>
+      <td>Blood clotting</td>
+      <td>Cell fragments, trigger fibrinogen &rarr; fibrin</td>
+    </tr>
+    <tr>
+      <td>Plasma</td>
+      <td>Transports dissolved substances and heat</td>
+      <td>Carries glucose, amino acids, urea, CO&#8322;, hormones</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Double circulation</span>
+    <span>Blood goes through the heart twice per loop: right side pumps to lungs, left side pumps to the body.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Left ventricle</span>
+    <span>Has the thickest wall because it pumps blood the furthest distance (to the entire body), needing the most pressure.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Capillaries</span>
+    <span>One cell thick, highly branched, slow blood flow &mdash; perfect conditions for exchange of substances with tissue fluid.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Tissue fluid</span>
+    <span>Plasma squeezed out of capillaries under pressure; bathes cells for exchange but has no RBCs or large proteins.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Pacemaker</span>
+    <span>A patch of tissue in the right atrium wall that sends electrical signals to make the heart beat in rhythm.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Heart attack</span>
+    <span>Coronary artery blocked by atheroma &rarr; heart muscle starved of O&#8322; &rarr; muscle cells die &rarr; heart stops pumping properly.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">A = Away, V = Via veins back</div>
+    <strong>A</strong>rtery = <strong>A</strong>way from heart. <strong>V</strong>ein = back <strong>V</strong>ia veins to the heart. The biggest artery is the <strong>a</strong>orta. The biggest vein is the <strong>v</strong>ena cava.
+  </div>
+
+  <div class="trick">
+    <div class="label">Trace the Red Blood Cell Loop</div>
+    Vena cava &rarr; Right atrium &rarr; Right ventricle &rarr; Pulmonary artery &rarr; Lungs &rarr; Pulmonary vein &rarr; Left atrium &rarr; Left ventricle &rarr; Aorta &rarr; Body &rarr; Vena cava. Say it out loud five times. That's the entire double circulation.
+  </div>
+
+  <div class="trick">
+    <div class="label">Ph = Physical eater, L = Launches antibodies</div>
+    <strong>Ph</strong>agocytes <strong>ph</strong>ysically eat (engulf and digest) pathogens. <strong>L</strong>ymphocytes <strong>l</strong>aunch antibodies (proteins). Two completely different defence mechanisms.
+  </div>
+
+  <div class="trick">
+    <div class="label">Why the Left Side Is Thicker</div>
+    Think: <strong>Left = Long journey</strong>. The left ventricle pumps blood all the way around the body. The right ventricle only pumps to the nearby lungs. Longer distance = more pressure needed = thicker muscle wall.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Why do large organisms need a circulatory system?"</td>
+      <td>Small <strong>surface area to volume ratio</strong> &mdash; diffusion alone is too slow to reach cells deep inside</td>
+    </tr>
+    <tr>
+      <td>"Why is the left ventricle wall thicker?"</td>
+      <td>It pumps blood <strong>further</strong> (whole body vs just lungs), so needs <strong>more pressure</strong>, so needs <strong>more muscle</strong></td>
+    </tr>
+    <tr>
+      <td>"Name the component of blood that carries oxygen"</td>
+      <td><strong>Red blood cells</strong> (which contain haemoglobin)</td>
+    </tr>
+    <tr>
+      <td>"Name two substances carried in plasma"</td>
+      <td><strong>Glucose</strong> and <strong>urea</strong> (also: amino acids, CO&#8322;, hormones)</td>
+    </tr>
+    <tr>
+      <td>"How are capillaries adapted for exchange?"</td>
+      <td><strong>One cell thick</strong> (short diffusion distance), highly branched (large surface area), close to every cell</td>
+    </tr>
+    <tr>
+      <td>"What happens during a heart attack?"</td>
+      <td>Coronary artery blocked by <strong>atheroma</strong> &rarr; heart muscle lacks oxygen &rarr; muscle cells die</td>
+    </tr>
+    <tr>
+      <td>"Give two risk factors for CHD"</td>
+      <td><strong>Smoking</strong> and <strong>high-cholesterol diet</strong> (also: lack of exercise, stress, genetic factors)</td>
+    </tr>
+    <tr>
+      <td>"What is the role of valves in veins?"</td>
+      <td>Prevent <strong>backflow</strong> of blood &mdash; blood in veins is at low pressure, so it needs valves to keep it moving forward</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

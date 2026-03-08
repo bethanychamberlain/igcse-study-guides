@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Gas Exchange &mdash; Biology Ch12</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 12</div>
+  <h1>Gas Exchange</h1>
+  <div class="subtitle">Alveoli, the breathing mechanism, smoking and disease &mdash; how oxygen gets into your blood and CO&#8322; gets out</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 18 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: GAS EXCHANGE SUPPLIES OXYGEN ===== -->
+<div class="section-header">
+  <span class="num">Section 12.1</span>
+  Gas Exchange Supplies Oxygen for Respiration
+</div>
+<div class="card">
+  <div class="intro-text">
+    Cells need oxygen for aerobic respiration and must get rid of CO&#8322; waste. Gas exchange is the process that makes this happen.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Gas Exchange Definition</div>
+      <p><strong>Gas exchange</strong> is the swapping of oxygen and carbon dioxide between an organism and its environment. It takes place through a <strong>gas exchange surface</strong> (also called a <strong>respiratory surface</strong>).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Gas Exchange vs Respiration vs Breathing</div>
+      <p><strong>Respiration</strong> = chemical reactions inside cells that release energy from glucose.<br>
+         <strong>Gas exchange</strong> = O&#8322; and CO&#8322; crossing a surface (e.g. alveoli walls).<br>
+         <strong>Breathing</strong> = the physical movement of air in and out of the lungs (ventilation).<br>
+         These are three <em>different</em> things. The exam loves to test whether you mix them up.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Properties of a Good Gas Exchange Surface</div>
+      <table class="compare-table">
+        <tr>
+          <th>Property</th>
+          <th>Reason</th>
+        </tr>
+        <tr>
+          <td><strong>Thin</strong> (one cell thick)</td>
+          <td>Short diffusion distance for gases</td>
+        </tr>
+        <tr>
+          <td><strong>Large surface area</strong></td>
+          <td>Many gas molecules can diffuse at the same time</td>
+        </tr>
+        <tr>
+          <td><strong>Moist</strong></td>
+          <td>Gases dissolve in moisture before diffusing; cells die if dry</td>
+        </tr>
+        <tr>
+          <td><strong>Good blood supply</strong></td>
+          <td>Carries gases to/from respiring cells, maintains concentration gradient</td>
+        </tr>
+        <tr>
+          <td><strong>Well ventilated</strong></td>
+          <td>Fresh air maintains concentration gradients for O&#8322; and CO&#8322;</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This table is exam gold. A classic 4-mark question: &ldquo;Describe the features of alveoli that make them efficient for gas exchange.&rdquo; Just list the properties and link each one to its reason.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define gas exchange</li>
+    <li><input type="checkbox"> I know the 5 properties of a good gas exchange surface</li>
+    <li><input type="checkbox"> I can tell the difference between respiration, gas exchange, and breathing</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: THE GAS EXCHANGE SYSTEM ===== -->
+<div class="section-header">
+  <span class="num">Section 12.1 continued</span>
+  The Human Gas Exchange System
+</div>
+<div class="card">
+  <div class="intro-text">
+    Air travels through a series of tubes before reaching the alveoli, where gas exchange actually happens.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Pathway of Air</div>
+      <p><strong>Nose/mouth</strong> &rarr; <strong>Larynx</strong> (voice box) &rarr; <strong>Trachea</strong> (windpipe, kept open by C-shaped cartilage rings) &rarr; <strong>Bronchi</strong> (one bronchus to each lung) &rarr; <strong>Bronchioles</strong> (fine branches) &rarr; <strong>Alveoli</strong> (air sacs where gas exchange occurs)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Alveoli</div>
+      <p><strong>Alveoli</strong> (singular: alveolus) are tiny air sacs at the ends of bronchioles. They are where gas exchange takes place.</p>
+      <p style="margin-top:8px;"><strong>Why alveoli are so efficient:</strong><br>
+         &bull; <strong>Thin walls</strong> &mdash; only one cell thick, so gases diffuse across a very short distance<br>
+         &bull; <strong>Huge surface area</strong> &mdash; millions of alveoli give a total area the size of a tennis court<br>
+         &bull; <strong>Moist lining</strong> &mdash; gases dissolve before diffusing<br>
+         &bull; <strong>Rich blood supply</strong> &mdash; dense network of capillaries maintains a steep concentration gradient<br>
+         &bull; <strong>Well ventilated</strong> &mdash; breathing keeps fresh air flowing in</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How Gas Exchange Works at the Alveolus</div>
+      <p>&bull; <strong>Oxygen</strong> diffuses from the air in the alveolus (high concentration) into the blood in the capillary (low concentration)<br>
+         &bull; Oxygen is picked up by <strong>haemoglobin</strong> in red blood cells, forming <strong>oxyhaemoglobin</strong><br>
+         &bull; <strong>Carbon dioxide</strong> diffuses from the blood (high concentration) into the air in the alveolus (low concentration)<br>
+         &bull; Both gases move by <strong>diffusion</strong> &mdash; down their concentration gradients</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Protecting the Airways</div>
+      <p><strong>Goblet cells</strong> produce sticky <strong>mucus</strong> that traps dust, microbes, and particles.<br>
+         <strong>Ciliated cells</strong> have tiny hair-like <strong>cilia</strong> that beat in a coordinated wave, sweeping the mucus (and trapped particles) <strong>up and away</strong> from the lungs towards the throat.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw and Label</div>
+      <p>Draw a simple diagram of one alveolus surrounded by a capillary. Label: alveolar wall, capillary wall, red blood cells, oxygen arrows (into blood), CO&#8322; arrows (into alveolus). Drawing this forces you to think about the direction of gas movement.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list the pathway of air from nose to alveoli in order</li>
+    <li><input type="checkbox"> I can explain why alveoli are efficient for gas exchange (at least 4 reasons)</li>
+    <li><input type="checkbox"> I know which direction O&#8322; and CO&#8322; move at the alveolus</li>
+    <li><input type="checkbox"> I know the roles of goblet cells and cilia</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: BREATHING ===== -->
+<div class="section-header">
+  <span class="num">Section 12.2</span>
+  Breathing Ventilates the Lungs
+</div>
+<div class="card">
+  <div class="intro-text">
+    Breathing moves air in and out of the lungs. It&rsquo;s a mechanical process involving muscles and pressure changes &mdash; nothing to do with the chemical reactions of respiration.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Breathing In (Inhalation)</div>
+      <p>1. <strong>External intercostal muscles</strong> contract &rarr; pull rib cage <strong>up and out</strong><br>
+         2. <strong>Diaphragm muscles</strong> contract &rarr; diaphragm moves <strong>down</strong> (flattens)<br>
+         3. Chest cavity volume <strong>increases</strong><br>
+         4. Pressure inside the lungs <strong>decreases</strong> (below atmospheric pressure)<br>
+         5. Air rushes <strong>in</strong> to equalise the pressure</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Breathing Out (Exhalation)</div>
+      <p>1. <strong>Internal intercostal muscles</strong> contract (during forced breathing) &rarr; rib cage moves <strong>down and in</strong><br>
+         2. <strong>Diaphragm muscles</strong> relax &rarr; diaphragm moves <strong>up</strong> (returns to dome shape)<br>
+         3. Chest cavity volume <strong>decreases</strong><br>
+         4. Pressure inside the lungs <strong>increases</strong> (above atmospheric pressure)<br>
+         5. Air is pushed <strong>out</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Which Muscles Do What</div>
+      <p><strong>External</strong> intercostals contract during <strong>breathing in</strong>.<br>
+         <strong>Internal</strong> intercostals contract during <strong>forced breathing out</strong> (e.g. coughing, sneezing).<br>
+         Normal breathing out is mostly <strong>passive</strong> &mdash; the muscles just relax and the lungs spring back.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Inhaled vs Exhaled Air</div>
+      <table class="compare-table">
+        <tr>
+          <th>Gas</th>
+          <th>Inhaled air</th>
+          <th>Exhaled air</th>
+          <th>Why</th>
+        </tr>
+        <tr>
+          <td><strong>Oxygen</strong></td>
+          <td>21%</td>
+          <td>~18%</td>
+          <td>O&#8322; diffuses from alveoli into blood</td>
+        </tr>
+        <tr>
+          <td><strong>Carbon dioxide</strong></td>
+          <td>0.04%</td>
+          <td>~3-4%</td>
+          <td>CO&#8322; diffuses from blood into alveoli</td>
+        </tr>
+        <tr>
+          <td><strong>Nitrogen</strong></td>
+          <td>78%</td>
+          <td>78%</td>
+          <td>Not used by the body</td>
+        </tr>
+        <tr>
+          <td><strong>Water vapour</strong></td>
+          <td>Variable</td>
+          <td>Saturated</td>
+          <td>Water evaporates from moist alveolar surfaces</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Exercise and Breathing</div>
+      <p>During exercise, muscles respire faster &rarr; more O&#8322; needed, more CO&#8322; produced. The body responds by:<br>
+         &bull; Increasing <strong>breathing rate</strong> (more breaths per minute)<br>
+         &bull; Increasing <strong>tidal volume</strong> (deeper breaths = more air per breath)<br>
+         &bull; Increasing <strong>heart rate</strong> (pumps blood faster to carry O&#8322; to muscles and CO&#8322; away)</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Pressure Story</div>
+      <p>Think of it as a syringe. Pull the plunger out = volume increases = pressure drops = air rushes in. Push the plunger in = volume decreases = pressure increases = air pushed out. That&rsquo;s exactly what the rib cage and diaphragm do.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe what happens during breathing in (5 steps)</li>
+    <li><input type="checkbox"> I can describe what happens during breathing out (5 steps)</li>
+    <li><input type="checkbox"> I know the differences between inhaled and exhaled air</li>
+    <li><input type="checkbox"> I can explain how exercise affects breathing rate and tidal volume</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: SMOKING AND DISEASE ===== -->
+<div class="section-header">
+  <span class="num">Section 12.3</span>
+  Smoking and Disease
+</div>
+<div class="card">
+  <div class="intro-text">
+    Smoking damages almost every part of the gas exchange system. Know the chemicals and the diseases they cause.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Harmful Chemicals in Tobacco Smoke</div>
+      <table class="compare-table">
+        <tr>
+          <th>Chemical</th>
+          <th>What it does</th>
+        </tr>
+        <tr>
+          <td><strong>Tar</strong></td>
+          <td>A sticky substance that coats the lungs. Contains <strong>carcinogens</strong> (cancer-causing chemicals). Damages cilia and builds up in alveoli.</td>
+        </tr>
+        <tr>
+          <td><strong>Nicotine</strong></td>
+          <td>The addictive substance. Increases heart rate and blood pressure. Narrows blood vessels.</td>
+        </tr>
+        <tr>
+          <td><strong>Carbon monoxide (CO)</strong></td>
+          <td>Binds to haemoglobin <strong>more strongly than oxygen</strong>, forming carboxyhaemoglobin. Reduces the blood&rsquo;s ability to carry oxygen. Heart must work harder.</td>
+        </tr>
+        <tr>
+          <td><strong>Smoke particles</strong></td>
+          <td>Irritate the airways, causing inflammation and extra mucus production.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Diseases Caused by Smoking</div>
+      <p><strong>Lung cancer:</strong> Tar contains carcinogens that cause uncontrolled cell division in lung tissue.<br>
+         <strong>Chronic bronchitis:</strong> Smoke irritates the bronchi &rarr; inflammation &rarr; excess mucus &rarr; persistent cough. Cilia are damaged so mucus is not cleared &rarr; infections are more likely.<br>
+         <strong>Emphysema:</strong> Alveoli walls are destroyed &rarr; surface area for gas exchange is greatly reduced &rarr; person becomes breathless because not enough O&#8322; can enter the blood.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Addiction</div>
+      <p><strong>Physical addiction:</strong> the body cannot function properly without nicotine because it has replaced a natural body chemical.<br>
+         <strong>Psychological addiction:</strong> smoking becomes linked with comfort or stress relief &mdash; the person reaches for a cigarette automatically.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Carbon monoxide is the sneaky one. It doesn&rsquo;t damage the lungs directly &mdash; it reduces the blood&rsquo;s oxygen-carrying capacity. This is why smokers get breathless more easily and why their hearts have to beat faster to deliver enough oxygen.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name 4 harmful chemicals in tobacco smoke and what each does</li>
+    <li><input type="checkbox"> I can describe how smoking causes lung cancer, bronchitis, and emphysema</li>
+    <li><input type="checkbox"> I know the difference between physical and psychological addiction</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: EVIDENCE FOR SMOKING AND DISEASE ===== -->
+<div class="section-header">
+  <span class="num">Section 12.4</span>
+  How Do We Know Smoking Causes Disease?
+</div>
+<div class="card">
+  <div class="intro-text">
+    We can&rsquo;t do experiments on humans, so scientists use epidemiological studies &mdash; large-scale surveys that look for patterns between smoking and disease.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Epidemiology</div>
+      <p><strong>Epidemiology</strong> is the study of patterns in the distribution of diseases. It looks at who gets ill, where, and why &mdash; to find links between lifestyle factors and disease.</p>
+      <p style="margin-top:8px;"><strong>Sir Richard Doll&rsquo;s study:</strong><br>
+         &bull; Studied <strong>doctors</strong> (to rule out occupation as a factor)<br>
+         &bull; Separated data for city vs countryside (to rule out pollution)<br>
+         &bull; Found a clear <strong>correlation</strong>: the more cigarettes smoked per day, the higher the risk of lung cancer</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Correlation vs Causation</div>
+      <p>A <strong>correlation</strong> between two variables does not <em>prove</em> that one <em>causes</em> the other. It might be that heavy smokers share another risk factor (e.g. diet, genetics). However, the evidence for smoking is so strong &mdash; because so many other variables have been eliminated &mdash; that scientists accept smoking as a <strong>major cause</strong> of lung disease.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>You cannot deliberately give humans cancer for an experiment &mdash; that would be unethical. So epidemiological studies (observing large populations over time) are the best evidence we have. The exam may ask: &ldquo;Why can&rsquo;t we use a typical laboratory experiment to prove smoking causes lung cancer?&rdquo; Answer: it would be unethical to deliberately expose humans to a known harmful substance.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Graph Interpretation</div>
+      <p>If the exam shows a graph of cigarettes smoked vs lung cancer deaths, describe the <strong>trend</strong> (as cigarettes increase, deaths increase), state it shows a <strong>positive correlation</strong>, and then add the caution: &ldquo;correlation does not prove causation, but the link is strongly supported by multiple studies.&rdquo;</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define epidemiology</li>
+    <li><input type="checkbox"> I know what Richard Doll's study showed and how he controlled variables</li>
+    <li><input type="checkbox"> I understand the difference between correlation and causation</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 12 Notes Complete</h2>
+  <p>You've covered gas exchange surfaces, alveoli, the breathing mechanism, and smoking. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

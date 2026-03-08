@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Redox Reactions &mdash; Chemistry Ch6</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 6</div>
+  <h1>Redox Reactions</h1>
+  <div class="subtitle">Oxidation, reduction, electron transfer, oxidation numbers, and oxidising/reducing agents &mdash; one of the most tested topics in IGCSE Chemistry</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 18 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: OXIDATION AND REDUCTION ===== -->
+<div class="section-header">
+  <span class="num">Section 6.1</span>
+  Oxidation and Reduction
+</div>
+<div class="card">
+  <div class="intro-text">
+    Thousands of reactions happen every day &mdash; in labs, factories, and in nature. One huge group is <strong>redox reactions</strong>, where oxidation and reduction happen at the same time. This section covers the simplest way to understand them: in terms of oxygen gain and loss.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Basic Definitions</div>
+      <p><strong>Oxidation</strong> is a <strong>gain of oxygen</strong>. The substance has been <strong>oxidised</strong>.<br>
+         <strong>Reduction</strong> is a <strong>loss of oxygen</strong>. The substance has been <strong>reduced</strong>.</p>
+      <p style="margin-top:8px;"><strong>Examples:</strong><br>
+         &bull; Magnesium burns in air: magnesium + oxygen &rarr; magnesium oxide. The magnesium <strong>gains</strong> oxygen, so it is <strong>oxidised</strong>.<br>
+         &bull; Copper(II) oxide + hydrogen &rarr; copper + water. The copper(II) oxide <strong>loses</strong> oxygen, so it is <strong>reduced</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Oxidation and Reduction Always Happen Together</div>
+      <p>You <strong>cannot</strong> have oxidation without reduction. They always take place together. That is why we call the reaction a <strong>redox reaction</strong> (reduction + oxidation = redox).</p>
+      <p style="margin-top:8px;"><strong>In the CuO + H&#8322; reaction:</strong><br>
+         &bull; CuO <strong>loses</strong> oxygen &rarr; it is <strong>reduced</strong><br>
+         &bull; H&#8322; <strong>gains</strong> oxygen &rarr; it is <strong>oxidised</strong><br>
+         Both happen in the same reaction &mdash; that makes it a redox reaction.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Which One Is Which?</div>
+      <p>Students constantly mix up oxidation and reduction. Here is the single most important thing to remember: <strong>Oxidation = gain of Oxygen</strong>. The "O" in oxidation matches the "O" in oxygen. If something gains oxygen, it is oxidised. If it loses oxygen, it is reduced. Always check: where did the oxygen go?</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Real World</div>
+      <p><strong>Rusting</strong> is oxidation: iron reacts with oxygen and water to form hydrated iron(III) oxide (rust), Fe&#8322;O&#8323;&middot;2H&#8322;O. <strong>Combustion</strong> (burning) is also oxidation: when you burn methane on a gas stove, the carbon and hydrogen in methane gain oxygen. Every burning reaction is a redox reaction. So is <strong>respiration</strong> in your body &mdash; glucose reacts with oxygen to give you energy.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Label the Equations</div>
+      <p>For every equation in this chapter, draw curved arrows above and below to show which substance is being oxidised and which is being reduced. For example:<br>
+         &bull; 2Ca + O&#8322; &rarr; 2CaO: calcium is oxidised (gains O), oxygen is reduced<br>
+         &bull; 2H&#8322; + O&#8322; &rarr; 2H&#8322;O: hydrogen is oxidised (gains O), oxygen is reduced<br>
+         Practise this on every equation until it feels automatic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define oxidation as a gain of oxygen</li>
+    <li><input type="checkbox"> I can define reduction as a loss of oxygen</li>
+    <li><input type="checkbox"> I can explain why oxidation and reduction always happen together</li>
+    <li><input type="checkbox"> I can identify what is oxidised and what is reduced in a given equation</li>
+    <li><input type="checkbox"> I can explain what the term "redox" means</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: REDOX AND ELECTRON TRANSFER ===== -->
+<div class="section-header">
+  <span class="num">Section 6.2</span>
+  Redox and Electron Transfer
+</div>
+<div class="card">
+  <div class="intro-text">
+    The oxygen definition works, but it is limited. There is a broader, more powerful way to define oxidation and reduction: in terms of <strong>electrons</strong>. This is the definition the exam cares about most.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; OIL RIG (Learn This Forever)</div>
+      <p><strong>OIL RIG</strong>:<br>
+         &bull; <strong>O</strong>xidation <strong>I</strong>s <strong>L</strong>oss (of electrons)<br>
+         &bull; <strong>R</strong>eduction <strong>I</strong>s <strong>G</strong>ain (of electrons)</p>
+      <p style="margin-top:8px;">When magnesium burns in oxygen:<br>
+         &bull; Each Mg atom <strong>loses</strong> 2 electrons &rarr; Mg is <strong>oxidised</strong>: Mg &rarr; Mg&#178;&#8314; + 2e&#8315;<br>
+         &bull; Each O atom <strong>gains</strong> 2 electrons &rarr; O is <strong>reduced</strong>: O&#8322; + 4e&#8315; &rarr; 2O&#178;&#8315;</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Half-Equations</div>
+      <p><strong>Half-equations</strong> show the electron transfer in a redox reaction. One half-equation shows oxidation (electron loss), the other shows reduction (electron gain).</p>
+      <p style="margin-top:8px;"><strong>How to write them (3 steps):</strong><br>
+         1. Write each reactant with the electrons it gains or loses<br>
+         2. Make sure each substance is in its correct form (e.g. O&#8322; not O, Cl&#8322; not Cl)<br>
+         3. Balance so the number of electrons is the same in both half-equations</p>
+      <p style="margin-top:8px;"><strong>Example &mdash; Sodium + Chlorine:</strong><br>
+         &bull; Oxidation: 2Na &rarr; 2Na&#8314; + 2e&#8315;<br>
+         &bull; Reduction: Cl&#8322; + 2e&#8315; &rarr; 2Cl&#8315;<br>
+         Both have 2 electrons &mdash; balanced!</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Ionic Equations</div>
+      <p>When you <strong>add</strong> the two balanced half-equations together, the electrons cancel out, and you get the <strong>ionic equation</strong>. The ionic equation shows only the ions that take part in the reaction.</p>
+      <p style="margin-top:8px;"><strong>Example &mdash; Chlorine displacing bromine from potassium bromide:</strong><br>
+         &bull; Reduction: Cl&#8322; + 2e&#8315; &rarr; 2Cl&#8315;<br>
+         &bull; Oxidation: 2Br&#8315; &rarr; Br&#8322; + 2e&#8315;<br>
+         &bull; Add them: Cl&#8322; + 2Br&#8315; &rarr; 2Cl&#8315; + Br&#8322; (electrons cancel)</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; "Loss" and "Gain" Are Backwards From What You Expect</div>
+      <p>Your instinct says "gaining something = good = oxidation." <strong>Wrong.</strong> Oxidation is <strong>loss</strong> of electrons. This trips up almost everyone. The mnemonic OIL RIG exists specifically because the words feel backwards. Write OIL RIG at the top of every redox question on the exam. Every. Single. Time.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Redox Does NOT Require Oxygen</div>
+      <p>The reaction between sodium and chlorine (2Na + Cl&#8322; &rarr; 2NaCl) is a redox reaction even though there is <strong>no oxygen anywhere</strong>. Any reaction involving electron transfer is redox. The electron-transfer definition is broader than the oxygen definition. If the exam asks "Is this a redox reaction?" check for electron transfer, not just oxygen.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Half-equations come up in almost every extended-answer chemistry question about reactions. The exam will give you a full equation and ask you to write the half-equations, or give you half-equations and ask you to combine them into an ionic equation. If you can do this confidently, you pick up easy marks that most students drop.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practise With Flashcards</div>
+      <p>Make flashcards: front side has a reaction equation, back side has the two half-equations labelled "oxidation" and "reduction." Test yourself until you can write the half-equations without looking. Start with: Mg + O&#8322;, Na + Cl&#8322;, Cl&#8322; + KBr. These three cover most exam patterns.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state OIL RIG from memory and explain what it means</li>
+    <li><input type="checkbox"> I can define oxidation and reduction in terms of electron transfer</li>
+    <li><input type="checkbox"> I can write balanced half-equations for a redox reaction</li>
+    <li><input type="checkbox"> I can combine half-equations to form an ionic equation</li>
+    <li><input type="checkbox"> I know that redox reactions do not have to involve oxygen</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: REDOX AND OXIDATION NUMBERS ===== -->
+<div class="section-header">
+  <span class="num">Section 6.3</span>
+  Redox and Oxidation Numbers
+</div>
+<div class="card">
+  <div class="intro-text">
+    Oxidation numbers are a way of tracking electrons in compounds. They let you spot redox reactions just by looking at the numbers &mdash; no need to draw electron diagrams every time.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Is an Oxidation Number?</div>
+      <p>The <strong>oxidation number</strong> tells you how many electrons each atom of an element has lost, gained, or shared in forming a compound. It is usually written as a Roman numeral (I, II, III, etc.).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Rules (Copy This Table)</div>
+      <table class="compare-table">
+        <tr>
+          <th>Rule</th>
+          <th>Detail</th>
+          <th>Example</th>
+        </tr>
+        <tr>
+          <td><strong>1. Uncombined elements</strong></td>
+          <td>Oxidation number = <strong>0</strong></td>
+          <td>Fe = 0, O&#8322; = 0, Na = 0</td>
+        </tr>
+        <tr>
+          <td><strong>2. Simple (monatomic) ions</strong></td>
+          <td>Oxidation number = <strong>the charge</strong></td>
+          <td>Na&#8314; = +I, Cl&#8315; = &minus;I, Mg&#178;&#8314; = +II</td>
+        </tr>
+        <tr>
+          <td><strong>3. Hydrogen</strong></td>
+          <td>Usually <strong>+I</strong></td>
+          <td>H in H&#8322;O = +I</td>
+        </tr>
+        <tr>
+          <td><strong>4. Oxygen</strong></td>
+          <td>Usually <strong>&minus;II</strong> (except in peroxides)</td>
+          <td>O in H&#8322;O = &minus;II</td>
+        </tr>
+        <tr>
+          <td><strong>5. Group I metals</strong></td>
+          <td>Always <strong>+I</strong></td>
+          <td>Na in NaCl = +I</td>
+        </tr>
+        <tr>
+          <td><strong>6. Group II metals</strong></td>
+          <td>Always <strong>+II</strong></td>
+          <td>Ca in CaO = +II</td>
+        </tr>
+        <tr>
+          <td><strong>7. Aluminium (Group III)</strong></td>
+          <td>Always <strong>+III</strong></td>
+          <td>Al in Al&#8322;O&#8323; = +III</td>
+        </tr>
+        <tr>
+          <td><strong>8. Compound total</strong></td>
+          <td>All oxidation numbers add up to <strong>zero</strong></td>
+          <td>MgCl&#8322;: (+II) + 2(&minus;I) = 0</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Transition Metals Have Variable Oxidation Numbers</div>
+      <p>Most transition elements can have different oxidation numbers. The oxidation number is shown in the compound's name as a Roman numeral.</p>
+      <table class="compare-table">
+        <tr>
+          <th>Element</th>
+          <th>Common Oxidation Numbers</th>
+        </tr>
+        <tr>
+          <td>Iron</td>
+          <td>+II and +III (e.g. iron(II) chloride, iron(III) oxide)</td>
+        </tr>
+        <tr>
+          <td>Copper</td>
+          <td>+I and +II (e.g. copper(I) oxide, copper(II) oxide)</td>
+        </tr>
+        <tr>
+          <td>Manganese</td>
+          <td>+II, +IV, and +VII</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How Oxidation Numbers Identify Redox</div>
+      <p>&bull; If an element's oxidation number <strong>increases</strong> (rises) during a reaction &rarr; it has been <strong>oxidised</strong><br>
+         &bull; If an element's oxidation number <strong>decreases</strong> (falls) during a reaction &rarr; it has been <strong>reduced</strong><br>
+         &bull; If oxidation numbers change, it is a <strong>redox reaction</strong></p>
+      <p style="margin-top:8px;"><strong>Worked Example:</strong> Fe + S &rarr; FeS<br>
+         &bull; Fe: 0 &rarr; +II (rises = oxidised)<br>
+         &bull; S: 0 &rarr; &minus;II (falls = reduced)<br>
+         Oxidation numbers changed, so this is a redox reaction.</p>
+      <p style="margin-top:8px;"><strong>Non-example:</strong> NH&#8323; + HCl &rarr; NH&#8324;Cl<br>
+         &bull; N: &minus;III &rarr; &minus;III (no change), H: +I &rarr; +I (no change), Cl: &minus;I &rarr; &minus;I (no change)<br>
+         No change in oxidation numbers, so this is <strong>not</strong> a redox reaction.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; "Increase" vs "Decrease"</div>
+      <p>An oxidation number going from 0 to +II is an <strong>increase</strong> (oxidation). An oxidation number going from 0 to &minus;II is a <strong>decrease</strong> (reduction). Think of a number line: moving right (towards positive) = oxidation. Moving left (towards negative) = reduction. <strong>Up = oxidised, down = reduced.</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Oxidation numbers let you answer the exam question "Is this a redox reaction? Explain your answer" in a systematic way. Write the oxidation number below each element before and after the reaction. If any numbers changed, it is redox. If none changed, it is not. This method works on any equation, even complicated ones where you cannot easily see electron transfer.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practise the Method</div>
+      <p>Take these three equations and assign oxidation numbers to every element, then state if it is redox or not:<br>
+         1. 2FeCl&#8322; + Cl&#8322; &rarr; 2FeCl&#8323;<br>
+         2. C + O&#8322; &rarr; CO&#8322;<br>
+         3. NaOH + HCl &rarr; NaCl + H&#8322;O<br>
+         (Answers: 1 = yes, Fe goes +II to +III. 2 = yes, C goes 0 to +IV. 3 = no, nothing changes.)</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define oxidation number</li>
+    <li><input type="checkbox"> I can state the rules for assigning oxidation numbers</li>
+    <li><input type="checkbox"> I can work out the oxidation number of any element in a compound</li>
+    <li><input type="checkbox"> I can use oxidation number changes to identify a redox reaction</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: OXIDISING AND REDUCING AGENTS ===== -->
+<div class="section-header">
+  <span class="num">Section 6.4</span>
+  Oxidising and Reducing Agents
+</div>
+<div class="card">
+  <div class="intro-text">
+    In every redox reaction, one substance causes oxidation and another causes reduction. These are the oxidising agent and reducing agent. The exam loves asking you to identify them and explain lab tests that use them.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p><strong>Oxidising agent</strong>: a substance that <strong>oxidises</strong> another substance. It does this by <strong>taking electrons</strong> from the other substance. The oxidising agent is <strong>itself reduced</strong>.</p>
+      <p style="margin-top:6px;"><strong>Reducing agent</strong>: a substance that <strong>reduces</strong> another substance. It does this by <strong>giving electrons</strong> to the other substance. The reducing agent is <strong>itself oxidised</strong>.</p>
+      <p style="margin-top:8px;"><strong>Example:</strong> CuO + H&#8322; &rarr; Cu + H&#8322;O<br>
+         &bull; CuO is the <strong>oxidising agent</strong> (it oxidises the hydrogen, and is itself reduced)<br>
+         &bull; H&#8322; is the <strong>reducing agent</strong> (it reduces the copper oxide, and is itself oxidised)</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; The Agent Does the Opposite of What Happens to It</div>
+      <p>This is the trickiest part of the whole chapter. The <strong>oxidising agent gets reduced</strong>. The <strong>reducing agent gets oxidised</strong>. It sounds contradictory, but think of it this way: the oxidising agent is the one <em>causing</em> oxidation in the other substance, like a bully taking someone's electrons. The bully (oxidising agent) gains electrons (is reduced), and the victim (reducing agent) loses electrons (is oxidised).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Common Oxidising and Reducing Agents</div>
+      <table class="compare-table">
+        <tr>
+          <th>Strong Oxidising Agents</th>
+          <th>Strong Reducing Agents</th>
+        </tr>
+        <tr>
+          <td>Oxygen (O&#8322;)</td>
+          <td>Hydrogen (H&#8322;)</td>
+        </tr>
+        <tr>
+          <td>Chlorine (Cl&#8322;)</td>
+          <td>Reactive metals (Na, Mg, Zn)</td>
+        </tr>
+        <tr>
+          <td>Potassium manganate(VII), KMnO&#8324;</td>
+          <td>Carbon (C) and carbon monoxide (CO)</td>
+        </tr>
+        <tr>
+          <td>Hydrogen peroxide (H&#8322;O&#8322;)</td>
+          <td>Potassium iodide (KI)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Lab Tests</div>
+      <p><strong>Test for a reducing agent:</strong> Add acidified <strong>potassium manganate(VII)</strong> solution (purple). If a reducing agent is present, the purple colour <strong>fades to colourless</strong> (Mn goes from +VII to +II).</p>
+      <p style="margin-top:8px;"><strong>Test for an oxidising agent:</strong> Add <strong>potassium iodide</strong> solution (colourless). If an oxidising agent is present, the solution turns <strong>red-brown</strong> (iodide ions are oxidised to iodine: 2I&#8315; &rarr; I&#8322;).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Oxidising Agents in Everyday Life</div>
+      <p>Strong oxidising agents are everywhere outside the lab:<br>
+         &bull; <strong>Bleach</strong> and household cleaners use oxidising agents to kill bacteria and remove colour<br>
+         &bull; <strong>Chlorine</strong> is added to water treatment plants to kill bacteria and make water safe to drink<br>
+         &bull; <strong>Hydrogen peroxide</strong> is used to bleach hair<br>
+         The exam sometimes asks for everyday uses of oxidising agents &mdash; these three examples cover it.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The "Itself" Trick</div>
+      <p>Whenever the exam asks you to identify the oxidising and reducing agent, use this trick: find what is oxidised and what is reduced first (using OIL RIG or oxidation numbers). Then flip:<br>
+         &bull; The substance that <strong>is reduced</strong> = the <strong>oxidising agent</strong><br>
+         &bull; The substance that <strong>is oxidised</strong> = the <strong>reducing agent</strong><br>
+         Write "is reduced = oxidising agent" on a sticky note and put it on your wall.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define oxidising agent and reducing agent</li>
+    <li><input type="checkbox"> I can explain that the oxidising agent is itself reduced (and vice versa)</li>
+    <li><input type="checkbox"> I can describe the test for a reducing agent using potassium manganate(VII)</li>
+    <li><input type="checkbox"> I can describe the test for an oxidising agent using potassium iodide</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 6 Notes Complete</h2>
+  <p>You've covered oxidation and reduction (oxygen and electron definitions), oxidation numbers, and oxidising/reducing agents. Now test yourself with the quiz &mdash; and remember: OIL RIG.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

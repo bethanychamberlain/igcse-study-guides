@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Plant Transport &mdash; Biology Ch8</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 8</div>
+  <h1>Plant Transport</h1>
+  <div class="subtitle">Xylem, phloem, root hair cells, transpiration &mdash; how plants move water and nutrients</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 18 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: XYLEM AND PHLOEM (8.1) ===== -->
+<div class="section-header">
+  <span class="num">Section 8.1</span>
+  Transport Systems in Plants &mdash; Xylem and Phloem
+</div>
+<div class="card">
+  <div class="intro-text">
+    Plants need to move water, minerals, and sugars around their bodies. They have two specialised transport tissues, bundled together in <strong>vascular bundles</strong>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Xylem vs Phloem</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Xylem</th>
+          <th>Phloem</th>
+        </tr>
+        <tr>
+          <td><strong>What it transports</strong></td>
+          <td>Water and dissolved mineral ions</td>
+          <td>Sucrose (sugar) and amino acids</td>
+        </tr>
+        <tr>
+          <td><strong>Direction</strong></td>
+          <td>Always <strong>upward</strong> (roots &rarr; leaves)</td>
+          <td><strong>Both ways</strong> (source &rarr; sink)</td>
+        </tr>
+        <tr>
+          <td><strong>Cells alive or dead?</strong></td>
+          <td><strong>Dead</strong> &mdash; no cytoplasm, no organelles</td>
+          <td><strong>Alive</strong> &mdash; thin cytoplasm, must remain alive or transport stops</td>
+        </tr>
+        <tr>
+          <td><strong>Cell wall</strong></td>
+          <td>Thickened with <strong>lignin</strong> (waterproof, strong)</td>
+          <td>Thin walls; <strong>sieve plates</strong> with pores between cells</td>
+        </tr>
+        <tr>
+          <td><strong>Structure</strong></td>
+          <td>Long hollow tubes (end walls removed) &mdash; no obstruction to water flow</td>
+          <td><strong>Sieve tubes</strong> with <strong>companion cells</strong> that carry out life processes</td>
+        </tr>
+        <tr>
+          <td><strong>Process name</strong></td>
+          <td>Transpiration stream</td>
+          <td><strong>Translocation</strong></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Sources and Sinks</div>
+      <p>Phloem transports sugars from <strong>sources</strong> (where sugars are made or stored) to <strong>sinks</strong> (where sugars are used or stored).</p>
+      <p style="margin-top:6px;">&bull; In summer: leaves (source, photosynthesis) &rarr; roots (sink, storage)<br>
+         &bull; In spring: roots (source, stored starch) &rarr; new leaves (sink, growth)<br>
+         This means phloem moves materials in <strong>both directions</strong>, depending on the season.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>Xylem = water UP. Phloem = sugar BOTH WAYS.</strong> Students often say "xylem goes up, phloem goes down." That's wrong &mdash; phloem goes both up AND down depending on where the source and sink are.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The xylem/phloem comparison table is a classic exam question. You can also be asked: "Why are xylem cells dead?" Answer: because dead cells have no cytoplasm, so there is <strong>no obstruction</strong> to the flow of water. The hollow tubes + lignin = perfect water pipes.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Celery Experiment</div>
+      <p>Remember the celery-in-coloured-water experiment? The coloured dye travels up through the xylem. If you cut the celery cross-section, you can see the stained dots &mdash; those are the xylem vessels. This proves xylem carries water upward.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can compare xylem and phloem in a table from memory</li>
+    <li><input type="checkbox"> I know xylem cells are dead and strengthened with lignin</li>
+    <li><input type="checkbox"> I understand sources and sinks, and why phloem goes both ways</li>
+    <li><input type="checkbox"> I know the term "translocation" for sugar transport in phloem</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: ROOT HAIR CELLS AND WATER UPTAKE (8.2) ===== -->
+<div class="section-header">
+  <span class="num">Section 8.2</span>
+  Uptake of Water and Minerals by Roots
+</div>
+<div class="card">
+  <div class="intro-text">
+    Plants absorb water and minerals from the soil through their roots. The root hair cells are specially adapted for this job.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Root Hair Cells</div>
+      <p><strong>Root hair cells</strong> are extensions of the epidermal cells of the root. They are adapted to absorb water and minerals:</p>
+      <p>&bull; Long, thin projections that extend between soil particles &rarr; <strong>enormous surface area</strong> for absorption<br>
+         &bull; Thin cell wall &rarr; short distance for water to cross<br>
+         &bull; Contain many <strong>mitochondria</strong> &rarr; provide energy for <strong>active transport</strong> of mineral ions</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How Water and Minerals Enter</div>
+      <p><strong>Water enters by osmosis:</strong> The soil solution has a <strong>higher water potential</strong> than the root hair cell cytoplasm (which contains dissolved sugars and salts). Water moves down the water potential gradient, through the partially permeable cell membrane, into the cell.</p>
+      <p style="margin-top:8px;"><strong>Minerals enter by two methods:</strong></p>
+      <p>&bull; <strong>Diffusion</strong> &mdash; if the mineral concentration in soil is higher than in the root cell<br>
+         &bull; <strong>Active transport</strong> &mdash; if the mineral concentration in soil is lower than in the root cell. This requires <strong>energy from respiration</strong>, which is why root hair cells have many mitochondria.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; This Links Back to Chapter 3</div>
+      <p>Water enters root hairs by <strong>osmosis</strong> (not active transport). Minerals enter by <strong>active transport</strong> (against concentration gradient) OR <strong>diffusion</strong> (down concentration gradient). The exam loves asking which process is which &mdash; don't mix them up.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>If a question asks "Why does waterlogging kill plants?", here's the chain: waterlogged soil &rarr; no air spaces &rarr; no oxygen for root cells &rarr; no aerobic respiration &rarr; no energy for active transport &rarr; plant can't absorb minerals &rarr; plant dies. Also, flooding with salt water lowers the water potential of the soil, preventing osmosis.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe three adaptations of root hair cells</li>
+    <li><input type="checkbox"> I know water enters by osmosis and minerals by active transport (or diffusion)</li>
+    <li><input type="checkbox"> I can explain why root hair cells need many mitochondria</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: TRANSPIRATION (8.3) ===== -->
+<div class="section-header">
+  <span class="num">Section 8.3</span>
+  Transpiration &mdash; Water Movement Through the Plant
+</div>
+<div class="card">
+  <div class="intro-text">
+    98% of the water a plant takes up is lost through its leaves. This might seem wasteful, but it actually drives the whole water transport system.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Is Transpiration?</div>
+      <p><strong>Transpiration</strong> is the loss of water vapour from the leaves of a plant, mainly through the <strong>stomata</strong> (tiny pores on the leaf surface, mostly on the <strong>lower</strong> surface).</p>
+      <p style="margin-top:6px;">The <strong>transpiration stream</strong> is the continuous flow of water through the plant:</p>
+      <p><strong>1.</strong> Water <strong>evaporates</strong> from the surfaces of spongy mesophyll cells inside the leaf<br>
+         <strong>2.</strong> Water vapour <strong>diffuses</strong> out through the stomata<br>
+         <strong>3.</strong> Water is pulled up the <strong>xylem</strong> in the stem (due to <strong>tension</strong> from water loss above and <strong>cohesion</strong> between water molecules)<br>
+         <strong>4.</strong> Water enters the roots from the soil by <strong>osmosis</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Factors That Affect Transpiration Rate</div>
+      <table class="compare-table">
+        <tr>
+          <th>Factor</th>
+          <th>Effect on Transpiration</th>
+          <th>Why</th>
+        </tr>
+        <tr>
+          <td><strong>High temperature</strong></td>
+          <td>Increases rate</td>
+          <td>More kinetic energy &rarr; water evaporates faster from leaf cells</td>
+        </tr>
+        <tr>
+          <td><strong>Wind</strong></td>
+          <td>Increases rate</td>
+          <td>Blows away humid air from leaf surface &rarr; steeper concentration gradient</td>
+        </tr>
+        <tr>
+          <td><strong>Low humidity</strong></td>
+          <td>Increases rate</td>
+          <td>Bigger water potential gradient between leaf and atmosphere</td>
+        </tr>
+        <tr>
+          <td><strong>High light intensity</strong></td>
+          <td>Increases rate</td>
+          <td>Stomata open (for photosynthesis) &rarr; water vapour can escape</td>
+        </tr>
+      </table>
+      <p style="margin-top:8px;">Remember: anything that increases evaporation or opens stomata increases transpiration.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Measuring Transpiration: The Potometer</div>
+      <p>A <strong>potometer</strong> measures water uptake by a cut shoot (which is approximately equal to water loss by transpiration). An air bubble is introduced into a capillary tube and its movement is timed. Faster bubble movement = faster water uptake = faster transpiration.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>"Describe an experiment to investigate the effect of wind on transpiration rate" is a classic practical question. Use a potometer with and without a fan. Measure the distance the bubble moves in a set time. The fan increases transpiration rate &mdash; the bubble moves faster.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>A <strong>potometer</strong> measures <strong>water uptake</strong>, not water loss. These are approximately equal because ~98% of water taken up is lost by transpiration. But strictly, the potometer measures uptake. The exam may try to catch you on this.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The 4 Factors</div>
+      <p>Use the mnemonic <strong>WHTL</strong> &mdash; Wind, Heat, (low) Humidity, Light. All four INCREASE transpiration. If the exam gives you a scenario (hot windy day vs cold still day), just check which factors are present.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define transpiration</li>
+    <li><input type="checkbox"> I can describe the four steps of the transpiration stream</li>
+    <li><input type="checkbox"> I know four factors that affect transpiration rate and can explain WHY</li>
+    <li><input type="checkbox"> I know what a potometer is and what it measures</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: STOMATA AND LEAF ADAPTATIONS (8.4) ===== -->
+<div class="section-header">
+  <span class="num">Section 8.4</span>
+  The Leaf, Stomata, and Water Loss
+</div>
+<div class="card">
+  <div class="intro-text">
+    Stomata are the plant's dilemma: they must open to let CO&#8322; in for photosynthesis, but every time they open, water escapes. Plants have evolved clever adaptations to balance this trade-off.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Stomata</div>
+      <p><strong>Stomata</strong> (singular: <strong>stoma</strong>) are tiny pores on the leaf surface, mostly on the <strong>lower surface</strong> (to reduce evaporation from sun-warmed upper surface). Each stoma is surrounded by two <strong>guard cells</strong> which can open and close the pore.</p>
+      <p style="margin-top:6px;">When guard cells are <strong>turgid</strong> (full of water) &rarr; stomata <strong>open</strong> &rarr; CO&#8322; enters, water vapour escapes.<br>
+         When guard cells are <strong>flaccid</strong> (lost water) &rarr; stomata <strong>close</strong> &rarr; reduces water loss.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Leaf Adaptations to Reduce Water Loss</div>
+      <p>Plants in dry environments (<strong>xerophytes</strong>) have special features:</p>
+      <p>&bull; <strong>Thick, waxy cuticle</strong> &mdash; waterproof layer on leaf surface reduces evaporation<br>
+         &bull; <strong>Stomata in pits/grooves</strong> &mdash; traps humid air near the stomata, reducing the concentration gradient<br>
+         &bull; <strong>Rolled leaves</strong> &mdash; traps humid air on inner surface near stomata<br>
+         &bull; <strong>Reduced leaves (spines)</strong> &mdash; e.g. cacti; smaller surface area for water loss. The stem is green and carries out photosynthesis instead<br>
+         &bull; <strong>Deep or shallow roots</strong> &mdash; to reach water (deep water table) or catch light rainfall</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Wilting</div>
+      <p>When water loss by transpiration exceeds water uptake from roots:</p>
+      <p>&bull; Cells lose water &rarr; become <strong>flaccid</strong> (lose turgor pressure)<br>
+         &bull; Plant becomes limp &mdash; this is <strong>wilting</strong><br>
+         &bull; Wilting actually helps the plant because it reduces the leaf surface area exposed to sun and wind, slowing further water loss</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>"Describe how the structure of a marram grass leaf reduces water loss" is a favourite exam question. The answer uses the adaptations above: rolled leaves trap humid air, stomata are in grooves, thick waxy cuticle. Every adaptation must include <em>how</em> it reduces water loss, not just what it is.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Cobalt Chloride Experiment</div>
+      <p>Cobalt chloride paper is blue when dry, pink when wet. If you tape it to both sides of a leaf, the paper on the <strong>lower surface</strong> turns pink faster &mdash; proving more stomata are on the underside. This is a simple but common practical question.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know what stomata are and why they are mostly on the lower surface</li>
+    <li><input type="checkbox"> I can explain how guard cells open and close stomata</li>
+    <li><input type="checkbox"> I can list at least four adaptations of xerophytes and explain how each reduces water loss</li>
+    <li><input type="checkbox"> I know what wilting is and why it happens</li>
+  </ul>
+</div>
+
+<!-- ===== THE BIG COMPARISON ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  The Complete Water Journey
+</div>
+<div class="card">
+  <div class="intro-text">
+    If you can trace the journey of a water molecule from the soil to the atmosphere, you understand the entire chapter.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Trace the Water Journey</div>
+      <p><strong>1. Soil &rarr; Root hair cell:</strong> Water enters by <strong>osmosis</strong> (soil has higher water potential than root cell cytoplasm).</p>
+      <p><strong>2. Root &rarr; Xylem:</strong> Water moves across the root cortex by osmosis, cell to cell, until it reaches the xylem vessels.</p>
+      <p><strong>3. Xylem &rarr; Leaf:</strong> Water is pulled up the xylem as a continuous column. This is driven by <strong>tension</strong> (pull from water evaporating above) and held together by <strong>cohesion</strong> (water molecules stick to each other).</p>
+      <p><strong>4. Leaf &rarr; Atmosphere:</strong> Water evaporates from the surfaces of spongy mesophyll cells into the air spaces inside the leaf. Water vapour then diffuses out through the <strong>stomata</strong> into the atmosphere. This is <strong>transpiration</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Real Test</div>
+      <p>Draw a plant with roots, stem, and leaf. Trace the water journey from soil to atmosphere with arrows. At each stage, label the <em>process</em> (osmosis, cohesion/tension, evaporation, diffusion). If you can do this from memory, you own this chapter.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can trace water from soil to atmosphere, naming processes at each stage</li>
+    <li><input type="checkbox"> I drew a labelled diagram of the complete water journey from memory</li>
+    <li><input type="checkbox"> I can explain the roles of osmosis, tension, cohesion, and transpiration</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 8 Notes Complete</h2>
+  <p>You've covered xylem and phloem, root hair cells, transpiration, stomata, and leaf adaptations. Now test yourself with the Chapter 8 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

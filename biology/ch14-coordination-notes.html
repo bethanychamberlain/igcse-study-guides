@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Homeostasis and Coordination &mdash; Biology Ch14</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 14</div>
+  <h1>Homeostasis and Coordination</h1>
+  <div class="subtitle">Negative feedback, temperature control, blood glucose, nervous system, reflex arcs, the eye, hormones, and plant tropisms &mdash; this is a BIG chapter</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 28 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">This is the biggest chapter in the biology course. Work through it in chunks &mdash; don't try to do it all in one sitting. Tick the checkboxes as you go.</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: HOMEOSTASIS & NEGATIVE FEEDBACK ===== -->
+<div class="section-header">
+  <span class="num">Sections 14.1 &ndash; 14.2</span>
+  Homeostasis, Negative Feedback, and Temperature Control
+</div>
+<div class="card">
+  <div class="intro-text">
+    Your body keeps its internal conditions constant so your cells can work properly. This is homeostasis &mdash; and it underpins everything else in this chapter.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Homeostasis</div>
+      <p><strong>Homeostasis</strong> is the maintenance of a <strong>constant internal environment</strong>.</p>
+      <p style="margin-top:6px;">Cells are surrounded by <strong>tissue fluid</strong>. Conditions in the tissue fluid (temperature, glucose, water, pH) must be kept at <strong>optimum</strong> levels for cells to function. Multiple organs are involved:</p>
+      <p style="margin-top:4px;">&bull; <strong>Skin</strong> &mdash; controls heat exchange<br>
+        &bull; <strong>Kidneys</strong> &mdash; control water and salt levels (osmoregulation) and remove urea (excretion)<br>
+        &bull; <strong>Liver</strong> &mdash; regulates levels of many solutes in the blood<br>
+        &bull; <strong>Lungs</strong> &mdash; regulate CO&#8322; and O&#8322; exchange<br>
+        &bull; <strong>Pancreas</strong> &mdash; controls blood glucose</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Negative Feedback</div>
+      <p><strong>Negative feedback</strong> is when a change from the normal level (set point) is detected, and a response is triggered that <strong>cancels out the change</strong> and returns the factor to normal.</p>
+      <p style="margin-top:6px;">The pattern is always: <strong>Deviation detected &rarr; Control centre triggers response &rarr; Response reverses the change &rarr; Return to set point</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>"Explain negative feedback" is one of the most frequently asked questions across the whole IGCSE Biology exam. Every example in this chapter (temperature, blood glucose, water balance) follows this same pattern. Learn the pattern once, apply it everywhere.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Temperature Control</div>
+      <p>The <strong>hypothalamus</strong> in the brain is the temperature control centre. Normal body temperature is about <strong>37&deg;C</strong>.</p>
+      <p style="margin-top:8px;"><strong>If body temperature RISES (too hot):</strong><br>
+        &bull; <strong>Vasodilation</strong> &mdash; arterioles near the skin surface dilate (widen), more blood flows near the surface, more heat is lost by radiation [1]<br>
+        &bull; <strong>Sweating</strong> &mdash; sweat glands produce sweat, which evaporates from the skin surface, taking heat energy with it [1]<br>
+        &bull; Hair erector muscles <strong>relax</strong> &mdash; hairs lie flat, less insulating air trapped</p>
+      <p style="margin-top:8px;"><strong>If body temperature FALLS (too cold):</strong><br>
+        &bull; <strong>Vasoconstriction</strong> &mdash; arterioles near the skin surface constrict (narrow), less blood flows near surface, less heat lost by radiation<br>
+        &bull; <strong>Shivering</strong> &mdash; muscles contract rapidly, generating heat from respiration<br>
+        &bull; Hair erector muscles <strong>contract</strong> &mdash; hairs stand up, trapping a layer of insulating air<br>
+        &bull; Less sweating</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Vasodilation vs Vasoconstriction</div>
+      <p><strong>Vasodilation</strong> = blood vessels <strong>dilate</strong> (widen) &rarr; more blood near skin &rarr; more heat lost. Think: "dilate = wide = heat escapes."<br>
+        <strong>Vasoconstriction</strong> = blood vessels <strong>constrict</strong> (narrow) &rarr; less blood near skin &rarr; less heat lost. Think: "constrict = tight = heat stays in."<br>
+        Also: the blood vessels do NOT "move closer to" or "further from" the skin. The <em>arterioles</em> change diameter &mdash; the capillaries stay in the same place.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Draw a simple feedback loop for temperature: "Temperature rises &rarr; Hypothalamus detects &rarr; Sweating + vasodilation &rarr; Temperature falls back to 37&deg;C." Then draw the opposite loop for when temperature falls. Being able to draw these loops from memory is the fastest way to answer exam questions on this topic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define homeostasis</li>
+    <li><input type="checkbox"> I can explain negative feedback in my own words</li>
+    <li><input type="checkbox"> I can describe 3 responses when the body is too hot</li>
+    <li><input type="checkbox"> I can describe 3 responses when the body is too cold</li>
+    <li><input type="checkbox"> I know the difference between vasodilation and vasoconstriction</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: BLOOD GLUCOSE ===== -->
+<div class="section-header">
+  <span class="num">Section 14.3</span>
+  Control of Blood Glucose
+</div>
+<div class="card">
+  <div class="intro-text">
+    Blood glucose must be kept at about 1 mg per cm&sup3;. Too high or too low, and cells can't function properly. Two hormones from the pancreas control this.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Insulin and Glucagon</div>
+      <p><strong>Insulin</strong> is released by the pancreas when blood glucose is <strong>too high</strong>. It causes the liver to convert <strong>glucose &rarr; glycogen</strong> (storage form). This lowers blood glucose back to normal.</p>
+      <p style="margin-top:6px;"><strong>Glucagon</strong> is released by the pancreas when blood glucose is <strong>too low</strong>. It causes the liver to convert <strong>glycogen &rarr; glucose</strong>. This raises blood glucose back to normal.</p>
+      <p style="margin-top:6px;">This is <strong>negative feedback</strong>: the change (high or low glucose) triggers a response that reverses the change.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; The Big Three Mix-Ups</div>
+      <p><strong>1. Glycogen is NOT glucagon.</strong> Glycogen is the storage molecule (a polysaccharide). Glucagon is the hormone. They sound similar but are completely different things.</p>
+      <p style="margin-top:4px;"><strong>2. Insulin LOWERS glucose. Glucagon RAISES glucose.</strong> Remember: "insul<strong>in</strong> = glucose goes <strong>in</strong>to storage."</p>
+      <p style="margin-top:4px;"><strong>3. The pancreas makes BOTH hormones.</strong> Not just insulin. The exam often asks what happens when glucose is too low &mdash; the answer is glucagon, not "less insulin."</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Diabetes</div>
+      <p><strong>Type I diabetes:</strong> The pancreas fails to produce enough <strong>insulin</strong>. Blood glucose stays too high. Symptoms: excessive thirst, hunger, urine production. Treated by regular <strong>injection of insulin</strong>.</p>
+      <p style="margin-top:6px;"><strong>Type II diabetes:</strong> Often linked to diet (too much fat and sugar) and obesity. The body's cells stop responding properly to insulin. Can be controlled by <strong>adjusting diet</strong> &mdash; no injection needed.</p>
+      <p style="margin-top:6px;">If glucose appears in urine, it can be detected using <strong>Clinistix</strong> (a test strip with an enzyme and a dye).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Blood glucose control is the most common example of negative feedback they test on the exam. If the question says "use the principle of negative feedback to explain how blood glucose is controlled," you need to describe BOTH directions: what happens when glucose is too high AND too low. Give both hormones, both conversions, both organs.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state the roles of insulin and glucagon</li>
+    <li><input type="checkbox"> I know the difference between glycogen and glucagon</li>
+    <li><input type="checkbox"> I can explain blood glucose control as negative feedback</li>
+    <li><input type="checkbox"> I can describe Type I and Type II diabetes and their treatments</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: NERVOUS SYSTEM ===== -->
+<div class="section-header">
+  <span class="num">Sections 14.4 &ndash; 14.6</span>
+  The Nervous System, Neurones, and Reflex Arcs
+</div>
+<div class="card">
+  <div class="intro-text">
+    The nervous system is one of two coordination systems in the body. It's the fast one &mdash; electrical impulses travelling along nerves in milliseconds.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Nervous System</div>
+      <p>The <strong>central nervous system (CNS)</strong> = <strong>brain + spinal cord</strong>.</p>
+      <p style="margin-top:4px;">The <strong>peripheral nervous system</strong> = all the nerves connecting the CNS to the rest of the body.</p>
+      <p style="margin-top:6px;"><strong>How information flows:</strong><br>
+        <strong>Stimulus</strong> &rarr; <strong>Receptor</strong> (detects the change) &rarr; <strong>Sensory neurone</strong> (carries impulse to CNS) &rarr; <strong>CNS</strong> (processes information) &rarr; <strong>Motor neurone</strong> (carries impulse to effector) &rarr; <strong>Effector</strong> (muscle or gland that carries out the response) &rarr; <strong>Response</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Neurone Structure</div>
+      <p>A neurone (nerve cell) has:<br>
+        &bull; <strong>Cell body</strong> &mdash; contains the nucleus, controls the cell's metabolism<br>
+        &bull; <strong>Dendrites</strong> &mdash; short branches that collect information from other cells<br>
+        &bull; <strong>Axon</strong> &mdash; a long fibre that carries the electrical impulse away from the cell body<br>
+        &bull; <strong>Myelin sheath</strong> &mdash; fatty insulation around the axon that speeds up impulse transmission</p>
+      <p style="margin-top:6px;">Messages pass as <strong>electrical impulses</strong> (action potentials). At a <strong>synapse</strong> (the gap between two neurones), a chemical called a <strong>neurotransmitter</strong> is released, diffuses across the gap, and triggers a new impulse in the next neurone. Synapses ensure impulses travel in <strong>one direction only</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Reflex Arc</div>
+      <p>A <strong>reflex action</strong> is a rapid, automatic response to a stimulus. It does NOT involve conscious thought &mdash; it's faster because the impulse goes through the spinal cord, not the brain.</p>
+      <p style="margin-top:6px;"><strong>The reflex arc pathway:</strong><br>
+        Stimulus &rarr; <strong>Receptor</strong> &rarr; <strong>Sensory neurone</strong> &rarr; <strong>Relay neurone</strong> (in spinal cord) &rarr; <strong>Motor neurone</strong> &rarr; <strong>Effector</strong> (muscle) &rarr; Response</p>
+      <p style="margin-top:6px;"><strong>Examples:</strong> withdrawing hand from hot object, knee-jerk reflex, pupil reflex, coughing, swallowing.</p>
+      <p style="margin-top:6px;"><strong>Voluntary actions</strong> involve the brain making a conscious decision. <strong>Involuntary actions</strong> (reflexes) are automatic &mdash; no choice involved.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Three Types of Neurone</div>
+      <p><strong>Sensory neurone</strong> = carries impulse FROM receptor TO CNS. Cell body is on the side, not at the end.<br>
+        <strong>Relay neurone</strong> (connector neurone) = carries impulse ACROSS the spinal cord. Short, no myelin sheath.<br>
+        <strong>Motor neurone</strong> = carries impulse FROM CNS TO effector. Cell body is at one end.</p>
+      <p style="margin-top:4px;">The exam loves asking you to label these on a diagram. Know which direction each one carries impulses.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw the Reflex Arc</div>
+      <p>Draw a hand touching a hot plate. Label: receptor in skin, sensory neurone, relay neurone in spinal cord, motor neurone, effector (muscle in arm). Draw arrows showing the direction of the impulse. Add synapses between the neurones. This single diagram could be worth 5+ marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe the pathway: stimulus &rarr; receptor &rarr; coordinator &rarr; effector &rarr; response</li>
+    <li><input type="checkbox"> I can name and describe the three types of neurone</li>
+    <li><input type="checkbox"> I can describe how a synapse works</li>
+    <li><input type="checkbox"> I can draw and label a reflex arc</li>
+    <li><input type="checkbox"> I know the difference between voluntary and involuntary actions</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: THE EYE ===== -->
+<div class="section-header">
+  <span class="num">Section 14.7</span>
+  The Eye as a Sense Organ
+</div>
+<div class="card">
+  <div class="intro-text">
+    The eye is the most complex sense organ you need to know. It contains receptors (rods and cones), systems for focusing light (lens, cornea), and muscles for controlling light intensity (iris).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Eye Structure</div>
+      <p><strong>Cornea</strong> &mdash; transparent front layer; does most of the refraction (bending) of light<br>
+        <strong>Iris</strong> &mdash; the coloured part; contains muscles that control pupil size<br>
+        <strong>Pupil</strong> &mdash; the hole that lets light in; appears black<br>
+        <strong>Lens</strong> &mdash; fine-focuses light onto the retina; can change shape<br>
+        <strong>Ciliary muscles</strong> &mdash; change the shape of the lens<br>
+        <strong>Suspensory ligaments</strong> &mdash; connect ciliary muscles to the lens<br>
+        <strong>Retina</strong> &mdash; the light-sensitive layer at the back; contains rods and cones<br>
+        <strong>Optic nerve</strong> &mdash; carries nerve impulses from the retina to the brain<br>
+        <strong>Blind spot</strong> &mdash; where the optic nerve exits; no light-sensitive cells here</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Accommodation (Focusing)</div>
+      <p><strong>Distant object:</strong><br>
+        &bull; Light rays are nearly parallel &mdash; less refraction needed<br>
+        &bull; Ciliary muscles <strong>relax</strong> &rarr; suspensory ligaments pull <strong>tight</strong> &rarr; lens is pulled <strong>long and thin</strong></p>
+      <p style="margin-top:6px;"><strong>Close object:</strong><br>
+        &bull; Light rays are diverging &mdash; more refraction needed<br>
+        &bull; Ciliary muscles <strong>contract</strong> &rarr; suspensory ligaments go <strong>slack</strong> &rarr; lens becomes <strong>short and fat</strong> (more powerful)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Pupil Reflex and Rods vs Cones</div>
+      <p><strong>Pupil reflex (bright light):</strong> Circular muscles of iris <strong>contract</strong>, radial muscles <strong>relax</strong> &rarr; pupil gets <strong>smaller</strong> &rarr; protects retina from damage.</p>
+      <p style="margin-top:4px;"><strong>Pupil reflex (dim light):</strong> Radial muscles <strong>contract</strong>, circular muscles <strong>relax</strong> &rarr; pupil gets <strong>larger</strong> &rarr; lets more light in.</p>
+      <p style="margin-top:8px;"><strong>Rod cells:</strong> Sensitive to low light intensity. Give black-and-white vision. Packed around the edges of the retina. Good for night vision but low detail.</p>
+      <p style="margin-top:4px;"><strong>Cone cells:</strong> Need bright light. Give colour vision (three types: red, green, blue). Packed at the centre of the retina (fovea). Give sharp detail.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Accommodation</div>
+      <p>Students often get the ciliary muscle/ligament relationship backwards. Remember: when ciliary muscles <strong>contract</strong>, they pull <em>inwards</em>, which makes the ligaments go <strong>slack</strong>, which lets the lens spring into a <strong>fat</strong> shape. It's counterintuitive &mdash; muscles contracting makes ligaments loose. Draw it to convince yourself.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can label a diagram of the eye</li>
+    <li><input type="checkbox"> I can describe accommodation for near and distant objects</li>
+    <li><input type="checkbox"> I can describe the pupil reflex in bright and dim light</li>
+    <li><input type="checkbox"> I know the difference between rods and cones</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: ENDOCRINE SYSTEM & TROPISMS ===== -->
+<div class="section-header">
+  <span class="num">Sections 14.8 &ndash; 14.9</span>
+  The Endocrine System and Plant Tropisms
+</div>
+<div class="card">
+  <div class="intro-text">
+    The endocrine system is the body's second coordination system &mdash; slower than nerves, but with longer-lasting effects. Plants use hormones too, but for growth responses.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Nervous vs Endocrine Comparison</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Nervous System</th>
+          <th>Endocrine System</th>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Very rapid</td>
+          <td>Can be slow</td>
+        </tr>
+        <tr>
+          <td><strong>Nature of message</strong></td>
+          <td>Electrical impulses along nerves</td>
+          <td>Chemical messengers (hormones) in the bloodstream</td>
+        </tr>
+        <tr>
+          <td><strong>Duration</strong></td>
+          <td>Short-lived (seconds)</td>
+          <td>Long-lasting (can be years)</td>
+        </tr>
+        <tr>
+          <td><strong>Area of response</strong></td>
+          <td>Localised (one area)</td>
+          <td>Widespread (many organs)</td>
+        </tr>
+        <tr>
+          <td><strong>Examples</strong></td>
+          <td>Reflexes, blinking, limb movement</td>
+          <td>Growth, puberty, blood glucose control</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Hormones and Glands</div>
+      <p><strong>Hormones</strong> are chemical messengers secreted by <strong>endocrine glands</strong> (ductless glands) directly into the <strong>bloodstream</strong>. They travel in the blood and only affect <strong>target organs</strong> that have the correct receptors.</p>
+      <p style="margin-top:6px;">Key glands and hormones:<br>
+        &bull; <strong>Pancreas</strong> &rarr; insulin and glucagon (blood glucose control)<br>
+        &bull; <strong>Adrenal glands</strong> &rarr; adrenaline (fight or flight response)<br>
+        &bull; <strong>Ovaries</strong> &rarr; oestrogen and progesterone (female puberty, menstrual cycle)<br>
+        &bull; <strong>Testes</strong> &rarr; testosterone (male puberty)</p>
+      <p style="margin-top:6px;"><strong>Adrenaline</strong> (the "fight or flight" hormone) causes: faster heart rate, deeper breathing, blood diverted from gut to muscles, glycogen converted to glucose. It prepares the body for action.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The "compare nervous and endocrine systems" table is a guaranteed exam question &mdash; it appears almost every year. Learn it cold. Also: hormone feedback control uses the same negative feedback principle as temperature and glucose control. It's the same pattern everywhere.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Plant Tropisms</div>
+      <p>A <strong>tropism</strong> is a growth response of a plant towards or away from a stimulus.</p>
+      <p style="margin-top:6px;"><strong>Phototropism</strong> = response to <strong>light</strong><br>
+        &bull; Shoots are <strong>positively phototropic</strong> (grow towards light)<br>
+        &bull; Roots are <strong>negatively phototropic</strong> (grow away from light)</p>
+      <p style="margin-top:6px;"><strong>Gravitropism</strong> = response to <strong>gravity</strong><br>
+        &bull; Roots are <strong>positively gravitropic</strong> (grow towards gravity, downwards)<br>
+        &bull; Shoots are <strong>negatively gravitropic</strong> (grow away from gravity, upwards)</p>
+      <p style="margin-top:8px;"><strong>How it works &mdash; Auxin:</strong><br>
+        &bull; <strong>Auxin</strong> is a plant growth substance produced at the <strong>tip</strong> of a shoot<br>
+        &bull; When light comes from one side, auxin moves to the <strong>shaded (dark) side</strong><br>
+        &bull; Auxin <strong>stimulates</strong> cell elongation in shoots &rarr; the dark side grows faster &rarr; shoot bends <strong>towards</strong> the light<br>
+        &bull; In roots, auxin <strong>inhibits</strong> cell elongation &rarr; the side with more auxin grows less &rarr; root bends <strong>downwards</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Auxin's Opposite Effects</div>
+      <p>Auxin does <strong>opposite things</strong> in shoots and roots. In shoots, more auxin = more growth. In roots, more auxin = less growth. This is why the same hormone makes a shoot bend towards light but a root bend away from it. The exam loves testing whether you understand this difference.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Commercial Uses of Plant Hormones</div>
+      <p>&bull; <strong>Rooting powder</strong> &mdash; auxin stimulates cuttings to grow roots, allowing plant cloning<br>
+        &bull; <strong>Weedkillers</strong> &mdash; high concentrations of synthetic auxin (2,4-D) disrupt weed growth<br>
+        &bull; <strong>Seedless fruits</strong> &mdash; hormone sprays can make fruit develop without fertilisation<br>
+        &bull; <strong>Synchronised fruiting</strong> &mdash; hormone sprays make all fruits ripen at the same time for efficient harvesting</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Biggest Table in the Course</div>
+      <p>This chapter has the most content of any biology chapter. The best way to study it is to make <strong>five mini flash cards</strong>:<br>
+        1. Negative feedback loop (draw it)<br>
+        2. Temperature control (hot vs cold responses)<br>
+        3. Blood glucose (insulin vs glucagon)<br>
+        4. Nervous vs endocrine comparison table<br>
+        5. Reflex arc diagram<br>
+        If you can reproduce all five from memory, you're ready for the exam.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can compare the nervous and endocrine systems (5 features)</li>
+    <li><input type="checkbox"> I can name 4 endocrine glands and the hormones they produce</li>
+    <li><input type="checkbox"> I can describe the effects of adrenaline</li>
+    <li><input type="checkbox"> I can define tropism and distinguish phototropism from gravitropism</li>
+    <li><input type="checkbox"> I can explain how auxin causes shoots to grow towards light</li>
+    <li><input type="checkbox"> I know why auxin has opposite effects in shoots and roots</li>
+    <li><input type="checkbox"> I can give 3 commercial uses of plant hormones</li>
+    <li><input type="checkbox"> I made my 5 mini flash cards for this chapter</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 14 Notes Complete</h2>
+  <p>You've covered homeostasis, negative feedback, temperature control, blood glucose, the nervous system, reflex arcs, the eye, hormones, and plant tropisms. That's a lot &mdash; now test yourself with the Chapter 14 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

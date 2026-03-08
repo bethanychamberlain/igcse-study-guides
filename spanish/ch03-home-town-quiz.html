@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Mi Ciudad (My Town) &mdash; Spanish Ch3</title>
+<style>
+  :root {
+    --subject: #e67e22;
+    --subject-light: #fef5e7;
+    --subject-dark: #ca6f1e;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: var(--text); max-width: 820px; margin: 0 auto; padding: 20px; background: var(--bg); }
+  .hero { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; }
+  .hero .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+  .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .btn { font-family: inherit; font-size: 13px; font-weight: 600; padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--subject); color: white; }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline { background: white; color: var(--subject-dark); border: 2px solid var(--subject); }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display { margin-left: auto; font-size: 14px; font-weight: 600; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+  .tier-header { display: flex; align-items: center; gap: 12px; margin: 28px 0 12px; padding: 12px 16px; border-radius: 10px; }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+  .tier-header .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+  .tier-header .marks { font-size: 12px; color: var(--text-secondary); }
+  .q-card { background: var(--card); border-radius: 10px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .q-card .q-header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; }
+  .q-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks { font-size: 11px; font-weight: 700; color: var(--text-secondary); background: #f0f0f0; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+  .q-answer { padding: 0 20px 16px; display: none; }
+  .q-answer.visible { display: block; }
+  .answer-box { background: var(--subject-light); border-left: 4px solid var(--subject); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; }
+  .answer-box .answer-label { font-weight: 700; color: var(--subject-dark); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .mark-hint { margin-top: 8px; font-size: 12px; color: var(--text-secondary); font-style: italic; }
+  .self-rate { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .self-rate .rate-label { font-size: 11px; color: var(--text-secondary); margin-right: 4px; }
+  .rate-btn { width: 30px; height: 30px; border-radius: 6px; border: 2px solid #ddd; background: white; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; color: var(--text-secondary); }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+  .answer-lines { display: none; }
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines { display: block; padding: 4px 20px 16px; }
+    .answer-lines .line { border-bottom: 1px solid #d0d0d0; height: 26px; }
+    .tier-header { break-after: avoid; }
+  }
+  .quiz-guide { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; font-size: 13px; }
+  .quiz-guide .guide-title { font-weight: 700; color: var(--subject-dark); font-size: 14px; margin-bottom: 8px; }
+  .quiz-guide .guide-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; color: var(--text-secondary); }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon { flex-shrink: 0; font-weight: 700; color: var(--text); }
+  .rating-scale { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .rating-scale .rs-item { display: flex; align-items: center; gap: 5px; }
+  .rating-scale .rs-num { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; }
+  .rs-1 { background: #e74c3c; } .rs-2 { background: #f39c12; } .rs-3 { background: #3498db; } .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text { font-size: 12px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Spanish Ch3 &mdash; Self-Test Quiz</div>
+  <h1>Mi Ciudad (My Town)</h1>
+  <p>10 questions across 3 difficulty levels. Heavy focus on comparatives &mdash; the topic you need the most practice on.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display"><span id="scoreText">Rate each answer to track your score</span></div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row"><span class="guide-icon">&#9654;</span><span><strong>Click any question</strong> to show or hide the answer.</span></div>
+  <div class="guide-row"><span class="guide-icon">[1]</span><span>Numbers in square brackets show how many marks that part is worth.</span></div>
+  <div class="guide-row"><span class="guide-icon">&#9733;</span><span><strong>Rate your answer</strong> after checking it:</span></div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Recall It?</h2>
+    <div class="marks">Worth 1-2 marks each. Vocabulary recall and basic structures.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">Translate into English: <strong>el museo, la iglesia, el ayuntamiento, la comisar&iacute;a, el cine</strong>.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>the museum</strong>, <strong>the church</strong>, <strong>the town hall</strong>, <strong>the police station</strong>, <strong>the cinema</strong> [1 for 3+ correct, 2 for all 5].
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">How do you say &ldquo;by car,&rdquo; &ldquo;by bus,&rdquo; and &ldquo;on foot&rdquo; in Spanish?</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>en coche</strong>, <strong>en autob&uacute;s</strong>, <strong>a pie</strong> [1 for 2 correct, 2 for all 3].
+      <div class="mark-hint">Remember: &ldquo;en&rdquo; for vehicles, &ldquo;a pie&rdquo; for walking. Never &ldquo;en pie.&rdquo;</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">Complete the three comparative patterns:<br><strong>(a)</strong> more ... than = _______ + adjective + _______<br><strong>(b)</strong> less ... than = _______ + adjective + _______<br><strong>(c)</strong> as ... as = _______ + adjective + _______</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>m&aacute;s</strong> + adj + <strong>que</strong>, (b) <strong>menos</strong> + adj + <strong>que</strong>, (c) <strong>tan</strong> + adj + <strong>como</strong> [1 for 2 correct patterns, 2 for all 3].
+      <div class="mark-hint">These three patterns are the entire comparative system. If you know these, you can compare anything.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">What is the difference between <em>la librer&iacute;a</em> and <em>la biblioteca</em>?</div>
+    <span class="q-marks">1 mark</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>La librer&iacute;a</strong> = bookshop (you buy books). <strong>La biblioteca</strong> = library (you borrow books) [1].
+      <div class="mark-hint">Classic false friend. &ldquo;Library&rdquo; looks like &ldquo;librer&iacute;a&rdquo; but it&rsquo;s not.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Use It?</h2>
+    <div class="marks">Worth 3-4 marks each. Sentence-level accuracy with comparatives and directions.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">Translate into Spanish: <strong>&ldquo;Madrid is bigger than Palm Bay. Palm Bay is quieter than Madrid. My town is as pretty as your town.&rdquo;</strong></div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>&ldquo;Madrid es m&aacute;s grande que Palm Bay.&rdquo;</strong> [1]<br>
+      <strong>&ldquo;Palm Bay es m&aacute;s tranquilo que Madrid.&rdquo;</strong> (or &ldquo;menos ruidoso que&rdquo;) [1]<br>
+      <strong>&ldquo;Mi ciudad es tan bonita como tu ciudad.&rdquo;</strong> [1]
+      <div class="mark-hint">Each sentence tests a different pattern: m&aacute;s...que, m&aacute;s/menos...que, tan...como. If you got all three, you own comparatives.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Translate into Spanish: <strong>&ldquo;The hospital is opposite the park. The church is between the museum and the square. I go to school by bus.&rdquo;</strong></div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>&ldquo;El hospital est&aacute; enfrente del parque.&rdquo;</strong> [1 &mdash; must use est&aacute; for location and del for de+el]<br>
+      <strong>&ldquo;La iglesia est&aacute; entre el museo y la plaza.&rdquo;</strong> [1]<br>
+      <strong>&ldquo;Voy al colegio en autob&uacute;s.&rdquo;</strong> [1 &mdash; must use al for a+el]
+      <div class="mark-hint">Three contractions tested here: del (de+el), al (a+el). Also: location always uses ESTAR.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">Fill in with the correct irregular comparative: <strong>(a)</strong> El restaurante italiano es _______ (better) que el restaurante franc&eacute;s. <strong>(b)</strong> Mi hermano es _______ (older) que yo. <strong>(c)</strong> El tiempo hoy es _______ (worse) que ayer.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>mejor</strong> [1], (b) <strong>mayor</strong> [1], (c) <strong>peor</strong> [1].
+      <div class="mark-hint">These are irregular &mdash; you cannot say &ldquo;m&aacute;s bueno&rdquo; or &ldquo;m&aacute;s malo.&rdquo; Mejor, peor, mayor, menor must be memorised.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Describe and Compare?</h2>
+    <div class="marks">Worth 5-6 marks each. Extended writing combining town vocabulary, comparatives, perfect tense, and opinions.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">Write a paragraph (5-6 sentences) in Spanish describing your town. Include: what places there are (hay), at least one location using est&aacute;, at least one comparative, and one sentence using the perfect tense.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model Answer</div>
+      <em>&ldquo;Vivo en Palm Bay, una ciudad peque&ntilde;a en Florida. Hay muchos restaurantes y un parque grande. El parque est&aacute; cerca de mi casa. Palm Bay es m&aacute;s tranquilo que Orlando. He vivido aqu&iacute; cinco a&ntilde;os. Me gusta mi ciudad porque es bonita y segura.&rdquo;</em><br><br>
+      [1] hay for existence, [1] est&aacute; for location, [1] comparative (m&aacute;s...que), [1] perfect tense (he vivido), [1] opinion (me gusta), [1] overall accuracy and variety.
+      <div class="mark-hint">This paragraph uses four different grammar points in six sentences. That&rsquo;s the kind of range the examiner rewards.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">Form the perfect tense for each: <strong>(a)</strong> yo / visitar, <strong>(b)</strong> nosotros / comer, <strong>(c)</strong> ella / hacer, <strong>(d)</strong> ellos / ver. Then use two of them in full sentences about your town.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>he visitado</strong> [&frac12;], (b) <strong>hemos comido</strong> [&frac12;], (c) <strong>ha hecho</strong> [1 &mdash; irregular!], (d) <strong>han visto</strong> [1 &mdash; irregular!].<br><br>
+      Example sentences:<br>
+      <em>&ldquo;He visitado el museo tres veces.&rdquo;</em> [1] <em>&ldquo;Hemos comido en el restaurante italiano.&rdquo;</em> [1]
+      <div class="mark-hint">The irregular ones (hecho, visto) are worth more because they test whether you&rsquo;ve memorised them. &ldquo;Ha hacido&rdquo; or &ldquo;han veido&rdquo; are wrong.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">Translate into Spanish: <strong>&ldquo;My town is smaller than Madrid but it is better because it is quieter. There is a supermarket near my house. The cinema is opposite the restaurant. I have visited many cities but I prefer my town.&rdquo;</strong></div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <em>&ldquo;Mi ciudad es m&aacute;s peque&ntilde;a que Madrid pero es mejor porque es m&aacute;s tranquila. Hay un supermercado cerca de mi casa. El cine est&aacute; enfrente del restaurante. He visitado muchas ciudades pero prefiero mi ciudad.&rdquo;</em><br><br>
+      [1] comparative (m&aacute;s peque&ntilde;a que), [1] irregular comparative (mejor), [1] hay for existence, [1] est&aacute; + preposition for location with del contraction, [1] perfect tense (he visitado), [1] overall accuracy and adjective agreement.
+      <div class="mark-hint">This paragraph tests comparatives (regular + irregular), hay, estar, the perfect tense, and contractions. Six grammar points = six marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleAll() { document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible')); }
+  function hideAll() { document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible')); }
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => { header.parentElement.querySelector('.q-answer').classList.toggle('visible'); });
+  });
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val); ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected'); updateScore();
+  }
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) { document.getElementById('scoreText').textContent = 'Rate each answer to track your score'; return; }
+    var sum = 0; keys.forEach(k => sum += ratings[k]);
+    document.getElementById('scoreText').textContent = keys.length + '/10 rated | Avg: ' + (sum / keys.length).toFixed(1) + '/4';
+  }
+</script>
+</body>
+</html>

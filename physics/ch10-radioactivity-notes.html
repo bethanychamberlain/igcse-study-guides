@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Atoms and Radioactivity &mdash; Physics Ch10</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #2e86c1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Formula highlight */
+  .formula {
+    display: inline-block;
+    background: #fff;
+    border: 2px solid var(--subject);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--subject-dark);
+    margin: 8px 0;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* Worked example */
+  .worked {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 13px;
+    border: 1px solid #e0e0e0;
+  }
+  .worked .step {
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    font-size: 12px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .step-text code {
+    background: var(--subject-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Physics &mdash; Chapter 10</div>
+  <h1>Atoms and Radioactivity</h1>
+  <div class="subtitle">Atomic structure, alpha/beta/gamma radiation, decay equations, half-life, fission, fusion, and uses of radioactivity</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 30 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 10.1: INSIDE ATOMS ===== -->
+<div class="section-header">
+  <span class="num">Section 10.1</span>
+  Inside Atoms
+</div>
+<div class="card">
+  <div class="intro-text">
+    Everything is made of atoms. To understand radioactivity, you first need to know what is inside an atom.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Structure of the Atom</div>
+      <p>An atom has a central <strong>nucleus</strong> made up of <strong>protons</strong> and <strong>neutrons</strong>. Around the nucleus, <strong>electrons</strong> orbit at high speed.</p>
+      <p style="margin-top:6px;">&bull; <strong>Protons</strong> have a positive (+) charge<br>
+         &bull; <strong>Electrons</strong> have a negative (-) charge<br>
+         &bull; <strong>Neutrons</strong> have no charge (neutral)<br>
+         &bull; Protons and neutrons are called <strong>nucleons</strong><br>
+         &bull; An atom normally has equal numbers of protons and electrons, so the total charge is <strong>zero</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Numbers</div>
+      <p><strong>Atomic number</strong> (proton number) = the number of protons in the nucleus. This tells you what <strong>element</strong> it is.</p>
+      <p><strong>Mass number</strong> (nucleon number) = the total number of protons + neutrons in the nucleus.</p>
+      <p style="margin-top:6px;">So: <strong>Number of neutrons = mass number - atomic number</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Isotopes</div>
+      <p><strong>Isotopes</strong> are atoms of the same element with the same number of protons but <strong>different numbers of neutrons</strong>. They have the same atomic number but different mass numbers.</p>
+      <p style="margin-top:6px;">Example: Lithium has two isotopes &mdash; lithium-6 (3 protons, 3 neutrons) and lithium-7 (3 protons, 4 neutrons).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Atomic Number vs Mass Number</div>
+      <p><strong>Atomic number</strong> = protons only (the small number, written at the bottom).<br>
+         <strong>Mass number</strong> = protons + neutrons (the big number, written at the top).<br>
+         In the notation <sup>7</sup><sub>3</sub>Li, the 7 is mass number and the 3 is atomic number.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Practise working out the number of neutrons: neutrons = mass number - atomic number. Try: carbon-14 has atomic number 6, so neutrons = 14 - 6 = 8. Do several until it becomes automatic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the three particles in an atom and their charges</li>
+    <li><input type="checkbox"> I know the difference between atomic number and mass number</li>
+    <li><input type="checkbox"> I can define "isotope" in one sentence</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 10.2: NUCLEAR RADIATION ===== -->
+<div class="section-header">
+  <span class="num">Section 10.2</span>
+  Nuclear Radiation &mdash; Alpha, Beta, and Gamma
+</div>
+<div class="card">
+  <div class="intro-text">
+    Some isotopes have unstable nuclei. Over time, these nuclei break apart (decay), releasing particles and energy. This is called <strong>nuclear radiation</strong>. There are three main types.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Big Comparison Table (Copy This!)</div>
+      <table class="compare-table">
+        <tr>
+          <th>Property</th>
+          <th>Alpha (&alpha;)</th>
+          <th>Beta (&beta;)</th>
+          <th>Gamma (&gamma;)</th>
+        </tr>
+        <tr>
+          <td><strong>What is it?</strong></td>
+          <td>2 protons + 2 neutrons (a helium nucleus)</td>
+          <td>A high-speed electron (from the nucleus)</td>
+          <td>Electromagnetic wave (like X-rays)</td>
+        </tr>
+        <tr>
+          <td><strong>Charge</strong></td>
+          <td>+2</td>
+          <td>-1</td>
+          <td>0 (no charge)</td>
+        </tr>
+        <tr>
+          <td><strong>Mass</strong></td>
+          <td>Heavy (4 nucleons)</td>
+          <td>Very light</td>
+          <td>No mass</td>
+        </tr>
+        <tr>
+          <td><strong>Speed</strong></td>
+          <td>Up to 0.1 &times; speed of light</td>
+          <td>Up to 0.9 &times; speed of light</td>
+          <td>Speed of light</td>
+        </tr>
+        <tr>
+          <td><strong>Ionising power</strong></td>
+          <td>Strong (most ionising)</td>
+          <td>Weak</td>
+          <td>Very weak (least ionising)</td>
+        </tr>
+        <tr>
+          <td><strong>Penetrating power</strong></td>
+          <td>Stopped by paper or skin</td>
+          <td>Stopped by a few mm of aluminium</td>
+          <td>Never fully stopped; reduced by thick lead or concrete</td>
+        </tr>
+        <tr>
+          <td><strong>Deflected by fields?</strong></td>
+          <td>Yes (by magnetic and electric fields)</td>
+          <td>Yes (opposite direction to alpha)</td>
+          <td>No</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Ionisation</div>
+      <p><strong>Ionisation</strong> means knocking electrons off atoms, turning them into ions (charged particles). Nuclear radiation causes ionisation, which is why it can damage living cells.</p>
+      <p style="margin-top:6px;">Alpha is the most ionising because it is big, slow, and heavily charged &mdash; it has more time to knock electrons off atoms it passes.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Exam Favourite</div>
+      <p>The comparison table above is one of the most commonly tested topics in IGCSE Physics. You will be asked to compare the three types of radiation in terms of penetration, ionisation, charge, and mass. Learn this table cold.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Memory Trick</div>
+      <p>Think of it as a trade-off: <strong>more ionising = less penetrating</strong>. Alpha is a big heavy bullet &mdash; it smashes into everything nearby (very ionising) but gets stopped quickly (not penetrating). Gamma is like a tiny fast needle &mdash; it slips through almost everything (very penetrating) but rarely hits anything (not ionising).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can draw the comparison table from memory</li>
+    <li><input type="checkbox"> I know what ionisation means</li>
+    <li><input type="checkbox"> I understand the trade-off: more ionising = less penetrating</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 10.3: RADIATION DANGERS & DETECTION ===== -->
+<div class="section-header">
+  <span class="num">Section 10.3</span>
+  Radiation Dangers and Detection
+</div>
+<div class="card">
+  <div class="intro-text">
+    Radiation can be dangerous to living things, but there is also radiation around us all the time from natural sources.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Dangers</div>
+      <p>Nuclear radiation can <strong>damage or destroy living cells</strong> and cause <strong>mutations</strong> (changes to DNA), which may lead to cancer.</p>
+      <p style="margin-top:6px;">&bull; Radiation <strong>inside</strong> the body: alpha is most dangerous (most ionising, damages cells most)<br>
+         &bull; Radiation <strong>outside</strong> the body: beta and gamma are most dangerous (they can penetrate skin to reach organs; alpha is stopped by skin)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Background Radiation</div>
+      <p><strong>Background radiation</strong> is a low level of radiation that is around us all the time. Sources include:</p>
+      <p>&bull; Radon gas from rocks (the biggest single source)<br>
+         &bull; Rocks and soil<br>
+         &bull; Food and drink<br>
+         &bull; Cosmic rays from space<br>
+         &bull; Medical X-rays<br>
+         &bull; Nuclear fallout (very small amount)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Detecting Radiation</div>
+      <p>A <strong>Geiger-M&uuml;ller (GM) tube</strong> detects radiation. It connects to a <strong>ratemeter</strong> (shows counts per second) or a <strong>scaler</strong> (shows total count). When radiation enters the tube, it ionises the gas inside, producing a pulse of current.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Inside vs Outside the Body</div>
+      <p>Students often say "alpha is the most dangerous" without saying where. <strong>Alpha is most dangerous INSIDE the body</strong> (e.g. if you breathe in radioactive dust). <strong>Outside the body, gamma is the biggest concern</strong> because it penetrates skin. The exam will ask you to distinguish between these two scenarios.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Safety Rules</div>
+      <p>Remember the three safety rules for handling radioactive sources: (1) store in a lead container, (2) pick up with tongs (never hands), (3) keep away from the body and point away from people. These come up in practical questions.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know why alpha is most dangerous inside the body but least dangerous outside</li>
+    <li><input type="checkbox"> I can name at least 3 sources of background radiation</li>
+    <li><input type="checkbox"> I know what a GM tube is and what it does</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 10.4: RADIOACTIVE DECAY ===== -->
+<div class="section-header">
+  <span class="num">Section 10.4</span>
+  Radioactive Decay &mdash; Nuclear Equations
+</div>
+<div class="card">
+  <div class="intro-text">
+    When an unstable nucleus decays, it emits an alpha or beta particle (sometimes with gamma rays). The nucleus changes into a different element. You need to be able to write nuclear equations for this.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Alpha Decay</div>
+      <p>In alpha decay, the nucleus loses <strong>2 protons and 2 neutrons</strong> (an alpha particle = helium-4 nucleus).</p>
+      <p style="margin-top:6px;"><strong>What changes:</strong><br>
+         &bull; Mass number goes <strong>down by 4</strong><br>
+         &bull; Atomic number goes <strong>down by 2</strong><br>
+         &bull; A new element is formed</p>
+      <p style="margin-top:8px;"><strong>Example:</strong> Radium-226 &rarr; Radon-222 + alpha particle</p>
+      <div class="formula"><sup>226</sup><sub>88</sub>Ra &rarr; <sup>222</sup><sub>86</sub>Rn + <sup>4</sup><sub>2</sub>He</div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Beta Decay</div>
+      <p>In beta decay, a <strong>neutron changes into a proton</strong>, and an electron (beta particle) is emitted at high speed.</p>
+      <p style="margin-top:6px;"><strong>What changes:</strong><br>
+         &bull; Mass number stays the <strong>same</strong><br>
+         &bull; Atomic number goes <strong>up by 1</strong><br>
+         &bull; A new element is formed</p>
+      <p style="margin-top:8px;"><strong>Example:</strong> Iodine-131 &rarr; Xenon-131 + beta particle</p>
+      <div class="formula"><sup>131</sup><sub>53</sub>I &rarr; <sup>131</sup><sub>54</sub>Xe + <sup>0</sup><sub>-1</sub>&beta;</div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Gamma Emission</div>
+      <p><strong>Gamma emission</strong> often accompanies alpha or beta decay. It does <strong>not</strong> change the mass number or atomic number &mdash; it just releases energy from the nucleus.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Balancing Nuclear Equations</div>
+      <p>In every nuclear equation:<br>
+         &bull; The <strong>top numbers</strong> (mass numbers) must add up to the same total on both sides<br>
+         &bull; The <strong>bottom numbers</strong> (atomic numbers) must add up to the same total on both sides</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the parent nucleus on the left</span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Write the emitted particle on the right: alpha = <code><sup>4</sup><sub>2</sub>He</code>, beta = <code><sup>0</sup><sub>-1</sub>e</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Work out the daughter nucleus by balancing top and bottom numbers</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Alpha vs Beta Changes</div>
+      <p><strong>Alpha:</strong> mass number drops by 4, atomic number drops by 2.<br>
+         <strong>Beta:</strong> mass number stays the SAME, atomic number goes UP by 1.<br>
+         The most common mistake is thinking beta decay reduces the atomic number. It doesn't &mdash; a neutron turns into a proton, so the atomic number <em>increases</em>.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practice Equations</div>
+      <p>Try this: Thorium-232 (atomic number 90) undergoes alpha decay. What is the daughter nucleus?<br>
+         Top: 232 - 4 = 228. Bottom: 90 - 2 = 88. The daughter is <sup>228</sup><sub>88</sub>Ra (radium). Check by adding both sides.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write a nuclear equation for alpha decay</li>
+    <li><input type="checkbox"> I can write a nuclear equation for beta decay</li>
+    <li><input type="checkbox"> I know how to check equations by balancing top and bottom numbers</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 10.5: HALF-LIFE ===== -->
+<div class="section-header">
+  <span class="num">Section 10.5</span>
+  Half-Life
+</div>
+<div class="card">
+  <div class="intro-text">
+    Radioactive decay is random and spontaneous &mdash; you cannot predict when any individual nucleus will decay. But with large numbers of nuclei, you can predict the overall rate using half-life.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p><strong>Half-life</strong> is the time taken for <strong>half</strong> of the radioactive nuclei in a sample to decay. It is also the time for the <strong>activity</strong> (count rate) to fall to half its original value.</p>
+      <p style="margin-top:6px;"><strong>Activity</strong> = the number of disintegrations per second, measured in <strong>becquerels (Bq)</strong>. 1 Bq = 1 decay per second.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Do Half-Life Calculations</div>
+      <p>To find how much remains after a number of half-lives, keep halving:</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">Ex:</span> <span class="step-text">A sample has an activity of 800 Bq. Its half-life is 2 hours. What is the activity after 6 hours?</span></div>
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Number of half-lives: <code>6 / 2 = 3 half-lives</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">After 1 half-life: <code>800 / 2 = 400 Bq</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">After 2 half-lives: <code>400 / 2 = 200 Bq</code></span></div>
+        <div class="step"><span class="step-num">4.</span> <span class="step-text">After 3 half-lives: <code>200 / 2 = 100 Bq</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Reading Half-Life from a Graph</div>
+      <p>On a decay curve (activity vs time), pick any value on the y-axis, then find how long it takes to halve. That time interval is the half-life. You can check by picking a different starting point &mdash; you should get the same answer.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Half-life calculations are worth 3-4 marks on the exam and come up nearly every year. The key is to count the number of half-lives, then keep halving. Never try to divide by a fraction &mdash; just halve repeatedly.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>Radioactive decay is <strong>random</strong> and <strong>spontaneous</strong>. It is NOT affected by temperature, pressure, or chemical changes. The half-life of an isotope is a fixed property &mdash; nothing can speed it up or slow it down.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define half-life in one sentence</li>
+    <li><input type="checkbox"> I solved the worked example (800 Bq after 3 half-lives = 100 Bq)</li>
+    <li><input type="checkbox"> I know how to read half-life from a graph</li>
+    <li><input type="checkbox"> I know decay is random and not affected by external conditions</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 10.6: NUCLEAR FISSION ===== -->
+<div class="section-header">
+  <span class="num">Section 10.6</span>
+  Nuclear Fission
+</div>
+<div class="card">
+  <div class="intro-text">
+    Nuclear fission is the process used in nuclear power stations and nuclear weapons. It releases a huge amount of energy by splitting heavy nuclei.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p><strong>Nuclear fission</strong> is the splitting of a large, unstable nucleus into two smaller nuclei, releasing <strong>energy</strong> and <strong>two or three neutrons</strong>.</p>
+      <p style="margin-top:6px;">It is triggered when a <strong>neutron</strong> hits a uranium-235 nucleus. The nucleus becomes highly unstable and splits.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Chain Reaction</div>
+      <p>The neutrons released from one fission can hit other uranium-235 nuclei, causing them to split too. This is called a <strong>chain reaction</strong>.</p>
+      <p style="margin-top:6px;">&bull; <strong>Controlled</strong> chain reaction = nuclear power station (steady energy release)<br>
+         &bull; <strong>Uncontrolled</strong> chain reaction = nuclear bomb (huge, rapid energy release)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Nuclear Reactor Parts</div>
+      <p>&bull; <strong>Fuel</strong>: uranium dioxide (enriched with U-235)<br>
+         &bull; <strong>Moderator</strong>: slows down neutrons (graphite or water) so they can be captured by other U-235 nuclei<br>
+         &bull; <strong>Control rods</strong>: contain boron or cadmium, which absorb neutrons. Lowering them slows the reaction; raising them speeds it up.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The energy released per atom in nuclear fission is about a <strong>million times</strong> greater than in a chemical reaction like burning. This is why a small amount of nuclear fuel can produce enormous amounts of energy.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Fission vs Fusion</div>
+      <p><strong>Fission</strong> = splitting a big nucleus into smaller ones. Think "fission = fissure = split."<br>
+         <strong>Fusion</strong> = joining small nuclei together. Think "fusion = fuse = join."<br>
+         Both release energy, but by opposite methods.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define nuclear fission</li>
+    <li><input type="checkbox"> I know what a chain reaction is</li>
+    <li><input type="checkbox"> I can name the three key parts of a reactor (fuel, moderator, control rods)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 10.7: NUCLEAR FUSION ===== -->
+<div class="section-header">
+  <span class="num">Section 10.7</span>
+  Nuclear Fusion
+</div>
+<div class="card">
+  <div class="intro-text">
+    Fusion is the opposite of fission. It is the process that powers the Sun and all stars.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p><strong>Nuclear fusion</strong> is the joining of two light nuclei to form a heavier nucleus, releasing <strong>energy</strong>.</p>
+      <p style="margin-top:6px;">In the Sun, <strong>hydrogen nuclei fuse together to form helium</strong>. This releases the energy that keeps the Sun shining.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Fusion Is Hard</div>
+      <p>Nuclei are positively charged, so they <strong>repel</strong> each other. To overcome this repulsion and fuse, they must be travelling extremely fast, which requires temperatures of at least <strong>40 million degrees Celsius</strong>. No ordinary container can hold gas this hot.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Fission vs Fusion Summary</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Fission</th>
+          <th>Fusion</th>
+        </tr>
+        <tr>
+          <td><strong>Process</strong></td>
+          <td>Splitting heavy nuclei</td>
+          <td>Joining light nuclei</td>
+        </tr>
+        <tr>
+          <td><strong>Fuel</strong></td>
+          <td>Uranium-235 or plutonium-239</td>
+          <td>Hydrogen isotopes</td>
+        </tr>
+        <tr>
+          <td><strong>Where it happens</strong></td>
+          <td>Nuclear power stations</td>
+          <td>Stars (Sun)</td>
+        </tr>
+        <tr>
+          <td><strong>Waste</strong></td>
+          <td>Radioactive waste (long-lived)</td>
+          <td>Helium (not radioactive)</td>
+        </tr>
+        <tr>
+          <td><strong>Energy per kg</strong></td>
+          <td>Very high</td>
+          <td>Even higher</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Fusion is the "holy grail" of energy. It would produce more energy per kilogram than fission, use fuel from seawater (hydrogen), and produce no long-lived radioactive waste. Scientists are still trying to build a working fusion reactor.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define nuclear fusion</li>
+    <li><input type="checkbox"> I know why fusion needs extremely high temperatures</li>
+    <li><input type="checkbox"> I can compare fission and fusion in a table</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 10.8: USES OF RADIOACTIVITY ===== -->
+<div class="section-header">
+  <span class="num">Section 10.8</span>
+  Uses of Radioactivity
+</div>
+<div class="card">
+  <div class="intro-text">
+    Despite its dangers, radioactivity has many useful applications in medicine, industry, and everyday life. The key is choosing the right type of radiation for each job.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Medical Uses</div>
+      <p><strong>Tracers:</strong> A patient swallows or is injected with a small amount of a radioactive isotope (e.g. iodine-123). A detector outside the body tracks where it goes, checking how organs are working. Tracers must have a <strong>short half-life</strong> and emit <strong>gamma rays</strong> (so they can escape the body).</p>
+      <p style="margin-top:6px;"><strong>Radiotherapy:</strong> Gamma rays are used to <strong>kill cancer cells</strong>. Several beams from different angles are aimed at the tumour to concentrate the dose on the cancer and reduce damage to healthy tissue.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Industrial Uses</div>
+      <p><strong>Thickness monitoring:</strong> A beta source is placed on one side of a material (e.g. paper or metal sheet) and a detector on the other. If the material gets too thick, less radiation reaches the detector, and the machine adjusts.</p>
+      <p style="margin-top:6px;"><strong>Gamma irradiation:</strong> Gamma rays are used to sterilise medical equipment and kill bacteria in food, making it last longer.</p>
+      <p style="margin-top:6px;"><strong>Smoke detectors:</strong> Contain a weak alpha source (americium-241). Alpha particles ionise the air, creating a small current. Smoke particles absorb the ions, reducing the current and triggering the alarm.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Why THAT Type of Radiation?</div>
+      <p>Exam questions often ask "why is a beta source used?" or "why not alpha?" The answer always links to the properties table:<br>
+         &bull; Thickness monitoring uses <strong>beta</strong> because it passes through thin materials but is absorbed by thicker ones. Alpha would be stopped by anything; gamma would pass through everything.<br>
+         &bull; Tracers use <strong>gamma</strong> because it can escape the body. Alpha or beta would be absorbed.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name and explain at least 3 uses of radioactivity</li>
+    <li><input type="checkbox"> I can explain why a specific type of radiation is used for each application</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 10.9-10.10: ATOMS AND PARTICLES ===== -->
+<div class="section-header">
+  <span class="num">Sections 10.9 &ndash; 10.10</span>
+  Atoms and Particles &mdash; How We Know
+</div>
+<div class="card">
+  <div class="intro-text">
+    Our understanding of the atom has changed over time as new evidence was discovered. You need to know the key experiments that shaped the model.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Two Models of the Atom</div>
+      <p><strong>Thomson's "plum pudding" model (1897):</strong> The atom is a ball of positive charge with negative electrons dotted throughout it, like raisins in a pudding.</p>
+      <p style="margin-top:6px;"><strong>Rutherford's nuclear model (1911):</strong> Geiger and Marsden fired alpha particles at thin gold foil. Most went straight through, but a few bounced back at large angles. This proved the atom is <strong>mostly empty space</strong> with a tiny, dense, positively charged <strong>nucleus</strong> at the centre.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Evidence from the Gold Foil Experiment</div>
+      <p>&bull; Most alpha particles passed straight through &rarr; the atom is mostly <strong>empty space</strong><br>
+         &bull; Some were deflected slightly &rarr; the nucleus has a <strong>positive charge</strong> (repelling the positive alphas)<br>
+         &bull; A very few bounced straight back &rarr; the nucleus is very <strong>small, dense, and heavy</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The gold foil experiment is a classic "describe and explain" exam question worth 4-6 marks. You need to state what happened to the alpha particles AND explain what each observation tells us about the atom's structure.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe the plum pudding model</li>
+    <li><input type="checkbox"> I can describe the gold foil experiment and what was observed</li>
+    <li><input type="checkbox"> I can explain what the results tell us about the atom</li>
+  </ul>
+</div>
+
+<!-- ===== E = mc^2 ===== -->
+<div class="section-header">
+  <span class="num">Key Formula</span>
+  Energy and Mass &mdash; E = mc&sup2;
+</div>
+<div class="card">
+  <div class="intro-text">
+    Einstein showed that mass and energy are linked. In nuclear reactions, a tiny amount of mass is converted into a huge amount of energy.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Einstein's Equation</div>
+      <div class="formula">E = mc&sup2;</div>
+      <p><strong>E</strong> = energy released (joules, J)<br>
+         <strong>m</strong> = mass lost (kilograms, kg)<br>
+         <strong>c</strong> = speed of light (3 &times; 10<sup>8</sup> m/s)</p>
+      <p style="margin-top:6px;">Because c&sup2; is so enormous (9 &times; 10<sup>16</sup>), even a tiny loss of mass produces a huge amount of energy. This is why nuclear reactions release so much more energy than chemical reactions.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write E = mc&sup2; and explain what each letter means</li>
+    <li><input type="checkbox"> I understand why nuclear reactions release so much energy</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 10 Notes Complete</h2>
+  <p>You've covered atomic structure, alpha/beta/gamma radiation, nuclear equations, half-life, fission, fusion, uses of radioactivity, and the gold foil experiment. Now test yourself with the Chapter 10 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Endings &mdash; English Ch9</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--subject); color: white; }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline { background: white; color: var(--subject-dark); border: 2px solid var(--subject); }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+  .tier-header .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+  .tier-header .marks { font-size: 12px; color: var(--text-secondary); }
+
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .q-answer { padding: 0 20px 16px; display: none; }
+  .q-answer.visible { display: block; }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  .self-rate { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .self-rate .rate-label { font-size: 11px; color: var(--text-secondary); margin-right: 4px; }
+  .rate-btn {
+    width: 30px; height: 30px; border-radius: 6px; border: 2px solid #ddd;
+    background: white; font-size: 12px; font-weight: 700; cursor: pointer;
+    transition: all 0.15s; color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  .answer-lines { display: none; }
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines { display: block; padding: 4px 20px 16px; }
+    .answer-lines .line { border-bottom: 1px solid #d0d0d0; height: 26px; }
+    .tier-header { break-after: avoid; }
+  }
+
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title { font-weight: 700; color: var(--subject-dark); font-size: 14px; margin-bottom: 8px; }
+  .quiz-guide .guide-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; color: var(--text-secondary); }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon { flex-shrink: 0; font-weight: 700; color: var(--text); }
+  .rating-scale { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .rating-scale .rs-item { display: flex; align-items: center; gap: 5px; }
+  .rating-scale .rs-num {
+    width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 800; color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text { font-size: 12px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English Ch9 &mdash; Self-Test Quiz</div>
+  <h1>Endings</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name it. Intermediate = explain it. Advanced = discuss and apply it.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each on the exam. Get these right and you're building a solid base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">What is the difference between <strong>explicit</strong> and <strong>implicit</strong> meaning?</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Explicit</strong> meaning is information that is <strong>stated directly</strong> in the text [1]. <strong>Implicit</strong> meaning is information that is <strong>suggested or implied</strong> &mdash; the reader must infer it from clues [1].
+      <div class="mark-hint">Explicit = on the page. Implicit = between the lines. When the exam says "what does this suggest," it wants implicit meaning.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">Name the <strong>5 stages</strong> of Freytag's Pyramid in order.</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      1. <strong>Exposition</strong>, 2. <strong>Rising Action</strong>, 3. <strong>Climax</strong>, 4. <strong>Falling Action</strong>, 5. <strong>Denouement / Resolution</strong> (or <strong>Catastrophe</strong> in tragedy) [1 for 3+ correct in order, 2 for all 5].
+      <div class="mark-hint">Think of it as a mountain: you climb up (rising action), reach the peak (climax), then come down (falling action). The start and end are the flat ground.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">Define <strong>sibilance</strong> and <strong>alliteration</strong>. How are they different?</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Sibilance</strong> is the repetition of "s" or "sh" sounds [1]. <strong>Alliteration</strong> is the repetition of consonant sounds at the <strong>start</strong> of words [1]. Sibilance is specifically about the "s/sh" sound and can occur anywhere in a word. Alliteration is about any consonant but only at the beginning.
+      <div class="mark-hint">Sibilance creates a soft, hissing, or whispering quality. Alliteration creates rhythm and emphasis. If the repeated sound happens to be "s" at the start of words, it's BOTH.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">What is <strong>pathetic fallacy</strong>? Give one example.</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Pathetic fallacy</strong> is when weather or nature is used to reflect the mood or emotions in a scene [1]. Example: a thunderstorm during an argument, or sunshine during a happy reunion [1].
+      <div class="mark-hint">Pathetic fallacy is a specific type of personification. It's always about WEATHER or NATURE matching MOOD. "The sky wept" = pathetic fallacy. "The chair groaned" = just personification.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain It?</h2>
+    <div class="marks">Worth 3-4 marks each. You need PEE structure and clear explanation of effects.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">Read this sentence: <strong>"She said she was fine, but her hands would not stop shaking."</strong> What is the <strong>explicit</strong> meaning and what is the <strong>implicit</strong> meaning? Explain how the writer creates this gap between the two.</div>
+    <span class="q-marks">[4]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Explicit:</strong> She says she is fine. Her hands are shaking [1]. <strong>Implicit:</strong> She is NOT fine. She is frightened, anxious, or hiding her true feelings [1]. <strong>How the writer creates this:</strong> The conjunction "but" signals a contradiction between what she says and what her body reveals [1]. The detail "would not stop" suggests the shaking is involuntary and uncontrollable, which implies the emotion is too strong to hide. The reader understands her words are a lie, creating tension between the surface and the truth [1].
+      <div class="mark-hint">The gap between explicit and implicit is often created through contradiction. The body betrays what words try to hide. When you spot this pattern in the exam, you are reading at the highest level.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Explain what happens during the <strong>rising action</strong> and <strong>climax</strong> of a story. Why is the climax the most important moment?</div>
+    <span class="q-marks">[3]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      During the <strong>rising action</strong>, complications develop, tension builds, and obstacles appear for the characters [1]. The <strong>climax</strong> is the turning point &mdash; the moment of greatest tension or conflict where everything comes to a head [1]. The climax is the most important moment because it determines the outcome of the story &mdash; it is where the central conflict is confronted, and after it, the story begins to resolve [1].
+      <div class="mark-hint">On Paper 2, if you write a narrative, your story MUST have a clear climax. Stories that just "things happen, then more things happen" without a turning point score low on structure.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">A writer describes a storm: <strong>"The sky hissed and spat, the rain slashing at the earth like a thousand tiny knives."</strong> Using PEE, analyse how the writer uses figurative language. Name at least <strong>two</strong> techniques.</div>
+    <span class="q-marks">[4]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Technique 1 &mdash; Personification + Sibilance:</strong><br>
+      <strong>P:</strong> The writer uses personification and sibilance to make the storm feel aggressive [1]. <strong>E:</strong> "The sky hissed and spat" [1]. <strong>E:</strong> "Hissed" and "spat" give the sky human (or animal) aggression, as though it is deliberately attacking. The "s" sounds in "sky hissed and spat" create sibilance, producing a venomous, snake-like quality that reinforces the threat [1].<br><br>
+      <strong>Technique 2 &mdash; Simile:</strong><br>
+      <strong>P:</strong> The writer uses a simile to make the rain feel violent. <strong>E:</strong> "slashing at the earth like a thousand tiny knives." <strong>E:</strong> Comparing rain to "knives" turns a natural event into something painful and weapon-like. "Slashing" implies deliberate, repeated cuts, and "a thousand" exaggerates the scale, making the rain feel inescapable and dangerous [1].
+      <div class="mark-hint">Bonus: "pathetic fallacy" also applies here &mdash; the storm reflects a mood of violence or turmoil. Naming a third technique shows examiner-level skill.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Discuss It?</h2>
+    <div class="marks">Worth 5-6 marks each. These need full PEE paragraphs, detailed analysis, and sometimes your own writing.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">Read this passage: <strong>"The house had been waiting. That was what it felt like when she pushed open the gate &mdash; not that it was empty, but that it had been holding its breath. The garden had grown wild, reaching over the path like arms trying to pull her in. And somewhere inside, a light flickered, though no one had lived there for years."</strong><br><br>Using PEE, analyse how the writer creates a sense of unease. Comment on at least <strong>two</strong> techniques and explain their effects on the reader.</div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Technique 1 &mdash; Personification:</strong><br>
+      <strong>P:</strong> The writer personifies the house to create a sense of it being alive and sentient [1]. <strong>E:</strong> "The house had been waiting" and "holding its breath" [1]. <strong>E:</strong> "Waiting" implies the house has intention &mdash; it expected her, which is deeply unsettling because houses cannot think. "Holding its breath" suggests anticipation, as though the house is about to act. This creates tension because the reader feels the house is not a safe, passive space but an active, watchful presence with its own agenda [1].<br><br>
+      <strong>Technique 2 &mdash; Simile + Personification:</strong><br>
+      <strong>P:</strong> The writer uses a simile combined with personification to make the garden feel threatening [1]. <strong>E:</strong> "reaching over the path like arms trying to pull her in" [1]. <strong>E:</strong> The comparison of the plants to "arms" gives the garden a predatory, grabbing quality. "Trying to pull her in" suggests the garden is not merely overgrown but actively trying to trap her, which creates a sense of danger and claustrophobia. The reader feels that nature itself is conspiring against the character, making the house impossible to resist entering [1].<br><br>
+      <em>Bonus point: the "light flickered, though no one had lived there for years" creates mystery and fear because something unexplained is happening. This is foreshadowing &mdash; it hints at a presence inside.</em>
+      <div class="mark-hint">6 marks for two fully developed PEE paragraphs. Each needs: name the technique, quote specifically, explain effect on the reader. The best answers explore individual word choices ("waiting," "holding its breath," "arms," "pull") rather than making general comments.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">Write the <strong>opening paragraph</strong> of a narrative that begins at the <strong>climax</strong> (in the middle of the action). Your opening should use at least one simile or metaphor, one example of "showing" (not telling) emotion, and create a clear mood. The topic is: <strong>"The last day."</strong></div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Example response:</strong><br><br>
+      "The siren split the morning in two. One moment, the corridor was full of laughter and the squeak of trainers on linoleum; the next, silence &mdash; the kind of silence that presses against your eardrums like water. My bag slid from my shoulder and hit the floor, but I did not pick it up. Around me, faces I had known for five years froze into masks I did not recognise, their eyes wide, searching for someone to tell them what to do. Nobody moved. Nobody breathed. And in that stillness, I understood: this was it. The last day had begun, and it was nothing like we had imagined."<br><br>
+      <strong>Marking:</strong> [1] starts at the climax (immediate action/tension), [1] simile or metaphor ("silence... like water" / "faces... froze into masks"), [1] showing emotion through physical detail ("bag slid from my shoulder," "eyes wide, searching"), [1] clear mood (tension, disorientation, fear), [1] varied sentence structure (short + long), [1] strong vocabulary and sensory detail.
+      <div class="mark-hint">You don't need to match this example. The examiner wants: immediate action (not backstory), figurative language, shown emotion (not "I was scared"), clear atmosphere, and varied sentence structure. Starting with a sound or action is always stronger than starting with a description of the setting.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text"><strong>Exam-style question (Paper 1 format):</strong> Explain how the following passage creates a sense of sadness and loss. You should comment on the writer's use of language and structure.<br><br><strong>"The playground was still there, smaller than he remembered. The swings hung motionless, their chains rusted to a dull orange. He sat on the bench where his mother used to wait, and for a moment he could almost hear her voice, calling him in for tea. Almost. The word hung in the air like smoke, beautiful and impossible to hold."</strong></div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Language point 1:</strong><br>
+      <strong>P:</strong> The writer uses sensory and symbolic detail to suggest decay and the passage of time [1]. <strong>E:</strong> "The swings hung motionless, their chains rusted to a dull orange" [1]. <strong>E:</strong> "Motionless" suggests the playground is frozen in time &mdash; life has stopped here. "Rusted" implies neglect and age, and the colour "dull orange" replaces what was once bright and shiny, symbolising how joy has faded. The reader feels the weight of abandoned childhood [1].<br><br>
+      <strong>Language point 2:</strong><br>
+      <strong>P:</strong> The writer uses a simile to convey the fragility of memory [1]. <strong>E:</strong> "The word hung in the air like smoke, beautiful and impossible to hold" [1]. <strong>E:</strong> Comparing the word "almost" to smoke suggests his memories are both vivid and intangible &mdash; they exist for a moment then dissolve. "Beautiful and impossible to hold" captures the bittersweet nature of nostalgia: the memory brings comfort but also pain because it cannot be recaptured [1].<br><br>
+      <strong>Structure point (bonus):</strong> The one-word sentence "Almost." is placed alone for emphasis, creating a pause that mirrors the character's heartbreak. The reader shares his moment of reaching for something and losing it.
+      <div class="mark-hint">This is a Paper 1 style response. The examiner wants: at least 2 techniques identified, both quoted, both explained in terms of EFFECT ON THE READER. Commenting on structure (short sentence, paragraph breaks) as well as language pushes you into the highest marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

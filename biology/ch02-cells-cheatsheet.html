@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Cells &mdash; Biology Ch2</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #d5f5e3;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #8e44ad;
+    --trick-bg: #f4ecf7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch2 &mdash; Cheat Sheet</div>
+    <h1>Cells</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Cell surface membrane</strong></td>
+      <td>Thin layer around the cytoplasm. Controls what enters and exits the cell.</td>
+      <td class="confuse">Cell wall (thick, rigid, cellulose &mdash; plant cells only)</td>
+    </tr>
+    <tr>
+      <td><strong>Cytoplasm</strong></td>
+      <td>Jelly-like substance where chemical reactions happen. Contains water, dissolved substances, and organelles.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Nucleus</strong></td>
+      <td>Contains DNA (genes on chromosomes). Controls the cell's activities and characteristics.</td>
+      <td class="confuse">Nucleolus (a structure inside the nucleus &mdash; different thing)</td>
+    </tr>
+    <tr>
+      <td><strong>Chloroplast</strong></td>
+      <td>Contains chlorophyll. Site of <strong>photosynthesis</strong>. Only in plant cells (green parts).</td>
+      <td class="confuse">Mitochondria (respiration, not photosynthesis)</td>
+    </tr>
+    <tr>
+      <td><strong>Mitochondria</strong></td>
+      <td>Site of <strong>aerobic respiration</strong>. Releases energy for the cell. Has folded inner membrane.</td>
+      <td class="confuse">Chloroplast (makes food from light &mdash; mitochondria release energy from food)</td>
+    </tr>
+    <tr>
+      <td><strong>Cellulose cell wall</strong></td>
+      <td>Rigid outer layer in plant cells. Provides support. Freely permeable (lets everything through).</td>
+      <td class="confuse">Cell membrane (thin, selective, present in ALL cells)</td>
+    </tr>
+    <tr>
+      <td><strong>Vacuole</strong></td>
+      <td>In plants: large, permanent, filled with cell sap, provides turgor. In animals: small and temporary.</td>
+      <td class="confuse">Vesicle (tiny transport bubble, not the large plant vacuole)</td>
+    </tr>
+    <tr>
+      <td><strong>Ribosome</strong></td>
+      <td>Tiny structure on rough ER. Site of <strong>protein synthesis</strong>.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Tissue</strong></td>
+      <td>A group of cells with <strong>similar structure and function</strong> working together.</td>
+      <td class="confuse">Organ (made of DIFFERENT tissues working together)</td>
+    </tr>
+    <tr>
+      <td><strong>Magnification</strong></td>
+      <td>How many times bigger the image is compared to the real object. Formula: M = Measured &divide; Actual.</td>
+      <td class="confuse">Resolution (ability to see detail &mdash; different from making it bigger)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: ANIMAL vs PLANT CELLS -->
+<div class="card">
+  <h2>Animal Cell vs Plant Cell &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Animal Cell</th>
+      <th>Plant Cell</th>
+    </tr>
+    <tr>
+      <td>Membrane</td>
+      <td>Yes</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Cytoplasm</td>
+      <td>Yes</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Nucleus</td>
+      <td>Yes</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Cellulose cell wall</td>
+      <td>No</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Chloroplasts</td>
+      <td>No</td>
+      <td>Yes (in green parts)</td>
+    </tr>
+    <tr>
+      <td>Large permanent vacuole</td>
+      <td>No (small temporary ones)</td>
+      <td>Yes</td>
+    </tr>
+    <tr>
+      <td>Carbohydrate store</td>
+      <td>Glycogen</td>
+      <td>Starch</td>
+    </tr>
+    <tr>
+      <td>Shape</td>
+      <td>Irregular</td>
+      <td>Regular (box-like)</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; Plant Cells Have 3 Extras</div>
+    Plant cells have everything animal cells have, <strong>PLUS</strong> three things: <strong>C</strong>ell wall, <strong>C</strong>hloroplasts, large permanent va<strong>C</strong>uole. Three C's for plants.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: SPECIALISED CELLS -->
+<div class="card">
+  <h2>Specialised Cells &mdash; Structure Linked to Function</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Cell</th>
+      <th>Job</th>
+      <th>Key Adaptation</th>
+    </tr>
+    <tr>
+      <td>Red blood cell</td>
+      <td>Carry oxygen</td>
+      <td>No nucleus (more haemoglobin), biconcave disc (large surface area)</td>
+    </tr>
+    <tr>
+      <td>Ciliated cell</td>
+      <td>Move mucus</td>
+      <td>Tiny hairs (cilia) beat to push mucus along the airways</td>
+    </tr>
+    <tr>
+      <td>Root hair cell</td>
+      <td>Absorb water/minerals</td>
+      <td>Long thin extension (huge surface area for absorption)</td>
+    </tr>
+    <tr>
+      <td>Xylem vessel</td>
+      <td>Transport water</td>
+      <td>No cytoplasm, no end walls (continuous tube), lignin-thickened walls</td>
+    </tr>
+    <tr>
+      <td>Palisade cell</td>
+      <td>Photosynthesis</td>
+      <td>Packed with chloroplasts, near top of leaf where light is strongest</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Red Blood Cells Have No Nucleus</div>
+    Don't write "all cells have a nucleus." Red blood cells are the exception &mdash; they have <strong>no nucleus</strong> to make room for more haemoglobin so they carry more oxygen.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Cell membrane</span>
+    <span>The bouncer at the door &mdash; it decides what gets into the cell and what stays out.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Nucleus</span>
+    <span>The boss of the cell &mdash; it holds the DNA instructions that tell the cell what to do.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Mitochondria</span>
+    <span>The cell's batteries &mdash; they release energy through aerobic respiration.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Chloroplast</span>
+    <span>Solar panels for plants &mdash; they trap light energy to make glucose by photosynthesis.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Levels of organisation</span>
+    <span>Cell &rarr; Tissue &rarr; Organ &rarr; Organ System &rarr; Organism (smallest to largest).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Division of labour</span>
+    <span>Different cells do different jobs, so each part becomes really efficient at its specific task.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Starch vs Glycogen &mdash; Who Stores What?</div>
+    <strong>P</strong>lants store <strong>S</strong>tarch. <strong>A</strong>nimals store <strong>G</strong>lycogen. Think: PS &rarr; AG. Or: "Plants are Starchy, Animals are Glyco-powered."
+  </div>
+
+  <div class="trick">
+    <div class="label">MAM Triangle for Magnification</div>
+    Put <strong>M</strong> (measured size) on top, <strong>A</strong> (actual size) and <strong>M</strong> (magnification) on the bottom. Cover what you want to find &mdash; the other two show the calculation. Always convert to the <strong>same units</strong> first (1 mm = 1000 &micro;m).
+  </div>
+
+  <div class="trick">
+    <div class="label">Why Does This Cell Need Lots of Mitochondria?</div>
+    If an exam question asks "Why does [cell] have many mitochondria?", the answer is always: it has a high rate of metabolic activity and needs a lot of <strong>energy from respiration</strong>. Works for muscle cells, liver cells, sperm cells.
+  </div>
+
+  <div class="trick">
+    <div class="label">Shape Tells You Which Cell</div>
+    Irregular shape = animal cell (no cell wall). Regular box shape = plant cell (cell wall holds the shape). This works on exam diagrams every time.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"State the function of the cell membrane"</td>
+      <td><strong>Controls</strong> what enters and exits the cell; separates cell contents from surroundings</td>
+    </tr>
+    <tr>
+      <td>"State the function of mitochondria"</td>
+      <td>Site of <strong>aerobic respiration</strong> &mdash; releases energy for the cell</td>
+    </tr>
+    <tr>
+      <td>"Name a structure found in plant cells but not animal cells"</td>
+      <td><strong>Cell wall</strong>, chloroplasts, or large permanent vacuole (any one)</td>
+    </tr>
+    <tr>
+      <td>"How is the red blood cell adapted?"</td>
+      <td>No nucleus = more haemoglobin; biconcave = large surface area; flexible = fits through capillaries</td>
+    </tr>
+    <tr>
+      <td>"How is the root hair cell adapted?"</td>
+      <td>Long thin extension = <strong>large surface area</strong> for absorbing water and minerals</td>
+    </tr>
+    <tr>
+      <td>"Put these in order: organ, cell, tissue, organism"</td>
+      <td>Cell &rarr; Tissue &rarr; Organ &rarr; Organ System &rarr; Organism</td>
+    </tr>
+    <tr>
+      <td>"Calculate the magnification" (gives measured + actual size)</td>
+      <td>M = Measured &divide; Actual. <strong>Convert to same units first</strong> (1 mm = 1000 &micro;m)</td>
+    </tr>
+    <tr>
+      <td>"Why does a liver cell have many mitochondria?"</td>
+      <td>High metabolic rate &rarr; needs lots of <strong>energy from aerobic respiration</strong></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

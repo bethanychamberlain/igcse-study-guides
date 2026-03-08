@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Ecology and Ecosystems &mdash; Biology Ch19</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 19</div>
+  <h1>Ecology and Ecosystems</h1>
+  <div class="subtitle">Habitats, food chains, pyramids, nutrient cycles &mdash; how living things interact with each other and their environment</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 24 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: ECOLOGY KEY TERMS ===== -->
+<div class="section-header">
+  <span class="num">Section 19.1</span>
+  Ecology and Ecosystems &mdash; Key Terms
+</div>
+<div class="card">
+  <div class="intro-text">
+    Ecology is about how organisms interact with each other and their surroundings. Start by nailing the definitions &mdash; the exam loves asking you to define these.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Core Definitions</div>
+      <p><strong>Ecology</strong> = the study of living organisms in relation to their environment.</p>
+      <p style="margin-top:6px;"><strong>Habitat</strong> = a part of the environment that can provide food, shelter, and a breeding site for a living organism (e.g. a patch of grassland).</p>
+      <p style="margin-top:6px;"><strong>Population</strong> = all the members of the <strong>same species</strong> in the <strong>same area</strong> at the <strong>same time</strong> (e.g. all the wildebeest on a plain).</p>
+      <p style="margin-top:6px;"><strong>Community</strong> = all the populations of living organisms in one area (e.g. acacia trees, zebra, wildebeest, and grass together). The community is the <strong>biotic environment</strong>.</p>
+      <p style="margin-top:6px;"><strong>Ecosystem</strong> = a unit containing the community of organisms <strong>and</strong> their non-living (abiotic) environment interacting together.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>Population</strong> vs <strong>community</strong>: A population is one species. A community is ALL the species living together. If the question says "all the organisms in an area," that's a community, not a population.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Biotic vs Abiotic</div>
+      <p><strong>Biotic factors</strong> (living) = predators, food availability, mates, competition, disease.</p>
+      <p style="margin-top:6px;"><strong>Abiotic factors</strong> (non-living) split into:</p>
+      <p>&bull; <strong>Physical</strong>: oxygen and CO&#8322; concentration, light intensity, water availability</p>
+      <p>&bull; <strong>Climatic</strong>: temperature, humidity, wind</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam often asks "Name two <strong>abiotic</strong> factors." Students lose marks by naming biotic ones like "predators." Abiotic = non-living. Temperature, light, water &mdash; these are the safe answers.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Write each definition on a flashcard. On the back, put an example. Test yourself by covering the definition and trying to say it from the example alone. These five definitions come up every year.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define ecology, habitat, population, community, and ecosystem</li>
+    <li><input type="checkbox"> I know the difference between biotic and abiotic factors</li>
+    <li><input type="checkbox"> I can give two examples of each type of factor</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: FOOD CHAINS AND FOOD WEBS ===== -->
+<div class="section-header">
+  <span class="num">Section 19.2</span>
+  Food Chains and Food Webs
+</div>
+<div class="card">
+  <div class="intro-text">
+    Food chains show energy flow. Food webs show how multiple food chains connect. The arrows always point in the direction energy flows &mdash; from the eaten to the eater.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Terms</div>
+      <p><strong>Food chain</strong> = shows the flow of energy from one organism to the next.</p>
+      <p style="margin-top:6px;"><strong>Trophic level</strong> = the position of an organism in a food chain.</p>
+      <p style="margin-top:6px;"><strong>Producer</strong> = an organism (usually a green plant) that makes its own food by photosynthesis.</p>
+      <p style="margin-top:6px;"><strong>Consumer</strong> = an organism that obtains energy by feeding on other organisms.</p>
+      <p>&bull; Primary consumer = herbivore (eats plants)</p>
+      <p>&bull; Secondary consumer = carnivore (eats herbivores)</p>
+      <p>&bull; Tertiary consumer / top carnivore = eats other carnivores</p>
+      <p style="margin-top:6px;"><strong>Decomposer</strong> = fungi and bacteria that break down dead organisms and wastes.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Arrow Direction</div>
+      <p>The arrows in a food chain point in the direction <strong>energy flows</strong>, NOT "who eats whom." So: <strong>grass &rarr; rabbit &rarr; fox</strong> means "energy goes FROM grass TO rabbit TO fox." If you draw it backwards, you lose the mark.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Energy Transfer Is Inefficient</div>
+      <p>At every step in a food chain, energy is lost as <strong>heat from respiration</strong>.</p>
+      <p style="margin-top:6px;">&bull; Only about <strong>5&ndash;8%</strong> of the Sun's energy falling on leaves is "fixed" by photosynthesis.</p>
+      <p>&bull; Energy transfer to primary consumer is only <strong>5&ndash;10%</strong> (much of the plant is indigestible, not all parts are eaten).</p>
+      <p>&bull; Energy transfer to secondary consumer is <strong>10&ndash;20%</strong> (animal material is more digestible).</p>
+      <p style="margin-top:6px;">This is why food chains rarely have more than <strong>4 or 5 trophic levels</strong> &mdash; there is not enough energy left to support another level.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This explains why it's more efficient for humans to eat plants directly rather than feeding plants to animals and then eating the animals. Each step loses 80&ndash;90% of the energy as heat.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Food Webs</div>
+      <p>A <strong>food web</strong> = many interconnected food chains in an ecosystem. The more complicated the food web, the more <strong>stable</strong> the community &mdash; because if one species declines, predators can switch to other prey.</p>
+      <p style="margin-top:6px;"><strong>Removing one species</strong> from a food web has knock-on effects. For example, removing all sharks from a coral reef food web would let the populations of sea turtles and octopuses increase, which could reduce butterflyfish, which could increase coral.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practise "What Happens If..."</div>
+      <p>Look at any food web diagram. Pick one organism and imagine it disappears. Trace the effects up and down. The exam loves these questions: "What would happen to the population of X if Y were removed?" Practise talking through the chain of consequences.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define producer, consumer (primary/secondary/tertiary), and decomposer</li>
+    <li><input type="checkbox"> I know that arrows point in the direction of energy flow</li>
+    <li><input type="checkbox"> I can explain why food chains rarely have more than 4&ndash;5 levels</li>
+    <li><input type="checkbox"> I can predict what happens when a species is removed from a food web</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: PYRAMIDS ===== -->
+<div class="section-header">
+  <span class="num">Section 19.3</span>
+  Pyramids of Numbers, Biomass, and Energy
+</div>
+<div class="card">
+  <div class="intro-text">
+    Food chains give qualitative information (who eats whom). Pyramids give <em>quantitative</em> information (how many, how much mass, how much energy).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Three Types of Pyramid</div>
+      <table class="compare-table">
+        <tr>
+          <th>Pyramid type</th>
+          <th>What it measures</th>
+          <th>Can it be inverted?</th>
+        </tr>
+        <tr>
+          <td><strong>Numbers</strong></td>
+          <td>Number of organisms at each trophic level</td>
+          <td>Yes &mdash; e.g. one oak tree supporting thousands of insects</td>
+        </tr>
+        <tr>
+          <td><strong>Biomass</strong></td>
+          <td>Total mass of organisms at each trophic level at one time</td>
+          <td>Rarely, but can be if organisms reproduce and replace themselves quickly</td>
+        </tr>
+        <tr>
+          <td><strong>Energy</strong></td>
+          <td>Amount of energy flowing through each level over a period (e.g. kJ/m&sup2;/year)</td>
+          <td>Never &mdash; always a true pyramid shape</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; "Inverted" Pyramids</div>
+      <p>A pyramid of <strong>numbers</strong> can be inverted (upside-down) when the producer is very large (one oak tree) or when parasites are involved (many bird lice on fewer birds). A pyramid of <strong>energy</strong> is NEVER inverted. Know which types can flip.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Sampling Methods</div>
+      <p>To build pyramids, you need to count organisms. Methods include:</p>
+      <p>&bull; <strong>Quadrat</strong> &mdash; a square frame placed randomly on the ground; count organisms inside. Must be <strong>random</strong> (use random number generator) and repeated to get a <strong>mean</strong>.</p>
+      <p>&bull; <strong>Transect</strong> &mdash; a line across a habitat; record organisms at regular intervals. A <strong>belt transect</strong> samples between two parallel lines.</p>
+      <p>&bull; <strong>Pitfall trap</strong> &mdash; jar sunk into soil to catch ground arthropods.</p>
+      <p>&bull; <strong>Pooter</strong> &mdash; device for collecting small insects from bushes and trees.</p>
+      <p>&bull; <strong>Mark-recapture</strong> &mdash; for mobile animals. Catch, mark, release. Recapture later. Use the <strong>Lincoln index</strong>:</p>
+      <p style="margin-top:4px;">Population = (number marked &times; number in second sample) &divide; number of marked individuals recaptured</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The mark-recapture calculation is a common exam question. They'll give you the numbers and ask you to calculate the population size. Practise this formula until you can use it without thinking.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe the three types of ecological pyramid</li>
+    <li><input type="checkbox"> I know which pyramids can be inverted and why</li>
+    <li><input type="checkbox"> I can describe how to use a quadrat and why sampling must be random</li>
+    <li><input type="checkbox"> I can use the Lincoln index formula</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: DECAY ===== -->
+<div class="section-header">
+  <span class="num">Section 19.4</span>
+  Decay and Nutrient Recycling
+</div>
+<div class="card">
+  <div class="intro-text">
+    When organisms die, their bodies don't just vanish. Decomposers break them down and return nutrients to the soil for reuse &mdash; this is recycling at its most fundamental.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Decomposition Process</div>
+      <p><strong>Scavengers</strong> (e.g. vultures) eat the dead body first, breaking it into smaller pieces.</p>
+      <p style="margin-top:6px;"><strong>Decomposers</strong> (bacteria and fungi) then break down the remains by <strong>saprotrophic feeding</strong> &mdash; they secrete enzymes onto the dead material, digest it externally, then absorb the simple products.</p>
+      <p style="margin-top:6px;">Key enzymes involved: <strong>lipases</strong> (fats &rarr; fatty acids + glycerol), <strong>amylases</strong> (starch &rarr; maltose &rarr; glucose), <strong>proteases</strong> (protein &rarr; amino acids).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Conditions Affecting Decay</div>
+      <p>Decomposition is faster when:</p>
+      <p>&bull; <strong>Temperature</strong> is warm (optimum for enzyme activity)</p>
+      <p>&bull; <strong>Oxygen</strong> is present (aerobic respiration in decomposers). Without oxygen, decay is <strong>slow and smelly</strong> (methane and hydrogen sulfide produced).</p>
+      <p>&bull; <strong>Water</strong> is available (many decomposition reactions are hydrolysis reactions).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Link to Compost Heaps</div>
+      <p>If the exam asks about compost heaps, connect the dots: gardeners spray water (moisture for reactions), build on sticks (air gaps for oxygen), and the heap heats up (respiration by decomposers generates heat). Every compost question is really a decomposition question.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe saprotrophic feeding</li>
+    <li><input type="checkbox"> I know the three conditions needed for rapid decomposition</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: CARBON CYCLE ===== -->
+<div class="section-header">
+  <span class="num">Section 19.5</span>
+  The Carbon Cycle
+</div>
+<div class="card">
+  <div class="intro-text">
+    Carbon is endlessly recycled between living organisms and the atmosphere. The key processes that move it are photosynthesis, respiration, feeding, decomposition, and combustion.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Carbon Cycle Steps</div>
+      <p><strong>Carbon enters living things via:</strong></p>
+      <p>&bull; <strong>Photosynthesis</strong> &mdash; plants use CO&#8322; from the air to make organic compounds (carbohydrates, fats, proteins).</p>
+      <p style="margin-top:6px;"><strong>Carbon returns to the atmosphere via:</strong></p>
+      <p>&bull; <strong>Respiration</strong> &mdash; all living organisms (plants, animals, decomposers) release CO&#8322;.</p>
+      <p>&bull; <strong>Combustion</strong> &mdash; burning fossil fuels or biomass releases CO&#8322;.</p>
+      <p>&bull; <strong>Decomposition</strong> &mdash; decomposers respire as they break down dead matter.</p>
+      <p style="margin-top:6px;"><strong>Carbon moves between organisms via:</strong></p>
+      <p>&bull; <strong>Feeding</strong> &mdash; animals eat plants or other animals.</p>
+      <p>&bull; <strong>Death and excretion</strong> &mdash; provides material for decomposers.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>"Plants only photosynthesize" is WRONG. Plants <strong>both</strong> photosynthesize and respire. Overall, they fix more carbon than they release (otherwise they couldn't grow), but they do respire 24/7.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Fossil Fuels and the Carbon Cycle</div>
+      <p>Over millions of years, some dead organisms did NOT decompose (conditions were anaerobic, low pH, extreme cold). Their carbon became "locked up" in <strong>fossil fuels</strong> (coal, oil, peat, gas).</p>
+      <p style="margin-top:6px;">When humans burn fossil fuels, this stored carbon is released rapidly as CO&#8322;, <strong>increasing atmospheric CO&#8322; concentration</strong>. This disrupts the balance of the carbon cycle.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Questions about rising CO&#8322; levels almost always link to the carbon cycle. The answer is: "Combustion of fossil fuels releases CO&#8322; faster than photosynthesis can remove it." That's the one-sentence version of climate change biology.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the processes that add carbon to the atmosphere</li>
+    <li><input type="checkbox"> I can name the process that removes carbon from the atmosphere</li>
+    <li><input type="checkbox"> I can explain how fossil fuel combustion disrupts the carbon cycle</li>
+    <li><input type="checkbox"> I could draw or label a carbon cycle diagram from memory</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: NITROGEN CYCLE ===== -->
+<div class="section-header">
+  <span class="num">Section 19.6</span>
+  The Nitrogen Cycle
+</div>
+<div class="card">
+  <div class="intro-text">
+    Plants need nitrogen to make proteins and DNA, but they can't use nitrogen gas (N&#8322;) directly. It must be converted to <strong>nitrate</strong> first. This involves several types of bacteria.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Four Key Bacterial Processes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Process</th>
+          <th>What happens</th>
+          <th>Bacteria involved</th>
+        </tr>
+        <tr>
+          <td><strong>Nitrogen fixation</strong></td>
+          <td>N&#8322; gas &rarr; ammonium ions &rarr; nitrate</td>
+          <td>Nitrogen-fixing bacteria (e.g. in root nodules of legumes like peas and beans)</td>
+        </tr>
+        <tr>
+          <td><strong>Decomposition</strong></td>
+          <td>Dead organisms &rarr; amino acids &rarr; ammonium ions</td>
+          <td>Decomposing bacteria and fungi</td>
+        </tr>
+        <tr>
+          <td><strong>Nitrification</strong></td>
+          <td>Ammonium ions &rarr; nitrite &rarr; nitrate (needs oxygen)</td>
+          <td>Nitrifying bacteria</td>
+        </tr>
+        <tr>
+          <td><strong>Denitrification</strong></td>
+          <td>Nitrate &rarr; nitrogen gas (occurs without oxygen)</td>
+          <td>Denitrifying bacteria (in waterlogged soils)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Nitrification vs Nitrogen Fixation</div>
+      <p><strong>Nitrogen fixation</strong> = N&#8322; gas from the air &rarr; ammonium &rarr; nitrate. It starts with atmospheric nitrogen.</p>
+      <p><strong>Nitrification</strong> = ammonium ions already in the soil &rarr; nitrite &rarr; nitrate. It starts with ammonium in the soil.</p>
+      <p>They sound similar, but they start from different places. The exam will test whether you know the difference.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Farming Link</div>
+      <p>Farmers drain waterlogged fields to prevent <strong>denitrification</strong> (which removes useful nitrate). They plant legumes (peas, beans) in crop rotation to add nitrate via <strong>nitrogen fixation</strong>. They add fertilisers to directly increase soil nitrate. All of this connects to the nitrogen cycle.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw It</div>
+      <p>The nitrogen cycle diagram is worth learning to draw. Start with "N&#8322; in atmosphere" at the top, then show the four processes as arrows connecting nitrogen gas, ammonium, nitrite, nitrate, plant protein, animal protein, dead matter. Practise until you can sketch it from memory.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name and describe all four bacterial processes in the nitrogen cycle</li>
+    <li><input type="checkbox"> I know the difference between nitrogen fixation and nitrification</li>
+    <li><input type="checkbox"> I can explain why farmers drain waterlogged fields and plant legumes</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7: WATER CYCLE ===== -->
+<div class="section-header">
+  <span class="num">Section 19.7</span>
+  The Water Cycle
+</div>
+<div class="card">
+  <div class="intro-text">
+    Unlike carbon and nitrogen, most water recycling happens through physical processes (evaporation, condensation) rather than biological ones. Only a tiny proportion passes through living organisms.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Water Cycle Steps</div>
+      <p>&bull; <strong>Evaporation</strong> &mdash; heat from the Sun turns liquid water (from seas, lakes, soil) into water vapour.</p>
+      <p>&bull; <strong>Evapotranspiration</strong> &mdash; water evaporates from plant leaves (transpiration) into the atmosphere.</p>
+      <p>&bull; <strong>Condensation</strong> &mdash; water vapour cools and forms water droplets, which collect as clouds.</p>
+      <p>&bull; <strong>Precipitation</strong> &mdash; water falls as rain, snow, or hail.</p>
+      <p>&bull; <strong>Melting/refreezing</strong> &mdash; ice turns to liquid water and vice versa.</p>
+      <p style="margin-top:6px;">The driving force is <strong>heat energy from the Sun</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Water Is Special for Life</div>
+      <p>&bull; <strong>High specific heat capacity</strong> &mdash; cells resist temperature changes.</p>
+      <p>&bull; <strong>High latent heat of vaporisation</strong> &mdash; evaporation from surfaces cools organisms.</p>
+      <p>&bull; <strong>Incompressible</strong> &mdash; provides support (e.g. for fish bodies, eyeballs).</p>
+      <p>&bull; <strong>Excellent solvent/transport medium</strong> &mdash; carries glucose, oxygen, amino acids in blood.</p>
+      <p>&bull; <strong>Biological reagent</strong> &mdash; needed for photosynthesis and digestion (hydrolysis).</p>
+      <p>&bull; <strong>Lubricant</strong> &mdash; e.g. saliva, synovial fluid in joints.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>The water cycle is the easiest of the three cycles. Focus more study time on the carbon and nitrogen cycles &mdash; those are where the harder exam questions come from.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe the main steps of the water cycle</li>
+    <li><input type="checkbox"> I can list at least four biological functions of water</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 19 Notes Complete</h2>
+  <p>You've covered ecology terms, food chains and webs, ecological pyramids, decay, and the carbon, nitrogen, and water cycles. Now test yourself with the Chapter 19 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

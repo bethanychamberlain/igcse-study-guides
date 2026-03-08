@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Atoms and Elements &mdash; Chemistry Ch2</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Chemistry Ch2 &mdash; Cheat Sheet</div>
+    <h1>Atoms and Elements</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Atom</strong></td>
+      <td>The smallest particle of matter that cannot be broken down further by chemical means.</td>
+      <td class="confuse">Molecule (two or more atoms bonded together)</td>
+    </tr>
+    <tr>
+      <td><strong>Element</strong></td>
+      <td>A substance that contains only <strong>one kind of atom</strong>. E.g. sodium, carbon, sulfur.</td>
+      <td class="confuse">Compound (two or more different elements bonded together)</td>
+    </tr>
+    <tr>
+      <td><strong>Compound</strong></td>
+      <td>Atoms of different elements <strong>chemically bonded</strong> together. You need a chemical reaction to separate them.</td>
+      <td class="confuse">Mixture (not bonded &mdash; you can separate by physical methods)</td>
+    </tr>
+    <tr>
+      <td><strong>Mixture</strong></td>
+      <td>Different substances <strong>not bonded</strong> together. Separated by filtering, distillation, etc.</td>
+      <td class="confuse">Compound (bonded &mdash; needs a chemical reaction to separate)</td>
+    </tr>
+    <tr>
+      <td><strong>Proton number</strong></td>
+      <td>Number of protons in the nucleus. Identifies the element. Also called <strong>atomic number</strong>.</td>
+      <td class="confuse">Nucleon number (protons + neutrons &mdash; always bigger)</td>
+    </tr>
+    <tr>
+      <td><strong>Nucleon number</strong></td>
+      <td>Total number of protons + neutrons. Also called <strong>mass number</strong>.</td>
+      <td class="confuse">Proton number (just protons, not neutrons)</td>
+    </tr>
+    <tr>
+      <td><strong>Isotopes</strong></td>
+      <td>Atoms of the <strong>same element</strong>, same protons, but <strong>different numbers of neutrons</strong>.</td>
+      <td class="confuse">Different elements (isotopes have the SAME proton number)</td>
+    </tr>
+    <tr>
+      <td><strong>Electronic configuration</strong></td>
+      <td>How electrons are arranged in shells. Written as 2,8,1 etc.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Relative atomic mass (A&#7523;)</strong></td>
+      <td>The <strong>average mass</strong> of an element's isotopes, compared to 1/12 of carbon-12.</td>
+      <td class="confuse">Nucleon number (that's for ONE atom; A&#7523; is an average and can be a decimal)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: SUBATOMIC PARTICLES -->
+<div class="card">
+  <h2>Subatomic Particles &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Proton</th>
+      <th>Neutron</th>
+      <th>Electron</th>
+    </tr>
+    <tr>
+      <td>Mass (amu)</td>
+      <td>1</td>
+      <td>1</td>
+      <td>~0 (negligible)</td>
+    </tr>
+    <tr>
+      <td>Charge</td>
+      <td>+1</td>
+      <td>0 (none)</td>
+      <td>&minus;1</td>
+    </tr>
+    <tr>
+      <td>Location</td>
+      <td>Nucleus</td>
+      <td>Nucleus</td>
+      <td>Shells around nucleus</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Shorthand Notation</div>
+    The <strong>big number on top</strong> is the nucleon number (mass number). The <strong>small number on the bottom</strong> is the proton number (atomic number). The big number is always bigger because it includes neutrons. <strong>Neutrons = nucleon number &minus; proton number.</strong>
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: ELECTRON SHELLS -->
+<div class="card">
+  <h2>Electron Shell Capacity</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Shell</th>
+      <th>Maximum Electrons</th>
+      <th>Example</th>
+    </tr>
+    <tr>
+      <td>1st (closest to nucleus)</td>
+      <td>2</td>
+      <td>Helium: 2</td>
+    </tr>
+    <tr>
+      <td>2nd</td>
+      <td>8</td>
+      <td>Neon: 2, 8</td>
+    </tr>
+    <tr>
+      <td>3rd</td>
+      <td>8 (when outer shell)</td>
+      <td>Argon: 2, 8, 8</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Key Link</div>
+    <strong>Group number = outer shell electrons.</strong> Group I = 1 outer electron. Group VII = 7 outer electrons.
+    <strong>Period number = number of occupied shells.</strong> Period 3 = 3 shells.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Atom</span>
+    <span>The smallest particle of an element that still behaves like that element.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Element</span>
+    <span>Only one type of atom &mdash; nothing else mixed in, no other elements bonded to it.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Compound</span>
+    <span>Two or more different elements bonded together that you can only separate with a chemical reaction.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Proton number</span>
+    <span>The identity card of an element &mdash; every element has a unique proton number, and changing it changes the element.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Neutral atom</span>
+    <span>Equal protons (+) and electrons (&minus;), so the charges cancel out to zero.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Isotopes</span>
+    <span>Same element, same protons, different neutrons &mdash; same chemistry, different mass.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">A&#7523;</span>
+    <span>The weighted average mass of all isotopes &mdash; closer to the most abundant isotope.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Noble gases</span>
+    <span>Full outer shell = stable = unreactive &mdash; they don't need to gain, lose, or share electrons.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Neutrons = Big Minus Small</div>
+    <strong>Neutrons = nucleon number &minus; proton number.</strong> The big number on top minus the small number on the bottom. For sodium: 23 &minus; 11 = 12 neutrons. This formula appears on every exam paper.
+  </div>
+
+  <div class="trick">
+    <div class="label">Big Number On Top</div>
+    In shorthand notation, the nucleon number (mass) goes on <strong>top</strong>, proton number on the <strong>bottom</strong>. Think: "mass is heavy, it sits on top." The mass number is always the bigger number.
+  </div>
+
+  <div class="trick">
+    <div class="label">2, 8, 8 Rule</div>
+    Electron shells fill in order: 2, then 8, then 8. After 2,8,8 (argon), the next electrons start a new 4th shell: potassium is 2,8,8,1 and calcium is 2,8,8,2. Don't try to put more than 8 in the 3rd shell for the first 20 elements.
+  </div>
+
+  <div class="trick">
+    <div class="label">Isotopes React the Same</div>
+    Isotopes have the same electrons, so they have the same chemistry. Carbon-12 and carbon-14 both burn the same way. Different mass, same reactions. The exam loves asking "why do isotopes have the same chemical properties?" &mdash; answer: same number of electrons / same electronic configuration.
+  </div>
+
+  <div class="trick">
+    <div class="label">A&#7523; Sanity Check</div>
+    Your calculated A&#7523; must fall <strong>between</strong> the lightest and heaviest isotope masses, and be <strong>closer to the more abundant one</strong>. If it's outside that range, you made an error.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"What is an element?"</td>
+      <td>A substance that contains only <strong>one type of atom</strong></td>
+    </tr>
+    <tr>
+      <td>"What is a compound?"</td>
+      <td>Two or more different elements <strong>chemically bonded</strong> together</td>
+    </tr>
+    <tr>
+      <td>"What is the difference between a compound and a mixture?"</td>
+      <td>A compound has atoms <strong>chemically bonded</strong> (needs a chemical reaction to separate). A mixture is <strong>not bonded</strong> (separated by physical methods like filtering)</td>
+    </tr>
+    <tr>
+      <td>"An atom has 17 protons and nucleon number 35. Find the number of neutrons and electrons."</td>
+      <td>Neutrons = 35 &minus; 17 = <strong>18</strong>. Electrons = 17 (same as protons in a neutral atom). Electronic configuration: <strong>2, 8, 7</strong></td>
+    </tr>
+    <tr>
+      <td>"Why does an atom have no overall charge?"</td>
+      <td>It has an <strong>equal number of protons (+) and electrons (&minus;)</strong>, so the charges cancel out</td>
+    </tr>
+    <tr>
+      <td>"What are isotopes?"</td>
+      <td>Atoms of the <strong>same element</strong> with the <strong>same number of protons</strong> but <strong>different numbers of neutrons</strong></td>
+    </tr>
+    <tr>
+      <td>"Why do isotopes have the same chemical properties?"</td>
+      <td>They have the same number of <strong>electrons</strong> (same electronic configuration), and chemical reactions depend on <strong>outer shell electrons</strong></td>
+    </tr>
+    <tr>
+      <td>"Calculate the relative atomic mass given isotope data"</td>
+      <td>A&#7523; = (mass&#8321; &times; %&#8321; &divide; 100) + (mass&#8322; &times; %&#8322; &divide; 100). Check: answer must be between the two masses</td>
+    </tr>
+    <tr>
+      <td>"Why are noble gases unreactive?"</td>
+      <td>They have a <strong>full outer shell of electrons</strong>, so they do not need to gain, lose, or share electrons</td>
+    </tr>
+    <tr>
+      <td>"How are elements in the same group similar?"</td>
+      <td>They have the <strong>same number of outer shell electrons</strong>, so they have <strong>similar chemical properties</strong></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

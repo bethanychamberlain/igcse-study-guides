@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Variation and Evolution &mdash; Biology Ch18</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch18 &mdash; Cheat Sheet</div>
+    <h1>Variation and Evolution</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Continuous variation</strong></td>
+      <td>A range of values with intermediates (e.g. height, body mass). Caused by genes AND environment. Bell curve graph.</td>
+      <td class="confuse">Discontinuous (clear-cut categories, no intermediates)</td>
+    </tr>
+    <tr>
+      <td><strong>Discontinuous variation</strong></td>
+      <td>Clear-cut categories with no intermediates (e.g. blood group, sex). Caused by genes only. Bar chart graph.</td>
+      <td class="confuse">Continuous (a range with in-between values)</td>
+    </tr>
+    <tr>
+      <td><strong>Mutation</strong></td>
+      <td>A change in the base sequence of DNA (gene mutation) or in chromosome number (chromosome mutation).</td>
+      <td class="confuse">Variation (mutation is one CAUSE of variation, not variation itself)</td>
+    </tr>
+    <tr>
+      <td><strong>Mutagen</strong></td>
+      <td>A factor that increases the rate of mutation. E.g. UV light, gamma rays, chemicals in tobacco smoke.</td>
+      <td class="confuse">Carcinogen (a mutagen that specifically causes cancer)</td>
+    </tr>
+    <tr>
+      <td><strong>Adaptation</strong></td>
+      <td>The way an organism is suited to survive in its environment.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Natural selection</strong></td>
+      <td>Organisms with the best-suited characteristics are more likely to survive, reproduce, and pass on their genes.</td>
+      <td class="confuse">Artificial selection (that's when humans choose which organisms breed)</td>
+    </tr>
+    <tr>
+      <td><strong>Artificial selection</strong></td>
+      <td>When humans choose organisms with desirable traits and breed them together (selective breeding).</td>
+      <td class="confuse">Genetic engineering (that's directly changing DNA, not traditional breeding)</td>
+    </tr>
+    <tr>
+      <td><strong>Evolution</strong></td>
+      <td>The change in a species over time through natural selection.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Fitness</strong></td>
+      <td>How well-suited an organism is to survive and reproduce in its environment.</td>
+      <td class="confuse">Physical fitness (in biology, fitness = reproductive success)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: CONTINUOUS vs DISCONTINUOUS -->
+<div class="card">
+  <h2>Continuous vs Discontinuous Variation</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Continuous</th>
+      <th>Discontinuous</th>
+    </tr>
+    <tr>
+      <td>Intermediates?</td>
+      <td>Yes &mdash; full range</td>
+      <td>No &mdash; distinct categories</td>
+    </tr>
+    <tr>
+      <td>Caused by</td>
+      <td>Genes AND environment</td>
+      <td>Genes only</td>
+    </tr>
+    <tr>
+      <td>Graph type</td>
+      <td>Smooth bell curve</td>
+      <td>Bar chart</td>
+    </tr>
+    <tr>
+      <td>Can you measure it?</td>
+      <td>Yes (quantitative)</td>
+      <td>No (qualitative &mdash; categories)</td>
+    </tr>
+    <tr>
+      <td>Examples</td>
+      <td>Height, body mass, hand span</td>
+      <td>Blood group, sex, eye colour</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: NATURAL vs ARTIFICIAL SELECTION -->
+<div class="card">
+  <h2>Natural vs Artificial Selection</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Natural Selection</th>
+      <th>Artificial Selection</th>
+    </tr>
+    <tr>
+      <td>Agent</td>
+      <td>The natural environment</td>
+      <td>Humans</td>
+    </tr>
+    <tr>
+      <td>Speed</td>
+      <td>Slow (many generations)</td>
+      <td>Much quicker</td>
+    </tr>
+    <tr>
+      <td>Purpose</td>
+      <td>Survival in the wild</td>
+      <td>Benefit to humans</td>
+    </tr>
+    <tr>
+      <td>Effect on variation</td>
+      <td>Maintains variation</td>
+      <td>Reduces variation (danger!)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Phenotype equation</span>
+    <span>Phenotype = Genotype + Environment &mdash; your traits come from BOTH your genes AND your surroundings.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Gene mutation</span>
+    <span>A change in the base sequence of DNA that may produce a different protein (or no protein at all).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Crossing over</span>
+    <span>Homologous chromosomes swap segments during meiosis, creating new allele combinations.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Darwin's finches</span>
+    <span>Finches on different Galapagos islands had different beaks adapted to different foods &mdash; evidence for natural selection.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Antibiotic resistance</span>
+    <span>Bacteria with a resistance mutation survive antibiotics, reproduce, and pass it on &mdash; natural selection happening now.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">New species</span>
+    <span>Two populations separated &rarr; different selection pressures &rarr; accumulate different adaptations &rarr; can no longer interbreed = new species.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Natural Selection &mdash; 5-Step Chain</div>
+    <strong>O</strong>ver-produce &rarr; <strong>V</strong>ary &rarr; <strong>S</strong>truggle &rarr; <strong>S</strong>urvive &rarr; <strong>P</strong>ass on. Each step = 1 mark on a 5-mark question. Memorise: "OVSSP."
+  </div>
+
+  <div class="trick">
+    <div class="label">Continuous = Can Measure</div>
+    If you can put a <strong>number</strong> on it (height = 165 cm), it's continuous. If you can only put a <strong>label</strong> on it (blood group = A), it's discontinuous.
+  </div>
+
+  <div class="trick">
+    <div class="label">Darwin vs Lamarck</div>
+    <strong>Lamarck</strong> = "You stretched your neck, so your babies will have long necks" (WRONG). <strong>Darwin</strong> = "Some giraffes randomly had longer necks, and those survived better" (RIGHT). Lamarck thinks the environment causes changes; Darwin says it selects from existing ones.
+  </div>
+
+  <div class="trick">
+    <div class="label">Artificial Selection Reduces Variation</div>
+    Think of it like a funnel: each generation you pick only the "best" few, so the gene pool gets narrower and narrower. Narrow gene pool = vulnerable to disease (Irish Potato Famine again).
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Explain how natural selection leads to evolution"</td>
+      <td>5 steps: overproduction, variation, struggle for existence, survival of the fittest, <strong>advantageous traits passed on</strong></td>
+    </tr>
+    <tr>
+      <td>"Why do identical twins raised apart look slightly different?"</td>
+      <td>Same genotype but <strong>different environments</strong> &mdash; phenotype = genotype + environment</td>
+    </tr>
+    <tr>
+      <td>"How does antibiotic resistance develop?"</td>
+      <td>Random mutation &rarr; resistant bacteria survive antibiotic &rarr; reproduce &rarr; <strong>resistance spreads through population</strong></td>
+    </tr>
+    <tr>
+      <td>"What is a mutagen? Give an example."</td>
+      <td>A factor that increases mutation rate. Examples: <strong>UV light, gamma rays, tar in cigarette smoke</strong></td>
+    </tr>
+    <tr>
+      <td>"Describe how to selectively breed sheep for thicker wool"</td>
+      <td>Choose sheep with thickest wool &rarr; breed them &rarr; select best offspring &rarr; <strong>repeat over many generations</strong></td>
+    </tr>
+    <tr>
+      <td>"Is height continuous or discontinuous?"</td>
+      <td><strong>Continuous</strong> &mdash; range of values, can be measured, influenced by genes AND environment</td>
+    </tr>
+    <tr>
+      <td>"Give a disadvantage of artificial selection"</td>
+      <td>Reduces genetic variation &mdash; all organisms similar, so <strong>one disease could wipe them all out</strong></td>
+    </tr>
+    <tr>
+      <td>"Name three sources of genetic variation"</td>
+      <td><strong>Crossing over, independent assortment, random fertilisation</strong> (all happen during meiosis / sexual reproduction)</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Magnets and Currents &mdash; Physics Ch9</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Physics Ch9 &mdash; Cheat Sheet</div>
+    <h1>Magnets and Currents</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Magnetic field</strong></td>
+      <td>The region around a magnet where a magnetic force acts. Field lines run from <strong>N to S</strong>.</td>
+      <td class="confuse">Electric field (that is around charges, not magnets)</td>
+    </tr>
+    <tr>
+      <td><strong>Ferromagnetic</strong></td>
+      <td>Materials that can be magnetised: iron, steel, nickel, cobalt.</td>
+      <td class="confuse">Non-magnetic metals like copper, aluminium, brass</td>
+    </tr>
+    <tr>
+      <td><strong>Soft iron</strong></td>
+      <td>Easy to magnetise, loses magnetism quickly. Used for electromagnet cores.</td>
+      <td class="confuse">Steel (hard magnetic &mdash; keeps magnetism &rarr; permanent magnets)</td>
+    </tr>
+    <tr>
+      <td><strong>Solenoid</strong></td>
+      <td>A long coil of wire. When current flows, it creates a field pattern like a bar magnet.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Motor effect</strong></td>
+      <td>A force on a current-carrying wire in a magnetic field. Use <strong>LEFT-hand rule</strong>.</td>
+      <td class="confuse">Generator effect (that is motion causing current &mdash; use RIGHT hand)</td>
+    </tr>
+    <tr>
+      <td><strong>Commutator</strong></td>
+      <td>Split ring in a d.c. motor that reverses the current direction every half-turn to keep the coil spinning.</td>
+      <td class="confuse">Slip rings (complete rings used in a.c. generators &mdash; they do NOT reverse current)</td>
+    </tr>
+    <tr>
+      <td><strong>Electromagnetic induction</strong></td>
+      <td>A conductor cutting magnetic field lines induces an e.m.f. (voltage). Use <strong>RIGHT-hand rule</strong>.</td>
+      <td class="confuse">Motor effect (that is current causing force, not motion causing current)</td>
+    </tr>
+    <tr>
+      <td><strong>Lenz's law</strong></td>
+      <td>The induced current always flows in a direction that <strong>opposes the change</strong> that caused it.</td>
+      <td class="confuse">Faraday's law (that tells you the SIZE of the induced e.m.f., not the direction)</td>
+    </tr>
+    <tr>
+      <td><strong>Transformer</strong></td>
+      <td>Two coils on a shared iron core. Changes a.c. voltage up or down. Only works with <strong>a.c.</strong></td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Step-up / Step-down</strong></td>
+      <td>Step-up: more turns on secondary = higher output voltage. Step-down: fewer turns = lower voltage.</td>
+      <td class="confuse">If voltage goes up, current goes down (and vice versa) &mdash; power stays the same</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: MOTOR vs GENERATOR -->
+<div class="card">
+  <h2>Motor vs Generator &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>D.C. Motor</th>
+      <th>A.C. Generator</th>
+    </tr>
+    <tr>
+      <td>Input</td>
+      <td>Electricity (current)</td>
+      <td>Motion (spinning the coil)</td>
+    </tr>
+    <tr>
+      <td>Output</td>
+      <td>Motion (rotation)</td>
+      <td>Electricity (a.c.)</td>
+    </tr>
+    <tr>
+      <td>Contacts</td>
+      <td><strong>Commutator</strong> (split ring)</td>
+      <td><strong>Slip rings</strong> (complete rings)</td>
+    </tr>
+    <tr>
+      <td>Hand rule</td>
+      <td><strong>LEFT</strong>-hand rule</td>
+      <td><strong>RIGHT</strong>-hand rule</td>
+    </tr>
+    <tr>
+      <td>How to increase</td>
+      <td>More current, stronger magnet, more turns</td>
+      <td>Spin faster, stronger magnet, more turns, larger coil area</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Which Hand?</div>
+    <strong>L</strong>eft hand = e<strong>L</strong>ectric <strong>m</strong>otor (current causes force).<br>
+    <strong>R</strong>ight hand = generato<strong>R</strong> (motion causes current).<br>
+    The exam WILL test whether you know which hand to use.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: STEP-UP vs STEP-DOWN -->
+<div class="card">
+  <h2>Step-Up vs Step-Down Transformer</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Step-Up</th>
+      <th>Step-Down</th>
+    </tr>
+    <tr>
+      <td>Turns</td>
+      <td>More on secondary than primary</td>
+      <td>Fewer on secondary than primary</td>
+    </tr>
+    <tr>
+      <td>Voltage</td>
+      <td>Output voltage is HIGHER</td>
+      <td>Output voltage is LOWER</td>
+    </tr>
+    <tr>
+      <td>Current</td>
+      <td>Output current is LOWER</td>
+      <td>Output current is HIGHER</td>
+    </tr>
+    <tr>
+      <td>Used at</td>
+      <td>Power stations (for long-distance transmission)</td>
+      <td>Substations (to reduce voltage for homes)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- KEY FORMULAS -->
+<div class="card">
+  <h2>Key Formulas (with Units)</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:45%;">Formula</th>
+      <th style="width:35%;">What It Tells You</th>
+      <th style="width:20%;">Units</th>
+    </tr>
+    <tr>
+      <td><strong>V<sub>s</sub> / V<sub>p</sub> = N<sub>s</sub> / N<sub>p</sub></strong></td>
+      <td>Transformer equation (voltage ratio = turns ratio)</td>
+      <td>V, turns</td>
+    </tr>
+    <tr>
+      <td><strong>V<sub>p</sub> &times; I<sub>p</sub> = V<sub>s</sub> &times; I<sub>s</sub></strong></td>
+      <td>Transformer power (100% efficient)</td>
+      <td>V, A</td>
+    </tr>
+    <tr>
+      <td><strong>P<sub>loss</sub> = I<sup>2</sup>R</strong></td>
+      <td>Power wasted as heat in cables</td>
+      <td>W, A, &Omega;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Magnetic field</span>
+    <span>Field lines run from N to S outside the magnet; the closer the lines, the stronger the field.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Electromagnet</span>
+    <span>A solenoid with a soft iron core &mdash; switch the current on and off to turn the magnet on and off.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Motor effect</span>
+    <span>A current-carrying wire in a magnetic field feels a force &mdash; this is how every electric motor works.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Induction</span>
+    <span>Move a wire through a magnetic field (cutting field lines) and a voltage is induced &mdash; no movement, no voltage.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Lenz's law</span>
+    <span>The induced current opposes whatever caused it &mdash; push a N pole in and the coil pushes back with its own N pole.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Transformer</span>
+    <span>Two coils on an iron core; a.c. in the primary creates a changing field that induces a voltage in the secondary.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">High-voltage transmission</span>
+    <span>Step-up transformers increase voltage (reducing current), which massively reduces I<sup>2</sup>R heat losses in the cables.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Fleming's Left-Hand Rule &mdash; TFC</div>
+    <strong>T</strong>humb = <strong>T</strong>hrust (force/motion).
+    <strong>F</strong>irst finger = <strong>F</strong>ield (N to S).
+    se<strong>C</strong>ond finger = <strong>C</strong>urrent (conventional, + to &minus;).
+    Hold your LEFT hand with all three at right angles.
+  </div>
+
+  <div class="trick">
+    <div class="label">Right-Hand Grip Rule for a Coil</div>
+    Curl your right-hand fingers in the direction of conventional current around the coil. Your <strong>thumb</strong> points to the <strong>N pole</strong>.
+  </div>
+
+  <div class="trick">
+    <div class="label">Why Soft Iron (Not Steel)?</div>
+    An electromagnet must be switchable. Soft iron loses magnetism when current stops. Steel keeps magnetism &mdash; bad for an electromagnet, good for a permanent magnet.
+  </div>
+
+  <div class="trick">
+    <div class="label">High-Voltage Transmission in 4 Steps</div>
+    1. Step-up transformer increases voltage.
+    2. P = IV, so higher V means lower I (same power).
+    3. P<sub>loss</sub> = I<sup>2</sup>R, so lower I = much less heat wasted.
+    4. Step-down transformers bring voltage back down for homes.
+    <strong>Practise writing this as a paragraph &mdash; it is worth 4&ndash;6 marks.</strong>
+  </div>
+
+  <div class="trick">
+    <div class="label">No Movement = No Current</div>
+    If a magnet is held still inside a coil, <strong>nothing happens</strong>. The wire must be CUTTING field lines. The exam loves asking this.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"How can the strength of an electromagnet be increased?"</td>
+      <td>Increase the <strong>current</strong> or increase the <strong>number of turns</strong> (or add a soft iron core)</td>
+    </tr>
+    <tr>
+      <td>"What is the purpose of the commutator in a motor?"</td>
+      <td>It <strong>reverses the current direction</strong> every half-turn so the coil keeps spinning the same way</td>
+    </tr>
+    <tr>
+      <td>"State Lenz's law"</td>
+      <td>The induced current flows in a direction that <strong>opposes the change</strong> that produced it</td>
+    </tr>
+    <tr>
+      <td>"Why do transformers only work on a.c.?"</td>
+      <td>Only a.c. creates a <strong>changing magnetic field</strong> in the core. D.c. would create a constant field, which does not induce a voltage.</td>
+    </tr>
+    <tr>
+      <td>"A transformer has 200 primary turns, 50 secondary turns, and 240 V input. Output voltage?"</td>
+      <td>V<sub>s</sub> = V<sub>p</sub> &times; N<sub>s</sub>/N<sub>p</sub> = 240 &times; 50/200 = <strong>60 V</strong></td>
+    </tr>
+    <tr>
+      <td>"Why is electricity transmitted at high voltage?"</td>
+      <td>High V means low I (P = IV). Low I means less power lost as heat (P<sub>loss</sub> = I<sup>2</sup>R).</td>
+    </tr>
+    <tr>
+      <td>"The magnet is stationary inside the coil. What happens?"</td>
+      <td><strong>Nothing</strong> &mdash; no movement means no field lines cut, so no induced e.m.f.</td>
+    </tr>
+    <tr>
+      <td>"When is the generator's output at maximum?"</td>
+      <td>When the coil is <strong>horizontal</strong> (cutting field lines at the fastest rate)</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

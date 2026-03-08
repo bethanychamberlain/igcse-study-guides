@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Inheritance &mdash; Biology Ch17</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Punnett square */
+  .punnett {
+    width: auto;
+    border-collapse: collapse;
+    font-size: 14px;
+    margin: 10px auto;
+    text-align: center;
+  }
+  .punnett th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 16px;
+    font-weight: 700;
+  }
+  .punnett td {
+    padding: 8px 16px;
+    border: 1px solid #ddd;
+    font-weight: 600;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 17</div>
+  <h1>Inheritance</h1>
+  <div class="subtitle">DNA, chromosomes, cell division, genetic crosses, and sex determination &mdash; how characteristics are passed on</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 30 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 17.1: VARIATION AND INHERITANCE ===== -->
+<div class="section-header">
+  <span class="num">Section 17.1</span>
+  Variation and Inheritance
+</div>
+<div class="card">
+  <div class="intro-text">
+    Living organisms vary. Some differences are inherited from parents, others are acquired during life.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p><strong>Inheritance</strong> is the transmission of genetic information from generation to generation.</p>
+      <p style="margin-top:8px;"><strong>Inherited characteristics</strong> (hereditary) = features passed on through genes. Examples: eye colour, hair colour, tendency for genetic diseases like cystic fibrosis, permanent skin colour.</p>
+      <p style="margin-top:8px;"><strong>Acquired characteristics</strong> = features developed during life that are NOT passed on. Examples: a scar, a suntan, muscle size from exercise, knowledge and skills.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>Body mass is <strong>acquired</strong> (changed by diet), but the tendency to be a certain build is <strong>inherited</strong>. The exam may try to trick you with this. If the question says "permanent colour of the skin" = inherited. "A temporary suntan" = acquired.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Sexual Reproduction &amp; Inheritance</div>
+      <p>In sexual reproduction:</p>
+      <p>&bull; The only part of the sperm that enters the egg is the <strong>nucleus</strong><br>
+         &bull; Gametes (sex cells) are formed by <strong>cell division</strong><br>
+         &bull; The young organism develops from a single fertilised egg by <strong>cell division</strong></p>
+      <p style="margin-top:8px;">So understanding inheritance means understanding the <strong>nucleus</strong> and how it behaves during cell division.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define inheritance</li>
+    <li><input type="checkbox"> I can give examples of inherited vs acquired characteristics</li>
+    <li><input type="checkbox"> I know that only the nucleus of the sperm enters the egg</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.2: DNA AND THE GENETIC CODE ===== -->
+<div class="section-header">
+  <span class="num">Section 17.2</span>
+  DNA, Proteins, and Characteristics
+</div>
+<div class="card">
+  <div class="intro-text">
+    The characteristics of an organism depend on the proteins it makes &mdash; and proteins are coded for by DNA.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Chromosomes and Genes</div>
+      <p><strong>Chromosome</strong> = a thread-like structure of DNA carrying genetic information in the form of genes.</p>
+      <p style="margin-top:6px;"><strong>Gene</strong> = a length of DNA that codes for a specific protein.</p>
+      <p style="margin-top:6px;">The nucleus of a human cell contains <strong>46 chromosomes</strong> (23 pairs). Each chromosome contains a very long, coiled strand of <strong>DNA</strong> (deoxyribonucleic acid).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; DNA Structure</div>
+      <p><strong>DNA</strong> is a double helix made of two strands twisted around each other like a ladder.</p>
+      <p style="margin-top:6px;">The "rungs" of the ladder are made of pairs of <strong>nucleotide bases</strong>:</p>
+      <p>&bull; <strong>Adenine (A)</strong> always pairs with <strong>Thymine (T)</strong><br>
+         &bull; <strong>Guanine (G)</strong> always pairs with <strong>Cytosine (C)</strong></p>
+      <p style="margin-top:6px;">This is called <strong>complementary base pairing</strong>. About 600 base pairs code for one average protein.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The chain is: <strong>Gene &rarr; Protein &rarr; Characteristic</strong>. Hair cells make keratin (a structural protein). Enzymes like amylase in saliva are proteins. Antibodies are proteins. If the gene changes, the protein changes, and the characteristic changes.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; DNA Replication</div>
+      <p><strong>DNA replication</strong> = the process by which DNA makes an exact copy of itself before cell division.</p>
+      <p style="margin-top:6px;">Steps:<br>
+         1. The two strands of the double helix <strong>separate</strong> (unzip)<br>
+         2. Each strand acts as a <strong>template</strong><br>
+         3. Free nucleotides pair up with the exposed bases using the <strong>base pairing rule</strong><br>
+         4. Result: two identical copies of the original DNA</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Base Pairing Memory Trick</div>
+      <p><strong>A</strong>pple <strong>T</strong>ree, <strong>G</strong>old <strong>C</strong>oin. A-T and G-C. If they give you one strand (e.g. ATGCCA), you can work out the other (TACGGT) by swapping each letter for its partner.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define chromosome and gene</li>
+    <li><input type="checkbox"> I know the four bases and their pairing rules (A-T, G-C)</li>
+    <li><input type="checkbox"> I can describe the steps of DNA replication</li>
+    <li><input type="checkbox"> I understand: gene &rarr; protein &rarr; characteristic</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.3: HOW THE CODE IS CARRIED ===== -->
+<div class="section-header">
+  <span class="num">Section 17.3</span>
+  How the Code Is Carried
+</div>
+<div class="card">
+  <div class="intro-text">
+    DNA stays in the nucleus, but proteins are made at ribosomes in the cytoplasm. A messenger molecule carries the code across.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Triplets and Amino Acids</div>
+      <p>Each gene carries coded instructions as <strong>triplets</strong> (code words of three bases). Each triplet codes for one specific <strong>amino acid</strong>. The sequence of triplets determines the sequence of amino acids, which determines the protein made.</p>
+      <p style="margin-top:6px;">The four bases (A, T, G, C) can form enough different triplets to code for all 20 amino acids found in cells.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Transcription and Translation</div>
+      <p><strong>Transcription</strong> = DNA code is copied into <strong>messenger RNA (mRNA)</strong> in the nucleus. Key difference: RNA uses <strong>uracil (U)</strong> instead of thymine (T), so the base pair is A-U.</p>
+      <p style="margin-top:8px;"><strong>Translation</strong> = mRNA travels to a <strong>ribosome</strong> in the cytoplasm, where the code is read and used to build a protein (a chain of amino acids).</p>
+      <p style="margin-top:8px;">Summary: <strong>DNA &rarr; mRNA &rarr; Protein &rarr; Characteristic</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Replication vs Transcription vs Translation</div>
+      <p>&bull; <strong>Replication</strong> makes a DNA copy using DNA<br>
+         &bull; <strong>Transcription</strong> makes mRNA using DNA<br>
+         &bull; <strong>Translation</strong> makes protein using mRNA<br>
+         Three different processes &mdash; don't mix them up. The exam loves asking "Name the process" for each one.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know what a triplet (codon) is</li>
+    <li><input type="checkbox"> I can define transcription and translation</li>
+    <li><input type="checkbox"> I know that RNA uses uracil (U) instead of thymine (T)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.4: CELL DIVISION &mdash; MITOSIS ===== -->
+<div class="section-header">
+  <span class="num">Section 17.4</span>
+  Cell Division &mdash; Mitosis
+</div>
+<div class="card">
+  <div class="intro-text">
+    The body needs to make exact copies of cells for growth and repair. This is mitosis.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Mitosis</div>
+      <p><strong>Mitosis</strong> is copying division. It produces two <strong>identical daughter cells</strong> with the same number of chromosomes as the parent cell.</p>
+      <p style="margin-top:8px;">Steps:<br>
+         1. DNA is <strong>replicated</strong> exactly<br>
+         2. Each chromosome becomes two identical <strong>chromatids</strong> joined at the <strong>centromere</strong><br>
+         3. Chromosomes line up at the <strong>equator</strong> (middle) of the cell<br>
+         4. <strong>Spindle fibres</strong> pull the chromatids apart to opposite poles<br>
+         5. The cell membrane <strong>pinches in</strong>, forming two identical cells</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Where Mitosis Happens</div>
+      <p>&bull; In animals: tissues provide new cells for growth and repair (e.g. liver cells, skin cells)<br>
+         &bull; <strong>Stem cells</strong> divide by mitosis to produce new specialised cells<br>
+         &bull; In plants: cell division at <strong>meristems</strong> (tips of roots and shoots) for length, and <strong>cambium</strong> for girth</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Every cell in your body (except gametes) was produced by mitosis from the original <strong>zygote</strong>. An adult human has about 50 billion cells, all containing the same genetic information. This is why mitosis must be <strong>accurate</strong> &mdash; errors can lead to cancer.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe the steps of mitosis</li>
+    <li><input type="checkbox"> I know that mitosis produces two identical cells</li>
+    <li><input type="checkbox"> I know where mitosis occurs in plants and animals</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.4 continued: MEIOSIS ===== -->
+<div class="section-header">
+  <span class="num">Section 17.4 (continued)</span>
+  Cell Division &mdash; Meiosis
+</div>
+<div class="card">
+  <div class="intro-text">
+    Gametes (sex cells) must have half the normal chromosome number. Meiosis makes this happen.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Terms</div>
+      <p><strong>Diploid number (2n)</strong> = the full number of chromosomes in a body cell (46 in humans, i.e. 23 pairs).</p>
+      <p style="margin-top:6px;"><strong>Haploid number (n)</strong> = half the number, found in gametes (23 in humans).</p>
+      <p style="margin-top:6px;"><strong>Homologous pairs</strong> = matching pairs of chromosomes, one from each parent, carrying the same genes in the same positions.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Meiosis</div>
+      <p><strong>Meiosis</strong> is reduction division. It produces <strong>four</strong> genetically different daughter cells, each with <strong>half</strong> the chromosome number (haploid).</p>
+      <p style="margin-top:8px;">Key steps:<br>
+         1. DNA is replicated<br>
+         2. <strong>Homologous pairs</strong> line up together at the equator<br>
+         3. <strong>First division:</strong> homologous pairs are separated &rarr; two cells, each with one chromosome from each pair<br>
+         4. <strong>Second division:</strong> chromatids are separated (like mitosis) &rarr; four haploid cells</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Big Comparison</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Mitosis</th>
+          <th>Meiosis</th>
+        </tr>
+        <tr>
+          <td><strong>Daughter cells</strong></td>
+          <td>2</td>
+          <td>4</td>
+        </tr>
+        <tr>
+          <td><strong>Genetically identical?</strong></td>
+          <td>Yes (clones)</td>
+          <td>No (all different)</td>
+        </tr>
+        <tr>
+          <td><strong>Chromosome number</strong></td>
+          <td>Same as parent (diploid)</td>
+          <td>Half (haploid)</td>
+        </tr>
+        <tr>
+          <td><strong>Purpose</strong></td>
+          <td>Growth, repair</td>
+          <td>Making gametes</td>
+        </tr>
+        <tr>
+          <td><strong>Where?</strong></td>
+          <td>All body tissues</td>
+          <td>Testes and ovaries only</td>
+        </tr>
+        <tr>
+          <td><strong>Number of divisions</strong></td>
+          <td>1</td>
+          <td>2</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Mitosis vs Meiosis</div>
+      <p><strong>Mitosis</strong> = <strong>M</strong>akes <strong>i</strong>dentical cells (Mi = identical). <strong>Meiosis</strong> = <strong>Me</strong>iosis halves the number and makes gametes. If the question says "gametes" or "sex cells" &mdash; it's meiosis. If it says "growth" or "repair" &mdash; it's mitosis.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw This Table From Memory</div>
+      <p>This mitosis vs meiosis comparison is worth 4-6 marks across the exam. Close the book, draw the table on blank paper. If you can fill all 12 cells, you own this topic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define diploid, haploid, and homologous pair</li>
+    <li><input type="checkbox"> I can describe the key steps of meiosis</li>
+    <li><input type="checkbox"> I can list at least 4 differences between mitosis and meiosis</li>
+    <li><input type="checkbox"> I can recreate the comparison table from memory</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.5: STEM CELLS ===== -->
+<div class="section-header">
+  <span class="num">Section 17.5</span>
+  Stem Cells
+</div>
+<div class="card">
+  <div class="intro-text">
+    Not all cells become specialised immediately. Stem cells retain the ability to differentiate into many types.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down</div>
+      <p><strong>Stem cells</strong> are unspecialised cells that can divide by mitosis and <strong>differentiate</strong> into specialised cell types.</p>
+      <p style="margin-top:6px;">&bull; <strong>Embryonic stem cells</strong> &mdash; can differentiate into almost any cell type<br>
+         &bull; <strong>Adult stem cells</strong> &mdash; found in bone marrow, liver, brain muscle, blood &mdash; can only differentiate into a limited range of cells</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Stem cell research could help treat leukaemia, Type 1 diabetes, spinal cord damage, and Parkinson's disease. But using embryonic stem cells is controversial because it involves destroying embryos. This is a common "discuss" question on the exam &mdash; you need to give arguments <strong>for</strong> and <strong>against</strong>.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define stem cell and differentiation</li>
+    <li><input type="checkbox"> I know the difference between embryonic and adult stem cells</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.6: INHERITANCE PATTERNS ===== -->
+<div class="section-header">
+  <span class="num">Section 17.6</span>
+  Inheritance &mdash; Key Genetic Terms
+</div>
+<div class="card">
+  <div class="intro-text">
+    Before you can do genetic crosses, you need to know the vocabulary. This is the most definition-heavy section of the whole chapter.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definitions You MUST Know</div>
+      <p><strong>Gene</strong> = a length of DNA that codes for a specific protein (and therefore a characteristic).</p>
+      <p style="margin-top:6px;"><strong>Allele</strong> = an alternative form of a gene. E.g. the gene for eye colour has alleles for brown and blue.</p>
+      <p style="margin-top:6px;"><strong>Homozygous</strong> = both alleles are the <strong>same</strong> (e.g. BB or bb).</p>
+      <p style="margin-top:6px;"><strong>Heterozygous</strong> = the two alleles are <strong>different</strong> (e.g. Bb).</p>
+      <p style="margin-top:6px;"><strong>Dominant allele</strong> = the allele that shows up in the phenotype whenever it is present (written as a CAPITAL letter, e.g. B).</p>
+      <p style="margin-top:6px;"><strong>Recessive allele</strong> = the allele that is only expressed when homozygous (written as a lowercase letter, e.g. b). It is "hidden" when the dominant allele is present.</p>
+      <p style="margin-top:6px;"><strong>Genotype</strong> = the combination of alleles an organism has (e.g. Bb).</p>
+      <p style="margin-top:6px;"><strong>Phenotype</strong> = the observable characteristic (e.g. brown eyes).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Gene vs Allele</div>
+      <p>A <strong>gene</strong> is the instruction for a characteristic (e.g. "eye colour"). An <strong>allele</strong> is a specific version of that instruction (e.g. "brown" or "blue"). The gene is the question, the allele is the answer. Examiners love asking the difference &mdash; 2 free marks if you know it.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Flashcards</div>
+      <p>These 8 definitions come up in almost every genetics question. Write each term on one side of a card and the definition on the other. Shuffle. Test yourself until you can get them all right without hesitation. This is pure memorisation &mdash; flashcards work best.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define: gene, allele, homozygous, heterozygous</li>
+    <li><input type="checkbox"> I can define: dominant, recessive, genotype, phenotype</li>
+    <li><input type="checkbox"> I know the difference between a gene and an allele</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.7: GENETIC CROSSES ===== -->
+<div class="section-header">
+  <span class="num">Section 17.7</span>
+  Genetic Crosses and Punnett Squares
+</div>
+<div class="card">
+  <div class="intro-text">
+    Punnett squares are the tool you use to predict offspring. Learn the method once and it works for every genetics question.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Set Up a Cross</div>
+      <p>Always follow this format:<br>
+         1. <strong>State the allele symbols</strong> &mdash; "Let B = brown (dominant), b = blue (recessive)"<br>
+         2. <strong>Write the parental genotypes</strong> &mdash; e.g. Parents: Bb &times; Bb<br>
+         3. <strong>Write the gametes</strong> &mdash; each parent can pass on either allele<br>
+         4. <strong>Draw the Punnett square</strong> &mdash; put one parent's gametes across the top, the other down the side<br>
+         5. <strong>List the genotypes and phenotypes</strong> of the offspring</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example (Bb &times; Bb)</div>
+      <p>Let B = brown eyes (dominant), b = blue eyes (recessive).<br>
+         Parents: Bb &times; Bb<br>
+         Gametes: B or b &nbsp;&nbsp;&times;&nbsp;&nbsp; B or b</p>
+      <table class="punnett">
+        <tr><th></th><th>B</th><th>b</th></tr>
+        <tr><th>B</th><td>BB</td><td>Bb</td></tr>
+        <tr><th>b</th><td>Bb</td><td>bb</td></tr>
+      </table>
+      <p><strong>Genotype ratio:</strong> 1 BB : 2 Bb : 1 bb<br>
+         <strong>Phenotype ratio:</strong> 3 brown : 1 blue<br>
+         <strong>Probability of blue eyes:</strong> 1 in 4 (25%)</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Ratios Are Probabilities</div>
+      <p>A 3:1 ratio does NOT mean that if you have 4 children, exactly 3 will have brown eyes and 1 will have blue. Each child is an <strong>independent event</strong> &mdash; there is always a 1/4 (25%) chance of blue for each child. The ratio is only seen reliably in <strong>very large numbers</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Test Cross</div>
+      <p>A <strong>test cross</strong> (back cross) is used to find out if an organism showing the dominant phenotype is BB or Bb. Cross it with a <strong>homozygous recessive</strong> (bb):</p>
+      <p>&bull; If ALL offspring show the dominant phenotype &rarr; parent was <strong>BB</strong><br>
+         &bull; If ANY offspring show the recessive phenotype &rarr; parent was <strong>Bb</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Pedigree Diagrams</div>
+      <p>A <strong>pedigree</strong> (family tree) shows how a trait is inherited across generations. Key symbols:<br>
+         &bull; Circle = female, Square = male<br>
+         &bull; Filled/shaded = affected by the condition<br>
+         &bull; Horizontal line between two symbols = parents (mated pair)<br>
+         &bull; Vertical line down = offspring</p>
+      <p style="margin-top:6px;"><strong>Key rule:</strong> If two unaffected parents have an affected child, both parents must be <strong>carriers</strong> (heterozygous) and the trait is <strong>recessive</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practice Crosses</div>
+      <p>Do at least 5 Punnett square problems from different angles: BB &times; bb, Bb &times; Bb, Bb &times; bb. Then try some pedigree problems. Speed matters on the exam &mdash; you should be able to set up and complete a Punnett square in under 2 minutes.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can set up a genetic cross with correct notation</li>
+    <li><input type="checkbox"> I can draw and complete a Punnett square</li>
+    <li><input type="checkbox"> I can state genotype and phenotype ratios from a cross</li>
+    <li><input type="checkbox"> I know what a test cross is and when it is used</li>
+    <li><input type="checkbox"> I can read and interpret a pedigree diagram</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.8: CODOMINANCE ===== -->
+<div class="section-header">
+  <span class="num">Section 17.8</span>
+  Inherited Conditions and Codominance
+</div>
+<div class="card">
+  <div class="intro-text">
+    Some genetic conditions are caused by recessive alleles, and some traits show codominance where neither allele is dominant.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Inherited Medical Conditions</div>
+      <p><strong>Albinism</strong> = caused by a <strong>recessive</strong> allele. The person cannot produce the pigment melanin. Genotype must be <strong>aa</strong> (homozygous recessive). Heterozygous individuals (Aa) are <strong>carriers</strong> &mdash; they have normal skin colour but carry the recessive allele.</p>
+      <p style="margin-top:8px;"><strong>Sickle cell anaemia</strong> = caused by a recessive allele that produces abnormal haemoglobin. Homozygous (Hb<sup>A</sup>Hb<sup>A</sup>) = normal. Heterozygous (Hb<sup>S</sup>Hb<sup>A</sup>) = some symptoms but <strong>resistant to malaria</strong>. Homozygous (Hb<sup>S</sup>Hb<sup>S</sup>) = severe anaemia.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Codominance</div>
+      <p><strong>Codominance</strong> = when both alleles are expressed in the heterozygote, producing a <strong>third phenotype</strong>. Neither allele is dominant over the other.</p>
+      <p style="margin-top:8px;"><strong>Example &mdash; ABO blood groups:</strong> Three alleles: I<sup>A</sup>, I<sup>B</sup>, and I<sup>O</sup>.</p>
+      <table class="compare-table">
+        <tr><th>Genotype</th><th>Phenotype (Blood Group)</th></tr>
+        <tr><td>I<sup>A</sup>I<sup>A</sup> or I<sup>A</sup>I<sup>O</sup></td><td>Group A</td></tr>
+        <tr><td>I<sup>B</sup>I<sup>B</sup> or I<sup>B</sup>I<sup>O</sup></td><td>Group B</td></tr>
+        <tr><td>I<sup>A</sup>I<sup>B</sup></td><td>Group AB (codominant)</td></tr>
+        <tr><td>I<sup>O</sup>I<sup>O</sup></td><td>Group O</td></tr>
+      </table>
+      <p style="margin-top:6px;">I<sup>A</sup> and I<sup>B</sup> are both dominant over I<sup>O</sup>, but codominant with each other.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The sickle cell / malaria link is a classic exam question. In areas where malaria is common (equatorial Africa), being heterozygous (carrier) is actually an <strong>advantage</strong> &mdash; you have some anaemia but are resistant to malaria. This is an example of how natural selection can maintain a harmful allele in a population.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can explain albinism as a recessive condition</li>
+    <li><input type="checkbox"> I understand the sickle cell / malaria connection</li>
+    <li><input type="checkbox"> I can define codominance and use blood group as an example</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 17.9: SEX DETERMINATION ===== -->
+<div class="section-header">
+  <span class="num">Section 17.9</span>
+  Sex Determination and Sex-Linked Genes
+</div>
+<div class="card">
+  <div class="intro-text">
+    Whether you are male or female is determined by one pair of chromosomes &mdash; the sex chromosomes.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Sex Chromosomes</div>
+      <p>Humans have 22 pairs of <strong>autosomes</strong> + 1 pair of <strong>sex chromosomes</strong> = 46 total.<br>
+         &bull; Female = <strong>XX</strong><br>
+         &bull; Male = <strong>XY</strong></p>
+      <p style="margin-top:6px;">The man's sperm determines the sex of the child (he can pass on X or Y). The woman can only pass on X.</p>
+      <table class="punnett">
+        <tr><th></th><th>X (mother)</th><th>X (mother)</th></tr>
+        <tr><th>X (father)</th><td>XX (girl)</td><td>XX (girl)</td></tr>
+        <tr><th>Y (father)</th><td>XY (boy)</td><td>XY (boy)</td></tr>
+      </table>
+      <p><strong>Theoretical sex ratio:</strong> 1 male : 1 female (50% chance of each).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Sex-Linked Characteristics</div>
+      <p>Some genes are located on the <strong>X chromosome</strong> but NOT on the shorter Y chromosome. These are called <strong>sex-linked</strong> genes.</p>
+      <p style="margin-top:6px;"><strong>Red-green colour blindness</strong> is sex-linked (recessive allele on the X chromosome):<br>
+         &bull; X<sup>C</sup> = normal vision, X<sup>c</sup> = colour blind<br>
+         &bull; Males only have ONE X chromosome, so if they inherit X<sup>c</sup>, they will be colour blind (X<sup>c</sup>Y)<br>
+         &bull; Females need TWO copies (X<sup>c</sup>X<sup>c</sup>) to be colour blind &mdash; so it is much rarer in females<br>
+         &bull; A female who is X<sup>C</sup>X<sup>c</sup> is a <strong>carrier</strong> (not affected but can pass it on)</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This explains why colour blindness and haemophilia are much more common in <strong>males</strong>. Males only need one copy of the recessive allele (they have no second X to "mask" it). This is a favourite exam topic &mdash; expect a Punnett square crossing a carrier female with a normal male.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Sex-Linked Crosses</div>
+      <p>For sex-linked Punnett squares, always write the alleles ON the X and Y chromosomes (e.g. X<sup>C</sup>X<sup>c</sup> &times; X<sup>C</sup>Y). Never just write "Cc" &mdash; you must show they are on the X. The Y has no allele for colour vision, so leave it blank (just Y).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know that XX = female and XY = male</li>
+    <li><input type="checkbox"> I can draw a Punnett square for sex determination</li>
+    <li><input type="checkbox"> I can explain why colour blindness is more common in males</li>
+    <li><input type="checkbox"> I can do a sex-linked cross with carrier female &times; normal male</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 17 Notes Complete</h2>
+  <p>You've covered DNA, cell division, genetic crosses, codominance, and sex determination. Now test yourself with the Chapter 17 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Electricity and Chemical Change &mdash; Chemistry Ch7</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 7</div>
+  <h1>Electricity and Chemical Change</h1>
+  <div class="subtitle">Conductors, electrolysis, electrode reactions, and electroplating &mdash; using electricity to break down and deposit substances</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 20 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: CONDUCTORS AND NON-CONDUCTORS ===== -->
+<div class="section-header">
+  <span class="num">Section 7.1</span>
+  Conductors and Non-Conductors
+</div>
+<div class="card">
+  <div class="intro-text">
+    Electricity is a flow of charged particles. Some substances let it through (conductors), others block it (insulators). Understanding which substances conduct &mdash; and why &mdash; is the foundation for understanding electrolysis.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down</div>
+      <p>An <strong>electric current</strong> is a flow of electrons. A battery acts as an electron pump: electrons leave the <strong>negative terminal</strong>, travel around the circuit, and re-enter through the <strong>positive terminal</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Conductors vs Insulators</div>
+      <p>A <strong>conductor</strong> is a substance that allows electricity to pass through it. An <strong>insulator</strong> (non-conductor) does not allow electricity to pass through it.</p>
+      <table class="compare-table">
+        <tr>
+          <th>Type</th>
+          <th>Conducts?</th>
+          <th>Why?</th>
+          <th>Examples</th>
+        </tr>
+        <tr>
+          <td><strong>Metals</strong></td>
+          <td>Yes (solid and liquid)</td>
+          <td>Have <strong>free electrons</strong> that can move through the structure</td>
+          <td>Copper, aluminium, iron, tin</td>
+        </tr>
+        <tr>
+          <td><strong>Carbon (graphite)</strong></td>
+          <td>Yes</td>
+          <td>Has free electrons (like a metal)</td>
+          <td>Graphite rods, pencil lead</td>
+        </tr>
+        <tr>
+          <td><strong>Molecular substances</strong></td>
+          <td>No (never)</td>
+          <td>No free electrons or ions</td>
+          <td>Plastic, ethanol, sugar, petrol, sulfur</td>
+        </tr>
+        <tr>
+          <td><strong>Ionic compounds (solid)</strong></td>
+          <td>No</td>
+          <td>Ions are locked in fixed positions</td>
+          <td>Solid NaCl, solid PbBr&#8322;</td>
+        </tr>
+        <tr>
+          <td><strong>Ionic compounds (molten or dissolved)</strong></td>
+          <td>Yes</td>
+          <td>Ions are <strong>free to move</strong> and carry the current</td>
+          <td>Molten NaCl, NaCl solution</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Two Types of Conduction</div>
+      <p><strong>Metals</strong> conduct using <strong>electrons</strong> (electronic conduction). <strong>Ionic compounds</strong> (when molten or dissolved) conduct using <strong>ions</strong> (ionic conduction). The exam often asks "What carries the current?" &mdash; make sure you say electrons for metals, ions for electrolytes.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>When ionic compounds conduct, they <strong>break down at the same time</strong>. This is the whole basis of electrolysis: passing electricity through a molten or dissolved ionic compound decomposes it. That's why solid ionic compounds don't work &mdash; the ions can't move, so there's no current and no decomposition.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>If the exam gives you a substance and asks "Will it conduct?", ask yourself two questions: (1) Does it have free electrons? (metals/graphite = yes). (2) Does it have free ions? (molten or dissolved ionic = yes). If neither, it's an insulator.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define conductor and insulator</li>
+    <li><input type="checkbox"> I can explain why metals conduct (free electrons)</li>
+    <li><input type="checkbox"> I can explain why ionic compounds only conduct when molten or dissolved (free ions)</li>
+    <li><input type="checkbox"> I know that molecular substances never conduct</li>
+    <li><input type="checkbox"> I can explain why ionic compounds decompose when they conduct</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: PRINCIPLES OF ELECTROLYSIS ===== -->
+<div class="section-header">
+  <span class="num">Section 7.2</span>
+  The Principles of Electrolysis
+</div>
+<div class="card">
+  <div class="intro-text">
+    Electrolysis means using electricity to break down a compound. This section covers the key definitions, the apparatus, and how to predict the products you get &mdash; both for molten compounds and aqueous solutions.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p>&bull; <strong>Electrolysis</strong>: the decomposition of an ionic compound, when molten or in aqueous solution, by the passage of an electric current.<br>
+         &bull; <strong>Electrolyte</strong>: the liquid (molten or dissolved ionic compound) that undergoes electrolysis.<br>
+         &bull; <strong>Electrodes</strong>: the rods (usually carbon or platinum) that carry current into and out of the electrolyte. They are <strong>inert</strong> &mdash; they carry the current but are not changed.<br>
+         &bull; <strong>Anode</strong>: the <strong>positive</strong> electrode (connected to + terminal of battery).<br>
+         &bull; <strong>Cathode</strong>: the <strong>negative</strong> electrode (connected to &minus; terminal of battery).<br>
+         &bull; <strong>Electrolytic cell</strong>: the whole apparatus (electrodes + electrolyte + power supply).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Anode vs Cathode</div>
+      <p>This is the single biggest mix-up in electrolysis. Two memory tricks:<br>
+         &bull; <strong>PA</strong>: <strong>P</strong>ositive = <strong>A</strong>node<br>
+         &bull; Think of a <strong>cat</strong>: a cat is <strong>negative</strong> (grumpy!) = <strong>cat</strong>hode is the negative electrode<br>
+         The exam will test this in every electrolysis question. Get it wrong and every other part of your answer will be backwards.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Electrolysis of Molten Compounds</div>
+      <p>When you electrolyse a <strong>molten</strong> ionic compound (only two elements present), the pattern is simple:</p>
+      <p style="margin-top:6px;">&bull; The <strong>metal</strong> forms at the <strong>cathode</strong> (negative electrode)<br>
+         &bull; The <strong>non-metal</strong> forms at the <strong>anode</strong> (positive electrode)</p>
+      <p style="margin-top:8px;"><strong>Example &mdash; molten lead(II) bromide (PbBr&#8322;):</strong><br>
+         &bull; At the cathode: silvery bead of <strong>lead</strong> forms<br>
+         &bull; At the anode: brown <strong>bromine</strong> gas bubbles off<br>
+         &bull; Overall: lead(II) bromide &rarr; lead + bromine</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Do Ions Move?</div>
+      <p><strong>Opposites attract.</strong> During electrolysis:<br>
+         &bull; <strong>Positive ions</strong> (cations, e.g. Pb&#178;&#8314;, Na&#8314;) are attracted to the <strong>negative electrode (cathode)</strong><br>
+         &bull; <strong>Negative ions</strong> (anions, e.g. Br&#8315;, Cl&#8315;) are attracted to the <strong>positive electrode (anode)</strong></p>
+      <p style="margin-top:6px;">So: <strong>electrons</strong> carry the current through the wires and electrodes, but <strong>ions</strong> carry the current through the liquid.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Electrolysis of Aqueous Solutions (The Rules)</div>
+      <p>When the electrolyte is a <strong>solution</strong> (dissolved in water), there are extra ions from water: H&#8314; and OH&#8315;. So the products may be different from the molten compound.</p>
+      <p style="margin-top:8px;"><strong>At the cathode (&minus;), either a metal or hydrogen forms:</strong><br>
+         &bull; If the metal is <strong>more reactive than hydrogen</strong> (e.g. sodium, potassium, calcium, magnesium, aluminium, zinc, iron), the metal stays in solution and <strong>hydrogen</strong> gas bubbles off.<br>
+         &bull; If the metal is <strong>less reactive than hydrogen</strong> (e.g. copper, silver), the <strong>metal</strong> is deposited.</p>
+      <p style="margin-top:8px;"><strong>At the anode (+), a non-metal other than hydrogen forms:</strong><br>
+         &bull; If the solution is a <strong>concentrated halide</strong> (contains Cl&#8315;, Br&#8315;, or I&#8315;), the <strong>halogen</strong> (chlorine, bromine, or iodine) forms.<br>
+         &bull; If the solution is <strong>dilute</strong>, or there is <strong>no halide</strong>, then <strong>oxygen</strong> forms.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Electrolyte</th>
+          <th>At cathode (&minus;)</th>
+          <th>At anode (+)</th>
+        </tr>
+        <tr>
+          <td>Molten lead(II) bromide, PbBr&#8322;</td>
+          <td>Lead (metal)</td>
+          <td>Bromine (non-metal)</td>
+        </tr>
+        <tr>
+          <td>Molten sodium chloride, NaCl</td>
+          <td>Sodium (metal)</td>
+          <td>Chlorine (non-metal)</td>
+        </tr>
+        <tr>
+          <td>Concentrated NaCl solution</td>
+          <td>Hydrogen (Na is more reactive)</td>
+          <td>Chlorine (concentrated halide)</td>
+        </tr>
+        <tr>
+          <td>Dilute NaCl solution</td>
+          <td>Hydrogen</td>
+          <td>Oxygen (dilute, so not enough Cl&#8315;)</td>
+        </tr>
+        <tr>
+          <td>Dilute sulfuric acid, H&#8322;SO&#8324;</td>
+          <td>Hydrogen</td>
+          <td>Oxygen (no halide present)</td>
+        </tr>
+        <tr>
+          <td>Concentrated HCl</td>
+          <td>Hydrogen</td>
+          <td>Chlorine (concentrated halide)</td>
+        </tr>
+        <tr>
+          <td>Dilute copper(II) sulfate, CuSO&#8324;</td>
+          <td>Copper (less reactive than H)</td>
+          <td>Oxygen (no halide)</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam will give you an electrolyte and ask you to <strong>predict the products at each electrode</strong>. If you learn the two rules (reactivity for the cathode, halide concentration for the anode) and this table, you can answer any prediction question. This is one of the most common 4-6 mark questions on the paper.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practice the Predictions</div>
+      <p>Write out 5 electrolytes on flashcards (e.g. "concentrated CuCl&#8322; solution"). On the back, write the cathode product and anode product. Test yourself. The key is: (1) Is the metal above or below hydrogen in the reactivity series? (2) Is there a concentrated halide? If you can answer those two questions, you can predict any electrolysis result.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define electrolysis, electrolyte, electrode, anode, and cathode</li>
+    <li><input type="checkbox"> I know that positive ions go to the cathode and negative ions go to the anode</li>
+    <li><input type="checkbox"> I can predict the products of electrolysis of a molten ionic compound</li>
+    <li><input type="checkbox"> I can state the rules for predicting products of aqueous electrolysis (cathode: reactivity; anode: halide or not)</li>
+    <li><input type="checkbox"> I can predict products for at least 5 different electrolytes from memory</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: REACTIONS AT THE ELECTRODES ===== -->
+<div class="section-header">
+  <span class="num">Section 7.3</span>
+  The Reactions at the Electrodes
+</div>
+<div class="card">
+  <div class="intro-text">
+    This is the hardest part of the chapter, but also the most important for your exam. You need to understand oxidation and reduction in terms of electron transfer, and be able to write half-equations for what happens at each electrode.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; OILRIG</div>
+      <p><strong>O</strong>xidation <strong>I</strong>s <strong>L</strong>oss of electrons.<br>
+         <strong>R</strong>eduction <strong>I</strong>s <strong>G</strong>ain of electrons.</p>
+      <p style="margin-top:8px;">During electrolysis:<br>
+         &bull; At the <strong>cathode (&minus;)</strong>: ions <strong>gain</strong> electrons &rarr; <strong>reduction</strong><br>
+         &bull; At the <strong>anode (+)</strong>: ions <strong>lose</strong> electrons &rarr; <strong>oxidation</strong></p>
+      <p style="margin-top:6px;">Memory trick: <strong>RAC</strong> &mdash; <strong>R</strong>eduction <strong>A</strong>t <strong>C</strong>athode.</p>
+      <p style="margin-top:6px;">Overall, electrolysis is a <strong>redox reaction</strong> (both reduction and oxidation happen).</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Oxidation vs Reduction at Electrodes</div>
+      <p>Students constantly get this backwards. Here's how to keep it straight:<br>
+         &bull; The <strong>cathode is negative</strong>, so it has <strong>extra electrons to give away</strong>. Ions at the cathode <strong>gain</strong> electrons = <strong>reduction</strong>.<br>
+         &bull; The <strong>anode is positive</strong>, so it <strong>pulls electrons away</strong> from ions. Ions at the anode <strong>lose</strong> electrons = <strong>oxidation</strong>.<br>
+         If you write "oxidation at the cathode" on an exam, every half-equation mark after that will be wrong too. Get OILRIG + RAC locked in.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Half-Equations (Molten Lead(II) Bromide)</div>
+      <p><strong>At the cathode (reduction &mdash; ions gain electrons):</strong><br>
+         Pb&#178;&#8314; + 2e&#8315; &rarr; Pb<br>
+         <em>Each lead ion gains 2 electrons and becomes a lead atom. A silvery bead of lead forms.</em></p>
+      <p style="margin-top:8px;"><strong>At the anode (oxidation &mdash; ions lose electrons):</strong><br>
+         2Br&#8315; &rarr; Br&#8322; + 2e&#8315;<br>
+         <em>Each bromide ion loses 1 electron. Two bromide ions pair up to form one bromine molecule. Brown bromine gas bubbles off.</em></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Half-Equations (Concentrated NaCl Solution)</div>
+      <p>The solution contains Na&#8314;, Cl&#8315;, H&#8314;, and OH&#8315; (the last two from water).</p>
+      <p style="margin-top:8px;"><strong>At the cathode (reduction):</strong><br>
+         2H&#8314;(aq) + 2e&#8315; &rarr; H&#8322;(g)<br>
+         <em>Hydrogen ions gain electrons (not sodium, because sodium is more reactive and "prefers" to stay as ions). Hydrogen gas bubbles off.</em></p>
+      <p style="margin-top:8px;"><strong>At the anode (oxidation):</strong><br>
+         2Cl&#8315;(aq) &rarr; Cl&#8322;(g) + 2e&#8315;<br>
+         <em>Chloride ions lose electrons (concentrated solution, so plenty of Cl&#8315; ions present). Chlorine gas bubbles off.</em></p>
+      <p style="margin-top:8px;"><em>The Na&#8314; and OH&#8315; ions remain in solution, so you end up with a solution of <strong>sodium hydroxide (NaOH)</strong>.</em></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Half-Equations (Dilute NaCl Solution)</div>
+      <p>Same ions present, but now Cl&#8315; concentration is low.</p>
+      <p style="margin-top:8px;"><strong>At the cathode:</strong> 4H&#8314;(aq) + 4e&#8315; &rarr; 2H&#8322;(g) &mdash; hydrogen still forms.<br>
+         <strong>At the anode:</strong> 4OH&#8315;(aq) &rarr; O&#8322;(g) + 2H&#8322;O(l) + 4e&#8315; &mdash; <strong>oxygen</strong> forms instead (not enough Cl&#8315;).</p>
+      <p style="margin-top:6px;"><em>Overall result: <strong>water has been decomposed</strong> (hydrogen + oxygen produced). The sodium chloride solution is still there.</em></p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; How to Write Half-Equations</div>
+      <p>Follow these steps every time:<br>
+         <strong>1.</strong> Name the ions present and the products.<br>
+         <strong>2.</strong> Write the ion with its correct charge (e.g. Pb&#178;&#8314;, Cl&#8315;).<br>
+         <strong>3.</strong> Positive ions go to cathode, negative ions go to anode.<br>
+         <strong>4.</strong> Write the correct element symbol for the product (Cl&#8322; not Cl, Br&#8322; not Br).<br>
+         <strong>5.</strong> Balance the electrons: the number of electrons must equal the total charge on the ion(s). E.g. Pb&#178;&#8314; needs 2e&#8315;; two Cl&#8315; ions means 2e&#8315; are released.<br>
+         <strong>6.</strong> Add state symbols if needed: (l) for molten, (aq) for solution, (s) for solid, (g) for gas.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Half-equations are worth 2-3 marks each on the exam and appear in almost every electrolysis question. If you can write half-equations for lead bromide, sodium chloride (concentrated and dilute), and copper sulfate, you can handle anything the exam throws at you.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state what OILRIG stands for</li>
+    <li><input type="checkbox"> I know that reduction happens at the cathode and oxidation at the anode (RAC)</li>
+    <li><input type="checkbox"> I can write the half-equations for molten lead(II) bromide</li>
+    <li><input type="checkbox"> I can write the half-equations for concentrated sodium chloride solution</li>
+    <li><input type="checkbox"> I can explain why dilute NaCl gives oxygen at the anode but concentrated gives chlorine</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: ELECTROPLATING ===== -->
+<div class="section-header">
+  <span class="num">Section 7.4</span>
+  Electroplating
+</div>
+<div class="card">
+  <div class="intro-text">
+    When you use electrodes made of the same metal as the solution (instead of inert carbon/platinum electrodes), something different happens: the anode dissolves and the cathode gets coated. This is the basis of electroplating and metal refining.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copper Sulfate with Different Electrodes</div>
+      <p><strong>A. Carbon (inert) electrodes:</strong><br>
+         &bull; Cathode: copper is deposited (Cu&#178;&#8314; + 2e&#8315; &rarr; Cu)<br>
+         &bull; Anode: oxygen bubbles off (4OH&#8315; &rarr; O&#8322; + 2H&#8322;O + 4e&#8315;)<br>
+         &bull; Blue colour <strong>fades</strong> because Cu&#178;&#8314; ions are being removed from solution</p>
+      <p style="margin-top:8px;"><strong>B. Copper electrodes (not inert):</strong><br>
+         &bull; Cathode: copper is deposited (Cu&#178;&#8314; + 2e&#8315; &rarr; Cu) &mdash; cathode grows larger<br>
+         &bull; Anode: copper <strong>dissolves</strong> into the solution (Cu &rarr; Cu&#178;&#8314; + 2e&#8315;) &mdash; anode shrinks<br>
+         &bull; Blue colour <strong>stays the same</strong> because Cu&#178;&#8314; ions are being replaced as fast as they are removed<br>
+         &bull; Net effect: copper moves from the anode to the cathode</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Electroplating</div>
+      <p><strong>Electroplating</strong> means using electrolysis to coat one metal with another, to make it look better or to prevent corrosion.</p>
+      <p style="margin-top:8px;">The set-up for electroplating an object with metal X:<br>
+         &bull; <strong>Cathode</strong> = the object to be plated (e.g. steel jug)<br>
+         &bull; <strong>Anode</strong> = pure metal X (e.g. silver bar)<br>
+         &bull; <strong>Electrolyte</strong> = a solution of a soluble compound of X (e.g. silver nitrate solution)</p>
+      <p style="margin-top:8px;"><strong>Examples:</strong><br>
+         &bull; Steel taps plated with <strong>chromium</strong> (looks shiny, prevents rust)<br>
+         &bull; Steel food cans plated with <strong>tin</strong> (prevents corrosion)<br>
+         &bull; Cheap jewellery plated with <strong>silver</strong> (looks good, cheaper than solid silver)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copper Refining</div>
+      <p><strong>Metal refining</strong> uses the same principle as electroplating to purify metals.<br>
+         &bull; <strong>Anode</strong> = impure copper<br>
+         &bull; <strong>Cathode</strong> = pure copper<br>
+         &bull; <strong>Electrolyte</strong> = dilute copper(II) sulfate solution</p>
+      <p style="margin-top:6px;">The impure copper dissolves from the anode. Pure copper deposits on the cathode. Impurities (including valuable metals like gold, silver, platinum) fall to the bottom as sludge and are recovered. The final copper is over 99.9% pure &mdash; essential for electrical wiring.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Which Is the Cathode in Electroplating?</div>
+      <p>In electroplating, the <strong>object you want to coat</strong> is always the <strong>cathode</strong> (because metal is deposited at the cathode). The plating metal is the <strong>anode</strong> (because it dissolves). Students sometimes get these backwards. Remember: you want the metal to <strong>go onto</strong> the object, and metal goes to the cathode.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Electroplating and copper refining are common exam application questions. They'll describe a set-up and ask you to identify the anode, cathode, and electrolyte, or ask you to design a set-up to electroplate a given object. If you know the three rules (cathode = object, anode = plating metal, electrolyte = solution of plating metal compound), you can answer all of them.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw the Set-Up</div>
+      <p>Draw and label the electroplating set-up from memory: battery at the top, two electrodes dipping into a solution. Label the anode (plating metal), cathode (object), and electrolyte (solution of plating metal compound). Draw arrows showing: electrons flow in the wire, metal ions move through the solution from anode to cathode. If you can draw this without looking, you understand electroplating.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe what happens when copper sulfate is electrolysed with carbon electrodes vs copper electrodes</li>
+    <li><input type="checkbox"> I can explain why the blue colour fades with carbon electrodes but stays with copper electrodes</li>
+    <li><input type="checkbox"> I can define electroplating and give two reasons it is done</li>
+    <li><input type="checkbox"> I know which is the anode, cathode, and electrolyte in any electroplating set-up</li>
+    <li><input type="checkbox"> I can describe how copper is purified by electrolysis</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 7 Notes Complete</h2>
+  <p>You've covered conductors, electrolysis principles, electrode reactions (half-equations), and electroplating. Now test yourself with the quiz &mdash; electrolysis is one of the highest-mark topics on the exam, so make sure you can write those half-equations from memory.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

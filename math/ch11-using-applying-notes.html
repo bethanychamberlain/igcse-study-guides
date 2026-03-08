@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Using and Applying Mathematics &mdash; Math Ch11</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: var(--text); max-width: 820px; margin: 0 auto; padding: 20px; background: var(--bg); }
+
+  .hero { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; }
+  .hero .tag { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px; }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  .progress-bar { background: var(--card); border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .progress-bar .track { flex: 1; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--subject); border-radius: 5px; width: 0%; transition: width 0.4s ease; }
+  .progress-bar .label { font-size: 13px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+
+  .how-to { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+  .how-to h2 { font-size: 16px; color: var(--subject-dark); margin-bottom: 10px; }
+  .how-to .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .how-to .legend-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+  .how-to .legend-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
+
+  .section-header { background: var(--subject); color: #fff; border-radius: 10px 10px 0 0; padding: 14px 20px; margin-top: 28px; font-size: 18px; font-weight: 700; }
+  .section-header .num { opacity: 0.7; font-size: 13px; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+
+  .card { background: var(--card); border-radius: 0 0 10px 10px; padding: 0; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .card + .card { border-radius: 10px; }
+
+  .block { padding: 14px 20px; border-left: 4px solid transparent; display: flex; gap: 12px; align-items: flex-start; }
+  .block + .block { border-top: 1px solid #f0f0f0; }
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon { flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  .worked { background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; padding: 12px 16px; margin: 8px 0 4px; font-size: 14px; }
+  .worked .step { padding: 4px 0; display: flex; gap: 8px; }
+  .worked .step-num { font-weight: 800; color: var(--subject); min-width: 22px; }
+  .worked .step-text { flex: 1; }
+  .worked .result { margin-top: 6px; padding-top: 6px; border-top: 1px dashed #ccc; font-weight: 700; color: var(--subject-dark); }
+
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  .compare-table th { background: var(--subject-light); color: var(--subject-dark); padding: 8px 10px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .checklist { list-style: none; padding: 14px 20px; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; font-size: 14px; }
+  .checklist input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--check-done); flex-shrink: 0; cursor: pointer; }
+
+  .intro-text { padding: 14px 20px; font-size: 14px; color: var(--text-secondary); }
+
+  .end-card { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 12px; padding: 24px; margin-top: 28px; text-align: center; }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Math &mdash; Chapter 11</div>
+  <h1>Using and Applying Mathematics</h1>
+  <div class="subtitle">Problem-solving strategies, investigation skills, finding patterns, making predictions, and mathematical reasoning</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 20 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">This chapter is different from the others &mdash; it's about problem-solving strategies and mathematical thinking, not a single topic. Read through the strategies below, then practise applying them.</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: PROBLEM-SOLVING TOOLKIT ===== -->
+<div class="section-header">
+  <span class="num">Section 11.1</span>
+  The Problem-Solving Toolkit
+</div>
+<div class="card">
+  <div class="intro-text">
+    The key to solving unfamiliar maths problems isn't knowing more formulas &mdash; it's having a <strong>systematic approach</strong>. These strategies work on investigation tasks, exam questions, and real-world problems alike.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The 5-Step Problem-Solving Process</div>
+      <p><strong>Step 1: Understand the problem.</strong> Read it twice. What are you being asked? What information do you have?</p>
+      <p><strong>Step 2: Try a simpler case.</strong> If the problem is complicated, try it with smaller numbers first.</p>
+      <p><strong>Step 3: Be systematic.</strong> Organise your results in a table. Don't just try random things.</p>
+      <p><strong>Step 4: Look for a pattern.</strong> Can you see a rule? Does the pattern hold for more cases?</p>
+      <p><strong>Step 5: Generalise.</strong> Can you write a formula or rule that works for ANY case, not just the ones you tried?</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>IGCSE Paper 3 often includes questions where you haven't seen the exact problem before. They test whether you can <strong>think mathematically</strong>, not just repeat a method. These skills also directly prepare you for 11th-grade math in the US, where problem-solving and reasoning are heavily emphasised.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; "If It's Too Complicated, Try an Easier Case"</div>
+      <p>This is the single most powerful problem-solving strategy. If a question asks about a 10 &times; 10 grid, try a 2 &times; 2 grid first, then 3 &times; 3, then 4 &times; 4. The pattern will usually become obvious from the smaller cases.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list the 5 steps of problem-solving</li>
+    <li><input type="checkbox"> I understand why starting with a simpler case helps</li>
+    <li><input type="checkbox"> I know to organise results in a table</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: FINDING PATTERNS ===== -->
+<div class="section-header">
+  <span class="num">Section 11.1 (continued)</span>
+  Finding Patterns and Rules
+</div>
+<div class="card">
+  <div class="intro-text">
+    Many investigation tasks ask you to find a pattern in numbers or diagrams, describe the pattern, and then write a general formula.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Find a Pattern</div>
+      <p><strong>Step 1:</strong> Calculate several cases and record the results in a table.</p>
+      <p><strong>Step 2:</strong> Look at the <strong>differences</strong> between consecutive results. Are they constant? Increasing?</p>
+      <p><strong>Step 3:</strong> If the differences are constant, the rule is linear (something like <strong>dn + c</strong>).</p>
+      <p><strong>Step 4:</strong> Test your rule on the cases you already have.</p>
+      <p><strong>Step 5:</strong> Use your rule to predict a case you haven't tried. Then check it.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> "Opposite corners" in a number grid (9 columns).</p>
+        <p>In a 2&times;2 square: products of opposite corners differ by 9.</p>
+        <p>In a 3&times;3 square: products of opposite corners differ by 36.</p>
+        <p>In a 4&times;4 square: the difference is 81.</p>
+        <table class="compare-table" style="max-width:350px;">
+          <tr><th>Square size</th><th>Difference</th><th>Pattern</th></tr>
+          <tr><td>2 &times; 2</td><td>9</td><td>9 &times; 1<sup>2</sup></td></tr>
+          <tr><td>3 &times; 3</td><td>36</td><td>9 &times; 2<sup>2</sup></td></tr>
+          <tr><td>4 &times; 4</td><td>81</td><td>9 &times; 3<sup>2</sup></td></tr>
+        </table>
+        <div class="result">Rule: For an n &times; n square in a 9-column grid, the difference = 9(n &minus; 1)<sup>2</sup></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Spotting a Pattern vs. Proving It</div>
+      <p>Finding that a pattern works for 3 or 4 cases does NOT prove it always works. On the exam, they'll often ask you to "test" your rule on additional cases. Always do this &mdash; it's easy marks.</p>
+      <p style="margin-top:4px;">If they ask you to "prove" the rule, you need to use algebra (e.g. show it works for general n, not just specific numbers).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can organise results in a table</li>
+    <li><input type="checkbox"> I can look at differences to identify a pattern</li>
+    <li><input type="checkbox"> I can write a formula to describe the pattern</li>
+    <li><input type="checkbox"> I know to test my formula on extra cases to verify it</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: REAL-WORLD PROBLEM SOLVING ===== -->
+<div class="section-header">
+  <span class="num">Section 11.1 (continued)</span>
+  Real-World Problem Solving
+</div>
+<div class="card">
+  <div class="intro-text">
+    Some problems require you to compare options, calculate costs, or make decisions using mathematics. These are practical skills you'll use throughout your life.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Comparison Problems</div>
+      <p>When comparing options (e.g. which car hire company is cheapest):</p>
+      <p style="margin-top:4px;"><strong>Step 1:</strong> Identify the variables (how many days, how many km, etc.).</p>
+      <p><strong>Step 2:</strong> Calculate the total cost for each option.</p>
+      <p><strong>Step 3:</strong> Consider different scenarios (what if you drive 200 km vs. 800 km?).</p>
+      <p><strong>Step 4:</strong> State which is best AND for what situation.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Hiring a car for 7 days.</p>
+        <table class="compare-table">
+          <tr><th>Company</th><th>Cost for 500 km</th><th>Cost for 1000 km</th></tr>
+          <tr><td>Gibson (\$170/week)</td><td>\$170</td><td>\$170</td></tr>
+          <tr><td>Snowdon (\$10/day + 6.5c/km)</td><td>\$70 + \$32.50 = \$102.50</td><td>\$70 + \$65 = \$135</td></tr>
+          <tr><td>Hav-a-car (\$60/week + 22c/km over 500)</td><td>\$60</td><td>\$60 + \$110 = \$170</td></tr>
+        </table>
+        <div class="result">Hav-a-car is cheapest for low mileage; Gibson is best for very high mileage.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Show Your Working, Even on "Explain" Questions</div>
+      <p>When a question says "explain your answer" or "give reasons," the examiner wants to see <strong>calculations</strong>, not just words. "Company A is cheaper" gets 0 marks. "Company A costs \$102.50 while Company B costs \$170, so A is cheaper by \$67.50" gets full marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can set up a comparison table for different options</li>
+    <li><input type="checkbox"> I consider multiple scenarios, not just one</li>
+    <li><input type="checkbox"> I show calculations in my explanations, not just words</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: PUZZLES AND GAMES ===== -->
+<div class="section-header">
+  <span class="num">Section 11.2</span>
+  Puzzles, Games, and Mental Maths
+</div>
+<div class="card">
+  <div class="intro-text">
+    Crossnumber puzzles, number messages, and estimation games sharpen your arithmetic skills and build fluency with the operations you need throughout the course.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Arithmetic Skills Tested</div>
+      <p>These puzzles practice skills from across the whole course:</p>
+      <p style="margin-top:4px;">&bull; <strong>BIDMAS/BODMAS</strong> &mdash; correct order of operations</p>
+      <p>&bull; <strong>Powers and roots</strong> &mdash; squares, cubes, and their roots</p>
+      <p>&bull; <strong>Negative numbers</strong> &mdash; all four operations with negatives</p>
+      <p>&bull; <strong>Fractions and decimals</strong> &mdash; converting between them, mixed operations</p>
+      <p>&bull; <strong>Estimation</strong> &mdash; rounding and approximating to check answers quickly</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Paper 1 of the IGCSE (the non-calculator paper) requires you to do all of these without a calculator. Strong mental maths saves time on both papers &mdash; even on Paper 3 (calculator), you can estimate to check your answer is sensible before writing it down.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Estimation as a Check</div>
+      <p>Before writing your final answer, always estimate: "Is this answer roughly right?"</p>
+      <p style="margin-top:4px;">If you calculate 37 &times; 5 &times; 3 and get 555, estimate: 40 &times; 5 &times; 3 = 600. Is 555 close to 600? Yes &mdash; so it's probably right.</p>
+      <p style="margin-top:4px;">If you get 55.5, something went wrong &mdash; it should be near 600, not 55.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can apply BIDMAS to multi-step calculations</li>
+    <li><input type="checkbox"> I can do basic calculations without a calculator</li>
+    <li><input type="checkbox"> I use estimation to check my answers</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: INVESTIGATION SKILLS ===== -->
+<div class="section-header">
+  <span class="num">Pulling It Together</span>
+  Investigation Checklist
+</div>
+<div class="card">
+  <div class="intro-text">
+    When you're working on an investigation or extended problem, use this checklist to make sure you've covered everything the examiner is looking for.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Investigation Checklist</div>
+      <p>For any investigation, make sure you:</p>
+      <p style="margin-top:4px;"><strong>a)</strong> Try simpler cases if the problem is too complicated.</p>
+      <p><strong>b)</strong> Draw your own diagrams where helpful.</p>
+      <p><strong>c)</strong> Make tables of your results &mdash; be systematic.</p>
+      <p><strong>d)</strong> Look for patterns in the numbers.</p>
+      <p><strong>e)</strong> Find a rule or formula to describe the results.</p>
+      <p><strong>f)</strong> Predict further results using your rule.</p>
+      <p><strong>g)</strong> Explain any rules you find &mdash; say WHY they work, not just WHAT they are.</p>
+      <p><strong>h)</strong> Extend the task &mdash; ask "what happens if...?" questions.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">The Most Important Exam Skill</div>
+      <p><strong>Show your working.</strong> In problem-solving questions, the method marks are worth more than the final answer. Even if your final answer is wrong, correct working can still earn most of the marks. Write every step clearly, one line at a time.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Connecting to Other Chapters</div>
+      <p>This chapter uses skills from every other chapter:</p>
+      <p>&bull; <strong>Sequences</strong> (Ch 2) &mdash; finding nth terms from patterns</p>
+      <p>&bull; <strong>Algebra</strong> (Ch 2, 6) &mdash; writing general formulae</p>
+      <p>&bull; <strong>Number</strong> (Ch 3, 7, 10) &mdash; arithmetic, fractions, negatives, percentages</p>
+      <p>&bull; <strong>Shape &amp; Space</strong> (Ch 1, 5, 9) &mdash; area, volume, diagrams</p>
+      <p style="margin-top:6px;">If you're stuck on an investigation, think: "Which topic from earlier chapters does this relate to?"</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I've read through all sections</li>
+    <li><input type="checkbox"> I know the 5-step problem-solving process</li>
+    <li><input type="checkbox"> I can find patterns and write rules</li>
+    <li><input type="checkbox"> I understand how to approach comparison problems</li>
+    <li><input type="checkbox"> I always show my working</li>
+    <li><input type="checkbox"> I'm ready to try the quiz</li>
+  </ul>
+</div>
+
+<div class="end-card">
+  <h2>Chapter 11 Notes Complete</h2>
+  <p>You've covered problem-solving strategies, pattern-finding, real-world applications, and investigation skills. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

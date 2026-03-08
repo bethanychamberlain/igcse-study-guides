@@ -1,0 +1,978 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Points of View &mdash; English Ch3</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #d1f2eb;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #16a085;
+    --pee: #d35400;
+    --pee-bg: #fef0e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+  .block-pee { border-left-color: var(--pee); background: var(--pee-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+  .block-pee .icon { background: var(--pee); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+  .block-pee .label { color: var(--pee); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Before/After comparison box */
+  .before-after {
+    padding: 14px 20px;
+  }
+  .before-after .ba-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+  .ba-box {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .ba-box.bad {
+    background: #fdedec;
+    border-left: 4px solid #e74c3c;
+  }
+  .ba-box.good {
+    background: #d1f2eb;
+    border-left: 4px solid #16a085;
+  }
+  .ba-box .ba-tag {
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .ba-box.bad .ba-tag { color: #e74c3c; }
+  .ba-box.good .ba-tag { color: #0e6655; }
+
+  /* PEE highlight box */
+  .pee-hero {
+    background: linear-gradient(135deg, #d35400, #e67e22);
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 28px 0 16px;
+    text-align: center;
+  }
+  .pee-hero h2 { font-size: 22px; margin-bottom: 6px; }
+  .pee-hero p { font-size: 14px; opacity: 0.95; }
+
+  /* PEE step boxes */
+  .pee-steps {
+    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pee-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fef0e7;
+    border-left: 4px solid #d35400;
+  }
+  .pee-step .step-letter {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #d35400;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .pee-step .step-body {
+    flex: 1;
+    font-size: 14px;
+  }
+  .pee-step .step-body strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+    .pee-hero { break-inside: avoid; break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English &mdash; Chapter 3</div>
+  <h1>Points of View</h1>
+  <div class="subtitle">Narrative perspective, literary techniques, mood and tone &mdash; and how to EXPLAIN their effects</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 20 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: NARRATIVE POINT OF VIEW ===== -->
+<div class="section-header">
+  <span class="num">Section 3.1</span>
+  Narrative Point of View
+</div>
+<div class="card">
+  <div class="intro-text">
+    Every story is told from a <strong>point of view</strong>. Who is telling the story &mdash; and what they can see &mdash; changes everything about how you experience it.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down</div>
+      <p><strong>First person</strong> &mdash; the narrator is a character in the story. Uses "I" and "we." You only know what <em>they</em> know, see, and feel. Example: "I walked through the snow, and the cold bit into my skin."</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down</div>
+      <p><strong>Third person limited</strong> &mdash; the narrator is outside the story but follows <em>one</em> character's thoughts. Uses "he/she/they." Example: "She could feel the music pulling her forward, though she did not know why."</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down</div>
+      <p><strong>Third person omniscient</strong> &mdash; the narrator is all-knowing. Can see into <em>every</em> character's thoughts and feelings, and can describe events happening in different places at the same time. Example: "While she danced, unaware, her mother sat at home worrying."</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam will not just ask you to <strong>name</strong> the point of view. It will ask you to explain <strong>what effect</strong> the point of view has. For example: "First person creates a sense of <strong>intimacy</strong> &mdash; the reader feels close to the narrator and shares their emotions directly."</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Effects of Each POV</div>
+      <table class="compare-table">
+        <tr>
+          <th>Point of View</th>
+          <th>Key Effect on Reader</th>
+        </tr>
+        <tr>
+          <td><strong>First person</strong></td>
+          <td>Creates <strong>intimacy and empathy</strong>. Reader shares narrator's emotions. But the narrator may be <strong>unreliable</strong> &mdash; we only get their side.</td>
+        </tr>
+        <tr>
+          <td><strong>Third person limited</strong></td>
+          <td>Creates <strong>connection with one character</strong> while keeping some distance. Reader can see things the character might not notice about themselves.</td>
+        </tr>
+        <tr>
+          <td><strong>Third person omniscient</strong></td>
+          <td>Creates a <strong>wider perspective</strong>. Reader can see the full picture. Builds <strong>dramatic irony</strong> when the reader knows things characters don't.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Quick Test</div>
+      <p>To identify POV: look at the first few lines. Do you see "I"? First person. Do you see "he/she" but only one character's thoughts? Third limited. Can you hear multiple characters' inner thoughts? Omniscient.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define first person, third person limited, and third person omniscient</li>
+    <li><input type="checkbox"> I can explain the EFFECT of each point of view on the reader</li>
+    <li><input type="checkbox"> I can identify the POV of a passage in under 30 seconds</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: THE PEE FRAMEWORK ===== -->
+<div class="pee-hero">
+  <h2>THE PEE FRAMEWORK</h2>
+  <p>This is the single most important skill in your English exam. The marks are in the EXPLANATION, not the identification.</p>
+</div>
+
+<div class="card" style="border-radius: 10px;">
+  <div class="intro-text">
+    <strong>PEE = Point, Evidence, Explanation.</strong> Every analytical paragraph you write on the exam should follow this structure. Right now, your biggest weakness is stopping after the Point &mdash; you say <em>what</em> a technique is, but you don't explain <em>how</em> it affects the reader or <em>why</em> the writer used it. That's where the marks are.
+  </div>
+
+  <div class="pee-steps">
+    <div class="pee-step">
+      <div class="step-letter">P</div>
+      <div class="step-body">
+        <strong>Point</strong>
+        State what the writer does. Name the technique or the choice they made.<br>
+        <em>"The writer uses a metaphor to describe the storm."</em>
+      </div>
+    </div>
+    <div class="pee-step">
+      <div class="step-letter">E</div>
+      <div class="step-body">
+        <strong>Evidence</strong>
+        Quote directly from the text. Keep it short &mdash; just the relevant words.<br>
+        <em>"The storm was a wild beast clawing at the windows."</em>
+      </div>
+    </div>
+    <div class="pee-step">
+      <div class="step-letter">E</div>
+      <div class="step-body">
+        <strong>Explanation</strong>
+        Explain the EFFECT on the reader. How does it make them feel? What does it suggest? Why did the writer choose this?<br>
+        <em>"This suggests the storm is violent and uncontrollable, creating a sense of danger. The word 'clawing' implies something predatory, which makes the reader feel threatened and uneasy."</em>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; This Is Your Biggest Weakness</div>
+      <p><strong>Identifying a technique is NOT the same as explaining its effect.</strong></p>
+      <p style="margin-top:6px;">Saying "The writer uses a simile" gets you maybe 1 mark. Explaining <em>what the simile makes the reader feel and why</em> gets you 3-4 marks. The explanation is worth more than the identification. Always.</p>
+    </div>
+  </div>
+
+  <div class="before-after">
+    <div class="ba-label">Before and After &mdash; See the Difference</div>
+    <div class="ba-box bad">
+      <div class="ba-tag">Weak Response (1-2 marks)</div>
+      <p>"The writer uses personification when they say 'the wind whispered through the trees.' This is when you give human qualities to something that isn't human. The wind is being described as whispering."</p>
+      <p style="margin-top:6px; font-style:italic; color:#c0392b;">Problem: This just identifies the technique and defines it. It doesn't explain the EFFECT.</p>
+    </div>
+    <div class="ba-box good">
+      <div class="ba-tag">Strong PEE Response (4-5 marks)</div>
+      <p><strong>P:</strong> The writer uses personification to create a gentle, secretive atmosphere. <strong>E:</strong> The phrase "the wind whispered through the trees" <strong>E:</strong> suggests something intimate and quiet. The word "whispered" implies the wind is sharing a secret, which creates a sense of mystery for the reader. This makes the setting feel alive and almost magical, as though nature itself has a voice and a purpose.</p>
+      <p style="margin-top:6px; font-style:italic; color:#0e6655;">Why this works: It names the technique, quotes the text, then spends MOST of the answer explaining the effect on the reader.</p>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">The Golden Rule</div>
+      <p>Your explanation should be <strong>at least twice as long</strong> as your Point and Evidence combined. If your explanation is only one sentence, it's not enough. Push yourself: after writing one explanation sentence, ask "So what? What does that make the reader feel?" and write another sentence.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Starter Phrases for Explanation</div>
+      <p>Memorize these and use them as launching pads:</p>
+      <p style="margin-top:6px;">
+        &bull; "This suggests that..."<br>
+        &bull; "The effect on the reader is..."<br>
+        &bull; "The word [X] implies..."<br>
+        &bull; "This creates a sense of..."<br>
+        &bull; "The reader feels... because..."<br>
+        &bull; "The writer may have chosen this to..."
+      </p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the three parts of PEE: Point, Evidence, Explanation</li>
+    <li><input type="checkbox"> I understand that the EXPLANATION is worth the most marks</li>
+    <li><input type="checkbox"> I can write a PEE paragraph about a technique without just defining it</li>
+    <li><input type="checkbox"> I know at least 3 starter phrases for explanations</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: LITERARY TECHNIQUES ===== -->
+<div class="section-header">
+  <span class="num">Section 3.2</span>
+  Literary Techniques
+</div>
+<div class="card">
+  <div class="intro-text">
+    Writers don't just choose what to say &mdash; they choose <strong>how</strong> to say it. These techniques are tools writers use to create effects on the reader. Learn to spot them AND explain what they do.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Simile</div>
+      <p><strong>Simile</strong> = a comparison using "like" or "as."</p>
+      <p style="margin-top:6px;"><strong>Example:</strong> "The fog crept in like a grey blanket over the city."</p>
+      <p style="margin-top:6px;"><strong>Effect:</strong> Creates a vivid picture in the reader's mind. Here, comparing fog to a blanket suggests something heavy and smothering, giving the reader a sense of the city being trapped or enclosed.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Metaphor</div>
+      <p><strong>Metaphor</strong> = saying something <em>is</em> something else (no "like" or "as").</p>
+      <p style="margin-top:6px;"><strong>Example:</strong> "The classroom was a prison."</p>
+      <p style="margin-top:6px;"><strong>Effect:</strong> Stronger than a simile because it states the comparison as fact. Here, calling the classroom a "prison" suggests the character feels trapped and powerless, creating empathy in the reader for their frustration.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>Simile</strong> uses "like" or "as" &mdash; "The car was <strong>like</strong> a rocket."<br>
+      <strong>Metaphor</strong> says it IS the thing &mdash; "The car <strong>was</strong> a rocket."<br>
+      If you see "like" or "as," it's a simile. If not, it's a metaphor. Simple as that.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Personification</div>
+      <p><strong>Personification</strong> = giving human qualities to something non-human.</p>
+      <p style="margin-top:6px;"><strong>Example:</strong> "The trees groaned in the wind."</p>
+      <p style="margin-top:6px;"><strong>Effect:</strong> Makes the scene feel alive and emotional. "Groaned" suggests pain or struggle, which can create an ominous or unsettling mood. The reader begins to feel the environment as a living presence rather than a backdrop.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Imagery</div>
+      <p><strong>Imagery</strong> = language that appeals to the five senses (sight, sound, smell, touch, taste).</p>
+      <p style="margin-top:6px;"><strong>Example:</strong> "The air was thick with the scent of damp earth and rotting leaves."</p>
+      <p style="margin-top:6px;"><strong>Effect:</strong> Makes the reader feel as though they are physically present in the scene. Engages the senses (smell, touch) to create an immersive, almost uncomfortable atmosphere. The words "damp" and "rotting" suggest decay, which can create a mood of unease.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>On the exam, you will be given a passage and asked something like: "How does the writer create a sense of tension?" You need to <strong>find the technique</strong> (simile, metaphor, etc.), <strong>quote the evidence</strong>, then <strong>explain the effect</strong>. That's PEE in action. Knowing the technique names is step 1 &mdash; but the marks are in step 3.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define simile, metaphor, personification, and imagery</li>
+    <li><input type="checkbox"> I can give an example of each</li>
+    <li><input type="checkbox"> I can explain the EFFECT of each technique, not just define it</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: MOOD AND TONE ===== -->
+<div class="section-header">
+  <span class="num">Section 3.3</span>
+  Analyzing Mood and Tone
+</div>
+<div class="card">
+  <div class="intro-text">
+    <strong>Mood</strong> is the feeling the writing creates in the reader. <strong>Tone</strong> is the writer's attitude toward their subject. They're related but different.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down</div>
+      <p><strong>Mood</strong> = the atmosphere or feeling the reader experiences. "The passage creates a mood of tension and unease."</p>
+      <p style="margin-top:8px;"><strong>Tone</strong> = the writer's attitude. "The writer's tone is nostalgic and reflective."</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How Writers Create Mood</div>
+      <p>Writers create mood through:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Word choice (diction)</strong> &mdash; dark, heavy words = ominous mood; light, airy words = cheerful mood<br>
+        &bull; <strong>Sentence length</strong> &mdash; short, sharp sentences = tension or urgency; long flowing sentences = calm or dreamlike mood<br>
+        &bull; <strong>Imagery</strong> &mdash; what the reader can "see" or "feel" through the writing<br>
+        &bull; <strong>Punctuation</strong> &mdash; ellipsis (...) = suspense or trailing off; exclamation marks = excitement or shock; dashes = interruption or afterthought
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">PEE In Action &mdash; Mood Analysis</div>
+      <p>Consider this sentence: <em>"The corridor stretched ahead, silent. Nothing moved. Then &mdash; a door, somewhere, creaking open."</em></p>
+      <p style="margin-top:8px;"><strong>P:</strong> The writer creates a mood of suspense and tension through short sentences and sound. <strong>E:</strong> "Nothing moved" and the dash before "a door" <strong>E:</strong> The short sentence "Nothing moved" creates a pause that makes the reader hold their breath, as the emptiness feels unnatural and threatening. The dash interrupts the flow, mimicking a sudden, unexpected event, which makes the reader feel startled. The word "creaking" adds an eerie sound that makes the silence feel even more unsettling.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Mood Word Bank</div>
+      <p>Learn these words so you can describe mood precisely instead of just saying "scary" or "happy":</p>
+      <p style="margin-top:6px;">
+        <strong>Dark/tense:</strong> ominous, foreboding, eerie, oppressive, menacing, sinister<br>
+        <strong>Sad/reflective:</strong> melancholic, wistful, nostalgic, sombre, poignant<br>
+        <strong>Happy/light:</strong> jubilant, whimsical, serene, tranquil, exuberant<br>
+        <strong>Mysterious:</strong> enigmatic, unsettling, ambiguous, ethereal
+      </p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the difference between mood and tone</li>
+    <li><input type="checkbox"> I can name 4 tools writers use to create mood</li>
+    <li><input type="checkbox"> I can use precise vocabulary to describe mood (not just "scary" or "sad")</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: PUNCTUATION AND SENTENCE STRUCTURE ===== -->
+<div class="section-header">
+  <span class="num">Section 3.4</span>
+  Punctuation and Sentence Structure for Effect
+</div>
+<div class="card">
+  <div class="intro-text">
+    Writers don't just choose their words carefully &mdash; they also choose their sentence <strong>shapes</strong> and <strong>punctuation</strong> deliberately. The exam rewards you for noticing this.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down</div>
+      <table class="compare-table">
+        <tr>
+          <th>Technique</th>
+          <th>What It Looks Like</th>
+          <th>Effect on Reader</th>
+        </tr>
+        <tr>
+          <td><strong>Short sentences</strong></td>
+          <td>"He stopped. Silence."</td>
+          <td>Creates tension, urgency, or dramatic impact. Forces the reader to pause.</td>
+        </tr>
+        <tr>
+          <td><strong>Long sentences</strong></td>
+          <td>Multiple clauses joined by commas</td>
+          <td>Creates a flowing, dreamy, or overwhelming feeling. Can mimic breathlessness.</td>
+        </tr>
+        <tr>
+          <td><strong>Ellipsis (...)</strong></td>
+          <td>"She turned the corner and..."</td>
+          <td>Creates suspense. Suggests something is left unsaid or trailing off.</td>
+        </tr>
+        <tr>
+          <td><strong>Dash (&mdash;)</strong></td>
+          <td>"The room was empty &mdash; or so he thought."</td>
+          <td>Interruption or surprise. Adds an unexpected afterthought that shifts meaning.</td>
+        </tr>
+        <tr>
+          <td><strong>Exclamation mark</strong></td>
+          <td>"Run!"</td>
+          <td>Shows urgency, excitement, or strong emotion.</td>
+        </tr>
+        <tr>
+          <td><strong>Rhetorical question</strong></td>
+          <td>"Was there no escape?"</td>
+          <td>Engages the reader directly. Creates a sense of desperation or reflection.</td>
+        </tr>
+        <tr>
+          <td><strong>Repetition</strong></td>
+          <td>"Dark. Everything was dark."</td>
+          <td>Emphasises a word or idea. Can create an obsessive or overwhelming mood.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Many students only comment on word choices (metaphors, similes). If you can <em>also</em> comment on sentence structure and punctuation, you stand out. Examiners notice this and it pushes you into the higher mark bands.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can identify at least 4 structural/punctuation techniques</li>
+    <li><input type="checkbox"> I can explain the effect of each, not just name it</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: COMPARING TEXTS ===== -->
+<div class="section-header">
+  <span class="num">Section 3.5</span>
+  Comparing Texts
+</div>
+<div class="card">
+  <div class="intro-text">
+    Chapter 3 covers both prose (stories) and poetry. The exam may ask you to compare how two writers tackle a similar topic using different techniques.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Comparison Structure</div>
+      <p>When comparing texts, use this structure:</p>
+      <p style="margin-top:6px;">
+        1. <strong>State the similarity or difference</strong> &mdash; "Both writers describe a city, but they create very different moods."<br>
+        2. <strong>Analyze Text A</strong> using PEE &mdash; Point, Evidence, Explanation for the first text.<br>
+        3. <strong>Link to Text B</strong> using a comparison connective &mdash; "In contrast," / "Similarly," / "Whereas..."<br>
+        4. <strong>Analyze Text B</strong> using PEE &mdash; Point, Evidence, Explanation for the second text.<br>
+        5. <strong>Overall comment</strong> &mdash; What is the overall difference in effect? "The first text makes the reader feel..., while the second creates a sense of..."
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Comparison Connectives</div>
+      <p>Use these to link your analysis of the two texts:</p>
+      <p style="margin-top:6px;">
+        <strong>Similarities:</strong> Similarly, Likewise, Both texts, In the same way, This is echoed in...<br>
+        <strong>Differences:</strong> In contrast, However, Whereas, On the other hand, Unlike Text A, While Text A... Text B...
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>A comparison question does NOT mean "write about Text A, then write about Text B separately." You must <strong>weave them together</strong>, constantly linking one to the other. If your answer has two separate paragraphs with no connection between them, you'll lose marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Prose vs Poetry</div>
+      <p>When comparing prose and poetry, look for these differences:</p>
+      <p style="margin-top:6px;">
+        &bull; Poetry uses <strong>line breaks and stanza structure</strong> for emphasis; prose uses paragraph flow<br>
+        &bull; Poetry often has concentrated imagery in fewer words; prose can build mood over longer passages<br>
+        &bull; Poetry may use <strong>rhyme and rhythm</strong> to create musicality; prose uses sentence variation<br>
+        &bull; Both can use metaphor, simile, personification &mdash; compare HOW they use them differently
+      </p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the 5-step comparison structure</li>
+    <li><input type="checkbox"> I can use at least 3 comparison connectives from memory</li>
+    <li><input type="checkbox"> I understand that comparison means weaving texts together, not treating them separately</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7: CHARACTER DESCRIPTION AND SUMMARY ===== -->
+<div class="section-header">
+  <span class="num">Section 3.6</span>
+  Character Description and Summary Writing
+</div>
+<div class="card">
+  <div class="intro-text">
+    Describing characters and summarising what a passage is about are practical skills you'll need in both Paper 1 and Paper 2.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Analyzing a Character</div>
+      <p>When analyzing how an author presents a character, look for:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>What they say</strong> (dialogue) &mdash; polite? aggressive? hesitant?<br>
+        &bull; <strong>What they do</strong> (actions) &mdash; kind? cruel? nervous?<br>
+        &bull; <strong>What they think/feel</strong> (inner voice) &mdash; only available if POV allows it<br>
+        &bull; <strong>How others react to them</strong> &mdash; respected? feared? ignored?<br>
+        &bull; <strong>How the writer describes them</strong> &mdash; word choices, comparisons, imagery
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Summary Writing Tips</div>
+      <p><strong>Summary = key ideas only.</strong> No analysis, no PEE, no personal opinion.</p>
+      <p style="margin-top:6px;">
+        &bull; Read the passage and underline the <strong>main points</strong><br>
+        &bull; Use <strong>your own words</strong> &mdash; do not copy long phrases from the text<br>
+        &bull; Be concise &mdash; if a point takes you 2 lines, it's too long<br>
+        &bull; Don't add anything the text doesn't say<br>
+        &bull; Check: does each sentence contain a different point? If two sentences say the same thing in different words, cut one.
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>Summary</strong> and <strong>analysis</strong> are DIFFERENT tasks. Summary = what the text says. Analysis = how the writer says it and why. If the question says "summarise," do NOT start analyzing techniques. If it says "explain how the writer creates," do NOT just summarise the content.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the 5 things to look for when analyzing a character</li>
+    <li><input type="checkbox"> I understand the difference between summary and analysis</li>
+    <li><input type="checkbox"> I can write a summary using my own words without adding opinion</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 8: STUDY STRATEGY ===== -->
+<div class="section-header">
+  <span class="num">Key Takeaway</span>
+  Where the Marks Are
+</div>
+<div class="card">
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">The #1 Thing to Remember</div>
+      <p style="font-size:16px;"><strong>The marks are in the EXPLANATION, not the identification.</strong></p>
+      <p style="margin-top:8px;">Naming a technique = 1 mark at best. Explaining what it does to the reader = 3-4 marks. Every time you write about a technique, force yourself to write at least 2 sentences of explanation. Use the starter phrases. Push past "this is a metaphor" into "this makes the reader feel..."</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practice PEE Every Day</div>
+      <p>Pick any sentence from any book you're reading. Write a PEE paragraph about it. It doesn't have to be from a textbook &mdash; manga, novels, even song lyrics work. The skill is the same: Point, Evidence, Explanation. Do one per day and this will click within a week.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The "So What?" Test</div>
+      <p>After writing any analytical sentence, ask yourself: <strong>"So what?"</strong> If you can answer that question, write the answer down &mdash; that's your explanation. If you can't, you haven't said enough yet. Keep pushing until you can explain why the reader should care.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I understand that EXPLANATION earns more marks than identification</li>
+    <li><input type="checkbox"> I have practiced writing at least one PEE paragraph today</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 3 Notes Complete</h2>
+  <p>You've covered point of view, PEE paragraphs, literary techniques, mood, sentence structure, and comparison. Now try the cheat sheet for a quick review, then test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Using Moles &mdash; Chemistry Ch5</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 130px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Formula highlight */
+  .formula-box {
+    background: #eaf2f8;
+    border: 2px solid #2e86c1;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    text-align: center;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Chemistry Ch5 &mdash; Cheat Sheet</div>
+    <h1>Using Moles</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Mole (mol)</strong></td>
+      <td>The chemist's counting unit. 1 mol = 6.02 &times; 10&sup2;&sup3; particles (Avogadro constant).</td>
+      <td class="confuse">Grams (moles and grams are DIFFERENT &mdash; use M&#7523; to convert)</td>
+    </tr>
+    <tr>
+      <td><strong>Molar mass</strong></td>
+      <td>The mass of 1 mole of a substance in grams = its A&#7523; or M&#7523; in grams.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Molar gas volume</strong></td>
+      <td>Volume of 1 mol of any gas at rtp = <strong>24 dm&sup3;</strong> = 24,000 cm&sup3;.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Concentration</strong></td>
+      <td>Amount of solute per unit volume of solution, usually mol/dm&sup3; or g/dm&sup3;.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Empirical formula</strong></td>
+      <td>The <strong>simplest whole-number ratio</strong> of atoms in a compound. E.g. CH&#8323;.</td>
+      <td class="confuse">Molecular formula (the actual number of atoms &mdash; could be C&#8322;H&#8326;)</td>
+    </tr>
+    <tr>
+      <td><strong>Molecular formula</strong></td>
+      <td>The <strong>actual number</strong> of each atom in one molecule. A whole-number multiple of the empirical formula.</td>
+      <td class="confuse">Empirical formula (the simplest ratio)</td>
+    </tr>
+    <tr>
+      <td><strong>% yield</strong></td>
+      <td>(Actual mass &divide; theoretical mass) &times; 100. How much product you really got vs what you expected.</td>
+      <td class="confuse">% purity (that's pure substance vs impure sample)</td>
+    </tr>
+    <tr>
+      <td><strong>% purity</strong></td>
+      <td>(Mass of pure substance &divide; mass of impure sample) &times; 100.</td>
+      <td class="confuse">% yield (that's actual vs theoretical)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ALL THE KEY FORMULAS -->
+<div class="card">
+  <h2>All the Key Formulas &mdash; One Place</h2>
+
+  <div class="formula-box">
+    moles = mass (g) &divide; M&#7523;<br>
+    mass (g) = moles &times; M&#7523;
+  </div>
+
+  <div class="formula-box">
+    volume of gas (dm&sup3;) = moles &times; 24<br>
+    moles of gas = volume (dm&sup3;) &divide; 24
+  </div>
+
+  <div class="formula-box">
+    concentration (mol/dm&sup3;) = moles &divide; volume (dm&sup3;)<br>
+    moles = concentration &times; volume (dm&sup3;)
+  </div>
+
+  <div class="formula-box">
+    % yield = (actual mass &divide; theoretical mass) &times; 100<br>
+    % purity = (mass of pure &divide; mass of impure sample) &times; 100
+  </div>
+
+  <div class="formula-box">
+    n = M&#7523; (given) &divide; empirical formula mass<br>
+    molecular formula = empirical formula &times; n
+  </div>
+
+  <div class="warning">
+    <div class="label">Unit Trap &mdash; cm&sup3; vs dm&sup3;</div>
+    <strong>1 dm&sup3; = 1000 cm&sup3;.</strong> All the formulas above use <strong>dm&sup3;</strong>. If the question gives you cm&sup3;, divide by 1000 first! This is the #1 error in moles calculations. Write the conversion as a visible step every time.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: % YIELD vs % PURITY -->
+<div class="card">
+  <h2>% Yield vs % Purity &mdash; Don't Mix Them Up</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>% Yield</th>
+      <th>% Purity</th>
+    </tr>
+    <tr>
+      <td>Question it answers</td>
+      <td>"How much product did I get vs what I expected?"</td>
+      <td>"How much of my sample is actually the substance I want?"</td>
+    </tr>
+    <tr>
+      <td>Formula top</td>
+      <td>Actual mass of product</td>
+      <td>Mass of pure substance</td>
+    </tr>
+    <tr>
+      <td>Formula bottom</td>
+      <td>Theoretical mass (from equation)</td>
+      <td>Total mass of impure sample</td>
+    </tr>
+    <tr>
+      <td>Always &le; 100%?</td>
+      <td>Yes (can't get more than theory predicts)</td>
+      <td>Yes (can't be more pure than 100%)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">The mole</span>
+    <span>1 mol = 6.02 &times; 10&sup2;&sup3; particles &mdash; the bridge between atoms (tiny) and grams (real world).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Molar mass</span>
+    <span>1 mol of any substance weighs exactly its A&#7523; or M&#7523; in grams.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Equation coefficients</span>
+    <span>The big numbers in a balanced equation tell you the <strong>mole ratio</strong>, NOT the gram ratio.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Avogadro's Law</span>
+    <span>1 mol of ANY gas = 24 dm&sup3; at room temperature and pressure. Doesn't matter what gas.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Concentration</span>
+    <span>How many moles of solute are dissolved in each dm&sup3; of solution.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Empirical formula</span>
+    <span>Divide each element's mass by its A&#7523;, then divide all by the smallest &mdash; that gives the ratio.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Molecular formula</span>
+    <span>Empirical formula multiplied by n, where n = M&#7523; &divide; empirical formula mass.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">The Triangle (Mass / Moles / M&#7523;)</div>
+    Draw a triangle: <strong>mass</strong> on top, <strong>moles &times; M&#7523;</strong> on the bottom. Cover what you want to find &mdash; what's left tells you what to do. Want moles? mass &divide; M&#7523;. Want mass? moles &times; M&#7523;.
+  </div>
+
+  <div class="trick">
+    <div class="label">Coefficients = Moles, NOT Grams</div>
+    In 2H&#8322; + O&#8322; &rarr; 2H&#8322;O, the "2" means 2 <strong>moles</strong> of hydrogen, not 2 grams. You must multiply by M&#7523; to convert to grams. This is where most students lose marks.
+  </div>
+
+  <div class="trick">
+    <div class="label">4-Step Method for Mass Calculations</div>
+    <strong>1.</strong> Write the balanced equation. <strong>2.</strong> Write M&#7523; for each substance you need. <strong>3.</strong> Convert moles in the equation to grams. <strong>4.</strong> Scale up or down to match the actual mass in the question. Show ALL steps.
+  </div>
+
+  <div class="trick">
+    <div class="label">Empirical Formula &mdash; 5-Step Table</div>
+    <strong>1.</strong> Write masses (or assume 100 g from %). <strong>2.</strong> Divide by A&#7523; = moles. <strong>3.</strong> Divide all by the smallest. <strong>4.</strong> If not whole numbers, multiply (e.g. 1:1.5 &rarr; 2:3). <strong>5.</strong> Write the formula. Use a table &mdash; it prevents errors every time.
+  </div>
+
+  <div class="trick">
+    <div class="label">Atoms vs Molecules &mdash; Check the Question</div>
+    "0.5 mol of bromine molecules (Br&#8322;)" is different from "0.5 mol of bromine atoms (Br)." The molecule mass is double the atom mass. Always check which one the question asks for.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"How many moles in 44 g of CO&#8322;?"</td>
+      <td>M&#7523; of CO&#8322; = 44. Moles = 44 &divide; 44 = <strong>1 mol</strong></td>
+    </tr>
+    <tr>
+      <td>"What mass is 0.5 mol of H&#8322;O?"</td>
+      <td>M&#7523; of H&#8322;O = 18. Mass = 0.5 &times; 18 = <strong>9 g</strong></td>
+    </tr>
+    <tr>
+      <td>"What volume does 2 mol of gas occupy at rtp?"</td>
+      <td>Volume = 2 &times; 24 = <strong>48 dm&sup3;</strong></td>
+    </tr>
+    <tr>
+      <td>"6000 cm&sup3; of gas &mdash; how many moles?"</td>
+      <td>Convert first: 6000 &divide; 1000 = 6 dm&sup3;. Moles = 6 &divide; 24 = <strong>0.25 mol</strong></td>
+    </tr>
+    <tr>
+      <td>"25 cm&sup3; of solution contains 0.05 mol. What is the concentration?"</td>
+      <td>Convert: 25 &divide; 1000 = 0.025 dm&sup3;. Concentration = 0.05 &divide; 0.025 = <strong>2 mol/dm&sup3;</strong></td>
+    </tr>
+    <tr>
+      <td>"Find the empirical formula from 80% C and 20% H"</td>
+      <td>Assume 100 g: 80 g C, 20 g H. Moles: C = 80/12 = 6.67, H = 20/1 = 20. Ratio: 6.67/6.67 = 1, 20/6.67 = 3. Formula = <strong>CH&#8323;</strong></td>
+    </tr>
+    <tr>
+      <td>"Empirical formula CH&#8323;, M&#7523; = 30. Find molecular formula."</td>
+      <td>Empirical mass = 12 + 3 = 15. n = 30 &divide; 15 = 2. Molecular formula = <strong>C&#8322;H&#8326;</strong></td>
+    </tr>
+    <tr>
+      <td>"Theoretical mass 130.5 g, actual mass 121.2 g. % yield?"</td>
+      <td>(121.2 &divide; 130.5) &times; 100 = <strong>92.9%</strong>. If answer > 100%, you made an error</td>
+    </tr>
+    <tr>
+      <td>"10 g impure sample, 9.5 g is pure. % purity?"</td>
+      <td>(9.5 &divide; 10) &times; 100 = <strong>95%</strong></td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

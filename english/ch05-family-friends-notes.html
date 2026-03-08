@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Family and Friends &mdash; English Ch5</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #16a085;
+    --pee: #d35400;
+    --pee-bg: #fef0e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px; }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+  .progress-bar { background: var(--card); border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .progress-bar .track { flex: 1; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--subject); border-radius: 5px; width: 0%; transition: width 0.4s ease; }
+  .progress-bar .label { font-size: 13px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+  .how-to { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+  .how-to h2 { font-size: 16px; color: var(--subject-dark); margin-bottom: 10px; }
+  .how-to .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .how-to .legend-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+  .how-to .legend-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
+  .section-header { background: var(--subject); color: #fff; border-radius: 10px 10px 0 0; padding: 14px 20px; margin-top: 28px; font-size: 18px; font-weight: 700; }
+  .section-header .num { opacity: 0.7; font-size: 13px; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+  .card { background: var(--card); border-radius: 0 0 10px 10px; padding: 0; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .card + .card { border-radius: 10px; }
+  .block { padding: 14px 20px; border-left: 4px solid transparent; display: flex; gap: 12px; align-items: flex-start; }
+  .block + .block { border-top: 1px solid #f0f0f0; }
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+  .block-pee { border-left-color: var(--pee); background: var(--pee-bg); }
+  .block .icon { flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+  .block-pee .icon { background: var(--pee); }
+  .block .body { flex: 1; }
+  .block .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+  .block-pee .label { color: var(--pee); }
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+  .checklist { list-style: none; padding: 14px 20px; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; font-size: 14px; }
+  .checklist input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--check-done); flex-shrink: 0; cursor: pointer; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  .compare-table th { background: var(--subject-light); color: var(--subject-dark); padding: 8px 10px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .intro-text { padding: 14px 20px; font-size: 14px; color: var(--text-secondary); }
+  .before-after { padding: 14px 20px; }
+  .before-after .ba-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 6px; }
+  .ba-box { border-radius: 8px; padding: 12px 16px; font-size: 13px; margin-bottom: 10px; }
+  .ba-box.bad { background: #fdedec; border-left: 4px solid #e74c3c; }
+  .ba-box.good { background: #d1f2eb; border-left: 4px solid #16a085; }
+  .ba-box .ba-tag { font-weight: 700; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .ba-box.bad .ba-tag { color: #e74c3c; }
+  .ba-box.good .ba-tag { color: #0e6655; }
+  .pee-hero { background: linear-gradient(135deg, #d35400, #e67e22); color: #fff; border-radius: 12px; padding: 24px 28px; margin: 28px 0 16px; text-align: center; }
+  .pee-hero h2 { font-size: 22px; margin-bottom: 6px; }
+  .pee-hero p { font-size: 14px; opacity: 0.95; }
+  .pee-steps { padding: 14px 20px; display: flex; flex-direction: column; gap: 10px; }
+  .pee-step { display: flex; gap: 12px; align-items: flex-start; padding: 12px 16px; border-radius: 8px; background: #fef0e7; border-left: 4px solid #d35400; }
+  .pee-step .step-letter { flex-shrink: 0; width: 36px; height: 36px; border-radius: 50%; background: #d35400; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 800; }
+  .pee-step .step-body { flex: 1; font-size: 14px; }
+  .pee-step .step-body strong { display: block; font-size: 15px; margin-bottom: 2px; }
+  .end-card { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 12px; padding: 24px; margin-top: 28px; text-align: center; }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+    .pee-hero { break-inside: avoid; break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English &mdash; Chapter 5</div>
+  <h1>Family and Friends</h1>
+  <div class="subtitle">Narrative writing, character relationships, tone and mood, directed writing skills</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 22 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go.</p>
+  <div class="legend">
+    <div class="legend-item"><div class="legend-icon" style="background:var(--write);">W</div><div><strong>Write This Down</strong> &mdash; put this in your notes</div></div>
+    <div class="legend-item"><div class="legend-icon" style="background:var(--why);">?</div><div><strong>Why This Matters</strong> &mdash; exam connection</div></div>
+    <div class="legend-item"><div class="legend-icon" style="background:var(--confuse);">!</div><div><strong>Don&rsquo;t Confuse</strong> &mdash; common mix-ups</div></div>
+    <div class="legend-item"><div class="legend-icon" style="background:var(--tip);">T</div><div><strong>Study Tip</strong> &mdash; how to learn it</div></div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: TONE AND REGISTER ===== -->
+<div class="section-header">
+  <span class="num">Section 5.1</span>
+  Tone and Register in Non-Fiction
+</div>
+<div class="card">
+  <div class="intro-text">
+    This chapter presents news articles, blog posts, and historical accounts about family and relationships. The key skill is recognising how <strong>tone</strong> and <strong>register</strong> differ between texts on the same topic.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Tone vs Register (Revision)</div>
+      <p><strong>Tone</strong> = the writer's attitude toward their subject. Is it celebratory? Critical? Nostalgic? Humorous?</p>
+      <p style="margin-top:6px;"><strong>Register</strong> = the level of formality. Created by diction (word choice), syntax (sentence structure), and form (layout).</p>
+      <p style="margin-top:6px;">Two articles about the same event can have completely different tones. One might be celebratory and personal; the other factual and analytical.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Comparing Tone in Two Articles</div>
+      <p>When comparing articles, look for:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Word choice</strong> &mdash; does one use emotional language while the other is neutral?<br>
+        &bull; <strong>Sentence structure</strong> &mdash; short, punchy sentences = urgency; long flowing sentences = descriptive mood<br>
+        &bull; <strong>Use of quotations</strong> &mdash; does the writer quote people directly or paraphrase?<br>
+        &bull; <strong>Writer's presence</strong> &mdash; does the writer include their own opinion or stay invisible?
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Paper 2 of the IGCSE often asks you to compare two non-fiction texts. Being able to identify and explain differences in tone and register is worth significant marks. Don't just say "one is formal and one is informal" &mdash; explain what specific words or structures create that difference.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define tone and register and explain the difference</li>
+    <li><input type="checkbox"> I can identify specific features that create a text's tone</li>
+    <li><input type="checkbox"> I can compare the tone of two articles on the same topic</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: CHRONOLOGICAL ORDER AND TENSE ===== -->
+<div class="section-header">
+  <span class="num">Section 5.2</span>
+  Chronological Order and Tense Choice
+</div>
+<div class="card">
+  <div class="intro-text">
+    Writers organise events carefully. Understanding <strong>chronological order</strong> and <strong>tense shifts</strong> helps you analyse how writers control time in their writing.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Past Tenses and Their Effects</div>
+      <table class="compare-table">
+        <tr><th>Tense</th><th>Example</th><th>Effect / Use</th></tr>
+        <tr><td><strong>Past simple</strong></td><td>"Cleopatra fled to Syria"</td><td>States a fact about a completed action. The main storytelling tense.</td></tr>
+        <tr><td><strong>Past perfect</strong></td><td>"Ptolemy had driven her out"</td><td>Shows that one event happened BEFORE another. Creates a timeline of events.</td></tr>
+        <tr><td><strong>Present tense</strong></td><td>"The image has been dramatized"</td><td>Used to show something is still relevant now. Bridges the past to the present.</td></tr>
+        <tr><td><strong>Past continuous</strong></td><td>"She was seeking an audience"</td><td>Shows an ongoing action in the past. Creates a sense of duration or atmosphere.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Past Perfect and Past Simple</div>
+      <p>"Cleopatra fled" (past simple) = she fled. "Ptolemy <strong>had driven</strong> her out" (past perfect) = he drove her out BEFORE she fled. The past perfect always shows the earlier event. If the exam asks "Why does the writer use the past perfect?" the answer is: to show the order of events &mdash; this happened first.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Modern Idioms in Historical Writing</div>
+      <p>Writers covering historical topics often use modern phrases (e.g. "Cleopatra set about the business of ruling Egypt"). This is a deliberate choice &mdash; it makes the past feel relevant and accessible to modern readers. If you spot this on the exam, comment on it. It shows you understand the writer's craft.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can identify and name four past tenses and explain their effects</li>
+    <li><input type="checkbox"> I understand why writers use modern idioms when writing about the past</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: NARRATIVE WRITING ===== -->
+<div class="section-header">
+  <span class="num">Section 5.3</span>
+  Writing to Entertain &mdash; Short Stories
+</div>
+<div class="card">
+  <div class="intro-text">
+    The exam may ask you to write a short story or continue a narrative. This section covers the skills you need to write engaging fiction.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; 6-Step Story Writing Process</div>
+      <p>
+        <strong>1. Plan before you write.</strong> Decide: Who is your audience? What is the subject? Where and when is it set? Who are the characters? First or third person?<br><br>
+        <strong>2. Make notes on your plot.</strong> Plan the beginning, middle, and end. Keep the number of characters small. Give your main character a flaw that makes them interesting.<br><br>
+        <strong>3. Don't lose the plot.</strong> You can focus on one event and leave it open-ended. A cliffhanger ending is fine &mdash; but you must know how it would end even if you don't write it.<br><br>
+        <strong>4. Think about your style.</strong> Get to the point quickly. Use sensory details (the five senses) so the reader can see and feel the scene.<br><br>
+        <strong>5. Finish the story.</strong> Don't let it trail off &mdash; give it a satisfying or surprising ending.<br><br>
+        <strong>6. Proofread.</strong> Check spelling, grammar, and word choice. Swap weak words for stronger ones.
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Dialogue Rules</div>
+      <p>
+        &bull; Start a <strong>new paragraph</strong> for each new speaker<br>
+        &bull; Use <strong>speech marks</strong> around what is said<br>
+        &bull; End dialogue with a comma, full stop, question mark, or exclamation mark <strong>before</strong> closing the speech marks<br>
+        &bull; Use speech verbs that show HOW the character speaks: <em>whispered, snapped, muttered, exclaimed</em> &mdash; not just "said" every time
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; First Person Narrator Limits</div>
+      <p>If you write in first person ("I"), you can only describe what YOUR character sees, hears, thinks, and feels. You CANNOT write "Meanwhile, across town, Sarah was worried" &mdash; your character doesn't know that. If you want to show multiple perspectives, use third person omniscient.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Show Don't Tell</div>
+      <p>Instead of "He was angry," write "His jaw tightened and his fingers curled into fists." Instead of "She was nervous," write "She kept glancing at the door, twisting the hem of her sleeve." <strong>Show the emotion through actions and details</strong> &mdash; this is what separates a Grade C story from a Grade A story.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the 6-step process for writing a short story</li>
+    <li><input type="checkbox"> I know the rules for writing dialogue with correct punctuation</li>
+    <li><input type="checkbox"> I understand the difference between "show" and "tell" in writing</li>
+    <li><input type="checkbox"> I know the limits of first-person narration</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: WRITING TO INFORM AND ENTERTAIN ===== -->
+<div class="section-header">
+  <span class="num">Section 5.4</span>
+  Writing to Inform and Entertain
+</div>
+<div class="card">
+  <div class="intro-text">
+    This type of writing combines factual information with an engaging style. Think of magazine articles, web pages, or blog posts about real events.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Features of Informative-Entertaining Writing</div>
+      <p>
+        &bull; <strong>Clear and factual</strong> about the subject, with topical references<br>
+        &bull; <strong>Objective but given a personal twist</strong> &mdash; the writer's voice comes through<br>
+        &bull; Opens with an <strong>attention-grabbing statement</strong> and an introduction to the topic<br>
+        &bull; May include <strong>quotations, historical references, and citations</strong><br>
+        &bull; Language is <strong>clear and neutral to informal</strong>; may include modern figures of speech<br>
+        &bull; Vocabulary is <strong>precise</strong> where necessary<br>
+        &bull; Mixes <strong>active and passive verbs</strong><br>
+        &bull; Historically accurate but does NOT have to be chronological
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">PEE In Action &mdash; Analysing Informative Writing</div>
+      <p><strong>P:</strong> The writer uses a mix of factual detail and modern idioms to make a historical topic engaging. <strong>E:</strong> While the article is about ancient events, phrases like "set about the business of ruling" use modern business language. <strong>E:</strong> This makes the distant past feel relevant and relatable to modern readers who are familiar with this kind of language from current news coverage. The effect is to bridge the gap between the ancient world and the reader's own experience, making the article both informative and enjoyable rather than dry and academic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list the key features of writing to inform and entertain</li>
+    <li><input type="checkbox"> I understand how writers mix factual content with engaging style</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: VOCABULARY AND WORD MEANING ===== -->
+<div class="section-header">
+  <span class="num">Section 5.5</span>
+  Vocabulary in Context
+</div>
+<div class="card">
+  <div class="intro-text">
+    The exam often asks you to explain what words or phrases mean <strong>in the context of the passage</strong>. This is NOT about dictionary definitions &mdash; it's about what the word means <em>here</em>, in this sentence.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Answer "Explain in Your Own Words"</div>
+      <p>
+        1. Read the sentence around the word, not just the word itself<br>
+        2. Think about what the word means <strong>in this specific context</strong><br>
+        3. Replace it with a simpler word or phrase that fits<br>
+        4. Write your answer as a <strong>full sentence</strong> that makes sense in the original context<br>
+        5. Do NOT just copy the phrase from the text &mdash; you must use <strong>your own words</strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>"In your own words"</strong> means you CANNOT just copy the text. If the text says "an integral role" and you write "an integral role means an integral role," you get zero marks. You need to say "an essential or very important part."</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Build Your Vocabulary</div>
+      <p>When you encounter unfamiliar words in reading, write them down with: (1) the sentence you found them in, (2) what you think they mean from context, (3) the dictionary definition. This builds the vocabulary you need to paraphrase effectively on the exam.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the 5-step process for answering "explain in your own words" questions</li>
+    <li><input type="checkbox"> I understand that "your own words" means I CANNOT copy from the text</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: EXPRESSING IDEAS AND FEELINGS ===== -->
+<div class="section-header">
+  <span class="num">Section 5.6</span>
+  Writing to Express Thoughts, Ideas, and Feelings
+</div>
+<div class="card">
+  <div class="intro-text">
+    The exam tests whether you can express personal opinions, describe experiences, and explore ideas in writing. Whether you're writing from your own or a character's perspective, you need to justify your opinions.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Types of Expressive Writing Questions</div>
+      <p>The exam may ask you to:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Paper 1 Reading:</strong> Write a journal entry from a character's point of view &mdash; use the text but write in your own words<br>
+        &bull; <strong>Paper 2 Section A:</strong> Discuss a real-life situation (directed writing)<br>
+        &bull; <strong>Paper 2 Section B:</strong> Descriptive writing (describe a scene) or narrative writing (write a story)<br>
+        &bull; <strong>All types:</strong> Justify your opinions. If something is good, say why. If it's bad, say why.
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">The Golden Rule for Expressive Writing</div>
+      <p><strong>Every opinion needs a reason. Every feeling needs a cause.</strong></p>
+      <p style="margin-top:6px;">Don't write "I was sad." Write "I was sad because I realised the bond between us had quietly broken, like a thread that had been stretching for years until it finally snapped." The exam rewards depth of thought, not just stating how you feel. Push past the first sentence of any feeling or opinion.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Feeling + Image Formula</div>
+      <p>For every emotion you write about, pair it with a <strong>concrete image</strong>:</p>
+      <p style="margin-top:6px;">
+        &bull; Loneliness + image: "The house felt enormous and empty, every footstep echoing like a question nobody answered."<br>
+        &bull; Joy + image: "The sunlight caught the spray from the hose and turned it into a rainbow above the garden."<br>
+        This technique makes your writing vivid and earns marks for descriptive skill.
+      </p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the different types of expressive writing the exam may ask for</li>
+    <li><input type="checkbox"> I understand that every opinion needs a reason</li>
+    <li><input type="checkbox"> I can pair emotions with concrete images to create vivid writing</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7: KEY TAKEAWAY ===== -->
+<div class="section-header">
+  <span class="num">Key Takeaway</span>
+  Relationships as a Lens for Analysis
+</div>
+<div class="card">
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">The #1 Thing to Remember</div>
+      <p style="font-size:16px;"><strong>Every text in this chapter is about relationships &mdash; use that as your analytical lens.</strong></p>
+      <p style="margin-top:8px;">Whether it's a historical article about Cleopatra, a poem about a father and son, or a novel extract about neighbours, the exam will ask you HOW the writer presents the relationship. Look for: what the characters say (and don't say), how they act toward each other, what the writer's word choices suggest about the power balance, and how the reader is positioned to feel about each person.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practice Summarising</div>
+      <p>Summary writing is a key skill tested in Paper 2. Take any article you read online and try to summarise it in exactly 120 words, using your own words. This forces you to identify the key points and practise paraphrasing &mdash; both essential exam skills.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I understand that relationships are the analytical lens for this chapter</li>
+    <li><input type="checkbox"> I have practised summarising an article in my own words</li>
+  </ul>
+</div>
+
+<div class="end-card">
+  <h2>Chapter 5 Notes Complete</h2>
+  <p>You've covered tone and register, chronological order, narrative writing, informative writing, vocabulary in context, and expressive writing. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

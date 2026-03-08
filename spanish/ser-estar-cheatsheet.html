@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Ser vs Estar &mdash; Spanish Grammar</title>
+<style>
+  :root {
+    --subject: #e67e22;
+    --subject-light: #fdebd0;
+    --subject-dark: #b8610a;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #8e44ad;
+    --trick-bg: #f4ecf7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Spanish styling */
+  .spanish {
+    font-style: italic;
+    color: var(--subject-dark);
+    font-weight: 600;
+  }
+  .translation {
+    color: var(--text-secondary);
+    font-size: 12px;
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Conjugation table */
+  .conj-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .conj-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .conj-table th:first-child { text-align: left; }
+  .conj-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .conj-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .conj-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Two-column layout for conjugation */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .two-col .col h3 {
+    font-size: 14px;
+    color: var(--subject-dark);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Spanish Grammar &mdash; Cheat Sheet</div>
+    <h1>Ser vs Estar</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- SIDE-BY-SIDE COMPARISON -->
+<div class="card">
+  <h2>SER vs ESTAR &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>SER</th>
+      <th>ESTAR</th>
+    </tr>
+    <tr>
+      <td>Means</td>
+      <td>&ldquo;To be&rdquo; (permanent)</td>
+      <td>&ldquo;To be&rdquo; (temporary / location)</td>
+    </tr>
+    <tr>
+      <td>Use #1</td>
+      <td>Identity &amp; nationality</td>
+      <td>Location (where something is)</td>
+    </tr>
+    <tr>
+      <td>Use #2</td>
+      <td>Profession</td>
+      <td>Feelings &amp; emotions</td>
+    </tr>
+    <tr>
+      <td>Use #3</td>
+      <td>Permanent traits (tall, big)</td>
+      <td>Temporary states (tired, sick)</td>
+    </tr>
+    <tr>
+      <td>Use #4</td>
+      <td>Time &amp; dates</td>
+      <td>Conditions (hot, open, broken)</td>
+    </tr>
+    <tr>
+      <td>Use #5</td>
+      <td>Origin &amp; material</td>
+      <td>Progressive (-ando / -iendo)</td>
+    </tr>
+    <tr>
+      <td>Think</td>
+      <td>&ldquo;What IS it?&rdquo;</td>
+      <td>&ldquo;Where IS it? / How does it FEEL?&rdquo;</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Your Easter Test Error</div>
+    You had these <strong>completely backwards</strong>. You put <span class="spanish">&ldquo;est&aacute;&rdquo;</span> for identity (wrong) and <span class="spanish">&ldquo;es&rdquo;</span> for location (wrong). Drill this table until it&rsquo;s automatic.
+  </div>
+</div>
+
+<!-- CONJUGATION TABLES -->
+<div class="card">
+  <h2>Conjugation &mdash; Present Tense</h2>
+  <div class="two-col">
+    <div class="col">
+      <h3>SER</h3>
+      <table class="conj-table">
+        <tr>
+          <th>Person</th>
+          <th>Form</th>
+        </tr>
+        <tr>
+          <td>yo</td>
+          <td><strong>soy</strong></td>
+        </tr>
+        <tr>
+          <td>t&uacute;</td>
+          <td><strong>eres</strong></td>
+        </tr>
+        <tr>
+          <td>&eacute;l/ella/Ud.</td>
+          <td><strong>es</strong></td>
+        </tr>
+        <tr>
+          <td>nosotros</td>
+          <td><strong>somos</strong></td>
+        </tr>
+        <tr>
+          <td>vosotros</td>
+          <td><strong>sois</strong></td>
+        </tr>
+        <tr>
+          <td>ellos/Uds.</td>
+          <td><strong>son</strong></td>
+        </tr>
+      </table>
+    </div>
+    <div class="col">
+      <h3>ESTAR</h3>
+      <table class="conj-table">
+        <tr>
+          <th>Person</th>
+          <th>Form</th>
+        </tr>
+        <tr>
+          <td>yo</td>
+          <td><strong>estoy</strong></td>
+        </tr>
+        <tr>
+          <td>t&uacute;</td>
+          <td><strong>est&aacute;s</strong></td>
+        </tr>
+        <tr>
+          <td>&eacute;l/ella/Ud.</td>
+          <td><strong>est&aacute;</strong></td>
+        </tr>
+        <tr>
+          <td>nosotros</td>
+          <td><strong>estamos</strong></td>
+        </tr>
+        <tr>
+          <td>vosotros</td>
+          <td><strong>est&aacute;is</strong></td>
+        </tr>
+        <tr>
+          <td>ellos/Uds.</td>
+          <td><strong>est&aacute;n</strong></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; Accents</div>
+    ESTAR has accents on <strong>every form except</strong> &ldquo;estoy&rdquo; and &ldquo;estamos&rdquo;. SER has <strong>no accents at all</strong>. If you&rsquo;re writing ESTAR and you&rsquo;re not sure about the accent &mdash; add it (except for estoy/estamos).
+  </div>
+</div>
+
+<!-- DUAL-MEANING ADJECTIVES -->
+<div class="card">
+  <h2>Same Word, Different Meaning</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:18%;">Word</th>
+      <th style="width:41%;">With SER means...</th>
+      <th style="width:41%;">With ESTAR means...</th>
+    </tr>
+    <tr>
+      <td><strong>aburrido</strong></td>
+      <td><span class="spanish">Es aburrido</span> = boring (person)</td>
+      <td><span class="spanish">Est&aacute; aburrido</span> = bored (feeling)</td>
+    </tr>
+    <tr>
+      <td><strong>listo</strong></td>
+      <td><span class="spanish">Es listo</span> = clever</td>
+      <td><span class="spanish">Est&aacute; listo</span> = ready</td>
+    </tr>
+    <tr>
+      <td><strong>malo</strong></td>
+      <td><span class="spanish">Es malo</span> = bad (person)</td>
+      <td><span class="spanish">Est&aacute; malo</span> = sick / ill</td>
+    </tr>
+    <tr>
+      <td><strong>rico</strong></td>
+      <td><span class="spanish">Es rico</span> = rich (wealthy)</td>
+      <td><span class="spanish">Est&aacute; rico</span> = delicious (food)</td>
+    </tr>
+    <tr>
+      <td><strong>verde</strong></td>
+      <td><span class="spanish">Es verde</span> = green (colour)</td>
+      <td><span class="spanish">Est&aacute; verde</span> = unripe</td>
+    </tr>
+    <tr>
+      <td><strong>vivo</strong></td>
+      <td><span class="spanish">Es vivo</span> = lively / sharp</td>
+      <td><span class="spanish">Est&aacute; vivo</span> = alive</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick</div>
+    <strong>SER = what kind of person/thing it IS.</strong> <strong>ESTAR = how it is RIGHT NOW.</strong><br>
+    Boring vs bored. Bad vs sick. Clever vs ready. The SER meaning is the permanent label; the ESTAR meaning is the current state.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">SER</span>
+    <span>What something IS &mdash; its identity, nature, and permanent qualities.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">ESTAR</span>
+    <span>Where something IS and how it FEELS right now &mdash; location and temporary states.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Origin vs Location</span>
+    <span><span class="spanish">&ldquo;Soy de...&rdquo;</span> = where I&rsquo;m FROM (SER). <span class="spanish">&ldquo;Estoy en...&rdquo;</span> = where I AM (ESTAR).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Trait vs Feeling</span>
+    <span><span class="spanish">&ldquo;Es guapo&rdquo;</span> = he&rsquo;s handsome (always). <span class="spanish">&ldquo;Est&aacute; guapo&rdquo;</span> = he looks good (today).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Progressive</span>
+    <span>ESTAR + -ando/-iendo = happening right now. <span class="spanish">&ldquo;Estoy comiendo&rdquo;</span> = I am eating.</span>
+  </div>
+</div>
+
+<!-- QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire: Which Verb and Why?</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">Sentence</th>
+      <th style="width:50%;">Answer</th>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;Yo ___ estudiante.&rdquo;</span></td>
+      <td><strong>soy</strong> &mdash; identity/profession (SER)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;El gato ___ en el jard&iacute;n.&rdquo;</span></td>
+      <td><strong>est&aacute;</strong> &mdash; location (ESTAR)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;Nosotros ___ cansados.&rdquo;</span></td>
+      <td><strong>estamos</strong> &mdash; temporary feeling (ESTAR)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;___ las dos de la tarde.&rdquo;</span></td>
+      <td><strong>Son</strong> &mdash; telling time (SER)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;La sopa ___ caliente.&rdquo;</span></td>
+      <td><strong>est&aacute;</strong> &mdash; temporary condition, it will cool down (ESTAR)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;Mi madre ___ profesora.&rdquo;</span></td>
+      <td><strong>es</strong> &mdash; profession (SER)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;&Eacute;l ___ de Colombia.&rdquo;</span></td>
+      <td><strong>es</strong> &mdash; origin (SER)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;&Eacute;l ___ en Colombia.&rdquo;</span></td>
+      <td><strong>est&aacute;</strong> &mdash; location right now (ESTAR)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;La pel&iacute;cula ___ aburrida.&rdquo;</span></td>
+      <td><strong>es</strong> &mdash; the film IS boring (permanent trait, SER)</td>
+    </tr>
+    <tr>
+      <td><span class="spanish">&ldquo;Ella ___ estudiando.&rdquo;</span></td>
+      <td><strong>est&aacute;</strong> &mdash; progressive tense, happening now (ESTAR)</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">The Test That Matters</div>
+    Cover the right column with your hand. Read each sentence and say the answer out loud BEFORE looking. If you get rows 1, 2, 7, and 8 right without hesitating, you&rsquo;ve fixed your Easter test error.
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">SER = Superman&rsquo;s Essential Reality</div>
+    Superman IS Kryptonian (nationality). He IS a journalist (profession). He IS strong (permanent trait). He IS from Krypton (origin). These define him &mdash; they don&rsquo;t change. All SER.
+  </div>
+
+  <div class="trick">
+    <div class="label">ESTAR = Emotional, Temporary And Right-now</div>
+    Superman IS IN Metropolis right now (location &mdash; ESTAR). He IS tired after fighting (temporary &mdash; ESTAR). He IS flying (progressive &mdash; ESTAR). All of these will change soon.
+  </div>
+
+  <div class="trick">
+    <div class="label">The &ldquo;De&rdquo; vs &ldquo;En&rdquo; Shortcut</div>
+    <strong>&ldquo;de&rdquo;</strong> (from) almost always goes with <strong>SER</strong> &mdash; <span class="spanish">&ldquo;Soy <strong>de</strong> Florida&rdquo;</span><br>
+    <strong>&ldquo;en&rdquo;</strong> (in/at) almost always goes with <strong>ESTAR</strong> &mdash; <span class="spanish">&ldquo;Estoy <strong>en</strong> Dinamarca&rdquo;</span><br>
+    If you see &ldquo;de&rdquo; think SER. If you see &ldquo;en&rdquo; think ESTAR.
+  </div>
+
+  <div class="trick">
+    <div class="label">The &ldquo;Will It Change Tomorrow?&rdquo; Test</div>
+    If the answer is <strong>no</strong> (he&rsquo;ll still be tall, still be Mexican, still be a doctor) &rarr; <strong>SER</strong>.<br>
+    If the answer is <strong>yes</strong> (he might not be tired, might leave the house, might stop eating) &rarr; <strong>ESTAR</strong>.
+  </div>
+</div>
+
+</body>
+</html>

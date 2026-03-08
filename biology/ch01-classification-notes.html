@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Classification of Living Organisms &mdash; Biology Ch1</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 1</div>
+  <h1>Classification of Living Organisms</h1>
+  <div class="subtitle">What makes something alive, how we group living things into five kingdoms, and how to use a dichotomous key</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 30 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: CHARACTERISTICS OF LIVING ORGANISMS ===== -->
+<div class="section-header">
+  <span class="num">Section 1.1</span>
+  Biology Is the Study of Life and Living Organisms
+</div>
+<div class="card">
+  <div class="intro-text">
+    How do you tell if something is alive? Biologists use a checklist of seven characteristics. If something shows all seven, it's alive.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The 7 Characteristics of Living Organisms</div>
+      <p>Use the mnemonic <strong>RINGER</strong> (from the textbook) or <strong>MRS GREN</strong> to remember them:</p>
+      <p style="margin-top:8px;">
+        <strong>M</strong> &mdash; <strong>Movement</strong>: an action by an organism causing a change of position or place<br>
+        <strong>R</strong> &mdash; <strong>Respiration</strong>: chemical reactions in cells that break down nutrient molecules to release energy<br>
+        <strong>S</strong> &mdash; <strong>Sensitivity (Irritability)</strong>: the ability to detect and respond to changes (stimuli) in the environment<br>
+        <strong>G</strong> &mdash; <strong>Growth</strong>: a permanent increase in size and dry mass, from an increase in cell number or cell size<br>
+        <strong>R</strong> &mdash; <strong>Reproduction</strong>: making more of the same kind of organism (new individuals of the same species)<br>
+        <strong>E</strong> &mdash; <strong>Excretion</strong>: removal of toxic waste products of metabolism from the organism<br>
+        <strong>N</strong> &mdash; <strong>Nutrition</strong>: taking in materials for energy, growth and development</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam often asks you to <strong>list</strong> the characteristics (easy marks) or to <strong>explain why</strong> something like a virus or a dried seed is debatable as "living." You need all seven memorised cold.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Excretion vs Egestion</div>
+      <p><strong>Excretion</strong> = removing waste products of <em>metabolism</em> (chemical reactions inside cells), like CO&#8322; and urea. <strong>Egestion</strong> = removing undigested food (faeces). Faeces were never inside cells, so passing faeces is NOT excretion. The exam will try to trick you on this.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; MRS GREN</div>
+      <p>Write "MRS GREN" on a sticky note. For each letter, say the characteristic AND give a one-sentence definition. Do it from memory. If you can't do all seven without looking, repeat until you can. This is guaranteed marks on the exam.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list all 7 characteristics of living organisms from memory</li>
+    <li><input type="checkbox"> I can define each one in one sentence</li>
+    <li><input type="checkbox"> I know the difference between excretion and egestion</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: THE VARIETY OF LIFE ===== -->
+<div class="section-header">
+  <span class="num">Section 1.2</span>
+  The Variety of Life &mdash; Classification and Keys
+</div>
+<div class="card">
+  <div class="intro-text">
+    There are millions of species on Earth. To study them, scientists sort them into groups based on shared features. This is called <strong>classification</strong>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why We Classify</div>
+      <p><strong>Classification</strong> = placing organisms into categories based on their observable characteristics. It is important for:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Conservation</strong>: scientists need to identify organisms in habitats being managed<br>
+        &bull; <strong>Understanding evolutionary relationships</strong>: organisms that share many features likely share a common ancestor</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Five Kingdoms</div>
+      <p>All living organisms can be placed into one of <strong>five kingdoms</strong>:</p>
+      <p style="margin-top:6px;">
+        1. <strong>Animals</strong> &mdash; multicellular, no cell wall, heterotrophs (feed on organic molecules)<br>
+        2. <strong>Plants</strong> &mdash; multicellular, cellulose cell wall, autotrophs (photosynthesise using chlorophyll)<br>
+        3. <strong>Fungi</strong> &mdash; cell wall made of chitin, saprotrophic nutrition (feed on dead matter by external digestion)<br>
+        4. <strong>Protoctists</strong> &mdash; cells have a nucleus, mostly unicellular, do not fit in any other kingdom<br>
+        5. <strong>Prokaryotes</strong> (Bacteria) &mdash; no true nucleus, no membrane-bound organelles, single-celled</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Hierarchy of Classification</div>
+      <p>Organisms are classified into groups that get smaller and more specific:</p>
+      <p style="margin-top:6px;"><strong>Kingdom &rarr; Phylum &rarr; Class &rarr; Order &rarr; Family &rarr; Genus &rarr; Species</strong></p>
+      <p style="margin-top:6px;">Memory trick: <strong>"King Philip Came Over For Good Spaghetti"</strong></p>
+      <p style="margin-top:6px;">As you go down the hierarchy: fewer organisms in each group, but more similarities between them.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Binomial Nomenclature</div>
+      <p>Every species has a two-part scientific name made up of its <strong>genus</strong> and <strong>species</strong>. This system was introduced by <strong>Carolus Linnaeus</strong>.</p>
+      <p style="margin-top:6px;">
+        &bull; The genus name has a <strong>capital letter</strong>; the species name is <strong>lowercase</strong><br>
+        &bull; Both are written in <strong>italics</strong> (or underlined if handwritten)<br>
+        &bull; Example: humans = <em>Homo sapiens</em>, lion = <em>Panthera leo</em></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Dichotomous Keys</div>
+      <p>A <strong>dichotomous key</strong> is a series of questions with two possible answers (yes/no) that lead you to identify an organism. "Dichotomous" means "branching into two."</p>
+      <p style="margin-top:6px;">Keys can be written as a <strong>numbered list</strong> or as a <strong>branching diagram</strong>. They use observable features like body structure (morphology) and anatomy.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam loves dichotomous keys. You'll be asked to either <strong>use</strong> a key to identify organisms or <strong>construct</strong> your own key from a set of organisms. Practice both &mdash; see the end-of-chapter questions in your textbook (Q5 and Q6).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Species Definition</div>
+      <p>A <strong>species</strong> = a group of organisms that can <strong>interbreed</strong> and produce <strong>fertile offspring</strong>. This is a classic 2-mark definition. Both parts are needed.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the five kingdoms</li>
+    <li><input type="checkbox"> I can list the hierarchy of classification in order</li>
+    <li><input type="checkbox"> I know what binomial nomenclature means and can give an example</li>
+    <li><input type="checkbox"> I can use a dichotomous key to identify an organism</li>
+    <li><input type="checkbox"> I can define "species" (interbreed + fertile offspring)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: FUNGI ===== -->
+<div class="section-header">
+  <span class="num">Section 1.3</span>
+  Fungi
+</div>
+<div class="card">
+  <div class="intro-text">
+    Fungi are not plants. They look still and rooted, but they feed completely differently.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Features of Fungi</div>
+      <p>&bull; Cell wall made of <strong>chitin</strong> (not cellulose like plants)<br>
+         &bull; Body made of thread-like <strong>hyphae</strong>; a network of hyphae = <strong>mycelium</strong><br>
+         &bull; Feed by <strong>saprotrophic nutrition</strong>: they secrete digestive enzymes onto dead organic matter, then absorb the soluble products<br>
+         &bull; Reproduce by <strong>spores</strong><br>
+         &bull; Do <strong>NOT</strong> photosynthesise &mdash; no chlorophyll<br>
+         &bull; Examples: mushrooms, bread mould, yeast</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Fungi vs Plants</div>
+      <p>Students often put fungi in the Plant Kingdom because they "look like plants" and don't move. But fungi have <strong>no chlorophyll</strong> (can't photosynthesise), their cell walls are <strong>chitin not cellulose</strong>, and they feed by <strong>absorbing</strong> digested food, not making their own. These are the exact differences the exam will ask for.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Fungi are important as <strong>decomposers</strong> in nutrient cycles, as food (mushrooms), in baking and brewing (yeast), and as agents of disease (athlete's foot). The exam may ask you to explain why fungi are placed in their own kingdom rather than with plants.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know fungi feed by saprotrophic nutrition (external digestion)</li>
+    <li><input type="checkbox"> I can state three differences between fungi and plants</li>
+    <li><input type="checkbox"> I know fungi reproduce by spores</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: PLANTS ===== -->
+<div class="section-header">
+  <span class="num">Section 1.4</span>
+  Plants: The Plant Kingdom
+</div>
+<div class="card">
+  <div class="intro-text">
+    All plants are <strong>autotrophs</strong> &mdash; they make their own food using light energy. This is the defining feature of the Plant Kingdom.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Features of Plants</div>
+      <p>&bull; Contain <strong>chlorophyll</strong> in chloroplasts &rarr; carry out <strong>photosynthesis</strong><br>
+         &bull; Have a <strong>cellulose cell wall</strong><br>
+         &bull; Are <strong>multicellular</strong><br>
+         &bull; Store energy as <strong>starch</strong></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Three Main Plant Groups</div>
+      <p><strong>Mosses</strong>: simple, no true roots/stems/leaves, need water for reproduction, no vascular tissue<br>
+         <strong>Ferns</strong>: have roots, stems, leaves and vascular tissue, reproduce by <strong>spores</strong>, need moist/shady habitats<br>
+         <strong>Seed plants (Angiosperms)</strong>: most successful group, reproduce by <strong>seeds</strong>, well adapted to life on dry land</p>
+      <p style="margin-top:8px;"><strong>Two groups of angiosperms:</strong><br>
+         &bull; <strong>Monocotyledons</strong>: one seed leaf (cotyledon), parallel leaf veins (e.g. maize, grass)<br>
+         &bull; <strong>Dicotyledons</strong>: two seed leaves, branched leaf veins (e.g. pea, oak)</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>The pattern from mosses &rarr; ferns &rarr; seed plants shows increasing adaptation to life on dry land. Each group is less dependent on water for reproduction. This "evolution towards dry land" idea connects to the vertebrate story too.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the key features of all plants (chlorophyll, cellulose cell wall, autotroph)</li>
+    <li><input type="checkbox"> I can name and describe the three main plant groups</li>
+    <li><input type="checkbox"> I know the difference between monocotyledons and dicotyledons</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: INVERTEBRATE ANIMALS ===== -->
+<div class="section-header">
+  <span class="num">Section 1.5</span>
+  Invertebrate Animals
+</div>
+<div class="card">
+  <div class="intro-text">
+    Animals are divided into <strong>vertebrates</strong> (with a backbone) and <strong>invertebrates</strong> (without). The arthropods are the largest and most important invertebrate group for your exam.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Arthropod Features</div>
+      <p>All arthropods have:<br>
+         &bull; A hard <strong>exoskeleton</strong><br>
+         &bull; <strong>Jointed limbs</strong><br>
+         &bull; A <strong>segmented body</strong></p>
+      <p style="margin-top:8px;">Four classes of arthropods:</p>
+      <table class="compare-table">
+        <tr>
+          <th>Class</th>
+          <th>Body Sections</th>
+          <th>Legs</th>
+          <th>Other Features</th>
+          <th>Example</th>
+        </tr>
+        <tr>
+          <td><strong>Insects</strong></td>
+          <td>3 (head, thorax, abdomen)</td>
+          <td>3 pairs (6)</td>
+          <td>Usually 2 pairs of wings, compound eyes, antennae</td>
+          <td>Mosquito, butterfly</td>
+        </tr>
+        <tr>
+          <td><strong>Arachnids</strong></td>
+          <td>2 (cephalothorax, abdomen)</td>
+          <td>4 pairs (8)</td>
+          <td>No wings, no antennae, simple eyes</td>
+          <td>Spider, scorpion</td>
+        </tr>
+        <tr>
+          <td><strong>Crustaceans</strong></td>
+          <td>Varies</td>
+          <td>5+ pairs</td>
+          <td>Hard carapace, often aquatic, 2 pairs of antennae</td>
+          <td>Crab, lobster</td>
+        </tr>
+        <tr>
+          <td><strong>Myriapods</strong></td>
+          <td>Many segments</td>
+          <td>Many pairs</td>
+          <td>Long segmented body, antennae</td>
+          <td>Centipede, millipede</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Metamorphosis</div>
+      <p><strong>Metamorphosis</strong> = "change of body form." Many insects go through complete metamorphosis: egg &rarr; larva &rarr; pupa &rarr; adult. This means the larva and adult don't compete for the same food, allowing more species to coexist.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Insects vs Spiders</div>
+      <p>Insects have <strong>3 body sections and 6 legs</strong>. Spiders have <strong>2 body sections and 8 legs</strong>. Spiders are NOT insects &mdash; they are arachnids. The exam will test this, often by giving you a drawing and asking which class it belongs to.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state the three features shared by all arthropods</li>
+    <li><input type="checkbox"> I can distinguish insects from arachnids (body sections + leg count)</li>
+    <li><input type="checkbox"> I know what metamorphosis means and why it's an advantage</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: VERTEBRATE ANIMALS ===== -->
+<div class="section-header">
+  <span class="num">Section 1.6</span>
+  Vertebrate Animals: Five Classes
+</div>
+<div class="card">
+  <div class="intro-text">
+    Vertebrates all have a backbone made of separate bones called vertebrae. They are divided into five classes that show increasing adaptation to life on dry land.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Five Vertebrate Classes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Class</th>
+          <th>Skin Covering</th>
+          <th>Breathing</th>
+          <th>Reproduction</th>
+          <th>Temperature</th>
+          <th>Example</th>
+        </tr>
+        <tr>
+          <td><strong>Fish</strong></td>
+          <td>Wet scales, mucus</td>
+          <td>Gills</td>
+          <td>Eggs in water (external fertilisation)</td>
+          <td>Ectothermic (cold-blooded)</td>
+          <td>Salmon</td>
+        </tr>
+        <tr>
+          <td><strong>Amphibians</strong></td>
+          <td>Moist, smooth skin</td>
+          <td>Lungs + skin</td>
+          <td>Eggs in water (external fertilisation)</td>
+          <td>Ectothermic</td>
+          <td>Frog</td>
+        </tr>
+        <tr>
+          <td><strong>Reptiles</strong></td>
+          <td>Dry scales</td>
+          <td>Lungs</td>
+          <td>Eggs with leathery shell on land</td>
+          <td>Ectothermic</td>
+          <td>Lizard, crocodile</td>
+        </tr>
+        <tr>
+          <td><strong>Birds</strong></td>
+          <td>Feathers</td>
+          <td>Lungs</td>
+          <td>Eggs with hard shell on land</td>
+          <td>Endothermic (warm-blooded)</td>
+          <td>Heron, thrush</td>
+        </tr>
+        <tr>
+          <td><strong>Mammals</strong></td>
+          <td>Hair/fur</td>
+          <td>Lungs</td>
+          <td>Live young (most), mammary glands</td>
+          <td>Endothermic</td>
+          <td>Human, mouse</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam will give you a description or picture of an animal and ask you to identify its class. The <strong>skin covering</strong> is usually the fastest way to tell: wet scales = fish, smooth moist skin = amphibian, dry scales = reptile, feathers = bird, fur/hair = mammal.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Fish Scales vs Reptile Scales</div>
+      <p>Both fish and reptiles have scales, but fish scales are <strong>wet</strong> (covered in mucus) while reptile scales are <strong>dry</strong>. Also, fish breathe through <strong>gills</strong>, reptiles use <strong>lungs</strong>. The dichotomous key in your textbook uses "Are the scales dry?" to separate them.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Copy the Table</div>
+      <p>Redraw this table from memory. Cover the columns one at a time and test yourself. The exam often gives you a partially completed table and asks you to fill in the blanks &mdash; so practice doing exactly that.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name all five vertebrate classes</li>
+    <li><input type="checkbox"> I can identify a vertebrate class from its skin covering</li>
+    <li><input type="checkbox"> I know which classes are ectothermic and which are endothermic</li>
+    <li><input type="checkbox"> I can recreate the vertebrate comparison table from memory</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7: PROTOCTISTS AND PROKARYOTES ===== -->
+<div class="section-header">
+  <span class="num">Section 1.7</span>
+  Protoctists and Prokaryotes
+</div>
+<div class="card">
+  <div class="intro-text">
+    These are the two kingdoms made up mostly of single-celled organisms. The key difference between them is whether or not they have a nucleus.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Protoctists</div>
+      <p>&bull; Cells <strong>have a nucleus</strong> (and may have other organelles like chloroplasts)<br>
+         &bull; Mostly <strong>unicellular</strong>, some are multicellular (e.g. algae/seaweeds)<br>
+         &bull; Some feed like animals, some photosynthesise like plants, some do both<br>
+         &bull; They are placed here because they <strong>don't fit</strong> neatly into any other kingdom<br>
+         &bull; Examples: <em>Amoeba</em>, <em>Euglena</em>, <em>Plasmodium</em> (causes malaria), algae</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Prokaryotes (Bacteria)</div>
+      <p>&bull; <strong>No true nucleus</strong> &mdash; DNA is free in the cytoplasm as a single circular strand<br>
+         &bull; <strong>No membrane-bound organelles</strong> (no mitochondria, no chloroplasts)<br>
+         &bull; Have a <strong>cell wall</strong> (but NOT made of cellulose or chitin)<br>
+         &bull; May have <strong>flagella</strong> for movement and <strong>plasmids</strong> (small rings of extra DNA)<br>
+         &bull; Very small: 1&ndash;2 &mu;m<br>
+         &bull; Some are <strong>parasites</strong> (feed on living organisms), some are <strong>saprotrophs</strong> (feed on dead matter)<br>
+         &bull; Shapes: cocci (spherical), bacilli (rod), spirilli (spiral)</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Protoctists vs Prokaryotes</div>
+      <p>Both can be single-celled, but:<br>
+         &bull; <strong>Protoctists HAVE a nucleus</strong>; prokaryotes do NOT<br>
+         &bull; Protoctists may have organelles (chloroplasts, etc.); prokaryotes have NO membrane-bound organelles<br>
+         If a unicellular organism has a nucleus, it's a protoctist, not a prokaryote.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>The prefix "pro" in prokaryote means "before" and "karyon" means "nucleus" &mdash; so prokaryote literally means "before nucleus" (they evolved before cells with nuclei). This helps you remember that prokaryotes have NO nucleus.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state the key feature of protoctists (have a nucleus, don't fit elsewhere)</li>
+    <li><input type="checkbox"> I can describe the structure of a typical bacterium</li>
+    <li><input type="checkbox"> I know that prokaryotes have no true nucleus and no membrane-bound organelles</li>
+    <li><input type="checkbox"> I can name an example of a protoctist and a prokaryote</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 8: VIRUSES ===== -->
+<div class="section-header">
+  <span class="num">Section 1.8</span>
+  Viruses
+</div>
+<div class="card">
+  <div class="intro-text">
+    Viruses are <strong>not</strong> placed in any of the five kingdoms. They are not considered truly "living" because they cannot carry out life processes on their own.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Virus Structure</div>
+      <p>&bull; <strong>Genetic material</strong>: a strand of DNA or RNA (not both)<br>
+         &bull; Surrounded by a <strong>protein coat</strong><br>
+         &bull; May have <strong>spikes</strong> on the surface to attach to host cells<br>
+         &bull; <strong>No cytoplasm</strong>, no nucleus, no organelles, no cell membrane<br>
+         &bull; Much smaller than bacteria</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Viruses Are Not "Living"</div>
+      <p>&bull; They can only <strong>reproduce inside a living host cell</strong><br>
+         &bull; Outside a host, they show <strong>none of the seven characteristics</strong> of life (no respiration, no nutrition, no excretion, etc.)<br>
+         &bull; All viruses are <strong>parasites</strong> &mdash; they cause harm to their host<br>
+         &bull; Examples: influenza virus, HIV, COVID-19 (coronavirus), tobacco mosaic virus</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Bacteria vs Viruses</div>
+      <p>This is one of the most common exam mix-ups:</p>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Bacteria</th>
+          <th>Virus</th>
+        </tr>
+        <tr>
+          <td><strong>Living?</strong></td>
+          <td>Yes &mdash; shows all 7 characteristics</td>
+          <td>No &mdash; only active inside a host</td>
+        </tr>
+        <tr>
+          <td><strong>Cell?</strong></td>
+          <td>Yes &mdash; it is a cell (with cytoplasm, cell wall, membrane)</td>
+          <td>No &mdash; not a cell</td>
+        </tr>
+        <tr>
+          <td><strong>Nucleus?</strong></td>
+          <td>No true nucleus (DNA free in cytoplasm)</td>
+          <td>No nucleus (just a strand of DNA or RNA)</td>
+        </tr>
+        <tr>
+          <td><strong>Reproduction</strong></td>
+          <td>Can reproduce on its own (binary fission)</td>
+          <td>Can only reproduce inside a host cell</td>
+        </tr>
+        <tr>
+          <td><strong>Size</strong></td>
+          <td>Larger (1&ndash;2 &mu;m)</td>
+          <td>Much smaller</td>
+        </tr>
+        <tr>
+          <td><strong>Treatment</strong></td>
+          <td>Antibiotics</td>
+          <td>Antibiotics do NOT work on viruses</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>"State one difference between a bacterium and a virus" is a classic exam question. Learn the table above &mdash; any one row gives you a valid answer. The <strong>safest</strong> answer: bacteria are cells and can reproduce on their own; viruses are not cells and can only reproduce inside a living host cell.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe the structure of a virus (genetic material + protein coat)</li>
+    <li><input type="checkbox"> I know why viruses are not placed in any kingdom</li>
+    <li><input type="checkbox"> I can state at least three differences between bacteria and viruses</li>
+  </ul>
+</div>
+
+<!-- ===== THE BIG COMPARISON ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  The Five Kingdoms Compared
+</div>
+<div class="card">
+  <div class="intro-text">
+    This is the single most important table in the chapter. The exam will test your ability to compare kingdoms and place organisms into the correct one.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Feature</th>
+          <th>Animals</th>
+          <th>Plants</th>
+          <th>Fungi</th>
+          <th>Protoctists</th>
+          <th>Prokaryotes</th>
+        </tr>
+        <tr>
+          <td><strong>Cell wall?</strong></td>
+          <td>No</td>
+          <td>Yes (cellulose)</td>
+          <td>Yes (chitin)</td>
+          <td>Some (varied)</td>
+          <td>Yes (not cellulose)</td>
+        </tr>
+        <tr>
+          <td><strong>Nucleus?</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>No</td>
+        </tr>
+        <tr>
+          <td><strong>Nutrition</strong></td>
+          <td>Heterotrophic (ingestive)</td>
+          <td>Autotrophic (photosynthesis)</td>
+          <td>Saprotrophic</td>
+          <td>Varied</td>
+          <td>Varied</td>
+        </tr>
+        <tr>
+          <td><strong>Multicellular?</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+          <td>Most are</td>
+          <td>Mostly unicellular</td>
+          <td>Unicellular</td>
+        </tr>
+        <tr>
+          <td><strong>Chlorophyll?</strong></td>
+          <td>No</td>
+          <td>Yes</td>
+          <td>No</td>
+          <td>Some</td>
+          <td>Rarely</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Dichotomous Key for Kingdoms</div>
+      <p>Use these questions to place any organism into its kingdom:<br>
+        1. Does it have cells with a nucleus? <strong>No</strong> &rarr; Prokaryote.<br>
+        2. Is it made of many different cells? <strong>No</strong> &rarr; Protoctist.<br>
+        3. Is it a heterotroph? <strong>No</strong> &rarr; Plant.<br>
+        4. Does it have cell walls and feed by external digestion? <strong>Yes</strong> &rarr; Fungus. <strong>No</strong> &rarr; Animal.<br>
+        Practice walking through this key with different organisms until it's automatic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the five kingdoms comparison table into my notes</li>
+    <li><input type="checkbox"> I can recreate the table from memory</li>
+    <li><input type="checkbox"> I can use the dichotomous key to place an organism into its kingdom</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 1 Notes Complete</h2>
+  <p>You've covered the characteristics of life, the five kingdoms, vertebrate and invertebrate classification, protoctists, prokaryotes, and viruses. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

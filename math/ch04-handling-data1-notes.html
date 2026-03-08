@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Handling Data 1 &mdash; Math Ch4</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #e74c3c;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Worked example boxes */
+  .worked {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0 4px;
+    font-size: 14px;
+  }
+  .worked .step {
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    min-width: 22px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .result {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #ccc;
+    font-weight: 700;
+    color: var(--subject-dark);
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Mathematics &mdash; Chapter 4</div>
+  <h1>Handling Data 1</h1>
+  <div class="subtitle">Displaying data, pictograms, bar charts, pie charts, stem-and-leaf diagrams, scatter graphs, correlation, averages (mean, median, mode), range, and frequency polygons</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 24 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: DISPLAYING DATA ===== -->
+<div class="section-header">
+  <span class="num">Section 4.1</span>
+  Displaying Data
+</div>
+<div class="card">
+  <div class="intro-text">
+    Raw data on its own is hard to understand. Displaying data in charts and diagrams makes patterns and comparisons easy to see. This section covers the main ways to display data: pictograms, stem-and-leaf diagrams, bar charts, pie charts, and frequency diagrams.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Pictograms</div>
+      <p>A <strong>pictogram</strong> uses a repeated symbol to represent data. Each symbol stands for a set number of items.</p>
+      <p style="margin-top:6px;">Always include a <strong>key</strong> (e.g. "each circle = 4 pizzas"). Half symbols represent half the value.</p>
+      <p style="margin-top:6px;">Limitation: showing fractions of symbols can only give approximate values.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Stem-and-Leaf Diagrams</div>
+      <p>A <strong>stem-and-leaf diagram</strong> splits each number into a <strong>stem</strong> (the leading digit) and a <strong>leaf</strong> (the last digit).</p>
+      <p style="margin-top:6px;"><strong>Step 1:</strong> Choose the stem (usually tens digit).</p>
+      <p><strong>Step 2:</strong> Write each leaf next to its stem, in the order the data appears.</p>
+      <p><strong>Step 3:</strong> Rewrite in order (smallest to largest leaf in each row).</p>
+      <p><strong>Step 4:</strong> Include a <strong>key</strong> (e.g. "1 | 4 means 14").</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Ages: 25, 17, 32, 21, 43, 28</p>
+        <div class="step"><span class="step-num">Stem</span><span class="step-text">| Leaf</span></div>
+        <div class="step"><span class="step-num">1</span><span class="step-text">| 7</span></div>
+        <div class="step"><span class="step-num">2</span><span class="step-text">| 1 5 8</span></div>
+        <div class="step"><span class="step-num">3</span><span class="step-text">| 2</span></div>
+        <div class="step"><span class="step-num">4</span><span class="step-text">| 3</span></div>
+        <div class="result">Key: 1 | 7 means 17</div>
+      </div>
+      <p style="margin-top:6px;">From an ordered stem-and-leaf diagram you can easily find the <strong>mode</strong>, <strong>median</strong>, and <strong>range</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Back-to-Back Stem Plots</div>
+      <p>A <strong>back-to-back stem-and-leaf diagram</strong> compares two data sets. The stems go in the middle. One set's leaves go left, the other's go right.</p>
+      <p style="margin-top:6px;">Each side needs its own key. This makes it easy to compare distributions (e.g. coached vs. not coached students).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Always Put Leaves in Order</div>
+      <p>The exam wants an <strong>ordered</strong> stem-and-leaf diagram. If you write the leaves randomly, you lose marks. Write the raw version first, then rewrite in order. Don't forget the key!</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can draw and read a pictogram with a key</li>
+    <li><input type="checkbox"> I can create an ordered stem-and-leaf diagram with a key</li>
+    <li><input type="checkbox"> I can draw a back-to-back stem-and-leaf diagram to compare two data sets</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: BAR CHARTS, PIE CHARTS, FREQUENCY DIAGRAMS ===== -->
+<div class="section-header">
+  <span class="num">Section 4.1 (cont.)</span>
+  Bar Charts, Pie Charts &amp; Frequency Diagrams
+</div>
+<div class="card">
+  <div class="intro-text">
+    Bar charts, pie charts, and frequency diagrams are the most common ways to show data in exams. You need to be able to both <strong>draw</strong> them and <strong>read</strong> information from them.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Frequency Diagrams / Bar Charts</div>
+      <p>A <strong>frequency diagram</strong> (bar chart) shows how often each value occurs.</p>
+      <p style="margin-top:6px;"><strong>Step 1:</strong> Draw a tally chart first &mdash; go through the data marking tallies. Group in fives: <strong>||||</strong> then cross for five.</p>
+      <p><strong>Step 2:</strong> Count the tallies to get the frequency for each value.</p>
+      <p><strong>Step 3:</strong> Draw the bar chart. Label both axes. Frequency goes on the vertical axis.</p>
+      <p style="margin-top:6px;">For <strong>grouped data</strong> (e.g. heights from 14.3 to 21.7 cm), choose class intervals like 14 &le; s &lt; 16, 16 &le; s &lt; 18, etc. The bars touch each other (no gaps) because the data is continuous.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Pie Charts</div>
+      <p>A <strong>pie chart</strong> shows proportions as slices of a circle. The whole circle = 360&deg;.</p>
+      <p style="margin-top:6px;"><strong>To read a pie chart:</strong> angle &divide; 360 &times; total = number in that category.</p>
+      <p><strong>To draw a pie chart:</strong> number in category &divide; total &times; 360 = angle for that slice.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> 600 people surveyed. Camping slice = 60&deg;. How many chose camping?</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">60 &divide; 360 &times; 600 = <strong>100 people</strong></span></div>
+        <div class="result">100 people chose camping</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Pie Chart Angles Must Add to 360&deg;</div>
+      <p>A common mistake is calculating angles that don't add up to 360&deg;. After you work out each angle, <strong>add them all together to check</strong>. If they don't sum to 360, you made an error. Also: always use a protractor when drawing &mdash; freehand slices lose marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Pie charts are worth <strong>3&ndash;4 marks</strong> on the exam. They test your ability to work with fractions, proportions, and angles all at once. If you can do pie charts confidently, you're also practising the fraction/percentage skills needed everywhere else in maths.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Pie Chart Formula</div>
+      <p>Memorise this: <strong>Angle = (value &divide; total) &times; 360</strong>. That single formula lets you draw any pie chart. Practise it with 3&ndash;4 examples until it's automatic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can draw a tally chart and frequency diagram from raw data</li>
+    <li><input type="checkbox"> I can group continuous data into class intervals and draw a bar chart with no gaps</li>
+    <li><input type="checkbox"> I can calculate angles for a pie chart and check they sum to 360&deg;</li>
+    <li><input type="checkbox"> I can read values from a pie chart using angle &divide; 360 &times; total</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: AVERAGES ===== -->
+<div class="section-header">
+  <span class="num">Section 4.3</span>
+  Averages: Mean, Median, Mode &amp; Range
+</div>
+<div class="card">
+  <div class="intro-text">
+    An "average" is a single number that represents a whole data set. There are <strong>three types of average</strong> and you need to know all of them, plus the <strong>range</strong> which measures spread.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Three Averages + Range</div>
+      <table class="compare-table">
+        <tr><th>Average</th><th>How to Find It</th><th>When to Use</th></tr>
+        <tr><td><strong>Mean</strong></td><td>Add all values &divide; number of values</td><td>Most common. Uses all the data.</td></tr>
+        <tr><td><strong>Median</strong></td><td>Put in order, pick the middle value</td><td>Not affected by extreme values (outliers).</td></tr>
+        <tr><td><strong>Mode</strong></td><td>The value that appears most often</td><td>Useful for categories (e.g. most popular colour).</td></tr>
+        <tr><td><strong>Range</strong></td><td>Largest value &minus; smallest value</td><td>Shows how spread out the data is.</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <div class="worked">
+        <p><strong>Data:</strong> 5, 4, 10, 3, 3, 4, 7, 4, 6, 5</p>
+        <div class="step"><span class="step-num">Order:</span><span class="step-text">3, 3, 4, 4, 4, 5, 5, 6, 7, 10</span></div>
+        <div class="step"><span class="step-num">Mean:</span><span class="step-text">(3+3+4+4+4+5+5+6+7+10) &divide; 10 = 51 &divide; 10 = <strong>5.1</strong></span></div>
+        <div class="step"><span class="step-num">Median:</span><span class="step-text">10 values &rarr; middle is between 5th and 6th values = (4+5) &divide; 2 = <strong>4.5</strong></span></div>
+        <div class="step"><span class="step-num">Mode:</span><span class="step-text"><strong>4</strong> (appears 3 times, more than any other)</span></div>
+        <div class="step"><span class="step-num">Range:</span><span class="step-text">10 &minus; 3 = <strong>7</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Mean vs. Median with Outliers</div>
+      <p>Consider exam marks: 20, 21, 21, 22, 23, 25, 27, 27, 27, 29, <strong>98, 98</strong></p>
+      <p style="margin-top:4px;">The <strong>median</strong> (25) gives a fair picture of the typical score.</p>
+      <p>The <strong>mean</strong> (35.5) is pulled up by the two extreme scores and doesn't represent the group well.</p>
+      <p style="margin-top:4px;">If the exam asks "which average best represents the data?", look for outliers. If there are extreme values, the <strong>median</strong> is usually better.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Finding the Median</div>
+      <p>You <strong>must put the data in order first</strong>. If you pick the "middle" number from an unordered list, you'll get the wrong answer.</p>
+      <p style="margin-top:4px;">For an <strong>even</strong> number of values: the median is the average of the two middle values. For an <strong>odd</strong> number: it's the single middle value.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; "MeMoMeR" Memory Trick</div>
+      <p><strong>Me</strong>an = add and divide. <strong>Mo</strong>de = <strong>Mo</strong>st common. <strong>Me</strong>dian = <strong>Me</strong>dium (middle). <strong>R</strong>ange = the <strong>R</strong>each (biggest minus smallest).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can calculate the mean of a data set</li>
+    <li><input type="checkbox"> I can find the median by ordering data and picking the middle</li>
+    <li><input type="checkbox"> I can identify the mode</li>
+    <li><input type="checkbox"> I can calculate the range</li>
+    <li><input type="checkbox"> I know when the median is a better average than the mean</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: SCATTER GRAPHS & CORRELATION ===== -->
+<div class="section-header">
+  <span class="num">Section 4.1 (cont.)</span>
+  Scatter Graphs &amp; Correlation
+</div>
+<div class="card">
+  <div class="intro-text">
+    A <strong>scatter graph</strong> (scatter diagram) plots two sets of data against each other to see if there's a relationship between them. The pattern of the points tells you about the <strong>correlation</strong>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Types of Correlation</div>
+      <table class="compare-table">
+        <tr><th>Correlation</th><th>What the Points Look Like</th><th>Example</th></tr>
+        <tr><td><strong>Strong positive</strong></td><td>Points close to an upward line</td><td>More revision &rarr; higher marks</td></tr>
+        <tr><td><strong>Weak positive</strong></td><td>Points roughly trend upward but scattered</td><td>Height vs. arm span</td></tr>
+        <tr><td><strong>Strong negative</strong></td><td>Points close to a downward line</td><td>Higher price &rarr; fewer sales</td></tr>
+        <tr><td><strong>No correlation</strong></td><td>Points scattered randomly</td><td>Maths score vs. time to run 800m</td></tr>
+      </table>
+      <p style="margin-top:8px;"><strong>Positive</strong> = as one goes up, the other goes up. <strong>Negative</strong> = as one goes up, the other goes down.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Line of Best Fit</div>
+      <p>When there is positive or negative correlation, you can draw a <strong>line of best fit</strong>.</p>
+      <p style="margin-top:6px;"><strong>Rules for the line of best fit:</strong></p>
+      <p>&bull; It should follow the general trend of the points.</p>
+      <p>&bull; Roughly equal numbers of points should be on each side of the line.</p>
+      <p>&bull; It does NOT have to pass through the origin (0, 0).</p>
+      <p>&bull; Use it to <strong>estimate</strong> values &mdash; e.g. "If a student scored 52 in physics, estimate their maths mark."</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Correlation Does Not Mean Cause</div>
+      <p>Just because two things are correlated doesn't mean one <strong>causes</strong> the other. Ice cream sales and drowning rates are both high in summer &mdash; but ice cream doesn't cause drowning! The exam sometimes tests whether you understand this.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Describing Correlation on the Exam</div>
+      <p>When the exam says "describe the correlation", use <strong>two words</strong>: the strength (strong/weak) and the direction (positive/negative). Example: "strong positive correlation." If there's no pattern, say "no correlation." Don't just say "they are related."</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can plot a scatter graph from a table of data</li>
+    <li><input type="checkbox"> I can describe correlation as strong/weak positive, strong/weak negative, or no correlation</li>
+    <li><input type="checkbox"> I can draw a line of best fit and use it to estimate values</li>
+    <li><input type="checkbox"> I understand that correlation does not prove cause</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: FREQUENCY POLYGONS ===== -->
+<div class="section-header">
+  <span class="num">Section 4.4</span>
+  Frequency Polygons
+</div>
+<div class="card">
+  <div class="intro-text">
+    A <strong>frequency polygon</strong> is formed by joining the midpoints of the tops of the bars in a bar chart with straight lines. It's useful for comparing two data sets on the same axes.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Draw a Frequency Polygon</div>
+      <p><strong>Step 1:</strong> Find the <strong>midpoint</strong> of each class interval. Midpoint = (lower boundary + upper boundary) &divide; 2.</p>
+      <p><strong>Step 2:</strong> Plot each midpoint against its frequency.</p>
+      <p><strong>Step 3:</strong> Join the points with straight lines.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Class 50 &le; l &lt; 60 with frequency 4.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Midpoint = (50 + 60) &divide; 2 = <strong>55</strong></span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Plot the point (55, 4)</span></div>
+        <div class="result">Repeat for all classes, then join the dots.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Frequency polygons let you overlay two distributions on the same graph for easy comparison. The exam might give you "before and after" data (like IQ scores before and after vitamin pills) and ask you to draw two polygons on the same axes and compare.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Discrete vs. Continuous Data</div>
+      <p><strong>Discrete data</strong> can only take certain values: number of children, shoe size, dice score.</p>
+      <p><strong>Continuous data</strong> can take any value within a range: height, weight, time.</p>
+      <p style="margin-top:6px;">For continuous data, bars in frequency diagrams <strong>touch</strong> (no gaps). For discrete data, bars have <strong>gaps</strong> between them.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can calculate midpoints and draw a frequency polygon</li>
+    <li><input type="checkbox"> I know the difference between discrete and continuous data</li>
+    <li><input type="checkbox"> I know when bar chart bars should touch vs. have gaps</li>
+  </ul>
+</div>
+
+<!-- ===== OVERALL STUDY TIPS ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  Key Study Strategies for Handling Data
+</div>
+<div class="card">
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">The Number One Rule</div>
+      <p><strong>Label everything.</strong> Every chart needs labelled axes, a title, and a key where relevant. On the exam, missing labels cost marks even if the chart itself is perfect. Get into the habit now: title, axes, units, key.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Show Your Working for Averages</div>
+      <p>For the mean, write out the full sum and the division. Even if your arithmetic is wrong at the end, you get method marks. For the median, write the ordered list &mdash; the examiner can see you know the method.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Check, Check, Check</div>
+      <p>Every topic in this chapter has a way to check your answer:</p>
+      <p>&bull; <strong>Pie charts:</strong> Do all angles add to 360&deg;?</p>
+      <p>&bull; <strong>Mean:</strong> Is the answer between the smallest and largest values?</p>
+      <p>&bull; <strong>Median:</strong> Did you order the data first? Is your middle value actually in the middle?</p>
+      <p>&bull; <strong>Frequency tables:</strong> Do the frequencies add up to the total number of data points?</p>
+      <p>&bull; <strong>Scatter graphs:</strong> Does your line of best fit have roughly equal points on each side?</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I've read through all sections</li>
+    <li><input type="checkbox"> I've written the key methods in my own notes</li>
+    <li><input type="checkbox"> I've tried at least one practice problem from each section</li>
+    <li><input type="checkbox"> I'm ready to try the quiz</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 4 Notes Complete</h2>
+  <p>You've covered displaying data, bar charts, pie charts, stem-and-leaf diagrams, averages, scatter graphs, correlation, and frequency polygons. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

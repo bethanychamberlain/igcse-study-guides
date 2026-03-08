@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Points of View &mdash; English Ch3</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #d1f2eb;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #8e44ad;
+    --trick-bg: #f4ecf7;
+    --pee: #d35400;
+    --pee-bg: #fef0e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .effect {
+    color: var(--subject-dark);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* PEE box */
+  .pee-box {
+    background: var(--pee-bg);
+    border-left: 4px solid var(--pee);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .pee-box .label {
+    font-weight: 700;
+    color: var(--pee);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Fill-in template */
+  .template-box {
+    background: #f9f9f9;
+    border: 2px dashed var(--subject);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .template-box .fill-line {
+    display: inline-block;
+    border-bottom: 2px solid var(--subject);
+    min-width: 120px;
+    margin: 0 4px;
+    color: var(--subject);
+    font-style: italic;
+  }
+  .template-box p {
+    margin: 6px 0;
+    line-height: 2;
+  }
+
+  /* Word bank grid */
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .word-bank .word {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning, .pee-box { break-inside: avoid; }
+    .template-box { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">English Ch3 &mdash; Cheat Sheet</div>
+    <h1>Points of View</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- TECHNIQUES TABLE -->
+<div class="card">
+  <h2>Literary Techniques &mdash; Quick Reference</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:18%;">Technique</th>
+      <th style="width:25%;">What It Means</th>
+      <th style="width:27%;">Example</th>
+      <th style="width:30%;">Effect on Reader</th>
+    </tr>
+    <tr>
+      <td><strong>Simile</strong></td>
+      <td>Comparison using "like" or "as"</td>
+      <td>"The river flowed like liquid silver"</td>
+      <td class="effect">Creates a vivid image; helps reader visualise by connecting to something familiar</td>
+    </tr>
+    <tr>
+      <td><strong>Metaphor</strong></td>
+      <td>Saying something IS something else (no like/as)</td>
+      <td>"The classroom was a prison"</td>
+      <td class="effect">Stronger than simile; states comparison as fact, making the feeling more intense</td>
+    </tr>
+    <tr>
+      <td><strong>Personification</strong></td>
+      <td>Giving human qualities to non-human things</td>
+      <td>"The trees groaned in the wind"</td>
+      <td class="effect">Makes the scene feel alive; can create eerie or emotional atmosphere</td>
+    </tr>
+    <tr>
+      <td><strong>Imagery</strong></td>
+      <td>Language appealing to the 5 senses</td>
+      <td>"The air was thick with damp earth and rotting leaves"</td>
+      <td class="effect">Immerses the reader in the scene; makes it feel real and physical</td>
+    </tr>
+    <tr>
+      <td><strong>Repetition</strong></td>
+      <td>Using the same word or phrase multiple times</td>
+      <td>"Dark. Everything was dark."</td>
+      <td class="effect">Emphasises an idea; can feel obsessive, overwhelming, or inescapable</td>
+    </tr>
+    <tr>
+      <td><strong>Short sentences</strong></td>
+      <td>Brief, punchy statements</td>
+      <td>"He ran. He didn't look back."</td>
+      <td class="effect">Creates tension, urgency, or shock; forces the reader to pause</td>
+    </tr>
+    <tr>
+      <td><strong>Rhetorical question</strong></td>
+      <td>Question not expecting an answer</td>
+      <td>"Was there no escape?"</td>
+      <td class="effect">Engages the reader; creates reflection or a sense of desperation</td>
+    </tr>
+    <tr>
+      <td><strong>Ellipsis (...)</strong></td>
+      <td>Three dots showing something left unsaid</td>
+      <td>"She opened the door and..."</td>
+      <td class="effect">Creates suspense; suggests something too awful or important to say directly</td>
+    </tr>
+  </table>
+</div>
+
+<!-- PEE TEMPLATE -->
+<div class="card">
+  <h2>PEE Paragraph Template</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Fill this in for every analytical paragraph you write. If you follow this pattern, you will score higher. Every. Single. Time.</p>
+
+  <div class="template-box">
+    <p><strong>P (Point):</strong> The writer uses <span class="fill-line">technique name</span> to create a sense of <span class="fill-line">mood/feeling</span>.</p>
+    <p><strong>E (Evidence):</strong> This is shown in the phrase "<span class="fill-line">quote from the text</span>".</p>
+    <p><strong>E (Explanation):</strong> The word "<span class="fill-line">specific word</span>" suggests <span class="fill-line">what it implies</span>, which makes the reader feel <span class="fill-line">emotion/reaction</span>. The writer may have chosen this to <span class="fill-line">purpose/intention</span>.</p>
+  </div>
+
+  <div class="pee-box">
+    <div class="label">Remember</div>
+    Your Explanation should be at least TWICE as long as your Point and Evidence combined. The marks are in the Explanation. If your explanation is only one sentence, you haven't said enough.
+  </div>
+
+  <div class="warning">
+    <div class="label">Common Mistake</div>
+    Do NOT write: "The writer uses a simile. A simile is when you compare two things using like or as." That's a <strong>definition</strong>, not an analysis. The examiner already knows what a simile is. Tell them what THIS simile does to THIS reader in THIS text.
+  </div>
+</div>
+
+<!-- ANALYSIS PHRASES -->
+<div class="card">
+  <h2>Useful Analysis Phrases</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Stick these into your explanation sentences. They show the examiner you're analyzing, not just describing.</p>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:40%;">Phrase</th>
+      <th style="width:60%;">When to Use It</th>
+    </tr>
+    <tr>
+      <td><strong>"This suggests that..."</strong></td>
+      <td>After quoting a word or phrase, to explain what it implies beyond its surface meaning</td>
+    </tr>
+    <tr>
+      <td><strong>"The writer creates a sense of..."</strong></td>
+      <td>To name the mood or atmosphere the writing produces</td>
+    </tr>
+    <tr>
+      <td><strong>"The effect on the reader is..."</strong></td>
+      <td>To directly state how the reader is meant to react or feel</td>
+    </tr>
+    <tr>
+      <td><strong>"The word [X] implies..."</strong></td>
+      <td>To zoom in on one specific word and explain its connotations</td>
+    </tr>
+    <tr>
+      <td><strong>"The reader feels... because..."</strong></td>
+      <td>To connect the technique to a specific reader emotion and explain why</td>
+    </tr>
+    <tr>
+      <td><strong>"The writer may have chosen this to..."</strong></td>
+      <td>To speculate on the writer's intention or purpose</td>
+    </tr>
+    <tr>
+      <td><strong>"The connotations of [X] are..."</strong></td>
+      <td>To explore the associations a word carries beyond its literal meaning</td>
+    </tr>
+    <tr>
+      <td><strong>"This contrasts with... which highlights..."</strong></td>
+      <td>When two ideas or images are placed against each other for effect</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick</div>
+    Think of it as <strong>S.E.F.</strong> &mdash; <strong>S</strong>uggests, <strong>E</strong>ffect, <strong>F</strong>eels. Every explanation sentence should do one of these: say what the word <em>suggests</em>, describe the <em>effect</em>, or name what the reader <em>feels</em>.
+  </div>
+</div>
+
+<!-- QUICK-FIRE EXAM CUES -->
+<div class="card">
+  <h2>Quick-Fire: If the Question Asks... Then Your Answer Should...</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:45%;">If the Question Says...</th>
+      <th style="width:55%;">Your Answer Should...</th>
+    </tr>
+    <tr>
+      <td>"How does the writer create a sense of [mood]?"</td>
+      <td>Name techniques + quote evidence + explain how they produce that specific mood. Use PEE. At least 2 techniques.</td>
+    </tr>
+    <tr>
+      <td>"What is the effect of [technique/word]?"</td>
+      <td>Do NOT define the technique. Explain what it makes the reader feel and why. Focus entirely on effect.</td>
+    </tr>
+    <tr>
+      <td>"How does the writer present [character]?"</td>
+      <td>Look at dialogue, actions, descriptions, others' reactions. Quote specific words and explain what they suggest about the character.</td>
+    </tr>
+    <tr>
+      <td>"Compare how the two texts..."</td>
+      <td>Weave texts together. For each point: analyze Text A with PEE, link with a connective, analyze Text B with PEE. Never treat them separately.</td>
+    </tr>
+    <tr>
+      <td>"Summarise the main ideas..."</td>
+      <td>Key points only. Own words. No analysis, no opinion. One point per sentence. Be concise.</td>
+    </tr>
+    <tr>
+      <td>"What does the word [X] suggest?"</td>
+      <td>Explore connotations. What does the word make you think of? What feeling does it carry? Go beyond the dictionary definition.</td>
+    </tr>
+    <tr>
+      <td>"From which point of view is this written? What is the effect?"</td>
+      <td>Name it (first person / third limited / omniscient) AND explain what it allows or restricts. Does it create intimacy? Suspense? A wider view?</td>
+    </tr>
+  </table>
+</div>
+
+<!-- TONE/MOOD WORD BANK -->
+<div class="card">
+  <h2>Tone and Mood Word Bank</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Use these instead of "happy," "sad," or "scary." Precise vocabulary = higher marks.</p>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:10px;">Tense / Dark</p>
+  <div class="word-bank">
+    <span class="word">ominous</span>
+    <span class="word">foreboding</span>
+    <span class="word">eerie</span>
+    <span class="word">oppressive</span>
+    <span class="word">menacing</span>
+    <span class="word">sinister</span>
+    <span class="word">claustrophobic</span>
+    <span class="word">bleak</span>
+  </div>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:14px;">Sad / Reflective</p>
+  <div class="word-bank">
+    <span class="word">melancholic</span>
+    <span class="word">wistful</span>
+    <span class="word">nostalgic</span>
+    <span class="word">sombre</span>
+    <span class="word">poignant</span>
+    <span class="word">elegiac</span>
+    <span class="word">bittersweet</span>
+    <span class="word">pensive</span>
+  </div>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:14px;">Happy / Positive</p>
+  <div class="word-bank">
+    <span class="word">jubilant</span>
+    <span class="word">whimsical</span>
+    <span class="word">serene</span>
+    <span class="word">tranquil</span>
+    <span class="word">exuberant</span>
+    <span class="word">buoyant</span>
+    <span class="word">playful</span>
+    <span class="word">idyllic</span>
+  </div>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:14px;">Mysterious / Uncertain</p>
+  <div class="word-bank">
+    <span class="word">enigmatic</span>
+    <span class="word">unsettling</span>
+    <span class="word">ambiguous</span>
+    <span class="word">ethereal</span>
+    <span class="word">surreal</span>
+    <span class="word">dreamlike</span>
+    <span class="word">disorienting</span>
+    <span class="word">haunting</span>
+  </div>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:14px;">Writer's Tone</p>
+  <div class="word-bank">
+    <span class="word">ironic</span>
+    <span class="word">sardonic</span>
+    <span class="word">affectionate</span>
+    <span class="word">reverent</span>
+    <span class="word">dismissive</span>
+    <span class="word">urgent</span>
+    <span class="word">detached</span>
+    <span class="word">passionate</span>
+    <span class="word">mocking</span>
+    <span class="word">earnest</span>
+  </div>
+</div>
+
+<!-- COMPARISON CONNECTIVES -->
+<div class="card">
+  <h2>Comparison Connectives</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Use these to weave two texts together in comparison answers.</p>
+
+  <table class="compare-table">
+    <tr>
+      <th style="text-align:left;">Purpose</th>
+      <th>Connectives to Use</th>
+    </tr>
+    <tr>
+      <td style="text-align:left;">Similarity</td>
+      <td>Similarly, Likewise, Both texts, In the same way, This is echoed in, Just as Text A... so too does Text B...</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;">Difference</td>
+      <td>In contrast, However, Whereas, On the other hand, Unlike, While Text A... Text B...</td>
+    </tr>
+    <tr>
+      <td style="text-align:left;">Building on</td>
+      <td>Furthermore, Moreover, Text B takes this further by, This is developed in</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Structure Trick</div>
+    Every comparison paragraph should mention <strong>both texts</strong>. If you write a paragraph that only discusses one text, you've lost marks. Use the connectives above to force yourself to link them.
+  </div>
+</div>
+
+<!-- POINT OF VIEW AT A GLANCE -->
+<div class="card">
+  <h2>Point of View &mdash; At a Glance</h2>
+  <table class="compare-table">
+    <tr>
+      <th style="text-align:left;"></th>
+      <th>First Person</th>
+      <th>Third Limited</th>
+      <th>Third Omniscient</th>
+    </tr>
+    <tr>
+      <td>Pronouns</td>
+      <td>I, me, we</td>
+      <td>He, she, they</td>
+      <td>He, she, they</td>
+    </tr>
+    <tr>
+      <td>Whose thoughts?</td>
+      <td>Narrator only</td>
+      <td>One character</td>
+      <td>All characters</td>
+    </tr>
+    <tr>
+      <td>Key effect</td>
+      <td>Intimacy, bias</td>
+      <td>Close but objective</td>
+      <td>Wide view, dramatic irony</td>
+    </tr>
+    <tr>
+      <td>Limitation</td>
+      <td>May be unreliable</td>
+      <td>Only sees one side</td>
+      <td>Can feel distant</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

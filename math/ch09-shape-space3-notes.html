@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Shape and Space 3 &mdash; Math Ch9</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Worked example boxes */
+  .worked {
+    background: #f8f9fa;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0 4px;
+    font-size: 14px;
+  }
+  .worked .step {
+    padding: 4px 0;
+    display: flex;
+    gap: 8px;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    min-width: 22px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .result {
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px dashed #ccc;
+    font-weight: 700;
+    color: var(--subject-dark);
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Math &mdash; Chapter 9</div>
+  <h1>Shape and Space 3</h1>
+  <div class="subtitle">Similar shapes, congruent shapes, trigonometry (sine, cosine, tangent), finding sides & angles, and real-world applications</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 20 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: SIMILAR SHAPES ===== -->
+<div class="section-header">
+  <span class="num">Section 9.1</span>
+  Similar Shapes
+</div>
+<div class="card">
+  <div class="intro-text">
+    Two shapes are <strong>similar</strong> if one is an enlargement of the other. They have the same shape but different sizes. All the angles are equal, and the sides are in the same ratio (the <strong>scale factor</strong>).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Makes Shapes Similar</div>
+      <p>Two shapes are <strong>mathematically similar</strong> if:</p>
+      <p style="margin-top:4px;">1. All corresponding <strong>angles are equal</strong></p>
+      <p>2. All corresponding <strong>sides are in the same ratio</strong></p>
+      <p style="margin-top:6px;">For triangles, you only need to check the angles &mdash; if the angles match, the sides will automatically be in ratio.</p>
+      <p style="margin-top:6px;">For other shapes (rectangles, quadrilaterals), you must check <strong>both</strong> angles AND side ratios. Two rectangles can have the same angles (all 90&deg;) but NOT be similar if the side ratios differ.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Finding Missing Sides Using Scale Factor</div>
+      <p><strong>Step 1:</strong> Find two corresponding sides (one from each shape) where you know both lengths.</p>
+      <p><strong>Step 2:</strong> Work out the scale factor: <strong>scale factor = bigger side &divide; smaller side</strong></p>
+      <p><strong>Step 3:</strong> Use the scale factor to find the missing side.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Triangles A and B are similar. Triangle A has sides 2, 3, x. Triangle B has sides 3, 4.5, 5. Find x.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Corresponding sides: 2 and 3, or 3 and 4.5.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Scale factor = 3 &divide; 2 = <strong>1.5</strong> (or 4.5 &divide; 3 = 1.5 &mdash; same, which confirms they're similar)</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">x corresponds to 5, so x = 5 &divide; 1.5 = <strong>3&frac13;</strong></span></div>
+        <div class="result">x = 3&frac13; cm</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Similar vs. Congruent</div>
+      <p><strong>Similar</strong> = same shape, different size (one is an enlargement of the other).</p>
+      <p><strong>Congruent</strong> = same shape AND same size (exact copies).</p>
+      <p style="margin-top:4px;">All congruent shapes are similar (scale factor = 1), but similar shapes are NOT necessarily congruent.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Match the Right Sides</div>
+      <p>The most common mistake is matching the wrong sides. Look at which sides are <strong>opposite the same angles</strong>. The longest side of one shape corresponds to the longest side of the other. The shortest to the shortest. If the shapes are drawn at different angles, rotate them mentally until they line up.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can explain the difference between similar and congruent shapes</li>
+    <li><input type="checkbox"> I can find the scale factor from two corresponding sides</li>
+    <li><input type="checkbox"> I can use the scale factor to find a missing length</li>
+    <li><input type="checkbox"> I know that similar triangles need matching angles; other shapes need matching angles AND side ratios</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: CONGRUENT SHAPES ===== -->
+<div class="section-header">
+  <span class="num">Section 9.2</span>
+  Congruent Shapes
+</div>
+<div class="card">
+  <div class="intro-text">
+    Two shapes are <strong>congruent</strong> if one fits exactly on top of the other. They are the <strong>same size and same shape</strong>. The second shape might be rotated, reflected, or translated, but it has the exact same measurements.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Recognising Congruence</div>
+      <p>To check if two shapes are congruent:</p>
+      <p style="margin-top:4px;">1. All corresponding <strong>sides</strong> must be the <strong>same length</strong></p>
+      <p>2. All corresponding <strong>angles</strong> must be the <strong>same size</strong></p>
+      <p style="margin-top:6px;">A shape and its mirror image are congruent. A shape rotated 180&deg; is congruent to the original. Sliding (translating) a shape doesn't change congruence.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Congruence is a quick-marks topic on the exam &mdash; usually 1&ndash;2 marks for identifying congruent pairs from a diagram. It's free marks if you can visually match shapes that are just rotated or reflected versions of each other.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Trace and Turn</div>
+      <p>If you're not sure whether two shapes are congruent, imagine tracing one on paper and then rotating, flipping, or sliding it. If it lands perfectly on the other shape, they're congruent. On the exam, you can use a ruler to measure sides to check.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can identify congruent shapes in a diagram</li>
+    <li><input type="checkbox"> I know that rotation, reflection, and translation don't change congruence</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: TRIGONOMETRY &mdash; THE BASICS ===== -->
+<div class="section-header">
+  <span class="num">Section 9.3</span>
+  Trigonometry &mdash; SOH CAH TOA
+</div>
+<div class="card">
+  <div class="intro-text">
+    Trigonometry lets you find missing sides and angles in <strong>right-angled triangles</strong>. It uses three ratios: <strong>sine</strong>, <strong>cosine</strong>, and <strong>tangent</strong>. This is one of the most important topics in IGCSE maths.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Labelling the Triangle</div>
+      <p>In a right-angled triangle, relative to a chosen angle x:</p>
+      <p style="margin-top:4px;"><strong>Hypotenuse (H)</strong> = the side <strong>opposite the right angle</strong>. Always the longest side.</p>
+      <p><strong>Opposite (O)</strong> = the side <strong>opposite</strong> to angle x (directly across from it).</p>
+      <p><strong>Adjacent (A)</strong> = the side <strong>next to</strong> angle x (that isn't the hypotenuse).</p>
+      <p style="margin-top:6px;">The labels O and A change depending on which angle you're looking at. H stays the same.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Three Ratios</div>
+      <p><strong>sin x = O / H</strong> &nbsp; (Opposite &divide; Hypotenuse)</p>
+      <p><strong>cos x = A / H</strong> &nbsp; (Adjacent &divide; Hypotenuse)</p>
+      <p><strong>tan x = O / A</strong> &nbsp; (Opposite &divide; Adjacent)</p>
+      <p style="margin-top:8px;">Remember: <strong>SOH CAH TOA</strong></p>
+      <p style="margin-top:4px;">Or the sentence: <em>"Silly Old Harry Caught A Herring Trawling Off Afghanistan"</em></p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Trigonometry questions are worth <strong>3&ndash;6 marks</strong> on every IGCSE paper. They appear in real-world contexts: ladders against walls, angles of elevation, bearings, building heights. Learn SOHCAHTOA and you unlock a whole category of exam questions.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can label H, O, and A on a right-angled triangle</li>
+    <li><input type="checkbox"> I've memorised SOHCAHTOA</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: FINDING A SIDE ===== -->
+<div class="section-header">
+  <span class="num">Section 9.3 (continued)</span>
+  Finding a Missing Side
+</div>
+<div class="card">
+  <div class="intro-text">
+    When you know an angle and one side, you can find another side using trig.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Step-by-Step Method</div>
+      <p><strong>Step 1: Label the sides</strong> H, O, A relative to the given angle.</p>
+      <p><strong>Step 2: Identify what you HAVE and what you WANT.</strong></p>
+      <p><strong>Step 3: Pick the right ratio</strong> &mdash; the one that uses both the side you have and the side you want.</p>
+      <p><strong>Step 4: Set up the equation</strong> and solve.</p>
+      <table class="compare-table">
+        <tr><th>You have & want</th><th>Use</th><th>Formula</th></tr>
+        <tr><td>O and H</td><td>sin</td><td>sin x = O / H</td></tr>
+        <tr><td>A and H</td><td>cos</td><td>cos x = A / H</td></tr>
+        <tr><td>O and A</td><td>tan</td><td>tan x = O / A</td></tr>
+      </table>
+      <div class="worked">
+        <p><strong>Example:</strong> Find length l. Angle = 32&deg;, hypotenuse = 10 cm, l is adjacent.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Have: angle (32&deg;) and H (10). Want: A (l).</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">A and H &rarr; use <strong>cos</strong>.</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">cos 32&deg; = l / 10</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">l = 10 &times; cos 32&deg; = 10 &times; 0.848 = <strong>8.5 cm</strong> (1 d.p.)</span></div>
+        <div class="result">l = 8.5 cm</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; When the Unknown Is on the Bottom</div>
+      <p>Sometimes you set up the ratio and the unknown ends up on the bottom of the fraction. You need to rearrange.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find x. Angle = 36&deg;, opposite = 11, x is the hypotenuse.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Have: O (11) and angle. Want: H (x). Use <strong>sin</strong>.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">sin 36&deg; = 11 / x</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">Multiply both sides by x: &nbsp; x &times; sin 36&deg; = 11</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">Divide both sides by sin 36&deg;: &nbsp; x = 11 / sin 36&deg; = <strong>18.7 cm</strong> (1 d.p.)</span></div>
+        <div class="result">x = 18.7 cm</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Multiplying vs. Dividing</div>
+      <p>If the unknown is on the <strong>top</strong> of the fraction: <strong>multiply</strong>. (e.g. x/10 = cos 32&deg; &rarr; x = 10 &times; cos 32&deg;)</p>
+      <p style="margin-top:4px;">If the unknown is on the <strong>bottom</strong>: <strong>divide</strong>. (e.g. 11/x = sin 36&deg; &rarr; x = 11 / sin 36&deg;)</p>
+      <p style="margin-top:4px;">Many students always multiply. This only works when the unknown is the numerator.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can choose the right ratio (sin, cos, or tan) based on what I have and what I need</li>
+    <li><input type="checkbox"> I can find a side when the unknown is on top (multiply)</li>
+    <li><input type="checkbox"> I can find a side when the unknown is on the bottom (divide)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: FINDING AN ANGLE ===== -->
+<div class="section-header">
+  <span class="num">Section 9.3 (continued)</span>
+  Finding a Missing Angle
+</div>
+<div class="card">
+  <div class="intro-text">
+    When you know two sides and need the angle, you use the <strong>inverse</strong> trig functions on your calculator: sin<sup>&minus;1</sup>, cos<sup>&minus;1</sup>, or tan<sup>&minus;1</sup>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Step-by-Step Method</div>
+      <p><strong>Step 1:</strong> Label sides H, O, A relative to the angle you want.</p>
+      <p><strong>Step 2:</strong> Identify which two sides you know.</p>
+      <p><strong>Step 3:</strong> Pick the ratio and calculate the fraction.</p>
+      <p><strong>Step 4:</strong> Use the <strong>inverse</strong> button (shift/2nd function + sin/cos/tan) on your calculator.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> Find angle x. Opposite = 3, Adjacent = 8.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Have O (3) and A (8). Use <strong>tan</strong>.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">tan x = 3 / 8 = 0.375</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">x = tan<sup>&minus;1</sup>(0.375)</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">On calculator: 3 &divide; 8 = INV tan</span></div>
+        <div class="result">x = 20.6&deg; (1 d.p.)</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Degrees Mode</div>
+      <p>Make sure your calculator is in <strong>DEGREES</strong> mode, not radians. If you get tiny weird answers like 0.36 instead of 20.6&deg;, your calculator is in the wrong mode. Look for a "DEG" or "D" indicator on the screen.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Sense-Check Your Answer</div>
+      <p>Angles in a right-angled triangle are between 0&deg; and 90&deg; (the two non-right angles). If you get an answer like 150&deg; or &minus;20&deg;, something went wrong. Also, if the opposite side is much shorter than the adjacent, the angle should be small (well under 45&deg;).</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can use inverse sin, cos, and tan on my calculator</li>
+    <li><input type="checkbox"> I know to check my calculator is in degrees mode</li>
+    <li><input type="checkbox"> I can sense-check whether my angle answer is reasonable</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: REAL-WORLD TRIG PROBLEMS ===== -->
+<div class="section-header">
+  <span class="num">Section 9.3 (continued)</span>
+  Real-World Trigonometry Problems
+</div>
+<div class="card">
+  <div class="intro-text">
+    Exam questions love putting trigonometry into real-life contexts: ladders, towers, ramps, kites, bearings. The maths is the same &mdash; you just need to draw the right triangle first.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Vocabulary</div>
+      <p><strong>Angle of elevation</strong> = the angle you look UP from the horizontal to see something above you.</p>
+      <p><strong>Angle of depression</strong> = the angle you look DOWN from the horizontal to see something below you.</p>
+      <p><strong>Bearing</strong> = a direction measured clockwise from North. Always written as 3 digits (e.g. 070&deg;, 215&deg;, 005&deg;).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Approach for Word Problems</div>
+      <p><strong>Step 1:</strong> Draw a <strong>large, clear diagram</strong>. Label all the information you're given.</p>
+      <p><strong>Step 2:</strong> Identify the right-angled triangle in the diagram.</p>
+      <p><strong>Step 3:</strong> Label H, O, A relative to the angle you're using.</p>
+      <p><strong>Step 4:</strong> Use SOHCAHTOA as normal.</p>
+      <div class="worked">
+        <p><strong>Example:</strong> From a point 20 m away, the angle of elevation to the top of a tower is 35&deg;. Find the tower's height.</p>
+        <div class="step"><span class="step-num">1.</span><span class="step-text">Draw: the tower is vertical, the ground is horizontal, 20 m = adjacent, height = opposite, 35&deg; is the angle at the ground.</span></div>
+        <div class="step"><span class="step-num">2.</span><span class="step-text">Have: A (20) and angle (35&deg;). Want: O (height). Use <strong>tan</strong>.</span></div>
+        <div class="step"><span class="step-num">3.</span><span class="step-text">tan 35&deg; = height / 20</span></div>
+        <div class="step"><span class="step-num">4.</span><span class="step-text">height = 20 &times; tan 35&deg; = 20 &times; 0.700 = <strong>14.0 m</strong></span></div>
+        <div class="result">Height = 14.0 m</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Always Draw the Diagram</div>
+      <p>The exam question might not give you a diagram for word problems. <strong>Always draw one yourself.</strong> Make it big. Label everything. A clear diagram is half the solution.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I understand angle of elevation and angle of depression</li>
+    <li><input type="checkbox"> I can draw a diagram from a word problem</li>
+    <li><input type="checkbox"> I know bearings are measured clockwise from North in 3 digits</li>
+    <li><input type="checkbox"> I can solve ladder, tower, and ramp problems using trig</li>
+  </ul>
+</div>
+
+<!-- ===== OVERALL STUDY TIPS ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  Key Study Strategies for Shape &amp; Space 3
+</div>
+<div class="card">
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">The Big Three</div>
+      <p>This chapter boils down to three skills:</p>
+      <p>&bull; <strong>Similar shapes:</strong> Find the scale factor, use it to find missing sides.</p>
+      <p>&bull; <strong>Trig &mdash; find a side:</strong> Label H/O/A, pick the ratio, set up the equation, solve.</p>
+      <p>&bull; <strong>Trig &mdash; find an angle:</strong> Same as above, but use the inverse button.</p>
+      <p style="margin-top:6px;">If you can do these three things confidently, you can handle any question in this chapter.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Check, Check, Check</div>
+      <p>&bull; <strong>Similar shapes:</strong> Check that your scale factor is consistent across all pairs of sides.</p>
+      <p>&bull; <strong>Trig sides:</strong> Your answer should be shorter than the hypotenuse (O and A are always shorter than H).</p>
+      <p>&bull; <strong>Trig angles:</strong> The two non-right angles must add up to 90&deg;.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I've read through all sections</li>
+    <li><input type="checkbox"> I've written the key methods in my own notes</li>
+    <li><input type="checkbox"> I've tried at least one practice problem from each section</li>
+    <li><input type="checkbox"> I'm ready to try the quiz</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 9 Notes Complete</h2>
+  <p>You've covered similar shapes, congruent shapes, and trigonometry (SOHCAHTOA). Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Electricity &mdash; Physics Ch8</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Physics Ch8 &mdash; Cheat Sheet</div>
+    <h1>Electricity</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Current (I)</strong></td>
+      <td>Flow of charge (electrons in a metal). Measured in <strong>amperes (A)</strong> by an <strong>ammeter in series</strong>.</td>
+      <td class="confuse">Voltage (current is the flow; voltage is what pushes it)</td>
+    </tr>
+    <tr>
+      <td><strong>Potential difference (V)</strong></td>
+      <td>Work done per unit charge. Measured in <strong>volts (V)</strong> by a <strong>voltmeter in parallel</strong>.</td>
+      <td class="confuse">E.m.f. (e.m.f. is the p.d. across the battery; p.d. is across a component)</td>
+    </tr>
+    <tr>
+      <td><strong>Resistance (R)</strong></td>
+      <td>How much a component opposes current flow. Measured in <strong>ohms (&Omega;)</strong>.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Ohm's law</strong></td>
+      <td>Current is proportional to p.d. at <strong>constant temperature</strong>. Gives a straight-line graph through the origin.</td>
+      <td class="confuse">V = IR (V = IR is just a formula and always works; Ohm's law is the specific condition of constant R)</td>
+    </tr>
+    <tr>
+      <td><strong>Thermistor</strong></td>
+      <td>Resistance <strong>decreases</strong> when temperature increases.</td>
+      <td class="confuse">LDR (that responds to light, not temperature)</td>
+    </tr>
+    <tr>
+      <td><strong>LDR</strong></td>
+      <td>Light-dependent resistor. Resistance <strong>decreases</strong> in bright light.</td>
+      <td class="confuse">Thermistor (that responds to heat, not light)</td>
+    </tr>
+    <tr>
+      <td><strong>Diode</strong></td>
+      <td>Lets current flow in one direction only (low R forward, very high R reverse).</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Power (P)</strong></td>
+      <td>Rate of energy transfer. Measured in <strong>watts (W)</strong>. 1 W = 1 J/s.</td>
+      <td class="confuse">Energy (power is energy per second, not total energy)</td>
+    </tr>
+    <tr>
+      <td><strong>Kilowatt-hour (kWh)</strong></td>
+      <td>The energy used by a 1 kW appliance in 1 hour. 1 kWh = 3,600,000 J. This is what electricity companies charge for.</td>
+      <td class="confuse">Joules (same thing, different scale &mdash; kWh is the practical unit)</td>
+    </tr>
+    <tr>
+      <td><strong>Fuse</strong></td>
+      <td>Thin wire in the <strong>live wire</strong> that melts if current is too high, breaking the circuit.</td>
+      <td class="confuse">Circuit breaker (same job, but can be reset)</td>
+    </tr>
+    <tr>
+      <td><strong>Earth wire</strong></td>
+      <td>Safety wire connecting the metal case to ground. If a fault occurs, current flows to earth and blows the fuse.</td>
+      <td class="confuse">Neutral wire (neutral completes the circuit; earth is only for safety)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- BIG COMPARISON TABLE: SERIES vs PARALLEL -->
+<div class="card">
+  <h2>Series vs Parallel Circuits &mdash; THE Rules</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Series</th>
+      <th>Parallel</th>
+    </tr>
+    <tr>
+      <td>Current</td>
+      <td><strong>Same</strong> through all components</td>
+      <td><strong>Splits</strong> at junctions; total = sum of branches</td>
+    </tr>
+    <tr>
+      <td>Voltage (p.d.)</td>
+      <td><strong>Shared</strong>; p.d.s add up to battery p.d.</td>
+      <td><strong>Same</strong> across each branch</td>
+    </tr>
+    <tr>
+      <td>Resistance</td>
+      <td>R<sub>total</sub> = R<sub>1</sub> + R<sub>2</sub> (adds up)</td>
+      <td>R = (R<sub>1</sub> &times; R<sub>2</sub>) / (R<sub>1</sub> + R<sub>2</sub>) (gets smaller)</td>
+    </tr>
+    <tr>
+      <td>If one breaks</td>
+      <td>Everything stops</td>
+      <td>Other branches keep working</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; #1 Mistake Students Make</div>
+    Which quantity is the SAME?<br>
+    <strong>S</strong>eries = same <strong>I</strong> (current).<br>
+    <strong>P</strong>arallel = same <strong>V</strong> (voltage).<br>
+    Memorise it: <strong>S = same I. P = same V.</strong>
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: A.C. vs D.C. -->
+<div class="card">
+  <h2>A.C. vs D.C.</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Direct Current (d.c.)</th>
+      <th>Alternating Current (a.c.)</th>
+    </tr>
+    <tr>
+      <td>Direction</td>
+      <td>Flows one way only</td>
+      <td>Reverses direction repeatedly</td>
+    </tr>
+    <tr>
+      <td>Source</td>
+      <td>Batteries, solar cells</td>
+      <td>Mains supply, generators</td>
+    </tr>
+    <tr>
+      <td>Frequency</td>
+      <td>n/a</td>
+      <td>50 Hz (UK/EU) or 60 Hz (US)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: SPECIAL COMPONENTS -->
+<div class="card">
+  <h2>Special Components &mdash; How Resistance Changes</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Component</th>
+      <th>Resistance When...</th>
+      <th>Used For</th>
+    </tr>
+    <tr>
+      <td>Thermistor</td>
+      <td>Hot &rarr; LOW resistance</td>
+      <td>Temperature sensors</td>
+    </tr>
+    <tr>
+      <td>LDR</td>
+      <td>Bright &rarr; LOW resistance</td>
+      <td>Light sensors, street lights</td>
+    </tr>
+    <tr>
+      <td>Diode</td>
+      <td>Forward &rarr; LOW; Reverse &rarr; VERY HIGH</td>
+      <td>One-way valves for current</td>
+    </tr>
+    <tr>
+      <td>Filament lamp</td>
+      <td>Hotter &rarr; HIGHER resistance</td>
+      <td>Does NOT obey Ohm's law</td>
+    </tr>
+  </table>
+</div>
+
+<!-- KEY FORMULAS -->
+<div class="card">
+  <h2>The Big Seven Formulas (Learn These Cold)</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:35%;">Formula</th>
+      <th style="width:35%;">What It Calculates</th>
+      <th style="width:30%;">Units</th>
+    </tr>
+    <tr>
+      <td><strong>Q = I &times; t</strong></td>
+      <td>Charge</td>
+      <td>C (coulombs), A, s</td>
+    </tr>
+    <tr>
+      <td><strong>V = W / Q</strong></td>
+      <td>Potential difference</td>
+      <td>V (volts), J, C</td>
+    </tr>
+    <tr>
+      <td><strong>V = I &times; R</strong></td>
+      <td>Resistance (or current, or voltage)</td>
+      <td>V, A, &Omega; (ohms)</td>
+    </tr>
+    <tr>
+      <td><strong>P = I &times; V</strong></td>
+      <td>Power</td>
+      <td>W (watts), A, V</td>
+    </tr>
+    <tr>
+      <td><strong>E = V &times; I &times; t</strong></td>
+      <td>Energy transferred</td>
+      <td>J (joules), V, A, s</td>
+    </tr>
+    <tr>
+      <td><strong>R = R<sub>1</sub> + R<sub>2</sub></strong></td>
+      <td>Total resistance in series</td>
+      <td>&Omega;</td>
+    </tr>
+    <tr>
+      <td><strong>R = (R<sub>1</sub>&times;R<sub>2</sub>) / (R<sub>1</sub>+R<sub>2</sub>)</strong></td>
+      <td>Total resistance in parallel (2 resistors)</td>
+      <td>&Omega;</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Milliamps</div>
+    1000 mA = 1 A. If the exam gives milliamps, <strong>divide by 1000</strong> before substituting into any formula.
+    Example: 250 mA = 0.25 A.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Current</span>
+    <span>The rate of flow of charge &mdash; how many coulombs pass a point each second.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Voltage</span>
+    <span>The energy given to (or taken from) each coulomb of charge &mdash; 1 V means 1 J per coulomb.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Resistance</span>
+    <span>How hard it is for current to flow &mdash; more resistance means less current for the same voltage.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Ohm's law</span>
+    <span>Current is proportional to p.d. at constant temperature &mdash; gives a straight-line graph through the origin.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Power</span>
+    <span>How fast energy is transferred &mdash; a 60 W bulb uses 60 joules every second.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Series circuit</span>
+    <span>One single loop &mdash; same current everywhere, voltages add up, resistances add up.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Parallel circuit</span>
+    <span>Branches &mdash; same voltage across each branch, currents add up, total resistance is smaller than the smallest.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Fuse + earth wire</span>
+    <span>If the live wire touches the metal case, current goes through earth wire, fuse melts, circuit breaks &mdash; you don't get electrocuted.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">The VIR Triangle</div>
+    Draw a triangle: <strong>V</strong> on top, <strong>I</strong> and <strong>R</strong> on the bottom. Cover what you want to find:
+    Cover V &rarr; V = I &times; R. Cover I &rarr; I = V / R. Cover R &rarr; R = V / I.
+  </div>
+
+  <div class="trick">
+    <div class="label">Ammeter vs Voltmeter</div>
+    <strong>A</strong>mmeter = in <strong>series</strong> (think: the current has to go through it, so it sits IN the line).
+    <strong>V</strong>oltmeter = in <strong>parallel</strong> (think: it sits across the component, measuring the difference between two points).
+  </div>
+
+  <div class="trick">
+    <div class="label">Parallel Resistance Shortcut</div>
+    "Product over sum" for two resistors: R = (R<sub>1</sub> &times; R<sub>2</sub>) / (R<sub>1</sub> + R<sub>2</sub>).
+    The answer is always <strong>less than the smallest</strong> individual resistor.
+  </div>
+
+  <div class="trick">
+    <div class="label">Choosing a Fuse</div>
+    Use P = IV to find the normal current, then pick the fuse <strong>slightly above</strong> that value.
+    Example: 500 W at 230 V &rarr; I = 500/230 = 2.2 A &rarr; use a <strong>3 A fuse</strong> (not 13 A).
+  </div>
+
+  <div class="trick">
+    <div class="label">Switch and Fuse Location</div>
+    Both go in the <strong>LIVE wire</strong>. Why? So when they operate, the dangerous live supply is disconnected from the appliance.
+  </div>
+
+  <div class="trick">
+    <div class="label">Electron Flow vs Conventional Current</div>
+    Electrons flow from &minus; to +. Conventional current is defined as + to &minus;. The exam uses conventional current unless it specifically says "electron flow."
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Calculate the current through a 6 &Omega; resistor with 12 V across it"</td>
+      <td><strong>I = V/R = 12/6 = 2 A</strong></td>
+    </tr>
+    <tr>
+      <td>"Two resistors (4 &Omega; and 6 &Omega;) in series. Total resistance?"</td>
+      <td><strong>R = 4 + 6 = 10 &Omega;</strong></td>
+    </tr>
+    <tr>
+      <td>"Two resistors (4 &Omega; and 12 &Omega;) in parallel. Total resistance?"</td>
+      <td><strong>R = (4 &times; 12)/(4 + 12) = 48/16 = 3 &Omega;</strong></td>
+    </tr>
+    <tr>
+      <td>"A lamp takes 3 A at 12 V. What is the power?"</td>
+      <td><strong>P = IV = 3 &times; 12 = 36 W</strong></td>
+    </tr>
+    <tr>
+      <td>"A 2 kW heater runs for 3 hours. Energy used in kWh?"</td>
+      <td><strong>E = P &times; t = 2 &times; 3 = 6 kWh</strong></td>
+    </tr>
+    <tr>
+      <td>"What happens to the current when resistance increases?"</td>
+      <td>Current <strong>decreases</strong> (V = IR, same V, bigger R means smaller I)</td>
+    </tr>
+    <tr>
+      <td>"Why does a thermistor's resistance decrease when heated?"</td>
+      <td>Higher temperature releases more charge carriers, making it easier for current to flow</td>
+    </tr>
+    <tr>
+      <td>"Why must the fuse be in the live wire?"</td>
+      <td>So when it blows, the appliance is disconnected from the <strong>dangerous live supply</strong></td>
+    </tr>
+    <tr>
+      <td>"How do fuse and earth wire protect the user?"</td>
+      <td>Fault &rarr; live wire touches case &rarr; current flows through earth wire &rarr; large current blows fuse &rarr; circuit breaks</td>
+    </tr>
+    <tr>
+      <td>"State the difference between a.c. and d.c."</td>
+      <td>D.C. flows in <strong>one direction</strong>; A.C. <strong>reverses direction</strong> repeatedly</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

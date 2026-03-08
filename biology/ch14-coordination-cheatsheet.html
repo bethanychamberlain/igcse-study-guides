@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Homeostasis &amp; Coordination &mdash; Biology Ch14</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch14 &mdash; Cheat Sheet</div>
+    <h1>Homeostasis &amp; Coordination</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Homeostasis</strong></td>
+      <td>Maintenance of a constant internal environment (temperature, glucose, water, pH).</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Negative feedback</strong></td>
+      <td>A change from the set point is detected &rarr; a response is triggered that reverses the change &rarr; return to normal.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Insulin</strong></td>
+      <td>Hormone from the pancreas. Lowers blood glucose by converting glucose &rarr; glycogen in the liver.</td>
+      <td class="confuse">Glucagon (that RAISES glucose). Glycogen (that's the storage molecule, not a hormone).</td>
+    </tr>
+    <tr>
+      <td><strong>Glucagon</strong></td>
+      <td>Hormone from the pancreas. Raises blood glucose by converting glycogen &rarr; glucose in the liver.</td>
+      <td class="confuse">Glycogen (storage molecule, not the hormone!)</td>
+    </tr>
+    <tr>
+      <td><strong>Vasodilation</strong></td>
+      <td>Arterioles near the skin widen &rarr; more blood flows near surface &rarr; more heat lost. Happens when too hot.</td>
+      <td class="confuse">Vasoconstriction (that narrows vessels to keep heat IN)</td>
+    </tr>
+    <tr>
+      <td><strong>Vasoconstriction</strong></td>
+      <td>Arterioles near the skin narrow &rarr; less blood flows near surface &rarr; less heat lost. Happens when too cold.</td>
+      <td class="confuse">Vasodilation (that widens vessels to release heat)</td>
+    </tr>
+    <tr>
+      <td><strong>Synapse</strong></td>
+      <td>The gap between two neurones. A chemical neurotransmitter crosses it. Ensures one-way impulse transmission.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Reflex arc</strong></td>
+      <td>The pathway: receptor &rarr; sensory neurone &rarr; relay neurone &rarr; motor neurone &rarr; effector. Automatic, fast, no brain.</td>
+      <td class="confuse">Voluntary action (that DOES involve the brain making a conscious decision)</td>
+    </tr>
+    <tr>
+      <td><strong>Accommodation</strong></td>
+      <td>The eye changing the shape of the lens to focus on near or distant objects.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Auxin</strong></td>
+      <td>Plant growth substance. Stimulates elongation in shoots but inhibits it in roots. Moves to the shaded side.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Tropism</strong></td>
+      <td>A growth response of a plant towards or away from a stimulus (light = phototropism, gravity = gravitropism).</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Adrenaline</strong></td>
+      <td>Hormone from adrenal glands. "Fight or flight" &mdash; increases heart rate, breathing rate, blood to muscles.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: NERVOUS vs ENDOCRINE -->
+<div class="card">
+  <h2>Nervous System vs Endocrine System</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Nervous System</th>
+      <th>Endocrine System</th>
+    </tr>
+    <tr>
+      <td>Speed</td>
+      <td>Very rapid (milliseconds)</td>
+      <td>Can be slow (seconds to hours)</td>
+    </tr>
+    <tr>
+      <td>Message type</td>
+      <td>Electrical impulses along nerves</td>
+      <td>Chemical hormones in the blood</td>
+    </tr>
+    <tr>
+      <td>Duration</td>
+      <td>Short-lived (seconds)</td>
+      <td>Long-lasting (hours to years)</td>
+    </tr>
+    <tr>
+      <td>Area affected</td>
+      <td>Localised (one precise area)</td>
+      <td>Widespread (many organs)</td>
+    </tr>
+    <tr>
+      <td>Examples</td>
+      <td>Reflexes, blinking, movement</td>
+      <td>Growth, puberty, blood glucose</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; This Table Appears Every Year</div>
+    "Compare the nervous and endocrine systems" is one of the most frequently asked questions. Learn all five rows cold.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: TOO HOT vs TOO COLD -->
+<div class="card">
+  <h2>Body Too Hot vs Body Too Cold</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Too Hot</th>
+      <th>Too Cold</th>
+    </tr>
+    <tr>
+      <td>Blood vessels</td>
+      <td>Vasodilation (widen, more heat lost)</td>
+      <td>Vasoconstriction (narrow, less heat lost)</td>
+    </tr>
+    <tr>
+      <td>Sweat glands</td>
+      <td>More sweating (evaporation cools skin)</td>
+      <td>Less sweating</td>
+    </tr>
+    <tr>
+      <td>Muscles</td>
+      <td>&mdash;</td>
+      <td>Shivering (rapid contraction = heat)</td>
+    </tr>
+    <tr>
+      <td>Body hairs</td>
+      <td>Lie flat (less air trapped)</td>
+      <td>Stand up (trap insulating air)</td>
+    </tr>
+    <tr>
+      <td>Detected by</td>
+      <td colspan="2" style="text-align:center;">Hypothalamus in the brain (the thermostat)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Homeostasis</span>
+    <span>Keeping the inside of your body constant so enzymes and cells can work at their best.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Negative feedback</span>
+    <span>Something changes &rarr; body detects it &rarr; body reverses the change &rarr; back to normal. Rinse and repeat.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Insulin</span>
+    <span>Blood glucose too HIGH &rarr; pancreas releases insulin &rarr; liver converts glucose to glycogen &rarr; glucose drops.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Glucagon</span>
+    <span>Blood glucose too LOW &rarr; pancreas releases glucagon &rarr; liver converts glycogen to glucose &rarr; glucose rises.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Reflex arc</span>
+    <span>Receptor &rarr; sensory neurone &rarr; relay neurone (spinal cord) &rarr; motor neurone &rarr; effector &mdash; fast, automatic, no brain.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Rods vs cones</span>
+    <span>Rods = dim light, black-and-white, edges of retina. Cones = bright light, colour vision, packed in the fovea.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Auxin</span>
+    <span>Moves to the shaded side of a shoot &rarr; that side grows faster &rarr; shoot bends towards the light.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Insulin vs Glucagon</div>
+    Insul<strong>in</strong> = glucose goes <strong>in</strong>to storage (glucose &rarr; glycogen, blood glucose goes DOWN). Gluca<strong>gon</strong> = glucose is <strong>gone</strong> from the blood, so the liver releases more (glycogen &rarr; glucose, blood glucose goes UP).
+  </div>
+
+  <div class="trick">
+    <div class="label">Vasodilation = "Dilate = Wide = Heat Escapes"</div>
+    <strong>D</strong>ilate = <strong>D</strong>oor opens wide = heat goes out. <strong>C</strong>onstrict = <strong>C</strong>losed tight = heat stays in. Also: blood vessels do NOT move &mdash; the arterioles change diameter.
+  </div>
+
+  <div class="trick">
+    <div class="label">Accommodation &mdash; The Counterintuitive One</div>
+    Ciliary muscles <strong>contract</strong> = ligaments go <strong>slack</strong> = lens goes <strong>fat</strong> (for near objects). It seems backwards, but think: muscles pulling inward create slack in the strings holding the lens.
+  </div>
+
+  <div class="trick">
+    <div class="label">Auxin's Opposite Effects</div>
+    In <strong>shoots</strong>: more auxin = MORE growth (shoot bends towards light). In <strong>roots</strong>: more auxin = LESS growth (root bends downward). Same hormone, opposite effect. Think: "Shoots love auxin, roots hate it."
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Define homeostasis"</td>
+      <td>The maintenance of a <strong>constant internal environment</strong></td>
+    </tr>
+    <tr>
+      <td>"Explain negative feedback using blood glucose as an example"</td>
+      <td>Glucose rises &rarr; pancreas detects &rarr; insulin released &rarr; liver converts glucose to glycogen &rarr; glucose falls. AND the reverse with glucagon. Give <strong>both directions</strong>.</td>
+    </tr>
+    <tr>
+      <td>"Describe what happens when the body is too hot"</td>
+      <td><strong>Vasodilation</strong> (more blood near skin, more heat lost), <strong>sweating</strong> (evaporation cools skin), hairs lie flat</td>
+    </tr>
+    <tr>
+      <td>"What is the difference between Type I and Type II diabetes?"</td>
+      <td>Type I: pancreas doesn't produce enough <strong>insulin</strong>, treated by injection. Type II: cells stop responding to insulin, managed by <strong>diet</strong>.</td>
+    </tr>
+    <tr>
+      <td>"Describe the reflex arc for touching a hot object"</td>
+      <td>Receptor in skin &rarr; <strong>sensory neurone</strong> &rarr; <strong>relay neurone</strong> (spinal cord) &rarr; <strong>motor neurone</strong> &rarr; effector (arm muscle) &rarr; hand pulls away</td>
+    </tr>
+    <tr>
+      <td>"Why do reflexes not involve the brain?"</td>
+      <td>They bypass the brain and go through the <strong>spinal cord</strong>, making them <strong>faster</strong> &mdash; which protects the body from harm</td>
+    </tr>
+    <tr>
+      <td>"Describe accommodation for a near object"</td>
+      <td>Ciliary muscles <strong>contract</strong> &rarr; suspensory ligaments go <strong>slack</strong> &rarr; lens becomes <strong>short and fat</strong> (more powerful refraction)</td>
+    </tr>
+    <tr>
+      <td>"Explain how auxin causes a shoot to bend towards light"</td>
+      <td>Light from one side &rarr; auxin moves to <strong>shaded side</strong> &rarr; more growth on shaded side &rarr; shoot bends <strong>towards</strong> the light</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Forces and Energy &mdash; Physics Ch4</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #8e44ad;
+    --trick-bg: #f4ecf7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Formula table */
+  .formula-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .formula-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .formula-table td {
+    padding: 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .formula-table tr:last-child td { border-bottom: none; }
+  .formula-table .formula-cell {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--subject-dark);
+    white-space: nowrap;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Worked example */
+  .worked {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+    border: 1px solid #e0e0e0;
+  }
+  .worked .step {
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    font-size: 12px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .step-text code {
+    background: var(--subject-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .worked-title {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+    .worked { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Physics Ch4 &mdash; Cheat Sheet</div>
+    <h1>Forces and Energy</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- FORMULA TABLE -->
+<div class="card">
+  <h2>All the Formulas &mdash; One Place</h2>
+  <table class="formula-table">
+    <tr>
+      <th style="width:18%;">Name</th>
+      <th style="width:24%;">Formula</th>
+      <th style="width:12%;">Units</th>
+      <th style="width:46%;">What Each Letter Means</th>
+    </tr>
+    <tr>
+      <td><strong>Work done</strong></td>
+      <td class="formula-cell">W = F x d</td>
+      <td>J</td>
+      <td>W = work done (J), F = force (N), d = distance (m)</td>
+    </tr>
+    <tr>
+      <td><strong>GPE</strong></td>
+      <td class="formula-cell">GPE = mgh</td>
+      <td>J</td>
+      <td>m = mass (kg), g = gravity (10 N/kg), h = height (m)</td>
+    </tr>
+    <tr>
+      <td><strong>KE</strong></td>
+      <td class="formula-cell">KE = &frac12;mv<sup>2</sup></td>
+      <td>J</td>
+      <td>m = mass (kg), v = speed (m/s). Square v FIRST!</td>
+    </tr>
+    <tr>
+      <td><strong>Efficiency</strong></td>
+      <td class="formula-cell" style="font-size:12px;">(useful/total) x 100%</td>
+      <td>%</td>
+      <td>useful = energy you want (J), total = energy you put in (J)</td>
+    </tr>
+    <tr>
+      <td><strong>Power</strong></td>
+      <td class="formula-cell">P = W / t</td>
+      <td>W</td>
+      <td>P = power (W), W = work done (J), t = time (s)</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; How to Remember All Five</div>
+    <strong>W</strong>ork: <strong>W</strong>hat <strong>F</strong>orce <strong>D</strong>oes &rarr; W = Fd<br>
+    <strong>G</strong>PE: <strong>M</strong>ountain <strong>G</strong>oats climb <strong>H</strong>igh &rarr; GPE = mgh<br>
+    <strong>K</strong>E: <strong>H</strong>alf <strong>M</strong>y <strong>V</strong>elocity <strong>S</strong>quared &rarr; KE = &frac12;mv<sup>2</sup><br>
+    <strong>E</strong>fficiency: <strong>U</strong>seful over <strong>T</strong>otal, times 100<br>
+    <strong>P</strong>ower: <strong>W</strong>ork per <strong>T</strong>ime &rarr; P = W/t
+  </div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:22%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:33%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Work done</strong></td>
+      <td>Energy transferred when a force moves an object through a distance.</td>
+      <td class="confuse">Force (push/pull, not energy)</td>
+    </tr>
+    <tr>
+      <td><strong>Energy</strong></td>
+      <td>The ability to do work. Measured in joules (J). Can change form but is never created or destroyed.</td>
+      <td class="confuse">Power (energy per second, not total energy)</td>
+    </tr>
+    <tr>
+      <td><strong>GPE</strong></td>
+      <td>Energy stored because of an object's height above the ground.</td>
+      <td class="confuse">KE (GPE is about height, KE is about speed)</td>
+    </tr>
+    <tr>
+      <td><strong>KE</strong></td>
+      <td>Energy an object has because it is moving.</td>
+      <td class="confuse">GPE (KE is about speed, GPE is about height)</td>
+    </tr>
+    <tr>
+      <td><strong>Efficiency</strong></td>
+      <td>The percentage of input energy that is usefully transferred. Always less than 100%.</td>
+      <td class="confuse">Power (efficiency is about waste, power is about speed)</td>
+    </tr>
+    <tr>
+      <td><strong>Power</strong></td>
+      <td>How fast energy is transferred. Measured in watts (W). 1 W = 1 J per second.</td>
+      <td class="confuse">Energy (power is the rate, energy is the total amount)</td>
+    </tr>
+    <tr>
+      <td><strong>Conservation of energy</strong></td>
+      <td>Energy cannot be created or destroyed, only transferred between forms.</td>
+      <td class="confuse">"Energy is used up" (WRONG &mdash; it just becomes heat)</td>
+    </tr>
+    <tr>
+      <td><strong>Joule (J)</strong></td>
+      <td>The unit of energy and work done. Also the unit of GPE and KE.</td>
+      <td class="confuse">Newton (force) or Watt (power)</td>
+    </tr>
+    <tr>
+      <td><strong>Watt (W)</strong></td>
+      <td>The unit of power. 1 watt = 1 joule per second.</td>
+      <td class="confuse">W for work done &mdash; same letter, different meaning!</td>
+    </tr>
+  </table>
+</div>
+
+<!-- WORKED EXAMPLES -->
+<div class="card">
+  <h2>Worked Examples &mdash; Step by Step</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Every calculation follows the same three steps: (1) Write the formula. (2) Substitute the numbers. (3) Calculate + write units.</p>
+
+  <div class="worked-title">Example 1: Work Done</div>
+  <p style="font-size:13px; margin-bottom:6px;">A child pulls a toy with a force of 8 N over 3 m. How much work is done?</p>
+  <div class="worked">
+    <div class="step"><span class="step-num">1.</span> <span class="step-text"><code>W = F x d</code></span></div>
+    <div class="step"><span class="step-num">2.</span> <span class="step-text"><code>W = 8 x 3</code></span></div>
+    <div class="step"><span class="step-num">3.</span> <span class="step-text"><code>W = 24 J</code></span></div>
+  </div>
+
+  <div class="worked-title" style="margin-top:16px;">Example 2: GPE</div>
+  <p style="font-size:13px; margin-bottom:6px;">A 3 kg book is placed on a shelf 2 m high. What is its GPE? (g = 10 N/kg)</p>
+  <div class="worked">
+    <div class="step"><span class="step-num">1.</span> <span class="step-text"><code>GPE = m x g x h</code></span></div>
+    <div class="step"><span class="step-num">2.</span> <span class="step-text"><code>GPE = 3 x 10 x 2</code></span></div>
+    <div class="step"><span class="step-num">3.</span> <span class="step-text"><code>GPE = 60 J</code></span></div>
+  </div>
+
+  <div class="worked-title" style="margin-top:16px;">Example 3: KE (watch the squaring step!)</div>
+  <p style="font-size:13px; margin-bottom:6px;">A 4 kg cat runs at 3 m/s. What is its KE?</p>
+  <div class="worked">
+    <div class="step"><span class="step-num">1.</span> <span class="step-text"><code>KE = &frac12; x m x v&sup2;</code></span></div>
+    <div class="step"><span class="step-num">2.</span> <span class="step-text"><code>KE = &frac12; x 4 x 3&sup2;</code></span></div>
+    <div class="step"><span class="step-num">3a.</span> <span class="step-text">Square the speed: <code>3&sup2; = 9</code></span></div>
+    <div class="step"><span class="step-num">3b.</span> <span class="step-text"><code>KE = &frac12; x 4 x 9 = 18 J</code></span></div>
+  </div>
+
+  <div class="worked-title" style="margin-top:16px;">Example 4: Efficiency</div>
+  <p style="font-size:13px; margin-bottom:6px;">A motor receives 800 J. It does 200 J of useful work. What is its efficiency?</p>
+  <div class="worked">
+    <div class="step"><span class="step-num">1.</span> <span class="step-text"><code>Efficiency = (useful / total) x 100%</code></span></div>
+    <div class="step"><span class="step-num">2.</span> <span class="step-text"><code>Efficiency = (200 / 800) x 100%</code></span></div>
+    <div class="step"><span class="step-num">3a.</span> <span class="step-text">Divide: <code>200 / 800 = 0.25</code></span></div>
+    <div class="step"><span class="step-num">3b.</span> <span class="step-text"><code>0.25 x 100% = 25%</code></span></div>
+  </div>
+
+  <div class="worked-title" style="margin-top:16px;">Example 5: Power</div>
+  <p style="font-size:13px; margin-bottom:6px;">An engine does 6000 J of work in 10 seconds. What is its power?</p>
+  <div class="worked">
+    <div class="step"><span class="step-num">1.</span> <span class="step-text"><code>P = W / t</code></span></div>
+    <div class="step"><span class="step-num">2.</span> <span class="step-text"><code>P = 6000 / 10</code></span></div>
+    <div class="step"><span class="step-num">3.</span> <span class="step-text"><code>P = 600 W</code></span></div>
+  </div>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Forgetting Units</div>
+    Always write the unit after your final answer. "60" gets 0 marks. "60 J" gets the mark. The examiner needs to see that you know it's joules, not newtons or watts.
+  </div>
+</div>
+
+<!-- QUICK-FIRE EXAM CUES -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"calculate the work done"</td>
+      <td><strong>W = F x d</strong> &mdash; look for force (N) and distance (m)</td>
+    </tr>
+    <tr>
+      <td>"calculate the gravitational potential energy"</td>
+      <td><strong>GPE = mgh</strong> &mdash; look for mass (kg), gravity (10), height (m)</td>
+    </tr>
+    <tr>
+      <td>"calculate the kinetic energy"</td>
+      <td><strong>KE = &frac12;mv<sup>2</sup></strong> &mdash; look for mass (kg) and speed (m/s)</td>
+    </tr>
+    <tr>
+      <td>"calculate the efficiency"</td>
+      <td><strong>(useful / total) x 100%</strong> &mdash; useful is the smaller number</td>
+    </tr>
+    <tr>
+      <td>"calculate the power"</td>
+      <td><strong>P = W / t</strong> &mdash; look for energy/work (J) and time (s)</td>
+    </tr>
+    <tr>
+      <td>"describe the energy changes" or "energy transfers"</td>
+      <td>Name the forms: "X energy is transferred to Y energy." Always mention heat/thermal as wasted energy</td>
+    </tr>
+    <tr>
+      <td>"explain using conservation of energy"</td>
+      <td>Total energy before = total energy after. Energy is transferred, not created or lost</td>
+    </tr>
+    <tr>
+      <td>"the ball falls from rest" or "dropped from a height"</td>
+      <td><strong>GPE = KE</strong> &mdash; set mgh = &frac12;mv<sup>2</sup> and solve</td>
+    </tr>
+    <tr>
+      <td>"how much energy is wasted?"</td>
+      <td><strong>Wasted = Total input - Useful output</strong></td>
+    </tr>
+    <tr>
+      <td>"the object comes to rest at the top"</td>
+      <td>All KE has been converted to GPE. Set <strong>KE = GPE</strong></td>
+    </tr>
+  </table>
+</div>
+
+<!-- ENERGY vs FORCE vs POWER -->
+<div class="card">
+  <h2>The Big Three &mdash; Don't Mix Them Up</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Energy</th>
+      <th>Force</th>
+      <th>Power</th>
+    </tr>
+    <tr>
+      <td>What is it?</td>
+      <td>Ability to do work</td>
+      <td>A push or pull</td>
+      <td>Rate of energy transfer</td>
+    </tr>
+    <tr>
+      <td>Unit</td>
+      <td>Joule (J)</td>
+      <td>Newton (N)</td>
+      <td>Watt (W)</td>
+    </tr>
+    <tr>
+      <td>Analogy</td>
+      <td>How much petrol is in the tank</td>
+      <td>How hard you press the pedal</td>
+      <td>How fast you use the petrol</td>
+    </tr>
+    <tr>
+      <td>Conserved?</td>
+      <td>Yes &mdash; never created or destroyed</td>
+      <td>No</td>
+      <td>No</td>
+    </tr>
+  </table>
+</div>
+
+<!-- KE vs GPE -->
+<div class="card">
+  <h2>KE vs GPE &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>KE (Kinetic)</th>
+      <th>GPE (Gravitational Potential)</th>
+    </tr>
+    <tr>
+      <td>Depends on</td>
+      <td>Mass and speed</td>
+      <td>Mass, gravity, and height</td>
+    </tr>
+    <tr>
+      <td>Formula</td>
+      <td>&frac12;mv<sup>2</sup></td>
+      <td>mgh</td>
+    </tr>
+    <tr>
+      <td>Maximum when</td>
+      <td>Object is at the bottom / fastest</td>
+      <td>Object is at the top / highest</td>
+    </tr>
+    <tr>
+      <td>Zero when</td>
+      <td>Object is stationary (v = 0)</td>
+      <td>Object is on the ground (h = 0)</td>
+    </tr>
+    <tr>
+      <td>Example</td>
+      <td>A ball just before it hits the ground</td>
+      <td>A ball held above your head</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; The Roller Coaster</div>
+    At the <strong>top</strong> of a roller coaster: maximum GPE, minimum KE (slow).<br>
+    At the <strong>bottom</strong>: maximum KE, minimum GPE (fast).<br>
+    Total energy stays the same the whole ride. GPE converts to KE on the way down, and KE converts to GPE on the way up.
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks for Formulas</h2>
+
+  <div class="trick">
+    <div class="label">KE &mdash; "Half My Velocity Squared"</div>
+    KE = <strong>&frac12;</strong> <strong>m</strong> <strong>v<sup>2</sup></strong>. Say it out loud: "half em vee squared." The &frac12; is the sneaky part &mdash; don't forget it. And always square the speed before multiplying.
+  </div>
+
+  <div class="trick">
+    <div class="label">GPE &mdash; "Mountains Got Height"</div>
+    GPE = <strong>m</strong> <strong>g</strong> <strong>h</strong>. Three letters, all multiplied. Mass times gravity times height. Easy &mdash; the hardest part is remembering g = 10 (but they give you that).
+  </div>
+
+  <div class="trick">
+    <div class="label">Efficiency &mdash; "Useful is LESS"</div>
+    The useful energy always goes on top and is always the <strong>smaller</strong> number. If you get more than 100%, flip your fraction &mdash; you put the numbers the wrong way round.
+  </div>
+
+  <div class="trick">
+    <div class="label">Power &mdash; "Work Takes Time"</div>
+    P = W / t. Power equals work divided by time. Think: a powerful person finishes the same work in less time. More power = same work, less time.
+  </div>
+
+  <div class="trick">
+    <div class="label">Work Done &mdash; "Force the Distance"</div>
+    W = F x d. You need both a force AND a distance for work to be done. If nothing moves, no work is done &mdash; even if you push really hard. Holding a heavy bag still = 0 work done.
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Reversible Reactions &amp; Equilibrium &mdash; Chemistry Ch10</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Chemistry Ch10 &mdash; Cheat Sheet</div>
+    <h1>Reversible Reactions &amp; Equilibrium</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Reversible reaction</strong></td>
+      <td>A reaction that can go in <strong>both directions</strong> &mdash; products can re-form the original reactants. Symbol: &#8652;</td>
+      <td class="confuse">Irreversible reactions (single arrow &rarr;, products can't go back)</td>
+    </tr>
+    <tr>
+      <td><strong>Dynamic equilibrium</strong></td>
+      <td>Forward and reverse reactions happen at the <strong>same rate</strong>. Concentrations stay constant. Both reactions are still happening.</td>
+      <td class="confuse">"Equilibrium" does NOT mean equal amounts &mdash; it means the amounts have stopped changing</td>
+    </tr>
+    <tr>
+      <td><strong>Closed system</strong></td>
+      <td>Nothing can enter or leave. Equilibrium can only be reached in a closed system.</td>
+      <td class="confuse">Open system &mdash; products escape and equilibrium is never reached</td>
+    </tr>
+    <tr>
+      <td><strong>Le Chatelier's principle</strong></td>
+      <td>If you change conditions at equilibrium, the system shifts to <strong>oppose</strong> the change.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Hydrated</strong></td>
+      <td>Contains water molecules in the crystal structure (e.g. blue CuSO&#8324;&middot;5H&#8322;O).</td>
+      <td class="confuse">Anhydrous &mdash; water-free form (e.g. white CuSO&#8324;)</td>
+    </tr>
+    <tr>
+      <td><strong>Compromise</strong></td>
+      <td>Industrial conditions chosen to balance yield, rate, cost, and safety.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- LE CHATELIER TABLE -->
+<div class="card">
+  <h2>Le Chatelier's Principle &mdash; Master Table</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Change You Make</th>
+      <th>Equilibrium Shifts To...</th>
+      <th>Why</th>
+    </tr>
+    <tr>
+      <td>Increase temperature</td>
+      <td>The <strong>endothermic</strong> direction</td>
+      <td>System absorbs the extra heat</td>
+    </tr>
+    <tr>
+      <td>Decrease temperature</td>
+      <td>The <strong>exothermic</strong> direction</td>
+      <td>System releases heat to oppose cooling</td>
+    </tr>
+    <tr>
+      <td>Increase pressure</td>
+      <td>Side with <strong>fewer gas molecules</strong></td>
+      <td>Fewer molecules = lower pressure</td>
+    </tr>
+    <tr>
+      <td>Decrease pressure</td>
+      <td>Side with <strong>more gas molecules</strong></td>
+      <td>More molecules = higher pressure</td>
+    </tr>
+    <tr>
+      <td>Add more reactant</td>
+      <td>Towards <strong>products</strong></td>
+      <td>System uses up the extra reactant</td>
+    </tr>
+    <tr>
+      <td>Remove product</td>
+      <td>Towards <strong>products</strong></td>
+      <td>System makes more to replace it</td>
+    </tr>
+    <tr>
+      <td>Add a catalyst</td>
+      <td><strong>No shift</strong> &mdash; yield unchanged</td>
+      <td>Speeds up BOTH directions equally</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; "A Catalyst Increases the Yield"</div>
+    This is <strong>WRONG</strong> and costs marks every time. A catalyst speeds up the <strong>rate</strong> (gets to equilibrium faster) but does NOT change the <strong>yield</strong> (position of equilibrium is the same). Temperature and pressure change yield. Catalyst does not.
+  </div>
+</div>
+
+<!-- HABER vs CONTACT -->
+<div class="card">
+  <h2>Haber Process vs Contact Process &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Haber Process</th>
+      <th>Contact Process</th>
+    </tr>
+    <tr>
+      <td>Product</td>
+      <td>Ammonia (NH&#8323;)</td>
+      <td>Sulfuric acid (H&#8322;SO&#8324;)</td>
+    </tr>
+    <tr>
+      <td>Key equation</td>
+      <td>N&#8322; + 3H&#8322; &#8652; 2NH&#8323;</td>
+      <td>2SO&#8322; + O&#8322; &#8652; 2SO&#8323;</td>
+    </tr>
+    <tr>
+      <td>Forward reaction</td>
+      <td>Exothermic</td>
+      <td>Exothermic</td>
+    </tr>
+    <tr>
+      <td>Temperature</td>
+      <td>450&deg;C</td>
+      <td>450&deg;C</td>
+    </tr>
+    <tr>
+      <td>Pressure</td>
+      <td><strong>200 atm</strong> (high)</td>
+      <td><strong>2 atm</strong> (low)</td>
+    </tr>
+    <tr>
+      <td>Catalyst</td>
+      <td><strong>Iron</strong></td>
+      <td><strong>Vanadium(V) oxide</strong> (V&#8322;O&#8325;)</td>
+    </tr>
+    <tr>
+      <td>Gas molecules</td>
+      <td>4 &#8652; 2 (high P helps)</td>
+      <td>3 &#8652; 2 (high P helps, but yield already high)</td>
+    </tr>
+    <tr>
+      <td>Main use</td>
+      <td>Fertilisers</td>
+      <td>Fertilisers, paints, detergents</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COLOUR CHANGES -->
+<div class="card">
+  <h2>Colour Changes to Memorise</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Substance</th>
+      <th>Hydrated (with water)</th>
+      <th>Anhydrous (without water)</th>
+    </tr>
+    <tr>
+      <td>Copper(II) sulfate</td>
+      <td><strong style="color:#2980b9;">Blue</strong> crystals</td>
+      <td><strong style="color:#888;">White</strong> powder</td>
+    </tr>
+    <tr>
+      <td>Cobalt(II) chloride</td>
+      <td><strong style="color:#d63384;">Pink</strong></td>
+      <td><strong style="color:#2980b9;">Blue</strong></td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Water Test</div>
+    Add a liquid to anhydrous copper(II) sulfate: <strong>white &rarr; blue</strong> = water is present. Add a liquid to cobalt(II) chloride paper: <strong>blue &rarr; pink</strong> = water is present. These only show water is <strong>present</strong>, not that it is pure.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Reversible</span>
+    <span>Products can react to re-form reactants &mdash; use the &#8652; symbol instead of &rarr;.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Dynamic</span>
+    <span>Both forward and reverse reactions are still happening &mdash; it's not stopped, just balanced.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Equilibrium</span>
+    <span>Forward and reverse rates are equal, so concentrations stay constant (but NOT necessarily equal).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Le Chatelier</span>
+    <span>Push the system one way and it pushes back &mdash; but settles at a new balance point.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Compromise</span>
+    <span>450&deg;C is used because lower temp = better yield but reaction is too slow; it's a trade-off.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Haber process</span>
+    <span>N&#8322; + 3H&#8322; &#8652; 2NH&#8323; at 450&deg;C, 200 atm, iron catalyst &mdash; makes ammonia for fertilisers.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Contact process</span>
+    <span>2SO&#8322; + O&#8322; &#8652; 2SO&#8323; at 450&deg;C, 2 atm, V&#8322;O&#8325; catalyst &mdash; makes sulfuric acid.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Temperature &rarr; "The System Fights Back"</div>
+    If you heat it up, the system tries to cool down by going <strong>endothermic</strong>. If you cool it down, the system fights back by going <strong>exothermic</strong>. The system always opposes you.
+  </div>
+
+  <div class="trick">
+    <div class="label">Pressure &rarr; Count the Molecules</div>
+    Write the numbers above the equation: N&#8322; + 3H&#8322; &#8652; 2NH&#8323; = <strong>4 molecules &#8652; 2 molecules</strong>. High pressure favours the <strong>smaller number</strong>. If both sides have the same number, pressure has no effect.
+  </div>
+
+  <div class="trick">
+    <div class="label">Haber vs Contact &mdash; Same Temp, Different Pressure</div>
+    Both use <strong>450&deg;C</strong>. The Haber process needs <strong>200 atm</strong> (big pressure difference needed). The Contact process only needs <strong>2 atm</strong> (yield is already high). Remember: <strong>H</strong>aber = <strong>H</strong>igh pressure. <strong>C</strong>ontact = <strong>C</strong>alm pressure.
+  </div>
+
+  <div class="trick">
+    <div class="label">CuSO&#8324; Colours</div>
+    <strong>B</strong>lue = <strong>B</strong>ig crystals (hydrated, with water). <strong>W</strong>hite = <strong>W</strong>ithout water (anhydrous). Adding water turns it back to blue.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"What is meant by dynamic equilibrium?"</td>
+      <td>The forward and reverse reactions are occurring at the <strong>same rate</strong>, so there is <strong>no overall change</strong> in the concentrations of reactants and products</td>
+    </tr>
+    <tr>
+      <td>"The forward reaction is exothermic. What happens to the yield if temperature increases?"</td>
+      <td>Yield <strong>decreases</strong>. Higher temperature favours the <strong>endothermic</strong> (reverse) direction, making less product.</td>
+    </tr>
+    <tr>
+      <td>"What happens to the yield if pressure increases?" (with more gas moles on left)</td>
+      <td>Yield <strong>increases</strong>. Higher pressure favours the side with <strong>fewer gas molecules</strong> (the products side).</td>
+    </tr>
+    <tr>
+      <td>"Why is 450&deg;C used in the Haber process?"</td>
+      <td>It is a <strong>compromise</strong>. Lower temperature gives higher yield (forward is exothermic), but the rate would be too slow. 450&deg;C gives a reasonable rate with a useful yield.</td>
+    </tr>
+    <tr>
+      <td>"What effect does a catalyst have on the yield?"</td>
+      <td><strong>None.</strong> A catalyst speeds up both forward and reverse reactions equally. It reaches equilibrium faster but does NOT change the position of equilibrium.</td>
+    </tr>
+    <tr>
+      <td>"Why is ammonia removed as soon as it is formed?"</td>
+      <td>Removing product shifts equilibrium towards <strong>products</strong> (Le Chatelier's). Unreacted gases are <strong>recycled</strong>, giving an overall yield close to 100%.</td>
+    </tr>
+    <tr>
+      <td>"Name the catalyst used in the Haber process"</td>
+      <td><strong>Iron</strong></td>
+    </tr>
+    <tr>
+      <td>"Name the catalyst used in the Contact process"</td>
+      <td><strong>Vanadium(V) oxide</strong> (V&#8322;O&#8325;)</td>
+    </tr>
+    <tr>
+      <td>"Why is SO&#8323; dissolved in H&#8322;SO&#8324; and not added directly to water?"</td>
+      <td>SO&#8323; reacts <strong>violently</strong> with water, producing a dangerous acid mist. It is safer to dissolve it in concentrated sulfuric acid first (making oleum), then carefully dilute.</td>
+    </tr>
+    <tr>
+      <td>"How can you test for the presence of water?"</td>
+      <td>Add the liquid to <strong>anhydrous copper(II) sulfate</strong> &mdash; turns from <strong>white to blue</strong> if water is present</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Cells &mdash; Biology Ch2</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 2</div>
+  <h1>Cells</h1>
+  <div class="subtitle">Animal cells, plant cells, organelles, specialised cells, and levels of organisation</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 20 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: CELL STRUCTURE ===== -->
+<div class="section-header">
+  <span class="num">Section 2.1</span>
+  Organisms Are Made Up of Cells
+</div>
+<div class="card">
+  <div class="intro-text">
+    All living things are made of cells. Cells are the basic unit of life. You need to know what's inside animal and plant cells &mdash; and what each part actually <em>does</em>.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Features Shared by All Cells</div>
+      <p>Both animal and plant cells have these three structures:</p>
+      <p style="margin-top:8px;">
+        &bull; <strong>Cell surface membrane</strong> &mdash; surrounds the cytoplasm, controls what enters and exits the cell, separates the cell's contents from its surroundings<br>
+        &bull; <strong>Cytoplasm</strong> &mdash; jelly-like substance where chemical reactions happen; contains water, dissolved substances like sugars and salts, and organelles<br>
+        &bull; <strong>Nucleus</strong> &mdash; contains genetic material (<strong>DNA</strong>, which makes up <strong>genes</strong> on <strong>chromosomes</strong>); carries the coded instructions that control the activities and characteristics of the cell</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; This Is a Common Exam Mistake</div>
+      <p>The <strong>cell wall</strong> and the <strong>cell surface membrane</strong> are NOT the same thing. The membrane is thin and controls what goes in and out. The cell wall is a thick outer layer made of <strong>cellulose</strong> that provides structural support. Only <strong>plant cells</strong> have a cell wall. Both plant and animal cells have a membrane.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Extra Features in Plant Cells Only</div>
+      <p>Plant cells have everything animal cells have, <strong>plus</strong> these extras:</p>
+      <p style="margin-top:8px;">
+        &bull; <strong>Cellulose cell wall</strong> &mdash; rigid outer layer that provides structural support, keeps the cell's shape regular, protects against damage from osmotic water intake. It is <strong>freely permeable</strong> to water and dissolved substances (unlike the membrane, which is selective)<br>
+        &bull; <strong>Large permanent vacuole</strong> &mdash; filled with cell sap (water + dissolved ions and molecules); provides turgor pressure to keep the cell firm<br>
+        &bull; <strong>Chloroplasts</strong> &mdash; contain the green pigment <strong>chlorophyll</strong> (for absorbing light) and the enzymes needed for <strong>photosynthesis</strong> (making glucose from light energy)<br>
+        &bull; <strong>Starch granules</strong> &mdash; found in cytoplasm or chloroplasts; the storage form of carbohydrates in plants</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Explaining Functions Gets Marks</div>
+      <p>On the Easter test you could name cell parts but lost marks when asked to <strong>explain what they do</strong>. The exam doesn't just ask "What is in a plant cell?" &mdash; it asks "State the <strong>function</strong> of the cell wall" or "Explain why plant cells have chloroplasts." You must link the structure to its job. Every time.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Animal Cell Features</div>
+      <p>Animal cells have features that relate to <strong>heterotrophic nutrition</strong> (they eat food rather than making it):</p>
+      <p style="margin-top:8px;">
+        &bull; <strong>Glycogen granules</strong> &mdash; the storage form of carbohydrates in animal cells (plants store starch, animals store glycogen)<br>
+        &bull; <strong>Secretory vesicles</strong> &mdash; small packages containing cell products like hormones or enzymes, much more common in animal cells<br>
+        &bull; <strong>Vacuoles</strong> in animal cells are small and temporary (e.g. for digestion in phagocytes, or contractile vacuoles to remove excess water) &mdash; NOT the large permanent vacuole you see in plant cells</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Shape Clue</div>
+      <p>Animal cells have <strong>irregular shapes</strong> because they have no cell wall to hold them rigid. Plant cells tend to have <strong>regular, box-like shapes</strong> because the cellulose cell wall maintains their structure. If you see a diagram on the exam and need to tell which is which, the shape is your first clue.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the three structures shared by ALL cells (membrane, cytoplasm, nucleus)</li>
+    <li><input type="checkbox"> I can state the function of each of those three structures</li>
+    <li><input type="checkbox"> I can list the four extra features found only in plant cells</li>
+    <li><input type="checkbox"> I can explain what each plant cell structure does (not just name it)</li>
+    <li><input type="checkbox"> I know the difference between the cell wall and the cell membrane</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: COMPARISON TABLE ===== -->
+<div class="section-header">
+  <span class="num">Section 2.1 continued</span>
+  Animal vs Plant Cells &mdash; The Big Comparison
+</div>
+<div class="card">
+  <div class="intro-text">
+    The exam <strong>will</strong> ask you to compare animal and plant cells. This table pulls it all together in one place.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Structure</th>
+          <th>Animal Cell</th>
+          <th>Plant Cell</th>
+        </tr>
+        <tr>
+          <td><strong>Cell surface membrane</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Cytoplasm</strong></td>
+          <td>Yes (dense, many organelles)</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Nucleus</strong></td>
+          <td>Yes</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Cellulose cell wall</strong></td>
+          <td>No</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Chloroplasts</strong></td>
+          <td>No</td>
+          <td>Yes (in green parts)</td>
+        </tr>
+        <tr>
+          <td><strong>Large permanent vacuole</strong></td>
+          <td>No (small temporary ones only)</td>
+          <td>Yes</td>
+        </tr>
+        <tr>
+          <td><strong>Carbohydrate store</strong></td>
+          <td>Glycogen</td>
+          <td>Starch</td>
+        </tr>
+        <tr>
+          <td><strong>Shape</strong></td>
+          <td>Irregular</td>
+          <td>Regular (box-like)</td>
+        </tr>
+        <tr>
+          <td><strong>Typical size</strong></td>
+          <td>~25 &micro;m</td>
+          <td>~60 &micro;m</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Blank Table Challenge</div>
+      <p>Print this page, then on a separate blank piece of paper try to draw this table from memory. If you can fill in all 18 cells without peeking, you own this topic. The exam loves giving you a table like this and asking you to tick or cross which structures are present. Practice it until it's automatic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the comparison table into my notes</li>
+    <li><input type="checkbox"> I can recreate the table from memory</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: STRUCTURES WITHIN THE CYTOPLASM ===== -->
+<div class="section-header">
+  <span class="num">Section 2.1 continued</span>
+  Structures Within the Cytoplasm
+</div>
+<div class="card">
+  <div class="intro-text">
+    Some organelles are too small to see with a light microscope. An <strong>electron microscope</strong> can reveal structures like mitochondria and rough endoplasmic reticulum inside the cytoplasm.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Mitochondria</div>
+      <p><strong>Mitochondria</strong> (singular: mitochondrion) are made of folded membranes that provide a large surface area. They are the sites of <strong>aerobic respiration</strong> &mdash; the process that releases energy for the cell to use.</p>
+      <p style="margin-top:8px;">Think of mitochondria as the cell's <strong>powerhouses</strong>. Cells that need lots of energy (muscle cells, nerve cells, liver cells) have <strong>many</strong> mitochondria.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Rough Endoplasmic Reticulum</div>
+      <p><strong>Rough endoplasmic reticulum</strong> (rough ER) is made of flattened membranes with <strong>ribosomes</strong> on its surface. Ribosomes are the sites of <strong>protein synthesis</strong>. Rough ER is common in cells that make many proteins (e.g. liver cells which produce enzymes and blood proteins).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam often asks: "Why does a liver cell contain many mitochondria?" The answer is always: because the liver cell has a high rate of metabolic activity and needs a lot of <strong>energy from respiration</strong>. The question is really testing whether you know what mitochondria <em>do</em>.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state the function of mitochondria (site of aerobic respiration / energy release)</li>
+    <li><input type="checkbox"> I can state the function of rough ER (has ribosomes for protein synthesis)</li>
+    <li><input type="checkbox"> I can explain why active cells have more mitochondria</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: MICROSCOPES AND MAGNIFICATION ===== -->
+<div class="section-header">
+  <span class="num">Section 2.1 continued</span>
+  Microscopes and Magnification
+</div>
+<div class="card">
+  <div class="intro-text">
+    Cells are too small to see with the naked eye, so we use microscopes. You need to know the magnification formula and how to use it.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Magnification Formula</div>
+      <p><strong>Magnification = Measured length &divide; Actual length</strong></p>
+      <p style="margin-top:6px;">Or rearranged: <strong>Actual length = Measured length &divide; Magnification</strong></p>
+      <p style="margin-top:8px;"><strong>Units:</strong> A typical animal cell is about <strong>25 &micro;m</strong> in diameter. 1 mm = 1000 &micro;m. Always make sure both measurements are in the <strong>same unit</strong> before dividing.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; MAM Triangle</div>
+      <p>Remember the formula with a triangle: <strong>M</strong> on top, <strong>A</strong> and <strong>M</strong> on the bottom. <strong>M</strong>agnification = <strong>M</strong>easured &divide; <strong>A</strong>ctual. Cover the one you want to find, and the other two show you the calculation. The textbook also gives a memory trick: M-A-M (the first letters spell MAM).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Light vs Electron Microscope</div>
+      <p>&bull; A <strong>light microscope</strong> uses visible light, gives useful magnification up to about <strong>&times;400</strong>. You can see cells, nuclei, and chloroplasts.<br>
+         &bull; An <strong>electron microscope</strong> gives much higher magnification. You can see mitochondria, rough ER, and ribosomes.<br>
+         &bull; Stains improve contrast: <strong>methylene blue</strong> shows the nucleus in animal cells; <strong>iodine solution</strong> shows structures in plant cells.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Units Trap</div>
+      <p>If the question gives the measured length in <strong>mm</strong> and the actual length in <strong>&micro;m</strong>, you MUST convert to the same unit first. Forgetting to convert is the most common reason students get magnification calculations wrong. Always check your units before you divide.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the magnification formula from memory</li>
+    <li><input type="checkbox"> I can convert between mm and &micro;m (1 mm = 1000 &micro;m)</li>
+    <li><input type="checkbox"> I know the difference between a light microscope and an electron microscope</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: SPECIALISED CELLS ===== -->
+<div class="section-header">
+  <span class="num">Section 2.2</span>
+  The Organisation of Living Organisms
+</div>
+<div class="card">
+  <div class="intro-text">
+    Large organisms are <strong>multicellular</strong> &mdash; made of many cells. Different cells become <strong>specialised</strong> to do particular jobs. Their structure is adapted to their function.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Specialised Animal Cells</div>
+      <p><strong>Red blood cell</strong> &mdash; transports oxygen from the lungs to the tissues for aerobic respiration. Adaptations: contains <strong>haemoglobin</strong> (carries oxygen), has <strong>no nucleus</strong> (more room for haemoglobin), <strong>biconcave disc shape</strong> (large surface area), very <strong>flexible</strong> (can squeeze through narrow capillaries).</p>
+      <p style="margin-top:8px;"><strong>Ciliated cell</strong> &mdash; has tiny hairs called <strong>cilia</strong> that can beat and <strong>move mucus</strong> from one place to another. The mucus traps dust and microbes. Found lining the airways.</p>
+      <p style="margin-top:8px;"><strong>Motor nerve cell</strong> &mdash; conducts <strong>nerve impulses</strong>. Adaptations: long fibre called an <strong>axon</strong> for carrying impulses over distance, <strong>fatty sheath</strong> for electrical insulation, <strong>branched endings</strong> to connect with many other cells.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Specialised Plant Cells</div>
+      <p><strong>Root hair cell</strong> &mdash; absorbs <strong>minerals and water</strong> from the soil. Adaptation: long, thin extension (the root hair) that gives a <strong>large surface area</strong> for absorption.</p>
+      <p style="margin-top:8px;"><strong>Xylem vessel</strong> &mdash; transports <strong>water</strong> and supports the plant. Adaptations: <strong>no cytoplasm</strong> (so water can flow freely), <strong>no end walls</strong> (cells join to form a continuous tube), walls strengthened with a waterproof substance called <strong>lignin</strong>.</p>
+      <p style="margin-top:8px;"><strong>Palisade mesophyll cell</strong> &mdash; specialised for <strong>photosynthesis</strong>. Contains <strong>many chloroplasts</strong> and is packed tightly near the top of the leaf where light is strongest.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Exam questions about specialised cells always follow the same pattern: they describe or draw a cell, then ask "How is this cell adapted for its function?" You need to link each <strong>structural feature</strong> to a <strong>reason</strong>. For example: "The root hair cell has a long extension <em>because</em> this increases the surface area <em>so that</em> more water can be absorbed." Structure &rarr; reason &rarr; advantage. That pattern gets full marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Red Blood Cells Are Special</div>
+      <p>Red blood cells have <strong>no nucleus</strong>. Do NOT write "all cells have a nucleus" on the exam &mdash; red blood cells are the big exception. The reason they have no nucleus is to make more room for haemoglobin, so they can carry more oxygen.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Flash Card Each Cell</div>
+      <p>Make one flash card per specialised cell. On the front: the cell name. On the back: its job, and then each adaptation with the reason. Test yourself until you can rattle off all the adaptations without looking. This is one of the highest-value topics &mdash; it comes up almost every exam.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe adaptations of the red blood cell and link each to its function</li>
+    <li><input type="checkbox"> I can describe adaptations of the ciliated cell</li>
+    <li><input type="checkbox"> I can describe adaptations of the motor nerve cell</li>
+    <li><input type="checkbox"> I can describe adaptations of the root hair cell</li>
+    <li><input type="checkbox"> I can describe adaptations of the xylem vessel</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: LEVELS OF ORGANISATION ===== -->
+<div class="section-header">
+  <span class="num">Section 2.2 continued</span>
+  Levels of Organisation
+</div>
+<div class="card">
+  <div class="intro-text">
+    Cells don't work alone. They are organised into increasingly complex structures that work together.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Five Levels (Smallest to Largest)</div>
+      <p><strong>Cell &rarr; Tissue &rarr; Organ &rarr; Organ System &rarr; Organism</strong></p>
+      <p style="margin-top:8px;">
+        &bull; <strong>Cell</strong> &mdash; the basic unit of life (e.g. an epithelial cell)<br>
+        &bull; <strong>Tissue</strong> &mdash; a group of cells with <strong>similar structures and functions</strong> working together (e.g. epithelial tissue lines the gut)<br>
+        &bull; <strong>Organ</strong> &mdash; a group of <strong>different tissues</strong> working together to perform a specific function (e.g. the small intestine)<br>
+        &bull; <strong>Organ system</strong> &mdash; a group of <strong>organs with related functions</strong> working together to perform body functions (e.g. the digestive system)<br>
+        &bull; <strong>Organism</strong> &mdash; a complete living thing made of all its organ systems working together (e.g. a human)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Examples of Tissues</div>
+      <table class="compare-table">
+        <tr>
+          <th>Animal Tissue</th>
+          <th>Function</th>
+          <th>Plant Tissue</th>
+          <th>Function</th>
+        </tr>
+        <tr>
+          <td>Epithelium</td>
+          <td>Lines tubes and covers surfaces</td>
+          <td>Epidermis</td>
+          <td>Protects against water loss</td>
+        </tr>
+        <tr>
+          <td>Muscle tissue</td>
+          <td>Contracts to move the body</td>
+          <td>Mesophyll</td>
+          <td>Photosynthesis</td>
+        </tr>
+        <tr>
+          <td>Blood</td>
+          <td>Transports substances, defends</td>
+          <td>Vascular tissue</td>
+          <td>Transports materials</td>
+        </tr>
+        <tr>
+          <td>Nervous tissue</td>
+          <td>Transmits nerve impulses</td>
+          <td>Parenchyma</td>
+          <td>Fills spaces, may store food</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Division of Labour</div>
+      <p>In a multicellular organism, different cells, tissues, and organs perform different functions &mdash; this is called <strong>division of labour</strong>. The advantage is that each part can become highly efficient at its specific job. But it also means the parts must be <strong>coordinated</strong> &mdash; that's what the nervous and endocrine systems do.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Walk Through One Example</div>
+      <p>Pick one organ system and trace it from cell to organism. For example: <strong>epithelial cell</strong> &rarr; epithelial tissue (lining the intestine) &rarr; small intestine (organ) &rarr; digestive system (organ system) &rarr; human (organism). If you can do this from memory for one example, you understand the concept.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list the five levels of organisation in order from smallest to largest</li>
+    <li><input type="checkbox"> I can define each level (cell, tissue, organ, organ system, organism)</li>
+    <li><input type="checkbox"> I can give one example of each level</li>
+    <li><input type="checkbox"> I can explain what "division of labour" means</li>
+    <li><input type="checkbox"> I can give examples of animal and plant tissues</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 2 Notes Complete</h2>
+  <p>You've covered cell structure, animal vs plant cells, organelles, specialised cells, and levels of organisation. Now test yourself with the Chapter 2 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

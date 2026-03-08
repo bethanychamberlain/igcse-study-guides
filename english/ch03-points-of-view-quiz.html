@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Points of View &mdash; English Ch3</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #d1f2eb;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #16a085;
+    --foundation-bg: #d1f2eb;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  /* Controls */
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary {
+    background: var(--subject);
+    color: white;
+  }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline {
+    background: white;
+    color: var(--subject-dark);
+    border: 2px solid var(--subject);
+  }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  /* Tier header */
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+
+  .tier-header .dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+
+  .tier-header .info {
+    flex: 1;
+  }
+  .tier-header h2 {
+    font-size: 16px;
+    margin: 0;
+  }
+  .tier-header.foundation h2 { color: #0e6655; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+
+  .tier-header .marks {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Question card */
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+
+  .q-text {
+    flex: 1;
+    font-size: 14px;
+  }
+  .q-text .passage {
+    background: #f8f8f5;
+    border-left: 3px solid var(--subject);
+    padding: 10px 14px;
+    margin: 8px 0;
+    font-style: italic;
+    font-size: 13px;
+    border-radius: 0 6px 6px 0;
+  }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* Answer area */
+  .q-answer {
+    padding: 0 20px 16px;
+    display: none;
+  }
+  .q-answer.visible {
+    display: block;
+  }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .answer-box .pee-label {
+    display: inline-block;
+    background: #d35400;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 800;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-right: 4px;
+    letter-spacing: 0.5px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  /* Self-rating */
+  .self-rate {
+    display: flex;
+    gap: 6px;
+    margin-top: 10px;
+    align-items: center;
+  }
+  .self-rate .rate-label {
+    font-size: 11px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .rate-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 6px;
+      border: 2px solid #ddd;
+      background: white;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+      color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover {
+      opacity: 0.8;
+      transform: scale(1.1);
+  }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  /* Answer lines for print */
+  .answer-lines {
+    display: none;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines {
+      display: block;
+      padding: 4px 20px 16px;
+    }
+    .answer-lines .line {
+      border-bottom: 1px solid #d0d0d0;
+      height: 26px;
+    }
+    .tier-header { break-after: avoid; }
+  }
+
+  /* Quiz guide */
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .quiz-guide .guide-row {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    color: var(--text-secondary);
+  }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon {
+    flex-shrink: 0;
+    font-weight: 700;
+    color: var(--text);
+  }
+  .rating-scale {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    flex-wrap: wrap;
+  }
+  .rating-scale .rs-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .rating-scale .rs-num {
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English Ch3 &mdash; Self-Test Quiz</div>
+  <h1>Points of View</h1>
+  <p>10 questions across 3 difficulty levels. Remember: the marks are in the EXPLANATION. Use PEE for every analytical answer.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> in the answers show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Identification and definitions. Get these right to build your base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">
+      Consider this sentence: <em>"I remember the cold biting into my fingers as I walked through the snow that morning."</em>
+      <br><br>What <strong>narrative point of view</strong> is this written in? How can you tell?
+    </div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>First person</strong> [1]. You can tell because the narrator uses "I" and "my," showing they are a character in the story telling their own experience [1].
+      <div class="mark-hint">Examiner wants: name the POV + give evidence from the text (the pronoun). Don't just say "first person" without explaining how you know.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">
+      What is a <strong>simile</strong>? What is a <strong>metaphor</strong>? Give one example of each.
+    </div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      A <strong>simile</strong> is a comparison using "like" or "as" [1]. Example: "Her smile was like sunshine" [1].<br><br>
+      A <strong>metaphor</strong> says something IS something else, without using "like" or "as" [1]. Example: "The world is a stage" [1].
+      <div class="mark-hint">1 mark for each definition, 1 mark for each example. Any sensible example works. The key difference: simile = "like/as," metaphor = direct comparison.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">
+      What is <strong>personification</strong>? Identify the personification in this sentence:
+      <div class="passage">"The old house watched us from the hilltop, its windows staring like hollow eyes."</div>
+    </div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Personification</strong> is giving human qualities to something non-human [1]. In this sentence, the house is described as "watching" and its windows are "staring" &mdash; these are human actions given to a building [1].
+      <div class="mark-hint">1 mark for definition, 1 mark for correctly identifying the personification with a quote. Note: "like hollow eyes" is a simile within the same sentence &mdash; bonus if you spotted both!</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">
+      What are the <strong>three parts</strong> of a PEE paragraph? Briefly explain what each part does.
+    </div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <span class="pee-label">P</span> <strong>Point</strong> &mdash; State what the writer does (name the technique or choice) [1].<br>
+      <span class="pee-label">E</span> <strong>Evidence</strong> &mdash; Quote directly from the text to support your point [1].<br>
+      <span class="pee-label">E</span> <strong>Explanation</strong> &mdash; Explain the EFFECT on the reader: how it makes them feel, what it suggests, why the writer chose it [1].
+      <div class="mark-hint">The explanation is worth the most marks on the real exam. If you only remember one thing from this chapter, remember: the marks are in the explanation.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain the Effect?</h2>
+    <div class="marks">These need PEE paragraphs. Identification alone won't score enough. Explain the EFFECT.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">
+      Consider this sentence:
+      <div class="passage">"The fog crept through the streets like a thief, stealing the light from every corner."</div>
+      Identify <strong>one technique</strong> used in this sentence and explain its <strong>effect on the reader</strong>. Write your answer as a PEE paragraph.
+    </div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model PEE Answer</div>
+      <span class="pee-label">P</span> The writer uses <strong>personification</strong> to create a sinister, threatening atmosphere.
+      <span class="pee-label">E</span> The fog is described as having "crept" and is compared to "a thief, stealing the light."
+      <span class="pee-label">E</span> The verb "crept" suggests something sneaky and deliberate, as though the fog has intent and is moving with purpose. The metaphor of a "thief" implies that something valuable (light, safety, visibility) is being taken away, which creates a sense of unease and vulnerability in the reader. The writer may have chosen this to make the fog feel like a living, hostile presence rather than just a weather event, heightening the tension of the scene.<br><br>
+      <em>Note: You could also identify the simile ("like a thief") &mdash; either technique is valid here.</em>
+      <div class="mark-hint">Examiner wants: technique named [1], evidence quoted [1], effect on reader explained with depth [2]. Notice how the explanation is longer than the Point and Evidence combined. That's what earns the marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">
+      Consider this sentence:
+      <div class="passage">"The music poured over her like warm water, and for the first time that evening, she forgot her aching feet and the tightness of her new shoes."</div>
+      Write a PEE paragraph explaining how the writer creates a sense of <strong>joy and relief</strong>.
+    </div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model PEE Answer</div>
+      <span class="pee-label">P</span> The writer uses a <strong>simile</strong> and <strong>contrast</strong> to convey the character's joy and sense of escape.
+      <span class="pee-label">E</span> The music is described as pouring over her "like warm water," and she "forgot her aching feet and the tightness of her new shoes."
+      <span class="pee-label">E</span> The simile "like warm water" creates a sense of comfort and immersion, as though the music is physically soothing her. The word "poured" suggests the music completely surrounds her, which makes the reader feel the overwhelming nature of the moment. The contrast between the pleasure of the music and the earlier discomfort of "aching feet" and "tightness" highlights the power of the experience &mdash; it's so joyful that physical pain becomes irrelevant. The reader shares in the character's relief, feeling the shift from discomfort to bliss. The writer creates empathy by showing us the small physical details alongside the emotional transformation.
+      <div class="mark-hint">Examiner wants: technique(s) identified [1], relevant quote [1], detailed explanation of effect [2], comment on specific word choices [1]. For 5 marks, you need depth &mdash; multiple sentences of explanation, exploring connotations and reader response.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">
+      Compare how these two short extracts describe a city:
+      <div class="passage"><strong>Text A:</strong> "The city hummed with life. Voices tangled in the air, and the smell of roasting chestnuts drifted from every corner."</div>
+      <div class="passage"><strong>Text B:</strong> "The city lay silent beneath the grey sky. The streets were empty. Nothing stirred."</div>
+      How do the two writers create <strong>different moods</strong>? You should comment on both texts.
+    </div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model Comparison Answer</div>
+      Both writers describe a city, but they create very different atmospheres.<br><br>
+      <span class="pee-label">P</span> Text A creates a <strong>warm, bustling mood</strong> through sensory imagery.
+      <span class="pee-label">E</span> The city "hummed with life" and "voices tangled in the air."
+      <span class="pee-label">E</span> The personification of the city "humming" suggests energy and vibrancy, as though the city itself is alive. The imagery of "roasting chestnuts" appeals to smell, making the scene feel cosy and inviting. The reader feels drawn into a lively, welcoming place.<br><br>
+      <strong>In contrast,</strong> <span class="pee-label">P</span> Text B creates a <strong>bleak, eerie mood</strong> through absence and short sentences.
+      <span class="pee-label">E</span> "The streets were empty. Nothing stirred."
+      <span class="pee-label">E</span> The short sentences slow the pace and create a sense of stillness that feels unnatural. "Nothing stirred" suggests not just quiet but a complete absence of life, which is unsettling. The "grey sky" removes all colour and warmth, making the reader feel a sense of isolation and foreboding. Where Text A fills the city with life and warmth, Text B empties it, creating an almost post-apocalyptic atmosphere.
+      <div class="mark-hint">Examiner wants: both texts analyzed [2], techniques identified with evidence [1], effects explained [1], comparison woven together with connectives like "In contrast" [1]. Notice how the answer links back to Text A at the end &mdash; that's what makes it a comparison, not two separate paragraphs.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Analyze in Depth?</h2>
+    <div class="marks">Full analytical responses. Multiple techniques, detailed explanation, precise vocabulary. This is where exam grades are won.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">
+      Read this passage carefully:
+      <div class="passage">"The garden had been beautiful once. Now the roses drooped like tired dancers, and the fountain stood dry, its stone lips cracked. Somewhere behind the wall, a bird sang &mdash; a bright, startling sound in all that silence."</div>
+      How does the writer create a mood of <strong>decay and loss</strong>, with a hint of hope? You should comment on at least <strong>two techniques</strong>.
+    </div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model Answer</div>
+      <span class="pee-label">P</span> The writer uses a <strong>simile</strong> to convey the garden's decline.
+      <span class="pee-label">E</span> The roses "drooped like tired dancers."
+      <span class="pee-label">E</span> This comparison is poignant because dancers are associated with grace and beauty &mdash; but these dancers are "tired," suggesting exhaustion and faded glory. The simile implies the garden was once elegant and full of life, but that beauty has worn away. This creates a melancholic mood, as the reader senses something lovely being lost.<br><br>
+
+      <span class="pee-label">P</span> The writer also uses <strong>personification</strong> to deepen the sense of neglect.
+      <span class="pee-label">E</span> The fountain has "stone lips cracked."
+      <span class="pee-label">E</span> Giving the fountain "lips" makes it seem almost human, as though it once spoke (through flowing water) but has now been silenced. "Cracked" suggests age, damage, and dryness, reinforcing the idea of abandonment. The reader feels a sense of loss, as though the garden is a forgotten place that was once loved.<br><br>
+
+      <span class="pee-label">P</span> Finally, the writer introduces a <strong>contrast</strong> through sound.
+      <span class="pee-label">E</span> The bird's song is described as "a bright, startling sound in all that silence."
+      <span class="pee-label">E</span> The adjective "bright" contrasts sharply with the decay around it, introducing a small moment of beauty and life. "Startling" suggests the sound is unexpected, which makes the reader feel a flicker of hope amid the sadness. The dash before this final image creates a pause, as though the narrator is surprised too, which makes the moment feel more genuine and emotionally powerful.
+
+      <div class="mark-hint">For 6 marks: at least 2 techniques [2], evidence quoted [1], detailed effect with precise vocabulary ("melancholic," "poignant") [2], comment on contrast/overall mood shift [1]. Notice how each paragraph follows PEE and the explanations are substantial.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">
+      Read this passage:
+      <div class="passage">"I could hear my own heartbeat. The corridor stretched out in front of me, impossibly long. Every door was shut. Every light was off. And then &mdash; at the far end &mdash; one of them clicked open."</div>
+      Write a <strong>full analytical response</strong> explaining how the writer builds <strong>tension and fear</strong>. Comment on: sentence structure, punctuation, and word choice.
+    </div>
+    <span class="q-marks">7 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model Answer</div>
+      <span class="pee-label">P</span> The writer builds tension through <strong>short, declarative sentences</strong>.
+      <span class="pee-label">E</span> "Every door was shut. Every light was off."
+      <span class="pee-label">E</span> These clipped sentences force the reader to pause after each one, creating a slow, deliberate rhythm that mirrors the narrator's cautious movement. The repetition of "Every" emphasises the totality of the darkness and closure &mdash; there is no escape, no light, no way out. This creates a claustrophobic mood where the reader feels trapped alongside the narrator.<br><br>
+
+      <span class="pee-label">P</span> The writer also uses <strong>first-person narration</strong> to heighten the fear.
+      <span class="pee-label">E</span> "I could hear my own heartbeat."
+      <span class="pee-label">E</span> By placing us inside the narrator's body, the reader experiences the fear physically. The detail of hearing one's own heartbeat suggests extreme quiet and extreme anxiety &mdash; we only notice our heartbeat when we are scared or the world around us has gone silent. This creates immediacy and intimacy, making the reader's own pulse quicken in response.<br><br>
+
+      <span class="pee-label">P</span> The <strong>dashes and punctuation</strong> create a moment of shock.
+      <span class="pee-label">E</span> "And then &mdash; at the far end &mdash; one of them clicked open."
+      <span class="pee-label">E</span> The dashes interrupt the sentence, creating pauses that build suspense before the final revelation. The phrase "at the far end" is isolated between dashes, which forces the reader to picture the distance and the vulnerability of the narrator. The word "clicked" is precise and sharp &mdash; a small, quiet sound that is somehow more terrifying than a loud noise because it implies something deliberate and controlled. The reader feels a jolt of fear because the silence has been broken by something intentional, suggesting a presence.
+
+      <div class="mark-hint">For 7 marks: comment on all three areas asked (sentence structure, punctuation, word choice) [3], relevant evidence [1], deep explanation of effects [2], cohesive response that tracks the building of tension [1]. This is a top-band response because it explains HOW each technique creates fear, not just that it does.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">
+      Compare how these two extracts describe a memory:
+      <div class="passage"><strong>Text A (prose):</strong> "I remember the kitchen in summer &mdash; the sticky heat, the hum of flies against the window, and my grandmother's hands, dusted white with flour, shaping bread that would never taste the same anywhere else."</div>
+      <div class="passage"><strong>Text B (poetry):</strong> "The kitchen hums in memory still, / flour-white hands, the windowsill, / the bread that rose like morning prayer &mdash; / I reach for it. It is not there."</div>
+      Compare how the two writers present the <strong>theme of nostalgia and loss</strong>. Comment on techniques used in both texts.
+    </div>
+    <span class="q-marks">8 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model Comparison Answer</div>
+      Both texts describe a kitchen memory with warmth and love, but each conveys loss in a different way.<br><br>
+
+      <span class="pee-label">P</span> Text A uses <strong>sensory imagery</strong> to immerse the reader in the memory.
+      <span class="pee-label">E</span> "The sticky heat, the hum of flies against the window" and "hands, dusted white with flour."
+      <span class="pee-label">E</span> The imagery appeals to touch ("sticky heat"), sound ("hum of flies"), and sight ("dusted white"), creating a rich, layered memory that feels almost physically real. This makes the reader experience the nostalgia alongside the narrator &mdash; we can almost feel and smell the kitchen. The final phrase "would never taste the same anywhere else" introduces loss subtly: it's the narrator looking back from the present, knowing this moment is gone. The loss is quiet and wistful rather than dramatic.<br><br>
+
+      <strong>Similarly,</strong> <span class="pee-label">P</span> Text B echoes the same images but uses <strong>rhyme and rhythm</strong> to give the memory a song-like quality.
+      <span class="pee-label">E</span> "The kitchen hums in memory still, / flour-white hands, the windowsill."
+      <span class="pee-label">E</span> The regular rhyme scheme ("still/windowsill," "prayer/there") creates a gentle, musical rhythm, almost like a lullaby. This reinforces the sense of a cherished memory that has been revisited many times, polished smooth by repetition. The present tense "hums" makes the memory feel alive even though it exists only in the mind.<br><br>
+
+      <strong>However,</strong> <span class="pee-label">P</span> Text B's ending delivers the sense of loss far more sharply than Text A.
+      <span class="pee-label">E</span> "I reach for it. It is not there."
+      <span class="pee-label">E</span> These two short sentences break the flowing rhythm with a sudden, painful reality. The physical gesture of "reaching" shows the narrator trying to recapture the past, and "It is not there" is a stark, devastating admission. The contrast between the warmth of the memory and the cold finality of this ending creates a poignant sense of grief. Where Text A lets the loss linger gently in the background, Text B confronts it directly, making the reader feel the sharp sting of absence.<br><br>
+
+      <strong>Overall,</strong> both writers use sensory detail to bring the memory alive, but Text A allows the reader to sit comfortably inside the nostalgia, while Text B pulls the reader out of it abruptly, making the loss feel more immediate and raw.
+
+      <div class="mark-hint">For 8 marks: both texts analyzed in depth [2], techniques named and evidenced for each [2], effects explained with precise vocabulary [2], comparison woven throughout with connectives [1], overall evaluative comment [1]. This is a top-band response because it doesn't just discuss the texts side by side &mdash; it constantly compares their <em>effects</em>.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Toggle answers
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  // Click question to toggle its answer
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  // Self-rating
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    // Update button styles
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

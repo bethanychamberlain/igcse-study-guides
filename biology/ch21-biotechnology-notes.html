@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Biotechnology and Genetic Engineering &mdash; Biology Ch21</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: var(--text); max-width: 820px; margin: 0 auto; padding: 20px; background: var(--bg); }
+  .hero { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; }
+  .hero .tag { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px; }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+  .progress-bar { background: var(--card); border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .progress-bar .track { flex: 1; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--subject); border-radius: 5px; width: 0%; transition: width 0.4s ease; }
+  .progress-bar .label { font-size: 13px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+  .how-to { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+  .how-to h2 { font-size: 16px; color: var(--subject-dark); margin-bottom: 10px; }
+  .how-to .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .how-to .legend-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+  .how-to .legend-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
+  .section-header { background: var(--subject); color: #fff; border-radius: 10px 10px 0 0; padding: 14px 20px; margin-top: 28px; font-size: 18px; font-weight: 700; }
+  .section-header .num { opacity: 0.7; font-size: 13px; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+  .card { background: var(--card); border-radius: 0 0 10px 10px; padding: 0; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .card + .card { border-radius: 10px; }
+  .block { padding: 14px 20px; border-left: 4px solid transparent; display: flex; gap: 12px; align-items: flex-start; }
+  .block + .block { border-top: 1px solid #f0f0f0; }
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+  .block .icon { flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+  .block .body { flex: 1; }
+  .block .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+  .checklist { list-style: none; padding: 14px 20px; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; font-size: 14px; }
+  .checklist input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--check-done); flex-shrink: 0; cursor: pointer; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  .compare-table th { background: var(--subject-light); color: var(--subject-dark); padding: 8px 10px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .intro-text { padding: 14px 20px; font-size: 14px; color: var(--text-secondary); }
+  .end-card { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 12px; padding: 24px; margin-top: 28px; text-align: center; }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 21</div>
+  <h1>Biotechnology and Genetic Engineering</h1>
+  <div class="subtitle">Bacteria, fermenters, enzymes, yeast, genetic engineering, and gene transfer &mdash; how humans use living organisms</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 20 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go.</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: BACTERIA IN BIOTECHNOLOGY ===== -->
+<div class="section-header">
+  <span class="num">Section 21.1</span>
+  Bacteria in Biotechnology
+</div>
+<div class="card">
+  <div class="intro-text">
+    Bacteria are incredibly useful to humans. They reproduce fast, make useful products, and their DNA is easy to manipulate. Understanding <em>why</em> bacteria are useful is the key to this chapter.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Why Bacteria Are Useful</div>
+      <p>Bacteria are useful in biotechnology because:</p>
+      <p>&bull; They reproduce very <strong>rapidly</strong> (by binary fission &mdash; can double every 20 minutes).</p>
+      <p>&bull; They can produce complex molecules like <strong>enzymes and hormones</strong> (e.g. insulin).</p>
+      <p>&bull; Their <strong>genetic code is the same</strong> as in all other organisms, so human genes work in bacteria.</p>
+      <p>&bull; They have <strong>plasmids</strong> (small circles of extra DNA) that can carry genes between cells.</p>
+      <p>&bull; People are less concerned about experiments on bacteria than on larger animals.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Fermenters (Bioreactors)</div>
+      <p>Bacteria and other microorganisms are grown in <strong>fermenters</strong> under controlled conditions:</p>
+      <p>&bull; <strong>Nutrient input</strong> &mdash; energy source (carbohydrate) + growth materials (amino acids or ammonium salts)</p>
+      <p>&bull; <strong>Temperature control</strong> &mdash; water jacket keeps it warm enough for enzyme activity but not so hot that proteins denature</p>
+      <p>&bull; <strong>Paddle stirrers</strong> &mdash; mix contents so microbes stay in contact with nutrients; ensure even temperature</p>
+      <p>&bull; <strong>Gas outlet</strong> &mdash; releases CO&#8322; or other gases to prevent pressure build-up</p>
+      <p>&bull; <strong>Probes</strong> &mdash; monitor pH, temperature, and oxygen; linked to computer control</p>
+      <p>&bull; <strong>Sterile conditions</strong> &mdash; to prevent contamination by unwanted microorganisms</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Batch vs Continuous Culture</div>
+      <p><strong>Batch culture:</strong> fixed input of nutrients, collect products, clean, restart. More expensive but contamination only ruins one batch.</p>
+      <p><strong>Continuous culture:</strong> fresh nutrients added continuously, products collected at intervals. More economical but contamination causes greater losses.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Fermenter diagrams are a common exam question. They'll give you a labelled diagram and ask you to explain what each part does. The answer is always about controlling conditions for optimal enzyme activity and preventing contamination.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list at least four reasons why bacteria are useful in biotechnology</li>
+    <li><input type="checkbox"> I can describe the key features of a fermenter</li>
+    <li><input type="checkbox"> I know the difference between batch and continuous culture</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: ENZYMES FROM MICROORGANISMS ===== -->
+<div class="section-header">
+  <span class="num">Section 21.2</span>
+  Enzymes from Microorganisms
+</div>
+<div class="card">
+  <div class="intro-text">
+    Microorganisms produce enzymes that humans use in industry, medicine, and everyday products. Immobilising enzymes makes them reusable and more economical.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Uses of Enzymes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Enzyme</th>
+          <th>Use</th>
+        </tr>
+        <tr>
+          <td><strong>Protease</strong></td>
+          <td>Softens gluten in biscuit-making; removes protein stains in biological washing powders</td>
+        </tr>
+        <tr>
+          <td><strong>Lipase</strong></td>
+          <td>Removes fatty/greasy stains in washing powders; helps chocolate flow in sweet-making</td>
+        </tr>
+        <tr>
+          <td><strong>Amylase</strong></td>
+          <td>Breaks down starch-based stains in washing powders</td>
+        </tr>
+        <tr>
+          <td><strong>Pectinase</strong></td>
+          <td>Breaks down pectin in plant cell walls &mdash; clears and increases yield of fruit juices</td>
+        </tr>
+        <tr>
+          <td><strong>Catalase</strong></td>
+          <td>Used in wound dressings &mdash; converts hydrogen peroxide to oxygen and water</td>
+        </tr>
+        <tr>
+          <td><strong>Lactase</strong></td>
+          <td>Breaks down lactose in milk &mdash; produces lactose-free milk for lactose-intolerant people</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Immobilised Enzymes</div>
+      <p><strong>Immobilised enzymes</strong> = enzymes fixed to an inert (non-reactive) support material such as resin beads or fibres.</p>
+      <p style="margin-top:6px;"><strong>Advantages:</strong></p>
+      <p>&bull; Product does not contain enzyme molecules &mdash; <strong>easier to purify</strong>.</p>
+      <p>&bull; Enzyme can be <strong>reused</strong> many times &mdash; continuous production, lower cost.</p>
+      <p>&bull; Enzyme is stabilised &mdash; less likely to break down.</p>
+      <p>&bull; Optimum conditions for the enzyme can be used without worrying about the whole organism.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Biological Washing Powders</div>
+      <p>If the exam asks "Why do biological washing powders work at lower temperatures?", the answer is: because enzymes work at moderate temperatures (around 30&ndash;40&deg;C). At these lower temperatures, less energy is used, clothes don't shrink, AND the enzymes break down stains that normal detergents can't.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can match at least four enzymes to their uses</li>
+    <li><input type="checkbox"> I can explain what immobilised enzymes are and give two advantages</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: BAKING AND BREWING ===== -->
+<div class="section-header">
+  <span class="num">Section 21.3</span>
+  Baking and Brewing
+</div>
+<div class="card">
+  <div class="intro-text">
+    Yeast is a single-celled fungus that carries out anaerobic respiration (fermentation). This is the basis of both bread-making and alcohol production.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Fermentation Equation</div>
+      <p><strong>glucose &rarr; ethanol + carbon dioxide + energy</strong></p>
+      <p style="margin-top:6px;">This is <strong>anaerobic respiration</strong> in yeast. Also called <strong>alcoholic fermentation</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Baking vs Brewing</div>
+      <p><strong>Baking (bread):</strong></p>
+      <p>&bull; Yeast ferments sugar in the dough, producing CO&#8322; bubbles that make the dough rise.</p>
+      <p>&bull; Baking at 180&deg;C kills the yeast, stops fermentation, evaporates alcohol, and forms a crust.</p>
+      <p>&bull; Good bread is spongy (trapped CO&#8322;) and fresh-smelling (partly alcohol vapour).</p>
+      <p style="margin-top:6px;"><strong>Brewing (alcohol):</strong></p>
+      <p>&bull; Yeast ferments sugar to produce ethanol (the useful product) and CO&#8322;.</p>
+      <p>&bull; Wine rarely exceeds 12% alcohol because at 8&ndash;9% concentration, the alcohol is <strong>toxic to the yeast</strong> and kills it, stopping fermentation.</p>
+      <p>&bull; Spirits with higher alcohol content require <strong>distillation</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>In baking, the useful product is the <strong>CO&#8322;</strong> (makes bread rise). In brewing, the useful product is the <strong>ethanol</strong> (the alcohol). Same reaction, different product wanted.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam may ask "Why does wine rarely have more than 12% alcohol?" The answer: at high alcohol concentrations, the ethanol becomes toxic to the yeast and kills it, so fermentation stops. This is a classic 2-mark question.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write the word equation for anaerobic respiration in yeast</li>
+    <li><input type="checkbox"> I know the role of CO&#8322; in baking and ethanol in brewing</li>
+    <li><input type="checkbox"> I can explain why wine doesn't exceed ~12% alcohol</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: GENETIC ENGINEERING ===== -->
+<div class="section-header">
+  <span class="num">Section 21.4</span>
+  Genetic Engineering
+</div>
+<div class="card">
+  <div class="intro-text">
+    Genetic engineering means taking a gene from one organism and putting it into another. The most important example for the exam is the production of human insulin by bacteria.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Steps of Genetic Engineering</div>
+      <p><strong>Step 1:</strong> The desirable gene (e.g. human insulin gene) is identified and <strong>cut out</strong> of the human chromosome using a <strong>restriction enzyme</strong>. This leaves <strong>sticky ends</strong>.</p>
+      <p><strong>Step 2:</strong> A <strong>plasmid</strong> (small circle of DNA in a bacterium) is cut open at specific points using the <strong>same restriction enzyme</strong>, creating matching sticky ends.</p>
+      <p><strong>Step 3:</strong> The human gene is inserted into the plasmid. The enzyme <strong>ligase</strong> "glues" (splices) the gene into the plasmid. This creates <strong>recombinant DNA</strong>.</p>
+      <p><strong>Step 4:</strong> The recombinant plasmid is inserted back into a <strong>host bacterium</strong>.</p>
+      <p><strong>Step 5:</strong> The bacterium is <strong>cultured</strong> in a fermenter. As it divides, all daughter cells contain the human gene and produce the desired protein (e.g. insulin).</p>
+      <p><strong>Step 6:</strong> The product is <strong>extracted and purified</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Vocabulary</div>
+      <p>&bull; <strong>Restriction enzyme</strong> = cuts DNA at specific points, leaving sticky ends.</p>
+      <p>&bull; <strong>Ligase</strong> = joins/splices DNA fragments together.</p>
+      <p>&bull; <strong>Plasmid</strong> = small circle of DNA in bacteria; acts as a <strong>vector</strong> (carrier) for the gene.</p>
+      <p>&bull; <strong>Vector</strong> = anything that carries a gene from one organism to another (plasmid, virus).</p>
+      <p>&bull; <strong>Recombinant DNA</strong> = DNA that contains genes from two different organisms.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Products of Genetic Engineering</div>
+      <p>&bull; <strong>Human insulin</strong> &mdash; for treating diabetes. Purer than animal insulin, less likely to be rejected.</p>
+      <p>&bull; <strong>Human growth hormone</strong></p>
+      <p>&bull; <strong>Factor VIII</strong> &mdash; blood clotting factor for haemophilia</p>
+      <p>&bull; <strong>Hepatitis B vaccine</strong> &mdash; antigen gene inserted into yeast cells; they produce the surface antigen, which is purified into a vaccine (safe because no whole virus is present).</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>"Why is genetically engineered insulin better than insulin from pigs?" is a classic exam question. Answer: it's the <strong>human</strong> version of the protein, so it works more effectively and is less likely to be rejected. It can be produced in <strong>large quantities</strong>, more cheaply, and on demand (not just when animals are slaughtered).</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Learn the Steps as a Story</div>
+      <p>Think of it as a recipe: (1) cut gene out with restriction enzyme scissors, (2) cut plasmid open with the same scissors, (3) glue gene into plasmid with ligase, (4) put plasmid back into bacterium, (5) grow bacteria in a fermenter, (6) collect the product. Practise writing these steps from memory until you can do it without looking.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can describe all six steps of genetic engineering</li>
+    <li><input type="checkbox"> I know what restriction enzymes, ligase, plasmids, and vectors are</li>
+    <li><input type="checkbox"> I can name at least three products made by genetic engineering</li>
+    <li><input type="checkbox"> I can explain why GE insulin is better than animal insulin</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: GENE TRANSFER AND GM ===== -->
+<div class="section-header">
+  <span class="num">Section 21.5</span>
+  Gene Transfer and GM Organisms
+</div>
+<div class="card">
+  <div class="intro-text">
+    Genetic engineering isn't just for bacteria. Genes can be transferred into plants and animals too, creating transgenic organisms. But this raises ethical questions.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Transgenic Organisms</div>
+      <p>A <strong>transgenic organism</strong> = an organism that has received genes from a different species.</p>
+      <p style="margin-top:6px;"><strong>Examples of GM plants:</strong></p>
+      <p>&bull; Improved shelf life (gene that inhibits enzymes causing ripening &mdash; e.g. "Flavr Savr" tomatoes)</p>
+      <p>&bull; Pest resistance (gene for <strong>insecticidal crystal protein</strong> &mdash; kills caterpillars)</p>
+      <p>&bull; Herbicide resistance (crop survives when herbicide kills surrounding weeds)</p>
+      <p>&bull; Drought resistance (thicker, more waxy cuticles)</p>
+      <p>&bull; <strong>Golden Rice</strong> &mdash; engineered to produce beta-carotene (vitamin A) for areas with vitamin A deficiency</p>
+      <p>&bull; Nitrogen fixation genes transferred to non-leguminous crops (could reduce need for fertilisers)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Gene Therapy</div>
+      <p><strong>Gene therapy</strong> = transferring a healthy human gene into a person's cells that contain a mutant allele causing disease.</p>
+      <p style="margin-top:6px;">Example: <strong>cystic fibrosis</strong> &mdash; the healthy gene is identified, placed into an empty virus coat (vector), the virus infects the diseased lung cells and releases the healthy gene. The cell can now make the correct protein.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Benefits vs Concerns of GM</div>
+      <table class="compare-table">
+        <tr>
+          <th>Benefits</th>
+          <th>Concerns</th>
+        </tr>
+        <tr>
+          <td>Higher yields from fewer resources</td>
+          <td>Pest-resistant genes could spread to wild plants, creating "superweeds"</td>
+        </tr>
+        <tr>
+          <td>Crops can grow in extreme environments, reducing famine</td>
+          <td>Engineered bacteria could escape with unpredictable consequences</td>
+        </tr>
+        <tr>
+          <td>More predictable results than selective breeding</td>
+          <td>Companies might patent organisms, blocking shared benefits</td>
+        </tr>
+        <tr>
+          <td>Healthier foods (e.g. Golden Rice with vitamin A)</td>
+          <td>Ethical concerns about "designer" organisms and where to draw the line</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Discuss Questions</div>
+      <p>The exam may ask you to "discuss the advantages and disadvantages of genetic engineering." Always give BOTH sides &mdash; at least two of each. Finish with a conclusion: "Overall, GE has significant benefits but must be carefully regulated to avoid environmental risks."</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know what a transgenic organism is</li>
+    <li><input type="checkbox"> I can give at least three examples of GM crop modifications</li>
+    <li><input type="checkbox"> I can describe gene therapy using cystic fibrosis as an example</li>
+    <li><input type="checkbox"> I can discuss at least two benefits and two concerns of GM technology</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 21 Notes Complete</h2>
+  <p>You've covered bacteria in biotechnology, enzyme applications, baking and brewing, genetic engineering, and gene transfer. Now test yourself with the Chapter 21 quiz.</p>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

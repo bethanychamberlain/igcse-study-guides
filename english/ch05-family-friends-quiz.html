@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Family and Friends &mdash; English Ch5</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; }
+  .hero .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .btn { font-family: inherit; font-size: 13px; font-weight: 600; padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--subject); color: white; }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline { background: white; color: var(--subject-dark); border: 2px solid var(--subject); }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display { margin-left: auto; font-size: 14px; font-weight: 600; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+
+  .tier-header { display: flex; align-items: center; gap: 12px; margin: 28px 0 12px; padding: 12px 16px; border-radius: 10px; }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+  .tier-header .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+  .tier-header .marks { font-size: 12px; color: var(--text-secondary); }
+
+  .q-card { background: var(--card); border-radius: 10px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .q-card .q-header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; }
+  .q-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks { font-size: 11px; font-weight: 700; color: var(--text-secondary); background: #f0f0f0; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+
+  .q-answer { padding: 0 20px 16px; display: none; }
+  .q-answer.visible { display: block; }
+  .answer-box { background: var(--subject-light); border-left: 4px solid var(--subject); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; }
+  .answer-box .answer-label { font-weight: 700; color: var(--subject-dark); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .mark-hint { margin-top: 8px; font-size: 12px; color: var(--text-secondary); font-style: italic; }
+
+  .self-rate { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .self-rate .rate-label { font-size: 11px; color: var(--text-secondary); margin-right: 4px; }
+  .rate-btn { width: 30px; height: 30px; border-radius: 6px; border: 2px solid #ddd; background: white; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; color: var(--text-secondary); }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  .answer-lines { display: none; }
+
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines { display: block; padding: 4px 20px 16px; }
+    .answer-lines .line { border-bottom: 1px solid #d0d0d0; height: 26px; }
+    .tier-header { break-after: avoid; }
+  }
+
+  .quiz-guide { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; font-size: 13px; }
+  .quiz-guide .guide-title { font-weight: 700; color: var(--subject-dark); font-size: 14px; margin-bottom: 8px; }
+  .quiz-guide .guide-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; color: var(--text-secondary); }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon { flex-shrink: 0; font-weight: 700; color: var(--text); }
+  .rating-scale { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .rating-scale .rs-item { display: flex; align-items: center; gap: 5px; }
+  .rating-scale .rs-num { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text { font-size: 12px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English Ch5 &mdash; Self-Test Quiz</div>
+  <h1>Family and Friends</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name the technique. Intermediate = explain and apply it. Advanced = produce extended analytical or creative writing.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[2]</span>
+    <span>Numbers in square brackets like <strong>[2]</strong> in the answers show how many marks that part is worth.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each. Define key writing techniques and terms from this chapter.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">Name and briefly explain the <strong>four past tenses</strong> in English. For each, write one example sentence about a family holiday.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      1. <strong>Simple past:</strong> completed action &mdash; "We <em>visited</em> the beach last summer." [1]<br>
+      2. <strong>Past continuous:</strong> ongoing action in the past &mdash; "The children <em>were playing</em> in the waves." [1]<br>
+      3. <strong>Past perfect:</strong> action completed before another past action &mdash; "We <em>had packed</em> the car before sunrise." [1]<br>
+      4. <strong>Past perfect continuous:</strong> ongoing action before another past action &mdash; "They <em>had been driving</em> for three hours when the storm hit." [1]
+      <div class="mark-hint">Knowing your tenses matters for narrative writing. The past continuous is especially useful for setting scenes ("The sun was setting..."), and the past perfect creates flashbacks ("She had never seen the ocean before").</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">Explain what <strong>"show, don't tell"</strong> means in creative writing. Give one "telling" sentence and rewrite it as a "showing" sentence.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>"Show, don't tell"</strong> means using descriptive details, actions, and sensory language to let the reader experience emotions or events, rather than simply stating them [1].<br>
+      <strong>Telling:</strong> "She was nervous."<br>
+      <strong>Showing:</strong> "Her fingers twisted the hem of her shirt as she glanced at the clock for the third time." [1]
+      <div class="mark-hint">The "showing" sentence must include at least one physical action or sensory detail that implies the emotion without naming it. This is the single most important technique for upgrading your narrative writing from a D to a B.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">State <strong>three rules</strong> for punctuating dialogue correctly in a story.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Any three of:<br>
+      1. Speech marks go around the spoken words only [1].<br>
+      2. Start a new line (new paragraph) for each new speaker [1].<br>
+      3. Punctuation goes inside the speech marks [1].<br>
+      4. Use a comma before the closing speech mark if a speech tag follows (e.g. "Hello," she said).<br>
+      5. Begin the spoken words with a capital letter.
+      <div class="mark-hint">Dialogue mistakes are one of the easiest ways to lose marks in narrative writing. If you can't remember all the rules, at least remember: new speaker = new line, and punctuation goes INSIDE the speech marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">What does <strong>chronological order</strong> mean? Name one alternative structure a writer might use instead, and explain why they might choose it.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Chronological order</strong> means telling events in the order they happened, from first to last [1].<br>
+      <strong>Alternative:</strong> Starting <em>in medias res</em> (in the middle of the action) or using a <strong>flashback</strong> structure. A writer might choose this to create immediate suspense or to hook the reader before explaining the backstory [1].
+      <div class="mark-hint">In the exam, if you're writing a story with a time limit, starting in the middle of the action is usually more effective than "I woke up that morning..." &mdash; examiners reward confident structural choices.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain and Apply It?</h2>
+    <div class="marks">Worth 3-5 marks each. Apply writing techniques and analyse how language creates effects.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">Read this sentence: <em>"The old house stood at the end of the road like a forgotten promise."</em> Write a PEE paragraph explaining the effect of the simile on the reader.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>P:</strong> The simile creates a sense of sadness and neglect, suggesting the house was once important to someone [1].<br>
+      <strong>E:</strong> The writer compares the house to "a forgotten promise" [1].<br>
+      <strong>E:</strong> A promise implies something valued and personal, so describing it as "forgotten" suggests abandonment and broken expectations. This evokes sympathy in the reader and hints at a backstory of loss. The word "forgotten" also implies that the house, like a promise, once held meaning that has faded over time, creating a melancholy atmosphere [2].
+      <div class="mark-hint">When analysing a simile, always explain BOTH sides of the comparison: what is being compared (the house) and what it is compared to (a forgotten promise), then explain what this pairing MAKES THE READER FEEL. That emotional effect is where the top marks are.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Rewrite this "telling" paragraph using <strong>"show, don't tell"</strong> techniques:<br><em>"It was a hot day. The family was tired after the long journey. The children were excited to see the sea."</em></div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Example rewrite:</strong> "Heat shimmered off the tarmac as the car doors finally swung open [1]. Dad stretched his back with a groan, and Mum pressed a cold water bottle against her forehead [1]. But the moment the salt air hit them, the twins were already sprinting down the dune path, their flip-flops kicked off and forgotten [1]."<br><br>
+      <strong>Mark scheme:</strong> 1 mark for showing heat through sensory detail (not just saying "hot"), 1 mark for showing tiredness through actions (not the word "tired"), 1 mark for showing excitement through actions (not the word "excited"), 1 mark for overall quality of descriptive writing [1].
+      <div class="mark-hint">The key test: could a reader INFER the emotion without being told it? "Sprinting" and "flip-flops kicked off" show excitement. "Groan" and "pressed a cold bottle against her forehead" show tiredness and heat. If you have to use the adjective (hot, tired, excited), you're telling, not showing.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">Explain the difference between <strong>tone</strong> and <strong>register</strong>. For each, give an example of how a writer might change it depending on whether they are writing a personal diary entry vs. a formal letter about a family event.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Register</strong> is the level of formality of the language (formal vs informal) [1].<br>
+      <strong>Tone</strong> is the attitude or feeling conveyed by the writing (e.g. angry, humorous, nostalgic, sad) [1].<br>
+      <strong>Example:</strong> A diary entry about a family reunion might use <em>informal register</em> ("Gran's roast was INSANE, best ever") with a <em>warm, excited tone</em>. A formal letter about the same event might use <em>formal register</em> ("I am writing to express my gratitude for hosting the family gathering") with a <em>polite, respectful tone</em> [1].
+      <div class="mark-hint">Students often confuse tone and register. Think of it this way: register = how dressed up your language is (casual vs formal). Tone = what emotion your voice carries (happy, sad, angry). You can have formal + angry, or informal + sad. They're independent.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Analyse and Write?</h2>
+    <div class="marks">Worth 5-8 marks each. These need extended writing with clear structure, PEE paragraphs, and sophisticated techniques.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">Write the <strong>opening paragraph</strong> (5-7 sentences) of a short story titled <em>"The Last Family Dinner."</em> You must use: (a) an <em>in medias res</em> opening, (b) at least one line of correctly punctuated dialogue, and (c) at least one "show, don't tell" moment.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Example opening:</strong><br>
+      "The gravy boat slipped from her fingers and shattered against the tiles. Nobody moved. Dad's fork hovered halfway to his mouth, and across the table, Amir's chair scraped back an inch, as if he was already calculating the distance to the door.<br>
+      &emsp;&lsquo;Leave it,&rsquo; Mum said, her voice tight as a wire. &lsquo;Just &mdash; leave it.&rsquo;<br>
+      But it wasn't the gravy she was talking about."<br><br>
+      <strong>Mark scheme:</strong><br>
+      [2] In medias res: starts in the middle of action/tension (not "That morning, I woke up...")<br>
+      [2] Dialogue: correctly punctuated with speech marks, comma, speech tag, new line for new speaker<br>
+      [2] Show don't tell: emotions shown through actions (fork hovering, chair scraping, voice "tight as a wire") rather than stated
+      <div class="mark-hint">Notice how the example ends with a hook: "it wasn't the gravy she was talking about." This creates mystery and makes the reader want to continue. For full marks, your opening should make the examiner want to read the next paragraph.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">A non-fiction text describes a family tradition using a <strong>nostalgic</strong> tone. Write <strong>two PEE paragraphs</strong> explaining how a writer could create a nostalgic tone. For each paragraph, name a specific language technique and explain its effect.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>PEE 1:</strong><br>
+      <strong>P:</strong> A writer can create nostalgia through <strong>sensory imagery</strong> that triggers memories [1].<br>
+      <strong>E:</strong> For example, describing "the smell of cinnamon and woodsmoke that always meant Christmas at Grandma's house" [1].<br>
+      <strong>E:</strong> Smell is the sense most strongly linked to memory. By using specific sensory details rather than abstract statements, the writer transports the reader into the scene and creates an emotional connection to the past, making the reader share the warmth of the memory [1].<br><br>
+      <strong>PEE 2:</strong><br>
+      <strong>P:</strong> A writer can also create nostalgia through <strong>contrast between past and present</strong> [1].<br>
+      <strong>E:</strong> For example, writing "Back then, the kitchen table was never empty. Now it collects dust" [1].<br>
+      <strong>E:</strong> The contrast between the busy past ("never empty") and the lonely present ("collects dust") highlights loss and the passage of time. The short, blunt sentence "Now it collects dust" creates a stark, emotional impact because of its simplicity, making the reader feel the absence sharply [1].
+      <div class="mark-hint">Each PEE paragraph must name a SPECIFIC technique (sensory imagery, contrast, past tense, listing, etc.) &mdash; not just "nice language." The Explanation must link the technique to the emotional EFFECT on the reader.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">You are asked to write a <strong>directed writing</strong> response: a letter to a friend describing a memorable family event. Plan your response by listing: (a) the register and tone you would use, (b) three specific "show, don't tell" moments you would include, and (c) how you would structure the opening and closing.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>(a) Register and tone:</strong> Informal register (contractions, first person, casual vocabulary). Warm, humorous, and slightly exaggerated tone &mdash; as if telling a funny story to a friend [1].<br><br>
+      <strong>(b) Three "show, don't tell" moments:</strong> [1 each]<br>
+      1. Instead of "the food was delicious" &rarr; describe Uncle Marco gesturing wildly while sauce dripped down his chin<br>
+      2. Instead of "my little cousin was annoying" &rarr; describe her tugging your sleeve every thirty seconds asking "but WHY?"<br>
+      3. Instead of "it was chaotic" &rarr; describe the dog knocking over the birthday cake while Gran tried to take a photo<br><br>
+      <strong>(c) Structure:</strong> <strong>Opening:</strong> Start with a hook sentence that summarises the feeling: "You won't believe what happened at my cousin's birthday &mdash; honestly, I'm still finding cake in my hair" [1]. <strong>Closing:</strong> End with a reflective or humorous line that circles back: "Next year, we're doing a restaurant. With no dog" [1].
+      <div class="mark-hint">Planning is not wasted time in the exam &mdash; it's where you earn the structure marks. Spending 5 minutes on a plan like this before writing will get you a better grade than starting immediately and rambling for 40 minutes.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

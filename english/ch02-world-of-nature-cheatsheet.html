@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: The World of Nature &mdash; English Ch2</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #d1f2eb;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #8e44ad;
+    --trick-bg: #f4ecf7;
+    --pee: #d35400;
+    --pee-bg: #fef0e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .effect {
+    color: var(--subject-dark);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .pee-box {
+    background: var(--pee-bg);
+    border-left: 4px solid var(--pee);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .pee-box .label {
+    font-weight: 700;
+    color: var(--pee);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .template-box {
+    background: #f9f9f9;
+    border: 2px dashed var(--subject);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .template-box .fill-line {
+    display: inline-block;
+    border-bottom: 2px solid var(--subject);
+    min-width: 120px;
+    margin: 0 4px;
+    color: var(--subject);
+    font-style: italic;
+  }
+  .template-box p {
+    margin: 6px 0;
+    line-height: 2;
+  }
+
+  .word-bank {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 8px;
+  }
+  .word-bank .word {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning, .pee-box { break-inside: avoid; }
+    .template-box { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">English Ch2 &mdash; Cheat Sheet</div>
+    <h1>The World of Nature</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- KEY VOCABULARY -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:20%;">Term</th>
+      <th style="width:40%;">What It Means</th>
+      <th style="width:40%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Personification</strong></td>
+      <td>Giving human qualities to non-human things. "The angry sea," "the wind whispered."</td>
+      <td class="effect">Metaphor (personification IS a type of metaphor, but specifically gives HUMAN traits)</td>
+    </tr>
+    <tr>
+      <td><strong>Emotive language</strong></td>
+      <td>Words chosen to trigger an emotional response: "devastating," "heartbreaking," "innocent."</td>
+      <td class="effect">Descriptive language (all emotive language is descriptive, but descriptive isn't always emotive)</td>
+    </tr>
+    <tr>
+      <td><strong>Counter-argument</strong></td>
+      <td>Acknowledging the opposing view, then arguing against it. Shows you've considered both sides.</td>
+      <td class="effect">Concession (similar, but a concession admits the other side has a point; a counter-argument dismantles it)</td>
+    </tr>
+    <tr>
+      <td><strong>Topic sentence</strong></td>
+      <td>The first sentence of a paragraph that states the main point. Everything else in the paragraph supports it.</td>
+      <td class="effect">Thesis statement (a thesis is for the whole essay; a topic sentence is for one paragraph)</td>
+    </tr>
+    <tr>
+      <td><strong>Register</strong></td>
+      <td>The level of formality in writing: formal, neutral, or informal. Created by word choice, tone, and sentence structure.</td>
+      <td class="effect">Tone (register = formality level; tone = writer's attitude &mdash; e.g. sarcastic, celebratory)</td>
+    </tr>
+    <tr>
+      <td><strong>Directed Writing</strong></td>
+      <td>Paper 2, Section A: read a text, then write a new piece (article, letter, speech) using the information.</td>
+      <td class="effect">Composition writing (directed writing uses a source text; composition is from your own ideas)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- FOUR PURPOSES COMPARISON -->
+<div class="card">
+  <h2>The Four Purposes of Writing</h2>
+  <table class="compare-table">
+    <tr>
+      <th style="text-align:left;">Purpose</th>
+      <th>Language Features</th>
+      <th>Example Text Type</th>
+    </tr>
+    <tr>
+      <td>To inform</td>
+      <td>Third person, factual, precise, statistics, passive voice</td>
+      <td>News reports, textbooks</td>
+    </tr>
+    <tr>
+      <td>To argue / persuade</td>
+      <td>Emotive language, rhetorical questions, counter-arguments</td>
+      <td>Opinion articles, speeches</td>
+    </tr>
+    <tr>
+      <td>To describe</td>
+      <td>Sensory language, simile, metaphor, personification</td>
+      <td>Travel writing, descriptive essays</td>
+    </tr>
+    <tr>
+      <td>To narrate</td>
+      <td>Past tense, dialogue, character development</td>
+      <td>Stories, myths, folk tales</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">Memory Trick &mdash; IAPDN</div>
+    <strong>I</strong>nform, <strong>A</strong>rgue/Persuade, <strong>D</strong>escribe, <strong>N</strong>arrate. A single text can have <strong>more than one</strong> purpose. A feature article might describe scenery (describe), give facts about a river (inform), AND persuade the reader that wild places deserve protection.
+  </div>
+</div>
+
+<!-- PERSONIFICATION EFFECTS -->
+<div class="card">
+  <h2>Personification &mdash; Effects on the Reader</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:22%;">What Is Personified</th>
+      <th style="width:30%;">Example</th>
+      <th style="width:48%;">Effect on Reader</th>
+    </tr>
+    <tr>
+      <td><strong>Wind as tyrant</strong></td>
+      <td>"announced the tyrant's coming"</td>
+      <td class="effect">Creates fear; the wind becomes a threatening ruler with deliberate cruelty</td>
+    </tr>
+    <tr>
+      <td><strong>River as living force</strong></td>
+      <td>"a taker as well as a giver of life"</td>
+      <td class="effect">Suggests the river has power and intention; creates respect and danger</td>
+    </tr>
+    <tr>
+      <td><strong>Trees in pain</strong></td>
+      <td>"the branches talk in agony"</td>
+      <td class="effect">Makes the reader feel empathy for nature, as if it is suffering</td>
+    </tr>
+    <tr>
+      <td><strong>Rapids as hostile</strong></td>
+      <td>"angry rapids"</td>
+      <td class="effect">Implies the river is aggressive and threatening; creates unease</td>
+    </tr>
+  </table>
+
+  <div class="pee-box">
+    <div class="label">Why Personification Matters</div>
+    Personification is one of the <strong>most common techniques in IGCSE English</strong>. If you can spot it AND explain its effect, you will score well. Nature passages almost always use it.
+  </div>
+</div>
+
+<!-- PEE TEMPLATE FOR NATURE WRITING -->
+<div class="card">
+  <h2>PEE Paragraph Template &mdash; For Nature Writing</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Fill this in for every analytical paragraph. The marks are in the Explanation.</p>
+
+  <div class="template-box">
+    <p><strong>P (Point):</strong> The writer uses <span class="fill-line">technique</span> to create a sense of <span class="fill-line">mood</span> in the description of <span class="fill-line">what is being described</span>.</p>
+    <p><strong>E (Evidence):</strong> This is shown in the phrase "<span class="fill-line">quote</span>".</p>
+    <p><strong>E (Explanation):</strong> The word "<span class="fill-line">specific word</span>" suggests <span class="fill-line">what it implies</span>, which makes the reader feel <span class="fill-line">emotion</span>. The writer may have chosen this to <span class="fill-line">purpose</span>, creating an atmosphere that is <span class="fill-line">precise mood word</span> rather than simply <span class="fill-line">vague word you're replacing</span>.</p>
+  </div>
+
+  <div class="pee-box">
+    <div class="label">Remember</div>
+    Your Explanation should be at least TWICE as long as your Point and Evidence combined. After writing one explanation sentence, ask: "So what? What does that make the reader feel?" Then write another sentence.
+  </div>
+
+  <div class="warning">
+    <div class="label">Common Mistake</div>
+    Do NOT write: "The writer uses personification. The river is described as 'angry.' This makes it seem alive." <strong>"Seem alive" is too vague.</strong> Alive how? Friendly? Dangerous? Hostile? The examiner needs precision: "This makes the reader feel uneasy, as if the river could become threatening at any moment."
+  </div>
+</div>
+
+<!-- PRECISE VOCABULARY UPGRADES -->
+<div class="card">
+  <h2>Vocabulary Upgrades &mdash; Replace Vague with Precise</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">Use these instead of basic words. Precise vocabulary = higher marks.</p>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:10px;">Instead of "nice"</p>
+  <div class="word-bank">
+    <span class="word">serene</span>
+    <span class="word">tranquil</span>
+    <span class="word">idyllic</span>
+    <span class="word">picturesque</span>
+  </div>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:14px;">Instead of "scary"</p>
+  <div class="word-bank">
+    <span class="word">ominous</span>
+    <span class="word">foreboding</span>
+    <span class="word">menacing</span>
+    <span class="word">hostile</span>
+  </div>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:14px;">Instead of "big"</p>
+  <div class="word-bank">
+    <span class="word">immense</span>
+    <span class="word">vast</span>
+    <span class="word">imposing</span>
+    <span class="word">formidable</span>
+  </div>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:14px;">Instead of "beautiful"</p>
+  <div class="word-bank">
+    <span class="word">breathtaking</span>
+    <span class="word">majestic</span>
+    <span class="word">awe-inspiring</span>
+    <span class="word">ethereal</span>
+  </div>
+
+  <p style="font-size:13px; font-weight:700; color:var(--subject-dark); margin-top:14px;">Instead of "sad"</p>
+  <div class="word-bank">
+    <span class="word">melancholic</span>
+    <span class="word">desolate</span>
+    <span class="word">sombre</span>
+    <span class="word">bleak</span>
+  </div>
+</div>
+
+<!-- ANIMAL VOCABULARY -->
+<div class="card">
+  <h2>Bonus Vocabulary &mdash; Latin Animal Adjectives</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:20%;">Adjective</th>
+      <th style="width:30%;">Animal</th>
+      <th style="width:50%;">Use in Analysis</th>
+    </tr>
+    <tr>
+      <td><strong>Equine</strong></td>
+      <td>Horse</td>
+      <td class="effect">Relating to horses; suggests power or grace</td>
+    </tr>
+    <tr>
+      <td><strong>Feline</strong></td>
+      <td>Cat</td>
+      <td class="effect">Relating to cats; suggests stealth, grace, independence</td>
+    </tr>
+    <tr>
+      <td><strong>Vulpine</strong></td>
+      <td>Fox</td>
+      <td class="effect">Relating to foxes; suggests cunning and slyness</td>
+    </tr>
+    <tr>
+      <td><strong>Leonine</strong></td>
+      <td>Lion</td>
+      <td class="effect">Relating to lions; suggests majesty and authority</td>
+    </tr>
+    <tr>
+      <td><strong>Aquiline</strong></td>
+      <td>Eagle</td>
+      <td class="effect">Relating to eagles; often describes a hooked nose</td>
+    </tr>
+    <tr>
+      <td><strong>Asinine</strong></td>
+      <td>Donkey</td>
+      <td class="effect">Relating to donkeys; means foolish or stupid</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Personification</span>
+    <span>Giving human qualities to nature makes the reader feel emotions toward non-human things &mdash; fear, sympathy, awe.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Writer's purpose</span>
+    <span>Always ask "Why was this written?" before analysing &mdash; the purpose tells you what techniques to look for.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Persuasive writing</span>
+    <span>Present both sides, use emotive language and rhetorical questions, but never be rude or make sweeping statements.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Informative writing</span>
+    <span>Factual, impersonal, third person, precise vocabulary, clear sentences, subheadings &mdash; no personal opinion.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Directed Writing</span>
+    <span>15 marks for content (what you say) + 25 marks for quality (how you say it) &mdash; HOW you write matters more.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Own words rule</span>
+    <span>In Directed Writing, you MUST use your own words &mdash; do not copy phrases from the source text.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">WHO-WHAT-HOW</div>
+    For every text you read, ask three questions: <strong>WHO</strong> is the audience? <strong>WHAT</strong> is the purpose? <strong>HOW</strong> does the language serve that purpose? If you can answer all three, you can analyse any text.
+  </div>
+
+  <div class="trick">
+    <div class="label">Persuasive Writing Don'ts</div>
+    Remember the <strong>3 Nos</strong>: <strong>No</strong> rudeness ("which is rubbish"), <strong>No</strong> sweeping statements ("Everyone thinks..."), <strong>No</strong> more than 1-2 rhetorical questions.
+  </div>
+
+  <div class="trick">
+    <div class="label">PEE Starter Phrases for Nature</div>
+    "The writer creates a sense of..." / "The verb [X] suggests violent movement, implying..." / "The personification makes the reader feel... because..." / "This creates an atmosphere of... which contrasts with..."
+  </div>
+
+  <div class="trick">
+    <div class="label">The Lawyer Test</div>
+    When writing persuasively, imagine you're a lawyer in court. What evidence would convince a judge? If your argument wouldn't hold up in court, it won't hold up on the exam.
+  </div>
+</div>
+
+<!-- QUICK-FIRE EXAM CUES -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:45%;">If the Question Says...</th>
+      <th style="width:55%;">Your Answer Should...</th>
+    </tr>
+    <tr>
+      <td>"How does the writer bring the scene to life?"</td>
+      <td>Look for personification, sensory language, dynamic verbs. Use PEE. Explain the EFFECT of specific word choices.</td>
+    </tr>
+    <tr>
+      <td>"What is the purpose of this text?"</td>
+      <td>Name it (inform, persuade, describe, narrate) AND explain what language features support that purpose. Quote evidence.</td>
+    </tr>
+    <tr>
+      <td>"Write an article arguing for or against..."</td>
+      <td>Include both sides. Use topic sentences, counter-arguments, linking phrases, emotive language. Plan before you write.</td>
+    </tr>
+    <tr>
+      <td>"Write an informative piece about..."</td>
+      <td>Be factual and impersonal. Use third person, clear sentences, subheadings. NO personal opinion. Mix active and passive verbs.</td>
+    </tr>
+    <tr>
+      <td>"How does the writer use personification?"</td>
+      <td>Do NOT just identify it. Quote the specific words. Explain what HUMAN quality is given and WHY. What does the reader feel?</td>
+    </tr>
+    <tr>
+      <td>"What is the effect of the word [X]?"</td>
+      <td>Explore connotations. What does the word make you think of? What feeling does it carry? Use precise vocabulary, not "nice" or "scary."</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

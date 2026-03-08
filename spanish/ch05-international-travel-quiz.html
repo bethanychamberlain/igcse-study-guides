@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: Viajes Internacionales &mdash; Spanish Ch5</title>
+<style>
+  :root {
+    --subject: #e67e22;
+    --subject-light: #fef5e7;
+    --subject-dark: #ca6f1e;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; font-size: 15px; line-height: 1.6; color: var(--text); max-width: 820px; margin: 0 auto; padding: 20px; background: var(--bg); }
+  .hero { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 14px; padding: 24px 28px; margin-bottom: 20px; }
+  .hero .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+  .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .btn { font-family: inherit; font-size: 13px; font-weight: 600; padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--subject); color: white; }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline { background: white; color: var(--subject-dark); border: 2px solid var(--subject); }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display { margin-left: auto; font-size: 14px; font-weight: 600; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+  .tier-header { display: flex; align-items: center; gap: 12px; margin: 28px 0 12px; padding: 12px 16px; border-radius: 10px; }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+  .tier-header .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+  .tier-header .marks { font-size: 12px; color: var(--text-secondary); }
+  .q-card { background: var(--card); border-radius: 10px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .q-card .q-header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; }
+  .q-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks { font-size: 11px; font-weight: 700; color: var(--text-secondary); background: #f0f0f0; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+  .q-answer { padding: 0 20px 16px; display: none; }
+  .q-answer.visible { display: block; }
+  .answer-box { background: var(--subject-light); border-left: 4px solid var(--subject); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; }
+  .answer-box .answer-label { font-weight: 700; color: var(--subject-dark); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .mark-hint { margin-top: 8px; font-size: 12px; color: var(--text-secondary); font-style: italic; }
+  .self-rate { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .self-rate .rate-label { font-size: 11px; color: var(--text-secondary); margin-right: 4px; }
+  .rate-btn { width: 30px; height: 30px; border-radius: 6px; border: 2px solid #ddd; background: white; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; color: var(--text-secondary); }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+  .answer-lines { display: none; }
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines { display: block; padding: 4px 20px 16px; }
+    .answer-lines .line { border-bottom: 1px solid #d0d0d0; height: 26px; }
+    .tier-header { break-after: avoid; }
+  }
+  .quiz-guide { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; font-size: 13px; }
+  .quiz-guide .guide-title { font-weight: 700; color: var(--subject-dark); font-size: 14px; margin-bottom: 8px; }
+  .quiz-guide .guide-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; color: var(--text-secondary); }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon { flex-shrink: 0; font-weight: 700; color: var(--text); }
+  .rating-scale { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .rating-scale .rs-item { display: flex; align-items: center; gap: 5px; }
+  .rating-scale .rs-num { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; }
+  .rs-1 { background: #e74c3c; } .rs-2 { background: #f39c12; } .rs-3 { background: #3498db; } .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text { font-size: 12px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Spanish Ch5 &mdash; Self-Test Quiz</div>
+  <h1>Viajes Internacionales</h1>
+  <p>10 questions across 3 difficulty levels. Focus on travel vocabulary, the preterite tense, weather, and writing full holiday descriptions.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display"><span id="scoreText">Rate each answer to track your score</span></div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row"><span class="guide-icon">&#9654;</span><span><strong>Click any question</strong> to reveal/hide the answer.</span></div>
+  <div class="guide-row"><span class="guide-icon">[1]</span><span>Numbers in square brackets show marks per part.</span></div>
+  <div class="guide-row"><span class="guide-icon">&#9733;</span><span><strong>Rate your answer</strong> honestly:</span></div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Recall It?</h2>
+    <div class="marks">Worth 1-2 marks each. Vocabulary and basic structures.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">Give the Spanish for: <strong>plane, train, suitcase, passport, return ticket</strong>.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>el avi&oacute;n</strong>, <strong>el tren</strong>, <strong>la maleta</strong>, <strong>el pasaporte</strong>, <strong>un billete de ida y vuelta</strong> [1 for 3+, 2 for all 5].
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">How do you say these weather expressions? <strong>(a)</strong> It&rsquo;s sunny <strong>(b)</strong> It&rsquo;s cold <strong>(c)</strong> It&rsquo;s raining <strong>(d)</strong> It&rsquo;s cloudy</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>Hace sol</strong>, (b) <strong>Hace fr&iacute;o</strong>, (c) <strong>Llueve</strong>, (d) <strong>Est&aacute; nublado</strong> [&frac12; each].
+      <div class="mark-hint">Notice three different constructions: hace (a,b), verb alone (c), est&aacute; (d). Don&rsquo;t use &ldquo;hace&rdquo; for all of them.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">Put these verbs into the preterite (yo form): <strong>visitar, comer, ir, hacer</strong>.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>visit&eacute;</strong>, <strong>com&iacute;</strong>, <strong>fui</strong> (irregular), <strong>hice</strong> (irregular) [&frac12; each].
+      <div class="mark-hint">The first two are regular (-&eacute;, -&iacute;). The last two are irregular and must be memorised.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">What is the difference between <em>muy</em> and <em>mucho</em>? Give one example of each.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Muy</strong> = very (before adjectives/adverbs): <em>&ldquo;muy bonito&rdquo;</em> [1].<br>
+      <strong>Mucho</strong> = a lot of (before nouns/after verbs): <em>&ldquo;mucho sol&rdquo;</em> or <em>&ldquo;como mucho&rdquo;</em> [1].
+      <div class="mark-hint">&ldquo;Mucho bonito&rdquo; is always wrong. &ldquo;Muy sol&rdquo; is always wrong. Learn which goes where.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Use It?</h2>
+    <div class="marks">Worth 3-4 marks each. Sentences combining vocabulary, tenses, and travel context.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">Translate into Spanish: <strong>&ldquo;I would like a double room with shower for three nights. How much does it cost?&rdquo;</strong></div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>&ldquo;Quisiera una habitaci&oacute;n doble con ducha para tres noches. &iquest;Cu&aacute;nto cuesta?&rdquo;</strong><br>
+      [1] quisiera + habitaci&oacute;n doble, [1] con ducha para tres noches, [1] &iquest;Cu&aacute;nto cuesta?
+      <div class="mark-hint">&ldquo;Quisiera&rdquo; is the most polite and exam-appropriate way to ask. &ldquo;Quiero&rdquo; works too but is more blunt.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Translate into Spanish: <strong>&ldquo;Last summer I went to Spain by plane. It was very hot and sunny. I visited a cathedral and ate paella.&rdquo;</strong></div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>&ldquo;El verano pasado fui a Espa&ntilde;a en avi&oacute;n. Hac&iacute;a mucho calor y sol. Visit&eacute; una catedral y com&iacute; paella.&rdquo;</strong><br><br>
+      [1] <strong>fui</strong> (irregular preterite of ir), [1] <strong>hac&iacute;a</strong> (imperfect for weather), [1] <strong>visit&eacute;, com&iacute;</strong> (regular preterites), [1] overall accuracy and vocabulary.
+      <div class="mark-hint">This uses two tenses: preterite for actions (fui, visit&eacute;, com&iacute;) and imperfect for weather (hac&iacute;a). Two tenses = higher marks.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">Choose SER or ESTAR for each blank and give the correct preterite/imperfect form:<br><strong>(a)</strong> El hotel _______ (was) muy grande. <strong>(b)</strong> El hotel _______ (was) cerca de la playa. <strong>(c)</strong> Las vacaciones _______ (were) incre&iacute;bles. <strong>(d)</strong> Yo _______ (was) contento.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      (a) <strong>era</strong> (SER &mdash; describing what it was like) [&frac34;]<br>
+      (b) <strong>estaba</strong> (ESTAR &mdash; location) [&frac34;]<br>
+      (c) <strong>fueron</strong> (SER &mdash; judging the experience, preterite) [&frac34;]<br>
+      (d) <strong>estaba</strong> (ESTAR &mdash; temporary feeling) [&frac34;]
+      <div class="mark-hint">This is ser vs estar applied to past tenses. Description/identity = SER. Location/feeling = ESTAR. Same rules, just conjugated differently.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Write a Full Description?</h2>
+    <div class="marks">Worth 5-6 marks each. Extended writing with multiple tenses, vocabulary, and opinions.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">Write a paragraph (6-7 sentences) describing a real or imagined holiday. Include: where you went, how you travelled, where you stayed, what the weather was like, what you did, your opinion, and what you would like to do next time. Use at least <strong>three</strong> different tenses.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model Answer</div>
+      <em>&ldquo;El verano pasado, fui a Espa&ntilde;a con mi familia. Viajamos en avi&oacute;n desde Florida. Nos alojamos en un hotel grande que estaba cerca de la playa. Hac&iacute;a mucho sol todos los d&iacute;as. Visit&eacute; la catedral de Barcelona y com&iacute; tapas en un restaurante. Fue una experiencia incre&iacute;ble. Me gustar&iacute;a volver a Espa&ntilde;a el a&ntilde;o que viene.&rdquo;</em><br><br>
+      [1] preterite (fui, viajamos, visit&eacute;, com&iacute;), [1] imperfect (estaba, hac&iacute;a), [1] conditional (gustar&iacute;a), [1] travel vocabulary, [1] opinion (fue incre&iacute;ble), [1] accuracy and coherence.
+      <div class="mark-hint">Three tenses in one paragraph (preterite + imperfect + conditional) = top band. This exact format works for any &ldquo;describe a holiday&rdquo; question on the exam.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">Translate into Spanish: <strong>&ldquo;We went to a restaurant and my father ordered paella. The food was delicious but quite expensive. After eating, we walked to the beach. It was a very good day. I would like to go back because I loved Spain.&rdquo;</strong></div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <em>&ldquo;Fuimos a un restaurante y mi padre pidi&oacute; paella. La comida era deliciosa pero bastante cara. Despu&eacute;s de comer, fuimos a la playa a pie. Fue un d&iacute;a muy bueno. Me gustar&iacute;a volver porque me encant&oacute; Espa&ntilde;a.&rdquo;</em><br><br>
+      [1] preterite forms (fuimos, pidi&oacute;, fue, encant&oacute;), [1] imperfect (era deliciosa &mdash; description), [1] quantifier (bastante cara), [1] conditional (gustar&iacute;a), [1] vocabulary and accuracy.
+      <div class="mark-hint">Notice &ldquo;era deliciosa&rdquo; (imperfect, describing what the food was like) vs &ldquo;fue un d&iacute;a bueno&rdquo; (preterite, judging the completed day). This distinction is what separates C from B grades.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">Write 4 sentences about a bad holiday experience. Include: where you went, what the weather was like (bad), a problem at the hotel or restaurant, and what you would do differently next time. Use preterite, imperfect, and conditional.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Model Answer</div>
+      <em>&ldquo;Fui a Inglaterra con mi familia. Hac&iacute;a mal tiempo y llov&iacute;a todos los d&iacute;as. El hotel era peque&ntilde;o y la habitaci&oacute;n no ten&iacute;a ducha. La pr&oacute;xima vez, me gustar&iacute;a ir a un pa&iacute;s con sol, como Espa&ntilde;a.&rdquo;</em><br><br>
+      [1] preterite (fui), [1] imperfect for weather (hac&iacute;a, llov&iacute;a) and description (era, ten&iacute;a), [1] negative (no ten&iacute;a), [1] conditional (gustar&iacute;a), [1] overall accuracy.
+      <div class="mark-hint">Describing a bad holiday is actually easier to write because you get to use negatives (no ten&iacute;a, no hab&iacute;a) and contrast (but next time I would...). The examiner loves to see contrast.</div>
+    </div>
+    <div class="self-rate"><span class="rate-label">Rate:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleAll() { document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible')); }
+  function hideAll() { document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible')); }
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => { header.parentElement.querySelector('.q-answer').classList.toggle('visible'); });
+  });
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val); ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected'); updateScore();
+  }
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) { document.getElementById('scoreText').textContent = 'Rate each answer to track your score'; return; }
+    var sum = 0; keys.forEach(k => sum += ratings[k]);
+    document.getElementById('scoreText').textContent = keys.length + '/10 rated | Avg: ' + (sum / keys.length).toFixed(1) + '/4';
+  }
+</script>
+</body>
+</html>

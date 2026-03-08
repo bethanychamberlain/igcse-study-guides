@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Using and Applying Mathematics &mdash; Math Ch11</title>
+<style>
+  :root {
+    --subject: #e74c3c;
+    --subject-light: #fdedec;
+    --subject-dark: #c0392b;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Numbered steps */
+  .step-list {
+    counter-reset: step-counter;
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  .step-list li {
+    counter-increment: step-counter;
+    padding: 6px 0 6px 36px;
+    position: relative;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .step-list li:last-child { border-bottom: none; }
+  .step-list li::before {
+    content: counter(step-counter);
+    position: absolute;
+    left: 0;
+    top: 6px;
+    width: 24px;
+    height: 24px;
+    background: var(--subject);
+    color: #fff;
+    border-radius: 50%;
+    font-size: 12px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Math Ch11 &mdash; Cheat Sheet</div>
+    <h1>Using and Applying Mathematics</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Investigation</strong></td>
+      <td>An extended problem where you explore, find patterns, and write rules. No single "right method."</td>
+      <td class="confuse">A standard calculation (those have one fixed method)</td>
+    </tr>
+    <tr>
+      <td><strong>Pattern</strong></td>
+      <td>A regular relationship between numbers in a sequence or table.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Generalise</strong></td>
+      <td>Write a formula or rule that works for ANY case, not just the ones you tested.</td>
+      <td class="confuse">Just listing examples (that's not generalising)</td>
+    </tr>
+    <tr>
+      <td><strong>Systematic</strong></td>
+      <td>Working through cases in order (1, 2, 3, 4...) rather than jumping around randomly.</td>
+      <td class="confuse">Random trial and error (that misses patterns)</td>
+    </tr>
+    <tr>
+      <td><strong>Linear pattern</strong></td>
+      <td>A pattern where the differences between terms are constant. Rule looks like dn + c.</td>
+      <td class="confuse">Quadratic pattern (differences are NOT constant &mdash; second differences are)</td>
+    </tr>
+    <tr>
+      <td><strong>Constant difference</strong></td>
+      <td>When you subtract consecutive terms and always get the same number.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Prediction</strong></td>
+      <td>Using your rule to calculate a result you haven't tested yet.</td>
+      <td class="confuse">Guess (a prediction is based on your formula, not a guess)</td>
+    </tr>
+    <tr>
+      <td><strong>Verify / Test</strong></td>
+      <td>Checking that your rule works by trying it on additional cases.</td>
+      <td class="confuse">Prove (testing =/= proving; proving requires algebra for ALL cases)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- THE 5-STEP PROCESS -->
+<div class="card">
+  <h2>The 5-Step Problem-Solving Process</h2>
+  <ol class="step-list">
+    <li><strong>Understand the problem.</strong> Read it twice. What are you asked? What information do you have? What are you looking for?</li>
+    <li><strong>Try a simpler case.</strong> If the problem uses big numbers or complicated shapes, try it with small, easy numbers first (2&times;2 grid before 10&times;10).</li>
+    <li><strong>Be systematic.</strong> Organise your results in a table. Don't jump around randomly &mdash; go in order (n = 1, 2, 3, 4...).</li>
+    <li><strong>Look for a pattern.</strong> Check the differences between consecutive results. Constant difference = linear rule (dn + c).</li>
+    <li><strong>Generalise.</strong> Write a formula that works for any n. Test it on cases you already tried. Then predict a new case and check it.</li>
+  </ol>
+</div>
+
+<!-- FINDING A PATTERN TABLE -->
+<div class="card">
+  <h2>How to Spot What Kind of Pattern It Is</h2>
+  <table class="compare-table">
+    <tr>
+      <th>What You See</th>
+      <th>Type of Pattern</th>
+      <th>Rule Looks Like</th>
+    </tr>
+    <tr>
+      <td>Constant 1st differences</td>
+      <td>Linear</td>
+      <td>dn + c &nbsp; (e.g. 3n + 2)</td>
+    </tr>
+    <tr>
+      <td>Constant 2nd differences</td>
+      <td>Quadratic</td>
+      <td>an<sup>2</sup> + bn + c</td>
+    </tr>
+    <tr>
+      <td>Each term is multiplied by a constant</td>
+      <td>Geometric / exponential</td>
+      <td>a &times; r<sup>n</sup></td>
+    </tr>
+    <tr>
+      <td>Results involve squares or products</td>
+      <td>Look for n<sup>2</sup> or n(n+1)</td>
+      <td>Check by squaring n</td>
+    </tr>
+  </table>
+
+  <div class="trick">
+    <div class="label">The Difference Method</div>
+    Write out your results. Subtract each from the next to get <strong>1st differences</strong>. If those aren't constant, subtract them again to get <strong>2nd differences</strong>. Constant 1st differences = linear. Constant 2nd differences = quadratic.
+  </div>
+</div>
+
+<!-- COMPARISON PROBLEMS -->
+<div class="card">
+  <h2>Comparison Problems &mdash; The Method</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Step</th>
+      <th>What to Do</th>
+    </tr>
+    <tr>
+      <td>1. Identify variables</td>
+      <td>What changes? (e.g. km driven, days hired, number of items)</td>
+    </tr>
+    <tr>
+      <td>2. Calculate for each option</td>
+      <td>Work out the total cost/value for each choice</td>
+    </tr>
+    <tr>
+      <td>3. Try multiple scenarios</td>
+      <td>Don't just check one case &mdash; try low, medium, and high values</td>
+    </tr>
+    <tr>
+      <td>4. State your conclusion</td>
+      <td>Say which is best AND for what situation, with numbers to support it</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; "Explain" Means Show Numbers</div>
+    "Company A is cheaper" gets <strong>0 marks</strong>. "Company A costs $102.50 while Company B costs $170, so A is cheaper by $67.50" gets <strong>full marks</strong>. Always show calculations in your explanation.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Problem-solving</span>
+    <span>Start simple, be systematic, find a pattern, write a rule, test it, then predict.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Simpler case</span>
+    <span>If the question is too hard, try it with smaller numbers first &mdash; the pattern will usually reveal itself.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Use a table</span>
+    <span>Organise your results in rows and columns so patterns are easy to spot.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Linear pattern</span>
+    <span>Constant differences between terms means the rule is dn + c, where d is the difference.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Generalise</span>
+    <span>Write a formula using n that works for ANY case &mdash; not just the ones you tried.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Verify</span>
+    <span>Test your rule on a case you already know the answer to &mdash; if it matches, your formula is likely correct.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Estimation check</span>
+    <span>Before writing your final answer, ask: "Is this roughly right?" Round and calculate mentally to check.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Show working</span>
+    <span>Method marks are worth more than the answer &mdash; write every step, one line at a time.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">"If It's Too Hard, Make It Easier"</div>
+    10&times;10 grid? Try 2&times;2 first. 100 coins? Try 3 coins first. The single most powerful strategy in all of maths problem-solving: reduce to a simpler case and let the pattern show itself.
+  </div>
+
+  <div class="trick">
+    <div class="label">"Table = Treasure Map"</div>
+    A results table is like a treasure map &mdash; the pattern (treasure) is hidden in the numbers. Without a table, you're searching blindly. With a table, the pattern practically jumps out at you.
+  </div>
+
+  <div class="trick">
+    <div class="label">Constant Difference? It's Linear.</div>
+    If every pair of consecutive results differs by the same amount (say, 3), your rule is <strong>3n + something</strong>. To find the "something," substitute n = 1 and solve.
+  </div>
+
+  <div class="trick">
+    <div class="label">"Show Working = Show Money"</div>
+    Think of each line of working as earning money. Even if your final answer is wrong, correct working steps still earn marks. Never skip steps &mdash; each step is a mark the examiner can give you.
+  </div>
+
+  <div class="trick">
+    <div class="label">The Investigation Checklist &mdash; STPREV</div>
+    <strong>S</strong>impler cases. <strong>T</strong>able of results. <strong>P</strong>attern spotted. <strong>R</strong>ule written. <strong>E</strong>xtra cases tested. <strong>V</strong>erify and explain.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Investigate..."</td>
+      <td>Try simple cases, make a table, find a pattern, write a rule, test it, explain why it works.</td>
+    </tr>
+    <tr>
+      <td>"Find a rule connecting n and..."</td>
+      <td>Look at differences. Constant difference d &rarr; rule is <strong>dn + c</strong>. Find c by substituting n = 1.</td>
+    </tr>
+    <tr>
+      <td>"Test your rule for n = 6"</td>
+      <td>Substitute n = 6 into your formula AND work out the real answer. <strong>Show both match.</strong></td>
+    </tr>
+    <tr>
+      <td>"Predict the result for n = 20"</td>
+      <td>Substitute n = 20 into your formula. State the answer clearly.</td>
+    </tr>
+    <tr>
+      <td>"Explain why..."</td>
+      <td>Use <strong>numbers and calculations</strong>, not just words. Show the working that proves your point.</td>
+    </tr>
+    <tr>
+      <td>"Which option is cheaper / better?"</td>
+      <td>Calculate <strong>both</strong> options with numbers. Compare them. State which is better AND by how much.</td>
+    </tr>
+    <tr>
+      <td>"Estimate the answer to 48.7 &times; 3.2"</td>
+      <td>Round to 1 s.f.: 50 &times; 3 = <strong>150</strong>. Use &asymp; symbol.</td>
+    </tr>
+    <tr>
+      <td>"Extend the investigation / What happens if...?"</td>
+      <td>Change one variable (e.g. try a different grid size, different shape). Repeat the whole process: table, pattern, rule.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Forces and Pressure &mdash; Physics Ch3</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #2e86c1;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Formula highlight */
+  .formula {
+    display: inline-block;
+    background: #fff;
+    border: 2px solid var(--subject);
+    border-radius: 8px;
+    padding: 6px 14px;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--subject-dark);
+    margin: 8px 0;
+    font-family: 'Courier New', Courier, monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* Worked example */
+  .worked {
+    background: #f8f9fa;
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin: 8px 0;
+    font-size: 13px;
+    border: 1px solid #e0e0e0;
+  }
+  .worked .step {
+    padding: 3px 0;
+    display: flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .worked .step-num {
+    font-weight: 800;
+    color: var(--subject);
+    font-size: 12px;
+    flex-shrink: 0;
+    width: 20px;
+  }
+  .worked .step-text {
+    flex: 1;
+  }
+  .worked .step-text code {
+    background: var(--subject-light);
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Physics &mdash; Chapter 3</div>
+  <h1>Forces and Pressure</h1>
+  <div class="subtitle">Moments, Hooke's law, pressure calculations, Boyle's law &mdash; formulas and reasoning you need for the exam</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 30 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== THE GOLDEN RULE ===== -->
+<div class="section-header">
+  <span class="num">Before You Start</span>
+  The Three-Step Method for Calculations
+</div>
+<div class="card">
+  <div class="intro-text">
+    This chapter has many formulas. Every single calculation question should be answered the same way.
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Three-Step Method (Use This EVERY Time)</div>
+      <p><strong>Step 1:</strong> Write the formula.<br>
+         <strong>Step 2:</strong> Substitute the numbers in.<br>
+         <strong>Step 3:</strong> Calculate and write the units.</p>
+      <p style="margin-top:8px;">Even if you can do it in your head, <strong>write all three steps</strong>. The examiner gives marks for each step separately. Skip to the answer and get it wrong = 0 marks. Show your working and make a small error = 2 out of 3 marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I understand the three-step method: formula, substitute, calculate + units</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3.1: FORCES AND TURNING EFFECTS ===== -->
+<div class="section-header">
+  <span class="num">Section 3.1</span>
+  Forces and Turning Effects
+</div>
+<div class="card">
+  <div class="intro-text">
+    A force can make an object turn around a fixed point (called a pivot). The turning effect depends on both the force and the distance from the pivot.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p>The <strong>moment</strong> of a force is its turning effect about a point. It depends on the size of the force and the perpendicular distance from the pivot.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Formula + Units</div>
+      <div class="formula">moment = force x perpendicular distance</div>
+      <p><strong>Moment</strong> is measured in <strong>newton metres (N m)</strong><br>
+         <strong>Force</strong> is measured in <strong>newtons (N)</strong><br>
+         <strong>Distance</strong> is measured in <strong>metres (m)</strong></p>
+      <p style="margin-top:6px;">Moments can be <strong>clockwise</strong> or <strong>anticlockwise</strong>. Always state the direction.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Principle of Moments</div>
+      <p><strong>The principle of moments:</strong> If an object is in <strong>equilibrium</strong> (balanced), the sum of the clockwise moments about any point equals the sum of the anticlockwise moments about that point.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Conditions for Equilibrium</div>
+      <p>For an object to be in equilibrium, two conditions must be met:<br>
+         1. The sum of forces in one direction = the sum of forces in the opposite direction.<br>
+         2. The principle of moments must apply (clockwise moments = anticlockwise moments).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <p>A person of weight 500 N stands on a plank supported by two trestles A and B, 5 m apart. The person is 2 m from A. Find the upward forces X (at A) and Y (at B).</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Take moments about A to eliminate X:</span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Clockwise moment: <code>500 x 2 = 1000 N m</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Anticlockwise moment: <code>Y x 5</code></span></div>
+        <div class="step"><span class="step-num">4.</span> <span class="step-text">Set equal: <code>Y x 5 = 1000</code>, so <code>Y = 200 N</code></span></div>
+        <div class="step"><span class="step-num">5.</span> <span class="step-text">Forces balance: <code>X + Y = 500</code>, so <code>X = 300 N</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Choosing Where to Take Moments</div>
+      <p>When you take moments about a point, any force <em>acting at that point</em> has a distance of zero, so its moment disappears. This trick lets you eliminate one unknown and solve for the other. Always pick the pivot point that gets rid of the unknown you don't want yet.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Distance Must Be Perpendicular</div>
+      <p>The distance in the moment formula must be the <strong>perpendicular</strong> (at right angles) distance from the force to the pivot. If the force is not at right angles, you need the perpendicular component. In most exam questions the forces are already at right angles, but read carefully.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define "moment" and write the formula from memory</li>
+    <li><input type="checkbox"> I can state the principle of moments</li>
+    <li><input type="checkbox"> I can state both conditions for equilibrium</li>
+    <li><input type="checkbox"> I solved a moments problem by taking moments about a point</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3.2: CENTRE OF GRAVITY ===== -->
+<div class="section-header">
+  <span class="num">Section 3.2</span>
+  Centre of Gravity
+</div>
+<div class="card">
+  <div class="intro-text">
+    Every object behaves as if all its weight acts through a single point. Understanding this point explains why things balance or topple.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Definition</div>
+      <p>The <strong>centre of gravity</strong> (or centre of mass) is the point where the whole weight of an object appears to act. For a uniform object, it is at the geometric centre.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Finding It Experimentally</div>
+      <p>For an irregular flat shape: suspend it from a pin, hang a plumb line, and draw the line. Repeat from a different point. The centre of gravity is where the two lines cross.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Stability</div>
+      <p>An object is <strong>stable</strong> if, when tilted slightly, it returns to its original position. An object topples when its centre of gravity passes <strong>beyond the edge of its base</strong>.</p>
+      <p style="margin-top:6px;">To make an object more stable: <strong>lower the centre of gravity</strong> and/or <strong>widen the base</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Three Types of Equilibrium</div>
+      <table class="compare-table">
+        <tr>
+          <th>Type</th>
+          <th>What Happens When Tilted</th>
+          <th>Example</th>
+        </tr>
+        <tr>
+          <td><strong>Stable</strong></td>
+          <td>Returns to original position</td>
+          <td>Cone on its base</td>
+        </tr>
+        <tr>
+          <td><strong>Unstable</strong></td>
+          <td>Topples further away</td>
+          <td>Cone on its tip</td>
+        </tr>
+        <tr>
+          <td><strong>Neutral</strong></td>
+          <td>Stays in new position</td>
+          <td>Ball on flat surface</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Stability questions come up regularly on exams. The key phrase is: "the centre of gravity must stay over the base." Wider base + lower centre of gravity = more stable. Use these exact words in your answers.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define centre of gravity</li>
+    <li><input type="checkbox"> I can describe how to find it for an irregular shape</li>
+    <li><input type="checkbox"> I know the three types of equilibrium</li>
+    <li><input type="checkbox"> I know how to make an object more stable (wider base, lower CoG)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3.3: MORE ABOUT MOMENTS ===== -->
+<div class="section-header">
+  <span class="num">Section 3.3</span>
+  More About Moments
+</div>
+<div class="card">
+  <div class="intro-text">
+    This section applies the principle of moments to harder problems, including heavy (non-negligible) bars and cranes.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Heavy Bar Rule</div>
+      <p>When a bar has weight, treat its weight as a single downward force acting at its <strong>centre of gravity</strong>. For a uniform bar, this is at the midpoint.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example (Crane Problem)</div>
+      <p>A crane's counterbalance weighs 400 N and is 1 m from the pivot. A 100 N load hangs 2 m from the pivot on the other side. Where should the counterbalance be placed?</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Clockwise moment (load): <code>100 x 2 = 200 N m</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Anticlockwise moment (counterbalance): <code>400 x d</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Set equal: <code>400 x d = 200</code></span></div>
+        <div class="step"><span class="step-num">4.</span> <span class="step-text">Solve: <code>d = 200 / 400 = 0.5 m</code> from the pivot</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Verify Your Answer</div>
+      <p>After solving a moments problem, check by adding up all the moments. Clockwise should equal anticlockwise. If they don't match, you made an error somewhere. This takes 10 seconds and can save you marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can handle problems where the bar has weight</li>
+    <li><input type="checkbox"> I solved the crane worked example</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3.4: STRETCHING AND COMPRESSING ===== -->
+<div class="section-header">
+  <span class="num">Section 3.4</span>
+  Stretching and Compressing
+</div>
+<div class="card">
+  <div class="intro-text">
+    Forces can stretch or compress objects. This section is about how springs behave under load &mdash; and the important limits to that behaviour.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p>&bull; <strong>Elastic</strong>: A material that returns to its original shape when the force is removed.<br>
+         &bull; <strong>Plastic</strong>: A material that keeps its new shape when the force is removed (permanently deformed).<br>
+         &bull; <strong>Extension</strong>: The difference between stretched length and original (unstretched) length.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Hooke's Law</div>
+      <p><strong>Hooke's law:</strong> Below the elastic limit, the extension of a spring is <strong>proportional</strong> to the load (force) applied.</p>
+      <p style="margin-top:6px;">This means: double the force = double the extension. The graph of extension vs load is a <strong>straight line through the origin</strong> (up to the limit of proportionality).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Spring Constant Formula</div>
+      <div class="formula">F = k x x</div>
+      <p><strong>F</strong> = force/load (newtons, N)<br>
+         <strong>k</strong> = spring constant (N/m or N/mm)<br>
+         <strong>x</strong> = extension (m or mm)</p>
+      <p style="margin-top:6px;">The spring constant <em>k</em> tells you how stiff the spring is. A higher <em>k</em> means harder to stretch.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Points on the Graph</div>
+      <p>&bull; <strong>Limit of proportionality</strong>: The point beyond which extension is no longer proportional to load (the graph stops being straight).<br>
+         &bull; <strong>Elastic limit</strong>: The point beyond which the spring will not return to its original length &mdash; it is permanently deformed.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Extension vs Length</div>
+      <p><strong>Extension</strong> = current length - original length. If the spring starts at 40 mm and stretches to 58 mm, the extension is 18 mm, NOT 58 mm. Always subtract the original length first.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Graph Questions</div>
+      <p>Exam questions often give you a table of load vs length. You need to: (1) calculate extensions by subtracting the unstretched length, (2) plot extension against load, (3) identify where the line stops being straight (limit of proportionality). Practise this with the data in the textbook.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state Hooke's law from memory</li>
+    <li><input type="checkbox"> I can write F = kx and know what each letter means</li>
+    <li><input type="checkbox"> I know the difference between elastic limit and limit of proportionality</li>
+    <li><input type="checkbox"> I know to calculate extension by subtracting the original length</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3.5: PRESSURE ===== -->
+<div class="section-header">
+  <span class="num">Section 3.5</span>
+  Pressure
+</div>
+<div class="card">
+  <div class="intro-text">
+    Pressure measures how concentrated a force is over an area. A small area with the same force means higher pressure &mdash; this is why drawing pins have sharp points and tractors have wide tyres.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Formula + Units</div>
+      <div class="formula">p = F / A</div>
+      <p><strong>p</strong> = pressure (pascals, Pa)<br>
+         <strong>F</strong> = force (newtons, N)<br>
+         <strong>A</strong> = area (square metres, m<sup>2</sup>)</p>
+      <p style="margin-top:6px;">1 Pa = 1 N/m<sup>2</sup>. Since this is very small, we often use <strong>kilopascals</strong> (1 kPa = 1000 Pa).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <p>A concrete block has a mass of 2600 kg and measures 0.5 m x 1.0 m x 2.0 m. What is the maximum pressure it can exert? (g = 10 N/kg)</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Weight: <code>W = 2600 x 10 = 26 000 N</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Maximum pressure = smallest area: <code>A = 1.0 x 0.5 = 0.5 m&sup2;</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Pressure: <code>p = 26 000 / 0.5 = 52 000 Pa = 52 kPa</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Maximum vs Minimum Pressure</div>
+      <p><strong>Maximum pressure</strong> = force on the <strong>smallest</strong> area (the block standing on its smallest face).<br>
+         <strong>Minimum pressure</strong> = force on the <strong>largest</strong> area (the block lying flat).<br>
+         The force (weight) is the same &mdash; it's the area that changes.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Pressure explains real-life design choices. Football boots have studs (small area = high pressure = grip). Skis are wide (large area = low pressure = don't sink). The exam loves asking you to explain examples like these using p = F/A.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can write p = F / A from memory</li>
+    <li><input type="checkbox"> I know the unit of pressure is the pascal (Pa)</li>
+    <li><input type="checkbox"> I can explain why smaller area = higher pressure</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3.6: PRESSURE IN LIQUIDS ===== -->
+<div class="section-header">
+  <span class="num">Section 3.6</span>
+  Pressure in Liquids
+</div>
+<div class="card">
+  <div class="intro-text">
+    Liquid pressure has different rules from solid pressure. It depends on depth and density, and it acts in all directions.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Four Key Properties</div>
+      <p>1. Pressure in a liquid acts <strong>in all directions</strong>.<br>
+         2. Pressure <strong>increases with depth</strong> (deeper = more liquid above = more weight = more pressure).<br>
+         3. Pressure depends on the <strong>density</strong> of the liquid (denser liquid = higher pressure at the same depth).<br>
+         4. Pressure does <strong>NOT</strong> depend on the shape or width of the container.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Formula + Units</div>
+      <div class="formula">p = &rho;gh</div>
+      <p><strong>p</strong> = pressure (Pa)<br>
+         <strong>&rho;</strong> (rho) = density of liquid (kg/m<sup>3</sup>)<br>
+         <strong>g</strong> = gravitational field strength (10 N/kg)<br>
+         <strong>h</strong> = depth (m)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <p>What is the pressure at the bottom of a 2 m deep swimming pool? (density of water = 1000 kg/m<sup>3</sup>)</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the formula: <code>p = &rho;gh</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Substitute: <code>p = 1000 x 10 x 2</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Calculate: <code>p = 20 000 Pa = 20 kPa</code></span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; p = F/A vs p = &rho;gh</div>
+      <p>Use <strong>p = F/A</strong> for solid objects pressing on surfaces.<br>
+         Use <strong>p = &rho;gh</strong> for the pressure inside a liquid at a given depth.<br>
+         The question will make it clear which one you need. If it mentions depth and density, use &rho;gh.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state the four properties of liquid pressure</li>
+    <li><input type="checkbox"> I can write p = &rho;gh from memory</li>
+    <li><input type="checkbox"> I solved the swimming pool worked example</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3.7: PRESSURE FROM THE AIR ===== -->
+<div class="section-header">
+  <span class="num">Section 3.7</span>
+  Pressure from the Air
+</div>
+<div class="card">
+  <div class="intro-text">
+    The atmosphere is a deep ocean of air that exerts pressure on everything. Atmospheric pressure explains how straws, vacuum cleaners, and barometers work.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Facts</div>
+      <p>&bull; At sea level, atmospheric pressure is about <strong>100 kPa</strong> (100 000 Pa) or <strong>1 atmosphere (1 atm)</strong>.<br>
+         &bull; Atmospheric pressure acts <strong>in all directions</strong>.<br>
+         &bull; Atmospheric pressure <strong>decreases</strong> as you go higher (less air above you).<br>
+         &bull; A <strong>barometer</strong> measures atmospheric pressure. A mercury barometer supports a column of mercury about 760 mm high.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How a Straw Works</div>
+      <p>When you "suck" a straw, you <strong>reduce</strong> the air pressure inside the straw. The atmospheric pressure on the surface of the drink is now <strong>greater</strong> than the pressure inside the straw, so it pushes the liquid up. You are not pulling the liquid &mdash; the atmosphere is pushing it.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The straw explanation is a classic exam question. The key is: you don't "suck" liquid up &mdash; the atmosphere pushes it up. Same principle for vacuum cleaners: the fan reduces air pressure inside, and the atmosphere pushes air (plus dust) in.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know atmospheric pressure at sea level is about 100 kPa</li>
+    <li><input type="checkbox"> I can explain how a straw works using pressure differences</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3.8: GAS PRESSURE AND VOLUME ===== -->
+<div class="section-header">
+  <span class="num">Section 3.8</span>
+  Gas Pressure and Volume
+</div>
+<div class="card">
+  <div class="intro-text">
+    When you squash a gas into a smaller space, the pressure goes up. This section covers the mathematical relationship between pressure and volume.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Boyle's Law</div>
+      <p><strong>Boyle's law:</strong> For a fixed mass of gas at constant temperature, the pressure is <strong>inversely proportional</strong> to the volume.</p>
+      <p style="margin-top:6px;">This means: if you halve the volume, the pressure doubles. If you double the volume, the pressure halves.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Formula</div>
+      <div class="formula">p<sub>1</sub> x V<sub>1</sub> = p<sub>2</sub> x V<sub>2</sub></div>
+      <p><strong>p<sub>1</sub></strong> = initial pressure, <strong>V<sub>1</sub></strong> = initial volume<br>
+         <strong>p<sub>2</sub></strong> = final pressure, <strong>V<sub>2</sub></strong> = final volume<br>
+         Units must be consistent (both pressures in the same unit, both volumes in the same unit).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
+      <p>An air bubble has a volume of 2 cm<sup>3</sup> at a depth of 20 m (where total pressure is 3 atm). What is its volume at the surface (1 atm)?</p>
+      <div class="worked">
+        <div class="step"><span class="step-num">1.</span> <span class="step-text">Write the formula: <code>p&sub1; x V&sub1; = p&sub2; x V&sub2;</code></span></div>
+        <div class="step"><span class="step-num">2.</span> <span class="step-text">Substitute: <code>3 x 2 = 1 x V&sub2;</code></span></div>
+        <div class="step"><span class="step-num">3.</span> <span class="step-text">Calculate: <code>V&sub2; = 6 cm&sup3;</code></span></div>
+      </div>
+      <p style="margin-top:8px; font-size:13px;">The bubble triples in volume because the pressure drops to a third.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Kinetic Theory Explanation</div>
+      <p>Gas particles constantly collide with the container walls, creating pressure. If the volume is halved, there are <strong>twice as many particles per unit volume</strong>, so there are <strong>twice as many collisions</strong> per second with each part of the wall. Therefore the pressure doubles.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; "Constant Temperature" Is Essential</div>
+      <p>Boyle's law only works at <strong>constant temperature</strong>. If the temperature also changes, the relationship is more complicated. When the exam says "assume no change in temperature," this is your cue to use p<sub>1</sub>V<sub>1</sub> = p<sub>2</sub>V<sub>2</sub>.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Quick Sense Check</div>
+      <p>After solving, check: did the pressure go up? Then the volume should have gone <em>down</em> (and vice versa). If both went up or both went down, you made an error. Inverse proportion means one goes up as the other goes down.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state Boyle's law from memory</li>
+    <li><input type="checkbox"> I can write p<sub>1</sub>V<sub>1</sub> = p<sub>2</sub>V<sub>2</sub> from memory</li>
+    <li><input type="checkbox"> I can explain Boyle's law using the kinetic theory</li>
+    <li><input type="checkbox"> I solved the air bubble worked example</li>
+  </ul>
+</div>
+
+<!-- ===== THE BIG COMPARISON ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  The Big Formula Table
+</div>
+<div class="card">
+  <div class="intro-text">
+    This table summarises every formula in this chapter. Copy it into your notes and learn to reproduce it from memory.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Quantity</th>
+          <th>Formula</th>
+          <th>Units</th>
+        </tr>
+        <tr>
+          <td><strong>Moment</strong></td>
+          <td>moment = force x perpendicular distance</td>
+          <td>N m</td>
+        </tr>
+        <tr>
+          <td><strong>Spring (Hooke's law)</strong></td>
+          <td>F = k x x</td>
+          <td>N, N/m, m</td>
+        </tr>
+        <tr>
+          <td><strong>Pressure (solid)</strong></td>
+          <td>p = F / A</td>
+          <td>Pa (or N/m<sup>2</sup>)</td>
+        </tr>
+        <tr>
+          <td><strong>Pressure (liquid)</strong></td>
+          <td>p = &rho;gh</td>
+          <td>Pa</td>
+        </tr>
+        <tr>
+          <td><strong>Boyle's law</strong></td>
+          <td>p<sub>1</sub>V<sub>1</sub> = p<sub>2</sub>V<sub>2</sub></td>
+          <td>Any consistent units</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Real Test</div>
+      <p>Close your book. Write out all five formulas from memory on a blank piece of paper. Include what each letter stands for and the units. If you can do this perfectly, you are ready for the exam questions. If you can't &mdash; keep practising until you can.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the formula table into my notes</li>
+    <li><input type="checkbox"> I can write all five formulas from memory</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 3 Notes Complete</h2>
+  <p>You've covered moments, centre of gravity, Hooke's law, pressure, liquid pressure, atmospheric pressure, and Boyle's law. Now test yourself with the quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

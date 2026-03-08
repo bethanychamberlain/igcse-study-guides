@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: World Famous &mdash; English Ch8</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">English Ch8 &mdash; Cheat Sheet</div>
+    <h1>World Famous</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Biography</strong></td>
+      <td>Someone ELSE writes about a person's life. Third person (he/she/they). Can be objective or biased.</td>
+      <td class="confuse">Autobiography (that's the person writing about themselves)</td>
+    </tr>
+    <tr>
+      <td><strong>Autobiography</strong></td>
+      <td>A person writes about their OWN life. First person (I/we). Intimate but may be self-serving.</td>
+      <td class="confuse">Memoir (similar, but memoir focuses on specific moments, not a whole life)</td>
+    </tr>
+    <tr>
+      <td><strong>Tone</strong></td>
+      <td>The writer's attitude toward their subject &mdash; admiring, critical, sarcastic, nostalgic, etc.</td>
+      <td class="confuse">Mood (mood = feeling created in the READER; tone = writer's attitude)</td>
+    </tr>
+    <tr>
+      <td><strong>Synthesis</strong></td>
+      <td>Combining information from two or more sources into one seamless response.</td>
+      <td class="confuse">Summary (that's ONE text shortened). Also not comparison (that highlights differences).</td>
+    </tr>
+    <tr>
+      <td><strong>Semi-colon</strong></td>
+      <td>Joins two closely related sentences without a conjunction: "Fame brings opportunity; it also brings scrutiny."</td>
+      <td class="confuse">Colon (a colon introduces a list or explanation; a semi-colon links equals)</td>
+    </tr>
+    <tr>
+      <td><strong>Sensory imagery</strong></td>
+      <td>Language that appeals to the five senses (sight, sound, smell, touch, taste).</td>
+      <td class="confuse">Figurative language (imagery uses the senses; figurative language includes metaphor, simile, etc.)</td>
+    </tr>
+    <tr>
+      <td><strong>Register</strong></td>
+      <td>The level of formality. Formal = no contractions, complex sentences. Informal = conversational.</td>
+      <td class="confuse">Tone (register = formality level; tone = writer's attitude)</td>
+    </tr>
+    <tr>
+      <td><strong>Reverential</strong></td>
+      <td>Showing deep admiration and respect. A reverential tone treats the subject as heroic or inspiring.</td>
+      <td class="confuse">Nostalgic (nostalgic = fondly remembering the past; reverential = showing deep respect)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: BIO VS AUTOBIO -->
+<div class="card">
+  <h2>Biography vs Autobiography</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Biography</th>
+      <th>Autobiography</th>
+    </tr>
+    <tr>
+      <td>Who writes it</td>
+      <td>Someone else</td>
+      <td>The person themselves</td>
+    </tr>
+    <tr>
+      <td>Point of view</td>
+      <td>Third person (he/she)</td>
+      <td>First person (I/we)</td>
+    </tr>
+    <tr>
+      <td>Strengths</td>
+      <td>Can be more objective; includes outside perspectives</td>
+      <td>Intimate; shares inner thoughts and feelings</td>
+    </tr>
+    <tr>
+      <td>Weaknesses</td>
+      <td>Biographer may have own agenda (admiration or dislike)</td>
+      <td>Subject controls the narrative; may hide flaws</td>
+    </tr>
+    <tr>
+      <td>Reliability</td>
+      <td>NOT automatically more truthful</td>
+      <td>NOT automatically less truthful</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap</div>
+    Don't assume biography = objective and autobiography = biased. BOTH can be biased. The exam rewards you for evaluating reliability, not assuming it.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: FICTION VS NON-FICTION DESCRIPTION -->
+<div class="card">
+  <h2>Fiction vs Non-Fiction Description</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Fiction</th>
+      <th>Non-Fiction</th>
+    </tr>
+    <tr>
+      <td>Purpose</td>
+      <td>Create atmosphere, build character</td>
+      <td>Help reader picture a real place/person accurately</td>
+    </tr>
+    <tr>
+      <td>Techniques</td>
+      <td>Metaphor, simile, personification, symbolism</td>
+      <td>Sensory detail, precise vocabulary, factual imagery</td>
+    </tr>
+    <tr>
+      <td>Freedom</td>
+      <td>Can invent and exaggerate</td>
+      <td>Must stay truthful</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: SUMMARY VS COMPARISON VS SYNTHESIS -->
+<div class="card">
+  <h2>Summary vs Comparison vs Synthesis</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Summary</th>
+      <th>Comparison</th>
+      <th>Synthesis</th>
+    </tr>
+    <tr>
+      <td>How many texts</td>
+      <td>ONE</td>
+      <td>TWO</td>
+      <td>TWO+</td>
+    </tr>
+    <tr>
+      <td>What you do</td>
+      <td>Shorten to key points</td>
+      <td>Show similarities and differences</td>
+      <td>Blend into one seamless response</td>
+    </tr>
+    <tr>
+      <td>Organise by</td>
+      <td>Order of the text</td>
+      <td>Feature (tone, language, purpose)</td>
+      <td>Topic (not by source)</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Synthesis is NOT Two Summaries</div>
+    Don't write "Text A says... Text B says..." Organise by TOPIC, not by text. Weave information from both sources together so it reads as one unified answer.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Biography</span>
+    <span>Someone else tells a person's story in third person &mdash; can praise, criticise, or both.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Autobiography</span>
+    <span>You tell your own story in first person &mdash; intimate but you control the narrative.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Bio structure</span>
+    <span>Hook, background, rise, complications, legacy &mdash; it's storytelling about a real person, not a CV.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">5 senses</span>
+    <span>Sight, sound, smell, touch, taste &mdash; strong description uses at least 3.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Tone vs mood</span>
+    <span>Tone = writer's attitude. Mood = what the reader feels. A sarcastic TONE creates an uncomfortable MOOD.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Article opening</span>
+    <span>Never "In this article I will..." &mdash; start with a question, bold statement, or surprising fact.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Semi-colon</span>
+    <span>Joins two related sentences: "Fame brings opportunity; it also brings scrutiny." Free marks for accuracy.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">PEE Paragraph Template</div>
+    <strong>P</strong> = make your POINT (name the technique). <strong>E</strong> = give EVIDENCE (short quote). <strong>E</strong> = EXPLAIN the effect (this is where ALL the marks are &mdash; make it the longest part). Your explanation should be <em>at least twice</em> as long as point + evidence combined.
+  </div>
+
+  <div class="trick">
+    <div class="label">The 5 Senses Checklist</div>
+    Before writing any description, jot down: <strong>S-S-S-T-T</strong> (Sight, Sound, Smell, Touch, Taste). Tick off at least 3 before you start writing. Smell is the most powerful for evoking memory &mdash; use it.
+  </div>
+
+  <div class="trick">
+    <div class="label">Tone Vocabulary &mdash; Go Beyond "Positive/Negative"</div>
+    <strong>Positive:</strong> admiring, reverential, celebratory, enthusiastic, affectionate, nostalgic.<br>
+    <strong>Negative:</strong> critical, dismissive, sarcastic, contemptuous, cynical, mocking.<br>
+    <strong>Complex:</strong> bittersweet, ambivalent, ironic, wistful.<br>
+    Using precise tone words = higher marks. "The tone is admiring" beats "The tone is positive."
+  </div>
+
+  <div class="trick">
+    <div class="label">How to Identify Tone &mdash; 4 Questions</div>
+    1. Are the word choices positive, negative, or neutral?<br>
+    2. Is there humour, exaggeration, or understatement?<br>
+    3. Is the writer personally involved or distant?<br>
+    4. How would this sound read aloud? What voice would you use?
+  </div>
+
+  <div class="trick">
+    <div class="label">Article Opening Hack</div>
+    Start with a <strong>rhetorical question</strong> or a <strong>bold statistic</strong>. "What would you sacrifice for a million followers?" is always better than "In this article I am going to write about fame."
+  </div>
+
+  <div class="trick">
+    <div class="label">Sentence Starters for Analysis</div>
+    "The writer uses [technique] to convey [idea]..." / "The word '[X]' suggests/implies/connotes..." / "This creates a sense of [feeling] in the reader because..." / "The writer's [reverential/critical] tone reveals their attitude toward..."
+  </div>
+</div>
+
+<!-- PEE TEMPLATES -->
+<div class="card">
+  <h2>PEE Paragraph Templates &mdash; Use These in Every Answer</h2>
+
+  <div class="warning">
+    <div class="label">Your #1 Weakness (Easter Test Result)</div>
+    You scored 100% on factual/recognition questions but only 46% on analytical writing. The gap is HERE &mdash; in PEE paragraphs. These templates close the gap.
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 1 &mdash; Analysing Biographical Writing</div>
+    <strong>P:</strong> The [biographer/autobiographer] presents [subject] as [heroic / flawed / complex].<br>
+    <strong>E:</strong> For example, "[short quote]"<br>
+    <strong>E:</strong> The phrase "[zoom in]" suggests [meaning]. The word "[specific word]" connotes [association], which makes the reader feel [admiration / sympathy / unease]. The writer's choice of [positive/negative] language reveals a [reverential / critical / ambivalent] attitude toward the subject.
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 2 &mdash; Analysing Description</div>
+    <strong>P:</strong> The writer uses sensory imagery to [immerse the reader / create atmosphere / convey mood].<br>
+    <strong>E:</strong> For example, "[short quote appealing to senses]"<br>
+    <strong>E:</strong> The appeal to [smell / touch / sound] makes the reader physically react, as though they are present in the scene. The [simile / metaphor] "[specific words]" suggests [meaning], creating a mood of [feeling]. The overall effect is to make the reader feel [emotion / connection / unease].
+  </div>
+
+  <div class="trick">
+    <div class="label">Template 3 &mdash; Comparing Tones</div>
+    <strong>P:</strong> The two writers adopt very different tones toward [topic].<br>
+    <strong>E:</strong> Text A uses [language / technique + quote], while Text B uses [language / technique + quote].<br>
+    <strong>E:</strong> Text A's [word choice] creates a [admiring / critical] tone, making the reader feel [effect]. In contrast, Text B's [word choice] creates a [different tone], which [different effect]. This reveals that Text A's writer [attitude] while Text B's writer [attitude].
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"How does the writer present [person]?"</td>
+      <td>Identify if it's <strong>biography or autobiography</strong>. Comment on tone (admiring? critical?). Find language choices that reveal the writer's attitude. Use PEE.</td>
+    </tr>
+    <tr>
+      <td>"Write a biographical article about..."</td>
+      <td><strong>Headline + hook</strong>, then: early life, key achievements, challenges, character traits, impact, closing. Use quotes. It's storytelling, not a list of facts.</td>
+    </tr>
+    <tr>
+      <td>"How does the writer use language to describe...?"</td>
+      <td>Find <strong>sensory imagery</strong> (3+ senses), figurative language (simile, metaphor, personification). Quote short, zoom in on ONE word, explain the mood it creates.</td>
+    </tr>
+    <tr>
+      <td>"Compare how the writers convey their attitudes"</td>
+      <td>Identify each writer's <strong>tone</strong> using precise vocabulary (not just "positive/negative"). Compare by feature. Weave both texts together. Explain HOW language creates tone.</td>
+    </tr>
+    <tr>
+      <td>"Using information from both texts, write..."</td>
+      <td>This is <strong>synthesis</strong>. Organise by TOPIC, not by text. Blend information smoothly. Don't do "Text A says... Text B says..."</td>
+    </tr>
+    <tr>
+      <td>"Write an article for a school magazine"</td>
+      <td><strong>Headline</strong>, engaging hook (question or bold statement), body paragraphs with evidence, semi-formal register, strong closing line. Never start with "In this article I will..."</td>
+    </tr>
+    <tr>
+      <td>"What impression does the reader get of...?"</td>
+      <td>This asks for the <strong>overall effect</strong>. State the impression, quote evidence, then explain HOW the language creates that impression. Zoom in on word choices.</td>
+    </tr>
+    <tr>
+      <td>"Use a semi-colon correctly"</td>
+      <td>Two related sentences, no conjunction: "She had everything; she had nothing." This shows <strong>technical accuracy</strong> = higher Writing marks.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Forces and Motion &mdash; Physics Ch2</title>
+<style>
+  :root {
+    --subject: #2e86c1;
+    --subject-light: #eaf2f8;
+    --subject-dark: #1a5276;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Physics Ch2 &mdash; Cheat Sheet</div>
+    <h1>Forces and Motion</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Speed</strong></td>
+      <td>Distance moved per unit time. v = s / t. Unit: m/s.</td>
+      <td class="confuse">Velocity (speed + direction)</td>
+    </tr>
+    <tr>
+      <td><strong>Velocity</strong></td>
+      <td>Speed in a given direction. A vector quantity (has magnitude AND direction).</td>
+      <td class="confuse">Speed (just magnitude, no direction)</td>
+    </tr>
+    <tr>
+      <td><strong>Acceleration</strong></td>
+      <td>Rate of change of velocity: a = &Delta;v / &Delta;t. Unit: m/s<sup>2</sup>.</td>
+      <td class="confuse">Speed (acceleration is how fast speed CHANGES, not how fast you go)</td>
+    </tr>
+    <tr>
+      <td><strong>Resultant force</strong></td>
+      <td>The single overall force when all forces are combined. Use THIS in F = ma.</td>
+      <td class="confuse">Any single force (always subtract opposing forces first)</td>
+    </tr>
+    <tr>
+      <td><strong>Momentum (p)</strong></td>
+      <td>Mass &times; velocity. Unit: kg m/s. A vector &mdash; direction matters!</td>
+      <td class="confuse">Force (momentum is a property, force changes momentum)</td>
+    </tr>
+    <tr>
+      <td><strong>Terminal velocity</strong></td>
+      <td>Maximum speed of a falling object, when air resistance equals weight (forces balanced).</td>
+      <td class="confuse">"Stopped" (terminal velocity means constant speed, NOT zero speed)</td>
+    </tr>
+    <tr>
+      <td><strong>Inertia</strong></td>
+      <td>An object's resistance to changing its velocity. More mass = more inertia.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Weight (W)</strong></td>
+      <td>The gravitational force on an object. W = m &times; g. Unit: newtons (N).</td>
+      <td class="confuse">Mass (mass is in kg and stays the same; weight is in N and changes with gravity)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ALL FORMULAS TABLE -->
+<div class="card">
+  <h2>All Six Formulas &mdash; Learn These Cold</h2>
+  <table class="compare-table">
+    <tr>
+      <th>What</th>
+      <th>Formula</th>
+      <th>Units</th>
+    </tr>
+    <tr>
+      <td>Speed</td>
+      <td>v = s / t</td>
+      <td>m/s, m, s</td>
+    </tr>
+    <tr>
+      <td>Acceleration</td>
+      <td>a = &Delta;v / &Delta;t</td>
+      <td>m/s<sup>2</sup>, m/s, s</td>
+    </tr>
+    <tr>
+      <td>Newton's 2nd law</td>
+      <td>F = m &times; a</td>
+      <td>N, kg, m/s<sup>2</sup></td>
+    </tr>
+    <tr>
+      <td>Weight</td>
+      <td>W = m &times; g</td>
+      <td>N, kg, N/kg</td>
+    </tr>
+    <tr>
+      <td>Momentum</td>
+      <td>p = m &times; v</td>
+      <td>kg m/s, kg, m/s</td>
+    </tr>
+    <tr>
+      <td>Force &amp; momentum</td>
+      <td>F = &Delta;p / &Delta;t</td>
+      <td>N, kg m/s, s</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; F Is the RESULTANT Force</div>
+    In F = ma, <strong>F</strong> is the resultant force, not just any single force. If a question gives driving force AND friction, <strong>subtract friction first</strong>, then use F = ma. This is the #1 mistake students make.
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: MASS vs WEIGHT -->
+<div class="card">
+  <h2>Mass vs Weight &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Mass</th>
+      <th>Weight</th>
+    </tr>
+    <tr>
+      <td>What is it?</td>
+      <td>Amount of matter</td>
+      <td>Gravitational force on object</td>
+    </tr>
+    <tr>
+      <td>Unit</td>
+      <td>Kilograms (kg)</td>
+      <td>Newtons (N)</td>
+    </tr>
+    <tr>
+      <td>Changes with location?</td>
+      <td>No &mdash; same everywhere</td>
+      <td>Yes &mdash; depends on gravity</td>
+    </tr>
+    <tr>
+      <td>50 kg person on Moon?</td>
+      <td>Still 50 kg</td>
+      <td>Only 80 N (vs 500 N on Earth)</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON: TWO TYPES OF GRAPH -->
+<div class="card">
+  <h2>Distance-Time vs Speed-Time Graphs</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Distance-Time</th>
+      <th>Speed-Time</th>
+    </tr>
+    <tr>
+      <td>Gradient =</td>
+      <td>Speed</td>
+      <td>Acceleration</td>
+    </tr>
+    <tr>
+      <td>Area under =</td>
+      <td>(not used)</td>
+      <td>Distance travelled</td>
+    </tr>
+    <tr>
+      <td>Flat line =</td>
+      <td>Stationary (stopped)</td>
+      <td>Constant speed (still moving!)</td>
+    </tr>
+    <tr>
+      <td>Steeper line =</td>
+      <td>Faster</td>
+      <td>Greater acceleration</td>
+    </tr>
+    <tr>
+      <td>Line going down =</td>
+      <td>Going back towards start</td>
+      <td>Decelerating (slowing down)</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Flat Line on Speed-Time</div>
+    A flat line on a speed-time graph does <strong>NOT</strong> mean stopped. It means constant speed. Students confuse this constantly. Only on a distance-time graph does a flat line mean stationary.
+  </div>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Newton's 1st law</span>
+    <span>An object stays still or keeps moving at constant velocity unless an external force acts on it.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Newton's 2nd law</span>
+    <span>The bigger the resultant force, the bigger the acceleration &mdash; and heavier objects accelerate less (F = ma).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Newton's 3rd law</span>
+    <span>Every force has an equal and opposite reaction force &mdash; but they act on DIFFERENT objects.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Terminal velocity</span>
+    <span>When air resistance grows to equal weight, forces balance and speed stops changing.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Balanced forces</span>
+    <span>Resultant force is zero &mdash; object is either stationary OR moving at constant velocity (NOT necessarily stopped).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Momentum</span>
+    <span>Mass times velocity &mdash; total momentum is always conserved in a collision (no external forces).</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Free fall</span>
+    <span>All objects near Earth accelerate at g = 10 m/s<sup>2</sup> when only gravity acts &mdash; gaining 10 m/s every second.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Units Tell You the Formula</div>
+    m/s means "metres <em>per</em> second" = distance / time. m/s<sup>2</sup> means "metres per second <em>per second</em>" = change in velocity / time. If you forget the formula, read the units out loud.
+  </div>
+
+  <div class="trick">
+    <div class="label">F = ma Triangle</div>
+    Draw a triangle: <strong>F</strong> on top, <strong>m</strong> and <strong>a</strong> on the bottom. Cover what you want: cover F = m &times; a. Cover m = F / a. Cover a = F / m.
+  </div>
+
+  <div class="trick">
+    <div class="label">Terminal Velocity Story</div>
+    A skydiver in 4 stages: (1) jumps &mdash; weight &gt; drag &mdash; accelerates. (2) goes faster &mdash; drag increases. (3) drag = weight &mdash; forces balanced &mdash; terminal velocity. (4) parachute opens &mdash; drag &gt; weight &mdash; decelerates &mdash; new, slower terminal velocity.
+  </div>
+
+  <div class="trick">
+    <div class="label">Momentum Direction Trick</div>
+    Always pick one direction as + (e.g. right). Everything going the other way is -. Multiply mass &times; velocity (with its sign). Add up the totals. The sign of your answer tells you which way things end up moving.
+  </div>
+
+  <div class="trick">
+    <div class="label">Speed-Time Area = Distance</div>
+    Break the area under the graph into rectangles and triangles. Rectangle: base &times; height. Triangle: &frac12; &times; base &times; height. Use the SCALE numbers on the axes, not the paper length.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"A car has 1500 N driving force and 500 N friction. What is the acceleration? (mass = 1000 kg)"</td>
+      <td>Step 1: Resultant F = 1500 - 500 = 1000 N. Step 2: a = F/m = 1000/1000. Step 3: <strong>a = 1 m/s<sup>2</sup></strong></td>
+    </tr>
+    <tr>
+      <td>"A rocket (200 kg) has thrust 3000 N. What is its acceleration?"</td>
+      <td>Step 1: Weight = 200 &times; 10 = 2000 N. Step 2: Resultant F = 3000 - 2000 = 1000 N. Step 3: a = 1000/200 = <strong>5 m/s<sup>2</sup></strong></td>
+    </tr>
+    <tr>
+      <td>"Explain why the sky-diver reaches terminal velocity"</td>
+      <td>As speed increases, <strong>air resistance increases</strong>. Eventually air resistance = weight, resultant force = 0, so <strong>acceleration = 0</strong> and speed is constant.</td>
+    </tr>
+    <tr>
+      <td>"What does a flat section on a speed-time graph mean?"</td>
+      <td><strong>Constant speed</strong> (zero acceleration). The object IS still moving.</td>
+    </tr>
+    <tr>
+      <td>"Find the distance from a speed-time graph"</td>
+      <td>Calculate the <strong>area under the line</strong>. Split into rectangles + triangles.</td>
+    </tr>
+    <tr>
+      <td>"State Newton's third law and give an example"</td>
+      <td>Every action has an equal and opposite reaction, acting on <strong>different objects</strong>. E.g. runner pushes ground back, ground pushes runner forward.</td>
+    </tr>
+    <tr>
+      <td>"Trolley A (2 kg, 3 m/s) hits trolley B (4 kg, at rest). They stick together. Find velocity."</td>
+      <td>Before: 2&times;3 + 4&times;0 = 6 kg m/s. After: 6 = 6 &times; v. <strong>v = 1 m/s</strong></td>
+    </tr>
+    <tr>
+      <td>"Does mass change on the Moon?"</td>
+      <td><strong>No.</strong> Mass is the amount of matter and stays the same. Weight changes because gravity is weaker.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

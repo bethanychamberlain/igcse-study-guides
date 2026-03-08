@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Mi Familia y Mis Amigos &mdash; Spanish Ch2</title>
+<style>
+  :root {
+    --subject: #e67e22;
+    --subject-light: #fef5e7;
+    --subject-dark: #ca6f1e;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #e67e22;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+  .hero { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 14px; padding: 28px 32px; margin-bottom: 20px; }
+  .hero .tag { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; margin-bottom: 4px; }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+  .progress-bar { background: var(--card); border-radius: 10px; padding: 14px 20px; margin-bottom: 20px; display: flex; align-items: center; gap: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+  .progress-bar .track { flex: 1; height: 10px; background: #eee; border-radius: 5px; overflow: hidden; }
+  .progress-bar .fill { height: 100%; background: var(--subject); border-radius: 5px; width: 0%; transition: width 0.4s ease; }
+  .progress-bar .label { font-size: 13px; font-weight: 600; color: var(--text-secondary); white-space: nowrap; }
+  .how-to { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 20px 24px; margin-bottom: 24px; }
+  .how-to h2 { font-size: 16px; color: var(--subject-dark); margin-bottom: 10px; }
+  .how-to .legend { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .how-to .legend-item { display: flex; align-items: flex-start; gap: 8px; font-size: 13px; }
+  .how-to .legend-icon { flex-shrink: 0; width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 800; color: #fff; }
+  .section-header { background: var(--subject); color: #fff; border-radius: 10px 10px 0 0; padding: 14px 20px; margin-top: 28px; font-size: 18px; font-weight: 700; }
+  .section-header .num { opacity: 0.7; font-size: 13px; display: block; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+  .card { background: var(--card); border-radius: 0 0 10px 10px; padding: 0; margin-bottom: 16px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .card + .card { border-radius: 10px; }
+  .block { padding: 14px 20px; border-left: 4px solid transparent; display: flex; gap: 12px; align-items: flex-start; }
+  .block + .block { border-top: 1px solid #f0f0f0; }
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+  .block .icon { flex-shrink: 0; width: 26px; height: 26px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+  .block .body { flex: 1; }
+  .block .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 3px; }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+  .spanish { font-style: italic; color: var(--subject-dark); font-weight: 600; }
+  .translation { color: var(--text-secondary); font-size: 13px; }
+  .checklist { list-style: none; padding: 14px 20px; }
+  .checklist li { display: flex; align-items: flex-start; gap: 10px; padding: 6px 0; font-size: 14px; }
+  .checklist input[type="checkbox"] { margin-top: 3px; width: 18px; height: 18px; accent-color: var(--check-done); flex-shrink: 0; cursor: pointer; }
+  .compare-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  .compare-table th { background: var(--subject-light); color: var(--subject-dark); padding: 8px 10px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .compare-table td { padding: 8px 10px; border-bottom: 1px solid #eee; }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .conj-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+  .conj-table th { background: var(--subject-light); color: var(--subject-dark); padding: 8px 10px; text-align: center; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .conj-table th:first-child { text-align: left; }
+  .conj-table td { padding: 8px 10px; border-bottom: 1px solid #eee; text-align: center; }
+  .conj-table td:first-child { text-align: left; font-weight: 600; color: var(--text-secondary); }
+  .conj-table tr:last-child td { border-bottom: none; }
+  .intro-text { padding: 14px 20px; font-size: 14px; color: var(--text-secondary); }
+  .end-card { background: linear-gradient(135deg, var(--subject-dark), var(--subject)); color: #fff; border-radius: 12px; padding: 24px; margin-top: 28px; text-align: center; }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Spanish Ch2 &mdash; Vocabulary &amp; Grammar</div>
+  <h1>Mi Familia y Mis Amigos</h1>
+  <div class="subtitle">Family members, physical descriptions, personality adjectives, and possessive adjectives &mdash; including the ones beyond &ldquo;mi&rdquo; that you need to learn.</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 22 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Work through each section below. Write the key rules in your notes. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: FAMILY MEMBERS ===== -->
+<div class="section-header">
+  <span class="num">Section 1</span>
+  Family Members &mdash; La familia
+</div>
+<div class="card">
+  <div class="intro-text">
+    Describing your family is one of the most common IGCSE topics. You need these nouns cold.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Family Vocabulary</div>
+      <table class="compare-table">
+        <tr><th>Spanish</th><th>English</th></tr>
+        <tr><td><span class="spanish">el padre</span></td><td>the father</td></tr>
+        <tr><td><span class="spanish">la madre</span></td><td>the mother</td></tr>
+        <tr><td><span class="spanish">los padres</span></td><td>the parents</td></tr>
+        <tr><td><span class="spanish">el hermano / la hermana</span></td><td>the brother / sister</td></tr>
+        <tr><td><span class="spanish">el abuelo / la abuela</span></td><td>the grandfather / grandmother</td></tr>
+        <tr><td><span class="spanish">el t&iacute;o / la t&iacute;a</span></td><td>the uncle / aunt</td></tr>
+        <tr><td><span class="spanish">el primo / la prima</span></td><td>the cousin (m/f)</td></tr>
+        <tr><td><span class="spanish">el hijo / la hija</span></td><td>the son / daughter</td></tr>
+        <tr><td><span class="spanish">el marido / la mujer</span></td><td>the husband / wife</td></tr>
+        <tr><td><span class="spanish">el hijo &uacute;nico / la hija &uacute;nica</span></td><td>the only child (m/f)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Model Sentences</div>
+      <p><span class="spanish">&ldquo;Tengo un hermano y una hermana.&rdquo;</span> <span class="translation">&mdash; I have one brother and one sister.</span><br>
+         <span class="spanish">&ldquo;Soy hijo &uacute;nico.&rdquo;</span> <span class="translation">&mdash; I am an only child. (boy)</span><br>
+         <span class="spanish">&ldquo;Vivo con mis padres y mi hermano.&rdquo;</span> <span class="translation">&mdash; I live with my parents and my brother.</span></p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Draw a Family Tree</div>
+      <p>Draw your own family tree and label every person in Spanish. Then write one sentence about each: <span class="spanish">&ldquo;Mi padre se llama John. Tiene cuarenta a&ntilde;os.&rdquo;</span> This is exactly the kind of writing the exam rewards.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name at least 8 family members in Spanish</li>
+    <li><input type="checkbox"> I know the masculine and feminine versions (hermano/hermana, primo/prima)</li>
+    <li><input type="checkbox"> I can describe my own family in 3+ sentences</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: POSSESSIVE ADJECTIVES ===== -->
+<div class="section-header">
+  <span class="num">Section 2</span>
+  Possessive Adjectives &mdash; More Than Just &ldquo;Mi&rdquo;
+</div>
+<div class="card">
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; This Is Your Biggest Gap</div>
+      <p>On the Easter test, you only knew <strong>&ldquo;mi&rdquo;</strong> for possessives and scored <strong>1 out of 5</strong>. You used &ldquo;mi&rdquo; for everything &mdash; &ldquo;my,&rdquo; &ldquo;your,&rdquo; &ldquo;his,&rdquo; &ldquo;our.&rdquo; That doesn&rsquo;t work. Spanish has <strong>six different possessive adjectives</strong> and you need all of them.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; All Possessive Adjectives</div>
+      <table class="conj-table">
+        <tr>
+          <th>English</th>
+          <th>Before Singular Noun</th>
+          <th>Before Plural Noun</th>
+        </tr>
+        <tr>
+          <td>my</td>
+          <td><strong>mi</strong></td>
+          <td><strong>mis</strong></td>
+        </tr>
+        <tr>
+          <td>your (t&uacute;)</td>
+          <td><strong>tu</strong></td>
+          <td><strong>tus</strong></td>
+        </tr>
+        <tr>
+          <td>his / her / your (usted)</td>
+          <td><strong>su</strong></td>
+          <td><strong>sus</strong></td>
+        </tr>
+        <tr>
+          <td>our</td>
+          <td><strong>nuestro/a</strong></td>
+          <td><strong>nuestros/as</strong></td>
+        </tr>
+        <tr>
+          <td>your (vosotros)</td>
+          <td><strong>vuestro/a</strong></td>
+          <td><strong>vuestros/as</strong></td>
+        </tr>
+        <tr>
+          <td>their / your (ustedes)</td>
+          <td><strong>su</strong></td>
+          <td><strong>sus</strong></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Examples</div>
+      <p><span class="spanish">&ldquo;<strong>Mi</strong> hermano es alto.&rdquo;</span> <span class="translation">&mdash; My brother is tall.</span><br>
+         <span class="spanish">&ldquo;<strong>Tu</strong> madre es simp&aacute;tica.&rdquo;</span> <span class="translation">&mdash; Your mother is nice.</span><br>
+         <span class="spanish">&ldquo;<strong>Su</strong> casa es grande.&rdquo;</span> <span class="translation">&mdash; His/Her house is big.</span><br>
+         <span class="spanish">&ldquo;<strong>Mis</strong> hermanos son j&oacute;venes.&rdquo;</span> <span class="translation">&mdash; My brothers are young.</span><br>
+         <span class="spanish">&ldquo;<strong>Nuestro</strong> padre es m&eacute;dico.&rdquo;</span> <span class="translation">&mdash; Our father is a doctor.</span><br>
+         <span class="spanish">&ldquo;<strong>Nuestra</strong> casa est&aacute; en Palm Bay.&rdquo;</span> <span class="translation">&mdash; Our house is in Palm Bay.</span></p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Key Rules</div>
+      <p><strong>Rule 1:</strong> Mi, tu, su do NOT change for gender. <span class="spanish">&ldquo;mi hermano&rdquo;</span> AND <span class="spanish">&ldquo;mi hermana&rdquo;</span> &mdash; same word.<br>
+         <strong>Rule 2:</strong> They DO change for plural. <span class="spanish">&ldquo;mi hermano&rdquo;</span> but <span class="spanish">&ldquo;<strong>mis</strong> hermanos.&rdquo;</span><br>
+         <strong>Rule 3:</strong> Only <span class="spanish">nuestro/vuestro</span> change for BOTH gender AND number: nuestro, nuestra, nuestros, nuestras.<br>
+         <strong>Rule 4:</strong> <span class="spanish">Tu</span> (your) has NO accent. <span class="spanish">T&uacute;</span> (you) has an accent. Different words!</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Drill Beyond &ldquo;Mi&rdquo;</div>
+      <p>Write 6 sentences about your family, each using a DIFFERENT possessive: <span class="spanish">mi padre, tu amigo, su hermana, nuestro perro, mis abuelos, sus primos</span>. If you can only write &ldquo;mi,&rdquo; you will lose marks every time the exam asks about other people&rsquo;s families.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know all 6 possessive adjectives (mi, tu, su, nuestro, vuestro, su)</li>
+    <li><input type="checkbox"> I know to add -s for plural nouns (mi &rarr; mis, tu &rarr; tus, su &rarr; sus)</li>
+    <li><input type="checkbox"> I know that only nuestro/vuestro change for gender (nuestro/nuestra)</li>
+    <li><input type="checkbox"> I can use at least 3 different possessives in sentences</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: PHYSICAL DESCRIPTIONS ===== -->
+<div class="section-header">
+  <span class="num">Section 3</span>
+  Physical Descriptions &mdash; &iquest;C&oacute;mo es?
+</div>
+<div class="card">
+  <div class="intro-text">
+    Describing people&rsquo;s appearance uses <strong>SER</strong> (permanent characteristics) and <strong>TENER</strong> (to have &mdash; for hair, eyes).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Height &amp; Build (use SER)</div>
+      <table class="compare-table">
+        <tr><th>Spanish</th><th>English</th></tr>
+        <tr><td><span class="spanish">alto/a</span></td><td>tall</td></tr>
+        <tr><td><span class="spanish">bajo/a</span></td><td>short</td></tr>
+        <tr><td><span class="spanish">delgado/a</span></td><td>thin / slim</td></tr>
+        <tr><td><span class="spanish">gordo/a</span></td><td>fat</td></tr>
+        <tr><td><span class="spanish">de estatura mediana</span></td><td>of medium height</td></tr>
+      </table>
+      <p style="margin-top:8px;"><span class="spanish">&ldquo;Mi padre <strong>es</strong> alto y delgado.&rdquo;</span> <span class="translation">&mdash; My father is tall and thin.</span></p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Hair &amp; Eyes (use TENER)</div>
+      <p>In Spanish you say &ldquo;I HAVE blue eyes&rdquo; not &ldquo;my eyes ARE blue.&rdquo; Use <span class="spanish"><strong>tener</strong></span> (to have).</p>
+      <table class="compare-table" style="margin-top:8px;">
+        <tr><th>Spanish</th><th>English</th></tr>
+        <tr><td><span class="spanish">el pelo largo / corto</span></td><td>long / short hair</td></tr>
+        <tr><td><span class="spanish">el pelo rizado / liso</span></td><td>curly / straight hair</td></tr>
+        <tr><td><span class="spanish">el pelo rubio / moreno / casta&ntilde;o / pelirrojo</span></td><td>blond / dark / brown / red hair</td></tr>
+        <tr><td><span class="spanish">los ojos azules / verdes / marrones</span></td><td>blue / green / brown eyes</td></tr>
+      </table>
+      <p style="margin-top:8px;"><span class="spanish">&ldquo;<strong>Tiene</strong> el pelo largo y rubio.&rdquo;</span> <span class="translation">&mdash; He/She has long blond hair.</span><br>
+         <span class="spanish">&ldquo;<strong>Tengo</strong> los ojos marrones.&rdquo;</span> <span class="translation">&mdash; I have brown eyes.</span></p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; SER for Build, TENER for Hair/Eyes</div>
+      <p>&ldquo;He IS tall&rdquo; = <span class="spanish">&ldquo;<strong>Es</strong> alto&rdquo;</span> (SER &mdash; permanent trait)<br>
+         &ldquo;He HAS brown hair&rdquo; = <span class="spanish">&ldquo;<strong>Tiene</strong> el pelo casta&ntilde;o&rdquo;</span> (TENER &mdash; possession)</p>
+      <p style="margin-top:6px;">Do NOT say <span class="spanish">&ldquo;es pelo largo&rdquo;</span> &mdash; that makes no sense. Hair and eyes always use TENER.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know 4+ adjectives for height/build</li>
+    <li><input type="checkbox"> I use TENER (not SER) for hair and eyes</li>
+    <li><input type="checkbox"> I can describe a person&rsquo;s appearance in 3+ sentences</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: PERSONALITY ===== -->
+<div class="section-header">
+  <span class="num">Section 4</span>
+  Personality &mdash; &iquest;C&oacute;mo es de car&aacute;cter?
+</div>
+<div class="card">
+  <div class="intro-text">
+    Personality descriptions use <strong>SER</strong> because personality is a permanent characteristic (it defines who someone is).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Personality Adjectives</div>
+      <table class="compare-table">
+        <tr><th>Spanish (m/f)</th><th>English</th></tr>
+        <tr><td><span class="spanish">simp&aacute;tico/a</span></td><td>nice / friendly</td></tr>
+        <tr><td><span class="spanish">antip&aacute;tico/a</span></td><td>unfriendly / unpleasant</td></tr>
+        <tr><td><span class="spanish">t&iacute;mido/a</span></td><td>shy</td></tr>
+        <tr><td><span class="spanish">sociable</span></td><td>sociable / outgoing</td></tr>
+        <tr><td><span class="spanish">trabajador/a</span></td><td>hardworking</td></tr>
+        <tr><td><span class="spanish">vago/a</span></td><td>lazy</td></tr>
+        <tr><td><span class="spanish">ambicioso/a</span></td><td>ambitious</td></tr>
+        <tr><td><span class="spanish">desordenado/a</span></td><td>untidy / messy</td></tr>
+        <tr><td><span class="spanish">inteligente</span></td><td>intelligent</td></tr>
+        <tr><td><span class="spanish">generoso/a</span></td><td>generous</td></tr>
+        <tr><td><span class="spanish">gracioso/a</span></td><td>funny</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Examples</div>
+      <p><span class="spanish">&ldquo;Mi madre <strong>es</strong> muy simp&aacute;tica y generosa.&rdquo;</span> <span class="translation">&mdash; My mother is very nice and generous.</span><br>
+         <span class="spanish">&ldquo;Mi hermano <strong>es</strong> un poco vago pero gracioso.&rdquo;</span> <span class="translation">&mdash; My brother is a bit lazy but funny.</span><br>
+         <span class="spanish">&ldquo;Mi mejor amigo <strong>es</strong> sociable e inteligente.&rdquo;</span> <span class="translation">&mdash; My best friend is sociable and intelligent.</span></p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; &ldquo;Y&rdquo; becomes &ldquo;E&rdquo; before &ldquo;I-&rdquo;</div>
+      <p>The word for &ldquo;and&rdquo; is normally <span class="spanish"><strong>y</strong></span>, but it changes to <span class="spanish"><strong>e</strong></span> before words starting with <strong>i-</strong> or <strong>hi-</strong>.<br>
+         <span class="spanish">&ldquo;sociable <strong>e</strong> inteligente&rdquo;</span> NOT <span class="spanish">&ldquo;sociable y inteligente.&rdquo;</span> This is a small rule that earns you accuracy marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The IGCSE writing and speaking exams almost always have a question about family or friends. The examiner wants: <strong>name + relationship + appearance + personality</strong>. If you can do all four, you&rsquo;re hitting the top band.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know at least 8 personality adjectives with correct agreement</li>
+    <li><input type="checkbox"> I know that personality uses SER (not ESTAR)</li>
+    <li><input type="checkbox"> I know the y &rarr; e rule before i-/hi- words</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: PERSONAL A ===== -->
+<div class="section-header">
+  <span class="num">Section 5</span>
+  The Personal &ldquo;A&rdquo; &mdash; A Unique Spanish Rule
+</div>
+<div class="card">
+  <div class="intro-text">
+    Spanish has a rule that doesn&rsquo;t exist in English: when the <strong>direct object</strong> of a verb is a person, you put <span class="spanish"><strong>a</strong></span> before them.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Rule</div>
+      <p>When the thing receiving the action is a <strong>person</strong>, add <span class="spanish"><strong>a</strong></span> before them.</p>
+      <p style="margin-top:6px;"><span class="spanish">&ldquo;Quiero <strong>a</strong> mi madre.&rdquo;</span> <span class="translation">&mdash; I love my mother. (person &rarr; add a)</span><br>
+         <span class="spanish">&ldquo;Conozco <strong>a</strong> tu hermano.&rdquo;</span> <span class="translation">&mdash; I know your brother. (person &rarr; add a)</span><br>
+         <span class="spanish">&ldquo;Veo la televisi&oacute;n.&rdquo;</span> <span class="translation">&mdash; I watch television. (not a person &rarr; NO a)</span></p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Simple Test</div>
+      <p>Before the object of the verb, ask: &ldquo;Is this a person?&rdquo; If yes, add <span class="spanish"><strong>a</strong></span>. If no, don&rsquo;t. That&rsquo;s it.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the personal &ldquo;a&rdquo; goes before people who are direct objects</li>
+    <li><input type="checkbox"> I can write 2 sentences using the personal a</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: APOCOPATED ADJECTIVES ===== -->
+<div class="section-header">
+  <span class="num">Section 6</span>
+  Shortened Adjectives &mdash; Buen, Mal, Gran
+</div>
+<div class="card">
+  <div class="intro-text">
+    Some adjectives <strong>shorten</strong> when they go BEFORE a masculine singular noun. These are called &ldquo;apocopated&rdquo; adjectives.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Short Forms</div>
+      <table class="compare-table">
+        <tr><th>Full Form</th><th>Shortened</th><th>When?</th><th>Example</th></tr>
+        <tr>
+          <td><span class="spanish">bueno</span></td>
+          <td><span class="spanish"><strong>buen</strong></span></td>
+          <td>Before masc. singular noun</td>
+          <td><span class="spanish">un <strong>buen</strong> amigo</span> <span class="translation">(a good friend)</span></td>
+        </tr>
+        <tr>
+          <td><span class="spanish">malo</span></td>
+          <td><span class="spanish"><strong>mal</strong></span></td>
+          <td>Before masc. singular noun</td>
+          <td><span class="spanish">un <strong>mal</strong> d&iacute;a</span> <span class="translation">(a bad day)</span></td>
+        </tr>
+        <tr>
+          <td><span class="spanish">grande</span></td>
+          <td><span class="spanish"><strong>gran</strong></span></td>
+          <td>Before ANY singular noun</td>
+          <td><span class="spanish">una <strong>gran</strong> familia</span> <span class="translation">(a great family)</span></td>
+        </tr>
+        <tr>
+          <td><span class="spanish">primero</span></td>
+          <td><span class="spanish"><strong>primer</strong></span></td>
+          <td>Before masc. singular noun</td>
+          <td><span class="spanish">el <strong>primer</strong> hijo</span> <span class="translation">(the first son)</span></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Gran vs Grande</div>
+      <p>Before the noun, <span class="spanish"><strong>gran</strong></span> means &ldquo;<strong>great</strong>&rdquo; (quality): <span class="spanish">&ldquo;una gran persona&rdquo;</span> = a great person.<br>
+         After the noun, <span class="spanish"><strong>grande</strong></span> means &ldquo;<strong>big</strong>&rdquo; (size): <span class="spanish">&ldquo;una persona grande&rdquo;</span> = a big/large person.<br>
+         Position changes meaning!</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know bueno &rarr; buen and malo &rarr; mal before masculine singular nouns</li>
+    <li><input type="checkbox"> I know grande &rarr; gran before any singular noun, and it changes meaning</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 2 Notes Complete</h2>
+  <p>You&rsquo;ve covered family members, possessive adjectives (all six, not just &ldquo;mi&rdquo;), physical descriptions, personality adjectives, the personal a, and shortened adjectives. Now test yourself with the Chapter 2 quiz.</p>
+</div>
+
+<script>
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

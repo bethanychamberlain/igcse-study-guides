@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Chemistry of the Environment &mdash; Chemistry Ch15</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Chemistry &mdash; Chapter 15</div>
+  <h1>Chemistry of the Environment</h1>
+  <div class="subtitle">Water treatment, air pollutants and their effects, the greenhouse effect, acid rain, and tackling climate change</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 24 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: OUR ENVIRONMENT ===== -->
+<div class="section-header">
+  <span class="num">Section 15.1</span>
+  Our Environment and Us
+</div>
+<div class="card">
+  <div class="intro-text">
+    We depend on air, water, and soil every second of our lives. But human activity pollutes all three. This chapter is about the chemistry of that pollution and what we can do about it.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Environmental Problems</div>
+      <p>Human activities harm the environment in many ways:<br>
+         &bull; <strong>Harmful gases</strong> from power stations, factories, and engines (CO&#8322;, CO, SO&#8322;, nitrogen oxides) &rarr; global warming, acid rain<br>
+         &bull; <strong>Methane</strong> from farm animals &rarr; global warming<br>
+         &bull; <strong>Particulates</strong> (tiny solid particles) from factories and diesel engines &rarr; respiratory problems, cancer<br>
+         &bull; <strong>Untreated sewage</strong> in water &rarr; harmful microbes (cholera, typhoid)<br>
+         &bull; <strong>Fertilisers</strong> draining into rivers &rarr; eutrophication (algae growth, fish die)<br>
+         &bull; <strong>Toxic metals</strong> (lead, mercury, arsenic) from mines/factories &rarr; contaminate water</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This section is an overview &mdash; the rest of the chapter fills in the details. The exam often asks "Describe two ways human activity harms the environment." Being able to name specific pollutants and their effects (not vague statements like "pollution") is what gets marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name at least four types of pollution caused by human activity</li>
+    <li><input type="checkbox"> I can link each type to a specific harmful effect</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: RIVER WATER ===== -->
+<div class="section-header">
+  <span class="num">Section 15.2</span>
+  What Is in River Water?
+</div>
+<div class="card">
+  <div class="intro-text">
+    River water is never pure. It contains helpful substances (dissolved oxygen, minerals) and harmful ones (toxic metals, sewage, fertilisers, plastic waste).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Helpful Substances</div>
+      <p>&bull; <strong>Dissolved oxygen</strong> &mdash; essential for fish and aquatic life (they breathe it through their gills)<br>
+         &bull; <strong>Essential minerals</strong> &mdash; calcium (bones, teeth), magnesium (heart), sodium, potassium, iron, copper, zinc, fluorine &mdash; dissolved from rocks and soil</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Harmful Substances</div>
+      <p>&bull; <strong>Toxic metals</strong> &mdash; lead (brain damage), mercury (damages nervous system), arsenic (cancer risk). From mines, factories, and natural rock.<br>
+         &bull; <strong>Nitrates and phosphates</strong> &mdash; from fertilisers. They promote algae growth, leading to <strong>eutrophication</strong>.<br>
+         &bull; <strong>Microbes from sewage</strong> &mdash; bacteria causing cholera and typhoid; viruses causing hepatitis.<br>
+         &bull; <strong>Plastic waste</strong> &mdash; animals mistake it for food; it clogs their guts and they starve.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>For the exam, always give <strong>specific examples</strong>: don't just say "toxic metals" &mdash; say "lead, mercury, and arsenic." Don't just say "diseases" &mdash; say "cholera and typhoid." Specific names = more marks.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name two helpful and four harmful types of substance in river water</li>
+    <li><input type="checkbox"> I can explain why untreated sewage is dangerous</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: WATER SUPPLY ===== -->
+<div class="section-header">
+  <span class="num">Section 15.3</span>
+  Our Water Supply
+</div>
+<div class="card">
+  <div class="intro-text">
+    River water must be treated before we can drink it safely. There are five key steps to providing a clean water supply.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Five Steps of Water Treatment</div>
+      <p><strong>1. Choose a clean source</strong> &mdash; a clean stretch of river, or an aquifer (underground water in rock).<br>
+         <strong>2. Remove solid particles</strong> &mdash; three methods:<br>
+         &nbsp;&nbsp;&bull; <strong>Filtration</strong>: pass water through gravel or sand<br>
+         &nbsp;&nbsp;&bull; <strong>Sedimentation</strong>: let particles settle to the bottom of a tank<br>
+         &nbsp;&nbsp;&bull; <strong>Flocculation</strong>: add a coagulant (e.g. iron(III) sulfate) to clump fine particles together; skim them off<br>
+         <strong>3. Remove dissolved compounds</strong> &mdash; filter through <strong>carbon</strong> (activated charcoal). This removes bad tastes, smells, and some toxic metals.<br>
+         <strong>4. Kill microbes</strong> &mdash; add <strong>chlorine</strong>.<br>
+         <strong>5. Store safely</strong> &mdash; in a clean covered reservoir, ready to pump to homes.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Testing for Water</div>
+      <p><strong>Test that a liquid contains water:</strong><br>
+         &bull; Add to white anhydrous copper(II) sulfate &rarr; turns <strong>blue</strong><br>
+         &bull; Add to blue cobalt(II) chloride paper &rarr; turns <strong>pink</strong></p>
+      <p style="margin-top:6px;"><strong>Test that water is pure:</strong><br>
+         &bull; It will boil at exactly <strong>100&deg;C</strong> and freeze at exactly <strong>0&deg;C</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; "Contains Water" vs "Is Pure Water"</div>
+      <p>Turning copper(II) sulfate blue only proves the liquid <strong>contains</strong> water &mdash; it could be a mixture. To prove it is <strong>pure</strong> water, you must check the boiling point (100&deg;C) and freezing point (0&deg;C). Treated tap water is NOT pure &mdash; it still contains dissolved salts and chlorine. <strong>Distilled water</strong> is used in labs when pure water is needed.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The water treatment steps come up frequently on the exam. A common question is "Describe the steps in treating water for drinking" (4-5 marks). Know the order and the purpose of each step. Also, the tests for water (copper sulfate + cobalt chloride) are classic practical questions.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can list the five steps of water treatment in order</li>
+    <li><input type="checkbox"> I know the difference between filtration, sedimentation, and flocculation</li>
+    <li><input type="checkbox"> I can describe both tests for water and the test for pure water</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: FERTILISERS ===== -->
+<div class="section-header">
+  <span class="num">Section 15.4</span>
+  Fertilisers
+</div>
+<div class="card">
+  <div class="intro-text">
+    Plants need nutrients from the soil. When crops use them up, farmers add fertilisers. But overuse of fertilisers causes serious problems in rivers and lakes.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What Plants Need</div>
+      <p>Plants need three main elements (besides carbon, hydrogen, and oxygen from CO&#8322; and water):<br>
+         &bull; <strong>Nitrogen (N)</strong> &mdash; for making chlorophyll and proteins<br>
+         &bull; <strong>Potassium (K)</strong> &mdash; for making proteins and resisting disease<br>
+         &bull; <strong>Phosphorus (P)</strong> &mdash; for root growth and helping crops ripen</p>
+      <p style="margin-top:6px;">Plants absorb nitrogen as <strong>nitrate ions</strong> and <strong>ammonium ions</strong> through their roots.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Fertilisers</div>
+      <p>&bull; <strong>A fertiliser</strong> is any substance added to soil to make it more fertile.<br>
+         &bull; <strong>Natural fertilisers</strong>: animal manure.<br>
+         &bull; <strong>Synthetic fertilisers</strong>: salts made in factories, e.g. ammonium nitrate (NH&#8324;NO&#8323;), ammonium phosphate ((NH&#8324;)&#8323;PO&#8324;).<br>
+         &bull; An <strong>NPK fertiliser</strong> is a mixture of salts that provides all three elements: nitrogen, phosphorus, and potassium.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Eutrophication (The Big Problem)</div>
+      <p>When fertilisers wash into rivers (especially in wet weather), they cause <strong>eutrophication</strong>:</p>
+      <p style="margin-top:6px;">1. Fertilisers (nitrates/phosphates) enter the river [1]<br>
+         2. They promote rapid growth of <strong>algae</strong> on the water surface [1]<br>
+         3. The algae block light to plants below, which die [1]<br>
+         4. <strong>Bacteria</strong> feed on the dead plants and algae, using up dissolved <strong>oxygen</strong> [1]<br>
+         5. Fish and other aquatic life <strong>suffocate</strong> (die from lack of oxygen) [1]</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Eutrophication is a classic 4-5 mark exam question. Learn the <strong>chain of events</strong> in order: fertilisers &rarr; algae bloom &rarr; plants die &rarr; bacteria decompose &rarr; oxygen used up &rarr; fish die. Each step in the chain is a mark. This question appears almost every year in some form.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Think of eutrophication as a domino chain: each event causes the next. Write the chain on a flashcard: Fertiliser &rarr; Algae &rarr; Block light &rarr; Plants die &rarr; Bacteria decompose &rarr; O&#8322; used up &rarr; Fish die. If you can recite this chain from memory, you can answer any eutrophication question.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the three elements plants need and why</li>
+    <li><input type="checkbox"> I can define fertiliser and explain what NPK means</li>
+    <li><input type="checkbox"> I can describe the full chain of eutrophication (5 steps)</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: AIR COMPOSITION ===== -->
+<div class="section-header">
+  <span class="num">Section 15.5</span>
+  Air &mdash; The Gas Mixture We Live In
+</div>
+<div class="card">
+  <div class="intro-text">
+    We live in the troposphere, the lowest layer of the atmosphere. Clean dry air has a fixed composition that you need to learn.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Composition of Clean Dry Air</div>
+      <p>&bull; <strong>Nitrogen: 78%</strong><br>
+         &bull; <strong>Oxygen: 21%</strong><br>
+         &bull; <strong>Argon: ~1%</strong> (the remaining 1% is mainly argon, plus small amounts of carbon dioxide, and traces of other noble gases like helium, neon, krypton, xenon)</p>
+      <p style="margin-top:6px;">Air also contains variable amounts of <strong>water vapour</strong> and may contain pollutants from human activities.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Measuring Oxygen in Air</div>
+      <p><strong>Experiment:</strong> Pass 100 cm&sup3; of air back and forth over heated copper wire in a tube between two gas syringes.<br>
+         &bull; The oxygen reacts with the hot copper: <em>copper + oxygen &rarr; copper oxide</em> (the copper turns black).<br>
+         &bull; Repeat until the volume stops decreasing.<br>
+         &bull; Final volume: ~79 cm&sup3;. Volume of oxygen used = 100 &minus; 79 = <strong>21 cm&sup3;</strong>.<br>
+         &bull; Percentage of oxygen = 21/100 &times; 100 = <strong>21%</strong>.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>The exam might ask "What happens to the copper?" &mdash; it turns <strong>black</strong> (copper oxide forms). Don't say it "dissolves" or "melts." Also, remember: the air must be pushed back and forth <strong>several times</strong> to make sure all the oxygen has reacted. Stopping too early gives a wrong result.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can state the composition of clean dry air (78% N&#8322;, 21% O&#8322;, ~1% Ar)</li>
+    <li><input type="checkbox"> I can describe the experiment to find the percentage of oxygen in air</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: AIR POLLUTION ===== -->
+<div class="section-header">
+  <span class="num">Section 15.6</span>
+  Air Pollution from Fossil Fuels
+</div>
+<div class="card">
+  <div class="intro-text">
+    Burning fossil fuels (coal, petroleum, natural gas) releases pollutant gases into the atmosphere. Each pollutant has different sources and causes different harm.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Five Main Pollutants</div>
+      <table class="compare-table">
+        <tr>
+          <th>Pollutant</th>
+          <th>How It Forms</th>
+          <th>Harm It Does</th>
+        </tr>
+        <tr>
+          <td><strong>Carbon dioxide (CO&#8322;)</strong></td>
+          <td>Complete combustion of carbon-containing fuels</td>
+          <td>Greenhouse gas &rarr; global warming &rarr; climate change</td>
+        </tr>
+        <tr>
+          <td><strong>Carbon monoxide (CO)</strong></td>
+          <td><strong>Incomplete</strong> combustion (limited air supply, e.g. car engines)</td>
+          <td>Poisonous: binds to haemoglobin in blood, prevents oxygen transport &rarr; death</td>
+        </tr>
+        <tr>
+          <td><strong>Particulates</strong> (soot)</td>
+          <td>Incomplete combustion (especially diesel engines)</td>
+          <td>Respiratory problems, cancer</td>
+        </tr>
+        <tr>
+          <td><strong>Sulfur dioxide (SO&#8322;)</strong></td>
+          <td>Burning fuels that contain sulfur impurities (coal, some petroleum)</td>
+          <td>Dissolves in rain &rarr; <strong>acid rain</strong>. Damages limestone/marble buildings, kills trees, acidifies lakes</td>
+        </tr>
+        <tr>
+          <td><strong>Nitrogen oxides (NO, NO&#8322;)</strong></td>
+          <td>Nitrogen and oxygen in <strong>air</strong> react inside hot engines/furnaces</td>
+          <td>Acid rain, respiratory problems, form <strong>photochemical smog</strong> in sunlight</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Complete vs Incomplete Combustion</div>
+      <p><strong>Complete combustion</strong> (plenty of air): fuel &rarr; CO&#8322; + H&#8322;O. Produces carbon dioxide.<br>
+         <strong>Incomplete combustion</strong> (limited air): fuel &rarr; CO + C (soot) + H&#8322;O. Produces carbon monoxide and particulates.<br>
+         Carbon monoxide is colourless and odourless &mdash; you can't detect it without a detector. That's what makes it so dangerous.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Tackling Acid Rain</div>
+      <p>Three ways to reduce acid rain:<br>
+         &bull; <strong>Use low-sulfur fuels</strong> &mdash; remove sulfur from fuels before burning them<br>
+         &bull; <strong>Flue gas desulfurisation</strong> &mdash; treat waste gases from power stations with calcium oxide (lime): SO&#8322; + CaO &rarr; CaSO&#8323; (calcium sulfite)<br>
+         &bull; <strong>Catalytic converters</strong> in cars &mdash; convert nitrogen oxides to harmless nitrogen, and carbon monoxide to carbon dioxide</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The pollutant table is one of the most-tested topics. The exam will ask "Name a pollutant that causes acid rain" or "Explain how carbon monoxide is harmful." Learn the table: for each pollutant, know the source, the type of combustion, and the harm it does.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Make flashcards with each pollutant on the front and its source + harm on the back. Pay special attention to the distinction between CO&#8322; (global warming) and CO (poisonous) &mdash; the exam likes to test whether you know the difference. Also remember: nitrogen oxides come from the <strong>air itself</strong> reacting in a hot engine, not from the fuel.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name the five main pollutants from fossil fuels</li>
+    <li><input type="checkbox"> I can state the source and harm of each pollutant</li>
+    <li><input type="checkbox"> I can explain the difference between complete and incomplete combustion</li>
+    <li><input type="checkbox"> I can describe three ways to reduce acid rain</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 7: GREENHOUSE GASES ===== -->
+<div class="section-header">
+  <span class="num">Section 15.7</span>
+  Two Greenhouse Gases
+</div>
+<div class="card">
+  <div class="intro-text">
+    Carbon dioxide and methane are greenhouse gases. They trap heat in the atmosphere, keeping Earth warm. But we are adding too much, causing global warming and climate change.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Greenhouse Effect</div>
+      <p><strong>How it works:</strong><br>
+         1. The Sun sends energy to Earth as light and UV rays [1]<br>
+         2. Earth's surface absorbs this energy and re-emits it as <strong>heat (thermal/infrared energy)</strong> [1]<br>
+         3. Some heat escapes to space, but some is <strong>absorbed by greenhouse gases</strong> (CO&#8322; and CH&#8324;) in the atmosphere [1]<br>
+         4. This trapped heat warms the atmosphere and Earth's surface [1]</p>
+      <p style="margin-top:6px;">We <strong>need</strong> the greenhouse effect &mdash; without it, Earth would freeze at night. The problem is that we are adding too much CO&#8322; and CH&#8324;, so <strong>more heat is being trapped</strong> than before.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Sources of These Gases</div>
+      <p><strong>Carbon dioxide (CO&#8322;) sources:</strong><br>
+         &bull; Burning fossil fuels (coal, gas, petrol, diesel, kerosene) for electricity and transport<br>
+         &bull; Burning/clearing forests (deforestation)</p>
+      <p style="margin-top:6px;"><strong>Methane (CH&#8324;) sources:</strong><br>
+         &bull; Grazing livestock (cattle, sheep, goats) &mdash; microbes in their stomachs produce methane<br>
+         &bull; Rice paddy fields and boglands (microbes break down organic matter without oxygen)<br>
+         &bull; Leaks from natural gas wells</p>
+      <p style="margin-top:6px;">There is more CO&#8322; in the air than methane, but methane is about <strong>28 times more powerful</strong> at trapping heat per molecule.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Key Definitions</div>
+      <p>&bull; <strong>Global warming</strong>: the increase in Earth's average temperature due to rising levels of greenhouse gases.<br>
+         &bull; <strong>Climate change</strong>: the changes in weather patterns (rainfall, storms, temperatures) caused by global warming.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Predicted Impacts of Climate Change</div>
+      <p>&bull; More frequent droughts in some areas; more flooding in others<br>
+         &bull; Melting polar ice and glaciers &rarr; <strong>sea level rise</strong> &rarr; flooding of low-lying countries<br>
+         &bull; More severe storms, heatwaves, and wildfires<br>
+         &bull; Farmers unable to grow their usual crops<br>
+         &bull; Species extinction (animals that cannot adapt)<br>
+         &bull; Spread of tropical diseases to new areas<br>
+         &bull; Climate refugees &mdash; people forced to move</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Greenhouse Effect vs Global Warming</div>
+      <p>The <strong>greenhouse effect</strong> is natural and necessary &mdash; it keeps Earth warm enough for life. <strong>Global warming</strong> is the <em>enhanced</em> greenhouse effect caused by humans adding extra CO&#8322; and CH&#8324;. The exam penalises students who say "the greenhouse effect is bad" &mdash; it's not. The <strong>increase</strong> in greenhouse gases is the problem.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can explain how the greenhouse effect works (4 steps)</li>
+    <li><input type="checkbox"> I can name the two main greenhouse gases and their sources</li>
+    <li><input type="checkbox"> I can define global warming and climate change</li>
+    <li><input type="checkbox"> I can list at least four predicted impacts of climate change</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 8: TACKLING CLIMATE CHANGE ===== -->
+<div class="section-header">
+  <span class="num">Section 15.8</span>
+  Tackling Climate Change
+</div>
+<div class="card">
+  <div class="intro-text">
+    The two main greenhouse gases are CO&#8322; and methane. Tackling climate change means reducing emissions of both.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Reducing Carbon Dioxide</div>
+      <p><strong>1. Use non-carbon fuels for electricity:</strong><br>
+         &bull; <strong>Wind, waves, tides, fast-flowing rivers</strong> (hydroelectricity) &mdash; spin turbines<br>
+         &bull; <strong>Nuclear power</strong> &mdash; nuclear fission heats water to steam to spin turbines<br>
+         &bull; <strong>Solar power</strong> &mdash; photovoltaic (PV) cells convert sunlight to electricity directly<br>
+         These are all forms of <strong>renewable energy</strong> (they do not run out).</p>
+      <p style="margin-top:6px;"><strong>2. Use non-carbon power for transport:</strong><br>
+         &bull; <strong>Electric vehicles</strong> (batteries charged using non-carbon electricity)<br>
+         &bull; <strong>Hydrogen-oxygen fuel cells</strong> (produce only water as a by-product)</p>
+      <p style="margin-top:6px;"><strong>3. Plant more trees:</strong><br>
+         Trees absorb CO&#8322; during <strong>photosynthesis</strong>:<br>
+         <em>carbon dioxide + water &rarr; glucose + oxygen</em><br>
+         Deforestation must be stopped &mdash; dead/burned trees release their stored carbon as CO&#8322;.</p>
+      <p style="margin-top:6px;"><strong>4. Carbon capture:</strong> trapping CO&#8322; from power stations and storing it underground (in old oil/gas wells).</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Reducing Methane</div>
+      <p>The main source of methane is livestock (cattle, sheep, goats). To reduce methane emissions:<br>
+         &bull; Rear fewer grazing animals<br>
+         &bull; Eat less meat and dairy &mdash; eat more fish, chicken, or plant-based foods instead</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam often asks: "Suggest two ways to reduce carbon dioxide levels in the atmosphere." The best answers are: (1) use renewable energy instead of fossil fuels, and (2) plant more trees (they absorb CO&#8322; by photosynthesis). If you can also write the word equation for photosynthesis, that's a bonus mark.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Group the solutions into categories: <strong>electricity</strong> (wind, solar, nuclear, hydro), <strong>transport</strong> (electric cars, hydrogen fuel cells), <strong>biology</strong> (plant trees, photosynthesis), <strong>diet</strong> (eat less meat). Having solutions in categories makes them easier to recall under exam pressure.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can name four non-carbon ways to generate electricity</li>
+    <li><input type="checkbox"> I can explain how planting trees helps reduce CO&#8322; (with the word equation)</li>
+    <li><input type="checkbox"> I can suggest how methane emissions can be reduced</li>
+    <li><input type="checkbox"> I can define renewable energy and give examples</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 15 Notes Complete</h2>
+  <p>You've covered water treatment, river pollution, air composition, pollutants, greenhouse gases, and climate solutions. Now test yourself with the Chapter 15 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

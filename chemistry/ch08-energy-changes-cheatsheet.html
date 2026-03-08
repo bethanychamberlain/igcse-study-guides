@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Energy Changes in Reactions &mdash; Chemistry Ch8</title>
+<style>
+  :root {
+    --subject: #8e44ad;
+    --subject-light: #f4ecf7;
+    --subject-dark: #6c3483;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  /* Vocab table */
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* One-liner summaries */
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Memory tricks */
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Warning */
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Chemistry Ch8 &mdash; Cheat Sheet</div>
+    <h1>Energy Changes in Reactions</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Exothermic</strong></td>
+      <td>A reaction that <strong>gives out</strong> thermal energy to the surroundings. Surroundings get hotter.</td>
+      <td class="confuse">Endothermic (opposite &mdash; takes in energy, surroundings cool down)</td>
+    </tr>
+    <tr>
+      <td><strong>Endothermic</strong></td>
+      <td>A reaction that <strong>takes in</strong> thermal energy from the surroundings. Surroundings get colder.</td>
+      <td class="confuse">Exothermic (opposite &mdash; gives out energy, surroundings heat up)</td>
+    </tr>
+    <tr>
+      <td><strong>Activation energy (E&#8336;)</strong></td>
+      <td>The <strong>minimum energy</strong> colliding particles need in order to react. Every reaction needs it.</td>
+      <td class="confuse">Enthalpy change (E&#8336; is the hump on the diagram; &Delta;H is the overall drop or rise)</td>
+    </tr>
+    <tr>
+      <td><strong>Enthalpy change (&Delta;H)</strong></td>
+      <td>The <strong>overall energy change</strong> of a reaction. Negative = exothermic, positive = endothermic.</td>
+      <td class="confuse">Activation energy (activation energy is always positive; &Delta;H can be negative or positive)</td>
+    </tr>
+    <tr>
+      <td><strong>Bond energy</strong></td>
+      <td>Energy needed to <strong>break</strong> one mole of a bond (or released when the same bond forms). In kJ/mol.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Fuel cell</strong></td>
+      <td>A device that converts chemical energy directly into <strong>electrical energy</strong>. The H&#8322;-O&#8322; fuel cell produces only water.</td>
+      <td class="confuse">Electrolysis (electrolysis puts electricity IN to force a reaction; a fuel cell gets electricity OUT from a reaction)</td>
+    </tr>
+    <tr>
+      <td><strong>Catalyst</strong></td>
+      <td>Lowers the activation energy &mdash; gives an alternative pathway. Unchanged at the end.</td>
+      <td class="confuse">A catalyst does NOT change &Delta;H or the total amount of product &mdash; only makes it faster</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE -->
+<div class="card">
+  <h2>Exothermic vs Endothermic &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Exothermic</th>
+      <th>Endothermic</th>
+    </tr>
+    <tr>
+      <td>Energy direction</td>
+      <td>Given OUT to surroundings</td>
+      <td>Taken IN from surroundings</td>
+    </tr>
+    <tr>
+      <td>Surroundings temp</td>
+      <td>Goes UP (feels hotter)</td>
+      <td>Goes DOWN (feels colder)</td>
+    </tr>
+    <tr>
+      <td>&Delta;H sign</td>
+      <td>Negative (&minus;)</td>
+      <td>Positive (+)</td>
+    </tr>
+    <tr>
+      <td>Energy diagram</td>
+      <td>Products LOWER than reactants</td>
+      <td>Products HIGHER than reactants</td>
+    </tr>
+    <tr>
+      <td>Bond energy maths</td>
+      <td>Energy out &gt; energy in</td>
+      <td>Energy in &gt; energy out</td>
+    </tr>
+    <tr>
+      <td>Examples</td>
+      <td>Combustion, neutralisation, Na + water</td>
+      <td>Thermal decomposition, sherbet, photosynthesis</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Temperature Trick</div>
+    Students think "endothermic = getting hotter." <strong>Wrong.</strong> Endothermic takes energy <em>away from</em> the surroundings, so the surroundings cool down. <strong>Endo = IN</strong> (energy goes into the reaction). <strong>Exo = OUT</strong> (energy exits the reaction).
+  </div>
+</div>
+
+<!-- COMPARISON TABLE 2: BOND BREAKING vs MAKING -->
+<div class="card">
+  <h2>Bond Breaking vs Bond Making</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Breaking Bonds</th>
+      <th>Making Bonds</th>
+    </tr>
+    <tr>
+      <td>Energy</td>
+      <td>Takes IN energy (endothermic)</td>
+      <td>Gives OUT energy (exothermic)</td>
+    </tr>
+    <tr>
+      <td>Happens to</td>
+      <td>Reactants</td>
+      <td>Products</td>
+    </tr>
+    <tr>
+      <td>Always true?</td>
+      <td>Yes &mdash; no exceptions</td>
+      <td>Yes &mdash; no exceptions</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Formula Order</div>
+    <strong>&Delta;H = energy in (break) &minus; energy out (make)</strong>. NOT the other way around. If you flip it, your sign is wrong and exothermic becomes endothermic.
+  </div>
+</div>
+
+<!-- FUEL CELL vs ELECTROLYSIS -->
+<div class="card">
+  <h2>Fuel Cell vs Electrolysis</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Hydrogen Fuel Cell</th>
+      <th>Electrolysis</th>
+    </tr>
+    <tr>
+      <td>What it does</td>
+      <td>Reaction produces electricity</td>
+      <td>Electricity forces a reaction</td>
+    </tr>
+    <tr>
+      <td>Energy flow</td>
+      <td>Chemical &rarr; electrical</td>
+      <td>Electrical &rarr; chemical</td>
+    </tr>
+    <tr>
+      <td>Product</td>
+      <td>Water (only)</td>
+      <td>Depends on electrolyte</td>
+    </tr>
+    <tr>
+      <td>Acts like</td>
+      <td>A battery</td>
+      <td>The opposite of a battery</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Exothermic</span>
+    <span>The reaction gives out heat and the surroundings warm up &mdash; think combustion, neutralisation.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Endothermic</span>
+    <span>The reaction absorbs heat and the surroundings cool down &mdash; think thermal decomposition, sherbet.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Activation energy</span>
+    <span>The minimum energy particles need to collide successfully &mdash; the "hump" on a reaction pathway diagram.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">&Delta;H formula</span>
+    <span>Energy in (bonds broken) minus energy out (bonds made) &mdash; negative means exothermic.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Bond energy calc</span>
+    <span>Draw all bonds, add up energy in and energy out separately, then subtract &mdash; three steps, every time.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Fuel cell</span>
+    <span>Hydrogen + oxygen make water and electricity &mdash; clean but hydrogen storage and supply are the problems.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">Exo = Exit</div>
+    <strong>Exo</strong>thermic = energy <strong>exits</strong> the reaction (given out). <strong>Endo</strong>thermic = energy enters the reaction (taken <strong>in</strong>). If you remember "exit," you'll never mix them up.
+  </div>
+
+  <div class="trick">
+    <div class="label">Diagram Direction</div>
+    <strong>Exo = products go down</strong> (energy dropped out). <strong>Endo = products go up</strong> (energy was absorbed). The line always humps UP first for activation energy &mdash; then goes down (exo) or stays up (endo).
+  </div>
+
+  <div class="trick">
+    <div class="label">Three-Step Bond Calculation</div>
+    <strong>1.</strong> Draw every bond. <strong>2.</strong> Add up IN and OUT separately. <strong>3.</strong> Subtract: &Delta;H = IN &minus; OUT. Negative = exothermic. Positive = endothermic. Same method every time. Show all three steps for full marks.
+  </div>
+
+  <div class="trick">
+    <div class="label">Fuel Cell = "Clean But Not Easy"</div>
+    Only product is water (clean!). But: hydrogen must be stored at high pressure (hard), filling stations are rare (inconvenient), and most hydrogen currently comes from fossil fuels (not truly green yet).
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"The beaker gets warmer / temperature rises"</td>
+      <td><strong>Exothermic</strong> &mdash; the reaction gives out energy to the surroundings</td>
+    </tr>
+    <tr>
+      <td>"The temperature drops / surroundings get colder"</td>
+      <td><strong>Endothermic</strong> &mdash; the reaction takes in energy from the surroundings</td>
+    </tr>
+    <tr>
+      <td>"Is bond breaking exothermic or endothermic?"</td>
+      <td>Bond breaking is always <strong>endothermic</strong> (takes in energy). Bond making is always <strong>exothermic</strong>.</td>
+    </tr>
+    <tr>
+      <td>"Calculate the enthalpy change"</td>
+      <td><strong>&Delta;H = energy in (break) &minus; energy out (make)</strong>. Show every bond, every multiplication, every total.</td>
+    </tr>
+    <tr>
+      <td>"Draw a reaction pathway diagram for an exothermic reaction"</td>
+      <td>Reactants HIGH, products LOW. Hump above reactants = E&#8336;. Arrow down = &Delta;H (negative). Label axes: "Energy" and "Progress of reaction."</td>
+    </tr>
+    <tr>
+      <td>"Draw a reaction pathway diagram for an endothermic reaction"</td>
+      <td>Reactants LOW, products HIGH. Hump above both = E&#8336;. Arrow up = &Delta;H (positive). Label axes.</td>
+    </tr>
+    <tr>
+      <td>"Why is the temperature constant during a change of state?"</td>
+      <td>Energy is used to <strong>overcome forces between particles</strong>, not to increase kinetic energy</td>
+    </tr>
+    <tr>
+      <td>"Give one advantage of hydrogen fuel cells over petrol"</td>
+      <td>The only product is <strong>water</strong>, which is harmless, whereas petrol produces CO&#8322; which causes <strong>climate change</strong></td>
+    </tr>
+    <tr>
+      <td>"Why isn't hydrogen widely used as a fuel?"</td>
+      <td>Hydrogen must be stored under <strong>high pressure</strong>, filling stations are <strong>rare</strong>, and most hydrogen is made from <strong>fossil fuels</strong></td>
+    </tr>
+    <tr>
+      <td>"What is the difference between a fuel cell and electrolysis?"</td>
+      <td>A fuel cell <strong>produces</strong> electricity from a chemical reaction. Electrolysis uses electricity to <strong>force</strong> a reaction. They are opposites.</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

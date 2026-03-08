@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: Biological Molecules &mdash; Biology Ch4</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #27ae60;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card {
+    border-radius: 10px;
+  }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block {
+    border-top: 1px solid #f0f0f0;
+  }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">Biology &mdash; Chapter 4</div>
+  <h1>Biological Molecules</h1>
+  <div class="subtitle">Carbohydrates, lipids, proteins, and how to test for them &mdash; the chemistry of life</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 20 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: BIOLOGICAL MOLECULES ===== -->
+<div class="section-header">
+  <span class="num">Section 4.1</span>
+  Biological Molecules
+</div>
+<div class="card">
+  <div class="intro-text">
+    Living things are made of molecules. These biological molecules are often called <em>organic molecules</em> because they all contain carbon. There are four main groups, and each has a different job.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Organic Molecules</div>
+      <p><strong>Organic molecules</strong> contain <strong>carbon</strong> and <strong>hydrogen</strong> atoms (often with other elements too). Carbon atoms bond strongly to each other, so organic molecules can be very large with chain and ring structures.</p>
+      <p style="margin-top:8px;">Organisms need organic molecules to:<br>
+         &bull; Provide <strong>energy</strong> to drive life processes<br>
+         &bull; Provide <strong>raw materials</strong> for the growth and repair of tissues</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The Four Groups</div>
+      <p>The four main groups of organic molecules in living things:</p>
+      <p style="margin-top:6px;">
+         <strong>1. Carbohydrates</strong> &mdash; contain C, H and O &mdash; main energy source<br>
+         <strong>2. Lipids</strong> (fats and oils) &mdash; contain C, H and O &mdash; energy store and barriers<br>
+         <strong>3. Proteins</strong> &mdash; contain C, H, O, N (and sometimes S) &mdash; growth and repair<br>
+         <strong>4. Nucleic acids</strong> &mdash; contain C, H, O, N and P &mdash; carry genetic information</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>The exam loves asking: "Which elements does [molecule type] contain?" Carbohydrates and lipids = <strong>C, H, O only</strong>. Proteins add <strong>nitrogen (N)</strong>. This is also how the biuret test works &mdash; it detects the nitrogen in protein.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know what "organic molecule" means (contains carbon + hydrogen)</li>
+    <li><input type="checkbox"> I can name the four groups of biological molecules</li>
+    <li><input type="checkbox"> I know which elements each group contains</li>
+  </ul>
+</div>
+
+<!-- Sub-section: Carbohydrates -->
+<div class="card">
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Carbohydrates</div>
+      <p><strong>Monosaccharides</strong> are the simplest carbohydrates (e.g. <strong>glucose</strong>). Glucose is <strong>soluble</strong>, so it dissolves in blood and is easily transported. It is the main source of energy for cells.</p>
+      <p style="margin-top:6px;"><strong>Polysaccharides</strong> are formed when many monosaccharide molecules join together:<br>
+         &bull; <strong>Starch</strong> &mdash; energy store in plants (made of many glucose units)<br>
+         &bull; <strong>Glycogen</strong> &mdash; energy store in animals (also made of glucose units)<br>
+         &bull; <strong>Cellulose</strong> &mdash; structural; makes up plant cell walls</p>
+      <p style="margin-top:6px;">Polysaccharides are <strong>insoluble</strong>, which makes them good for storage (they won't dissolve away) and for structures like cell walls.</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Starch vs Glycogen</div>
+      <p>Both starch and glycogen are made of glucose. The difference: <strong>starch</strong> is the energy store in <strong>plants</strong>, <strong>glycogen</strong> is the energy store in <strong>animals</strong>. Don't mix them up &mdash; the exam will test this.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the difference between monosaccharides and polysaccharides</li>
+    <li><input type="checkbox"> I can name examples of each (glucose; starch, glycogen, cellulose)</li>
+  </ul>
+</div>
+
+<!-- Sub-section: Lipids -->
+<div class="card">
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Lipids (Fats and Oils)</div>
+      <p>Lipids are formed from <strong>one molecule of glycerol</strong> combined with <strong>three molecules of fatty acid</strong>.</p>
+      <p style="margin-top:6px;">&bull; <strong>Fats</strong> are solid at room temperature<br>
+         &bull; <strong>Oils</strong> are liquid at room temperature<br>
+         &bull; Both are <strong>insoluble in water</strong></p>
+      <p style="margin-top:6px;"><strong>Functions of lipids:</strong><br>
+         &bull; Excellent <strong>energy stores</strong> (even better than carbohydrates per gram)<br>
+         &bull; Form <strong>barriers</strong> between watery environments (e.g. cell membranes)</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Remember "Glycerol + 3 Fatty Acids"</div>
+      <p>Think: <strong>G + 3F = Lipid</strong>. If the exam asks you to describe the structure of a lipid, always mention both parts: glycerol AND fatty acids. Just saying "fat" is not enough.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the building blocks of a lipid (glycerol + 3 fatty acids)</li>
+    <li><input type="checkbox"> I know the difference between a fat and an oil</li>
+  </ul>
+</div>
+
+<!-- Sub-section: Proteins -->
+<div class="card">
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Proteins</div>
+      <p>Proteins are made of long chains of <strong>amino acids</strong> (the subunits). There are <strong>20 different amino acids</strong> that can be joined in any order, so there is a huge variety of different proteins.</p>
+      <p style="margin-top:6px;">The <strong>sequence of amino acids</strong> determines the <strong>shape</strong> of the protein. The shape determines its <strong>function</strong>:<br>
+         &bull; <strong>Enzymes</strong> &mdash; have an active site that fits a specific substrate<br>
+         &bull; <strong>Antibodies</strong> &mdash; have a binding site that fits a specific pathogen<br>
+         &bull; <strong>Keratin</strong> &mdash; long, thin structural protein in hair and nails</p>
+      <p style="margin-top:6px;">Amino acids are <strong>soluble</strong>, so they can be transported in blood and take part in reactions in the watery cytoplasm of cells.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>This links directly to the enzymes chapter. When the exam asks "Why does an enzyme only work on one substrate?", the answer traces back here: the <strong>amino acid sequence</strong> gives the enzyme its <strong>specific shape</strong>, and only one substrate fits the active site.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know that proteins are made of amino acids</li>
+    <li><input type="checkbox"> I understand that amino acid sequence determines protein shape and function</li>
+  </ul>
+</div>
+
+<!-- Sub-section: Hydrolysis and Condensation -->
+<div class="card">
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Building Up and Breaking Down</div>
+      <p>Large molecules are built from small subunits by two key reactions:</p>
+      <p style="margin-top:6px;"><strong>Condensation</strong> &mdash; small molecules are joined together, and <strong>water is removed</strong> (produced).<br>
+         Example: glucose + glucose &rarr; maltose + water</p>
+      <p style="margin-top:6px;"><strong>Hydrolysis</strong> &mdash; large molecules are broken down into smaller ones, and <strong>water is added</strong> (used up).<br>
+         Example: starch + water &rarr; glucose</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Condensation vs Hydrolysis</div>
+      <p>They are <strong>opposites</strong>. Condensation <strong>builds up</strong> (removes water). Hydrolysis <strong>breaks down</strong> (adds water). The clue is in the name: <strong>"hydro"</strong> = water, <strong>"lysis"</strong> = splitting. So hydrolysis = splitting with water.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip</div>
+      <p>Remember: <strong>Con</strong>densation = <strong>con</strong>necting (building up, water out). <strong>Hydro</strong>lysis = water (<strong>hydro</strong>) splitting (<strong>lysis</strong>) things apart.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define condensation and hydrolysis</li>
+    <li><input type="checkbox"> I know which one removes water and which one adds water</li>
+  </ul>
+</div>
+
+<!-- Sub-section: Water -->
+<div class="card">
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Water as a Solvent</div>
+      <p>Water is the most important <strong>biological solvent</strong> &mdash; it dissolves other substances so they can be transported and take part in reactions.</p>
+      <p style="margin-top:6px;">Water acts as a solvent in:<br>
+         &bull; <strong>Digestion</strong> &mdash; enzymes work in watery solutions<br>
+         &bull; <strong>Excretion</strong> &mdash; waste products dissolve in water to be removed<br>
+         &bull; <strong>Transport</strong> &mdash; blood plasma is mainly water, carrying dissolved substances</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know that water is a biological solvent and can give three roles</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: TESTING FOR BIOCHEMICALS ===== -->
+<div class="section-header">
+  <span class="num">Section 4.2</span>
+  Testing for Biochemicals
+</div>
+<div class="card">
+  <div class="intro-text">
+    Scientists use simple chemical tests to find out which biological molecules are present in a solution. You <strong>must</strong> know all four food tests &mdash; the steps, the reagents, and the colour changes. This is one of the most commonly examined topics.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Test for Glucose (Reducing Sugar)</div>
+      <p><strong>Reagent:</strong> Benedict's reagent (pale blue liquid)<br>
+         <strong>Method:</strong><br>
+         1. Add 2 cm&sup3; of Benedict's reagent to 2 cm&sup3; of the unknown solution<br>
+         2. Heat the mixture in a boiling water bath for 2&ndash;3 minutes<br>
+         <strong>Positive result:</strong> Colour changes from blue &rarr; green &rarr; yellow &rarr; <strong>orange/brick-red</strong><br>
+         <strong>Negative result:</strong> Stays blue (no reducing sugar present)</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; You Must Heat Benedict's</div>
+      <p>Benedict's test requires <strong>heating</strong> in a water bath. If you forget to mention heating, you lose a mark. None of the other food tests need heating &mdash; only Benedict's.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Test for Starch</div>
+      <p><strong>Reagent:</strong> Iodine solution (brown/yellow liquid)<br>
+         <strong>Method:</strong><br>
+         1. Add a few drops of iodine solution to 2 cm&sup3; of the unknown solution<br>
+         2. Gently shake<br>
+         <strong>Positive result:</strong> Colour changes to <strong>deep blue-black</strong><br>
+         <strong>Negative result:</strong> Stays brown/yellow (no starch present)</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Test for Protein</div>
+      <p><strong>Reagent:</strong> Biuret reagent (pale blue liquid)<br>
+         <strong>Method:</strong><br>
+         1. Add a few drops of biuret reagent to 2 cm&sup3; of the unknown solution<br>
+         2. Gently shake (no heating needed)<br>
+         <strong>Positive result:</strong> Colour changes to <strong>mauve/purple</strong><br>
+         <strong>Negative result:</strong> Stays blue (no protein present)</p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Benedict's vs Biuret</div>
+      <p>Both start as blue liquids, but they test for <strong>different things</strong>:<br>
+         &bull; <strong>B</strong>enedict's = reducing sugar (glucose) &rarr; goes <strong>orange/brick-red</strong> when <strong>heated</strong><br>
+         &bull; <strong>B</strong>iuret = protein &rarr; goes <strong>purple</strong> with NO heating<br>
+         Don't mix them up. The exam will try to trick you.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Test for Lipids (Emulsion Test)</div>
+      <p><strong>Reagent:</strong> Ethanol + distilled water (this is a <strong>physical test</strong>, not a chemical one)<br>
+         <strong>Method:</strong><br>
+         1. Add 2 cm&sup3; of ethanol to the unknown solution and gently shake<br>
+         2. Pour the mixture into a test tube containing an equal volume of distilled water<br>
+         <strong>Positive result:</strong> A <strong>milky-white emulsion</strong> forms (cloudy white layer)<br>
+         <strong>Negative result:</strong> Solution stays clear (no lipid present)</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Why Ethanol?</div>
+      <p>Lipids are <strong>insoluble in water</strong>, so you can't just add a reagent to a watery solution. The ethanol dissolves the lipid first, then when you add water, the lipid comes out of solution as tiny droplets &mdash; that's the milky emulsion. The exam may ask why the emulsion test uses ethanol.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Test for Vitamin C</div>
+      <p><strong>Reagent:</strong> DCPIP (a blue dye)<br>
+         <strong>Method:</strong><br>
+         1. Add drops of the unknown solution to DCPIP one drop at a time<br>
+         <strong>Positive result:</strong> DCPIP is <strong>decolourised</strong> (the blue colour disappears)<br>
+         <strong>Negative result:</strong> DCPIP stays blue</p>
+      <p style="margin-top:6px;">The <strong>fewer drops</strong> needed to decolourise DCPIP, the <strong>more concentrated</strong> the vitamin C solution.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Use the Table Below as Your Revision Tool</div>
+      <p>Copy the comparison table into your notes. Then cover it and try to recreate it from memory. If you can fill in every cell &mdash; reagent, method, positive result &mdash; you own this topic.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the Benedict's test (glucose): heat + orange/brick-red</li>
+    <li><input type="checkbox"> I know the iodine test (starch): no heat + blue-black</li>
+    <li><input type="checkbox"> I know the biuret test (protein): no heat + mauve/purple</li>
+    <li><input type="checkbox"> I know the emulsion test (lipid): ethanol + water + milky-white</li>
+    <li><input type="checkbox"> I know the DCPIP test (vitamin C): decolourises the blue dye</li>
+  </ul>
+</div>
+
+<!-- ===== THE BIG COMPARISON TABLE ===== -->
+<div class="section-header">
+  <span class="num">Putting It All Together</span>
+  Food Tests Comparison Table
+</div>
+<div class="card">
+  <div class="intro-text">
+    The exam <strong>will</strong> ask about food tests. This table is the most important thing in this chapter. Learn every cell.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Copy This Table Into Your Notes</div>
+      <table class="compare-table">
+        <tr>
+          <th>Testing for</th>
+          <th>Reagent</th>
+          <th>Method</th>
+          <th>Positive Result</th>
+        </tr>
+        <tr>
+          <td><strong>Glucose</strong> (reducing sugar)</td>
+          <td>Benedict's reagent</td>
+          <td>Add to sample, heat in water bath 2&ndash;3 min</td>
+          <td>Blue &rarr; <strong>orange/brick-red</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Starch</strong></td>
+          <td>Iodine solution</td>
+          <td>Add a few drops, shake gently</td>
+          <td>Brown &rarr; <strong>blue-black</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Protein</strong></td>
+          <td>Biuret reagent</td>
+          <td>Add a few drops, shake gently</td>
+          <td>Blue &rarr; <strong>mauve/purple</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Lipid</strong> (fat/oil)</td>
+          <td>Ethanol + water</td>
+          <td>Shake with ethanol, pour into water</td>
+          <td>Clear &rarr; <strong>milky-white emulsion</strong></td>
+        </tr>
+        <tr>
+          <td><strong>Vitamin C</strong></td>
+          <td>DCPIP</td>
+          <td>Add drops of sample to DCPIP</td>
+          <td>Blue &rarr; <strong>colourless</strong></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Controls</div>
+      <p>Every food test needs <strong>two controls</strong>:</p>
+      <p style="margin-top:6px;"><strong>1. Positive control</strong> &mdash; test a solution you <strong>know</strong> contains the substance. This proves the reagent is working properly. It should give a positive result.</p>
+      <p style="margin-top:6px;"><strong>2. Negative control</strong> &mdash; test a sample of <strong>distilled water</strong>. This proves the test solutions are not contaminated. It should give a negative result.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters &mdash; Fair Testing</div>
+      <p>When comparing solutions (e.g. glucose levels in different urine samples), you must keep conditions the same:<br>
+         &bull; Equal volumes of unknown solution<br>
+         &bull; Equal volumes of reagent<br>
+         &bull; Same temperature and heating time<br>
+         The exam often asks about "fair test" conditions for food tests. These are your marks.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; The Real Test</div>
+      <p>Close your book. Draw the food tests table from memory on a blank piece of paper. All 5 rows, all 4 columns. If you get every cell right, you own this topic. If you miss any &mdash; that's exactly what you need to drill.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I copied the food tests comparison table into my notes</li>
+    <li><input type="checkbox"> I can recreate the table from memory (all 5 tests)</li>
+    <li><input type="checkbox"> I know why we need a positive and a negative control</li>
+    <li><input type="checkbox"> I know what "fair test" conditions mean for food tests</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 4 Notes Complete</h2>
+  <p>You've covered biological molecules, hydrolysis and condensation, and all five food tests. Now try the quiz to test yourself.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>

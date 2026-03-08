@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: World Famous &mdash; English Ch8</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 8px 18px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .btn-primary { background: var(--subject); color: white; }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline { background: white; color: var(--subject-dark); border: 2px solid var(--subject); }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display {
+    margin-left: auto;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .tier-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 12px;
+    padding: 12px 16px;
+    border-radius: 10px;
+  }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+  .tier-header .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+  .tier-header .marks { font-size: 12px; color: var(--text-secondary); }
+
+  .q-card {
+    background: var(--card);
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .q-card .q-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
+  }
+  .q-num {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks {
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    background: #f0f0f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+
+  .q-answer { padding: 0 20px 16px; display: none; }
+  .q-answer.visible { display: block; }
+  .answer-box {
+    background: var(--subject-light);
+    border-left: 4px solid var(--subject);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+  }
+  .answer-box .answer-label {
+    font-weight: 700;
+    color: var(--subject-dark);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .mark-hint {
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+  }
+
+  .self-rate { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .self-rate .rate-label { font-size: 11px; color: var(--text-secondary); margin-right: 4px; }
+  .rate-btn {
+    width: 30px; height: 30px; border-radius: 6px; border: 2px solid #ddd;
+    background: white; font-size: 12px; font-weight: 700; cursor: pointer;
+    transition: all 0.15s; color: var(--text-secondary);
+  }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  .answer-lines { display: none; }
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines { display: block; padding: 4px 20px 16px; }
+    .answer-lines .line { border-bottom: 1px solid #d0d0d0; height: 26px; }
+    .tier-header { break-after: avoid; }
+  }
+
+  .quiz-guide {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+  }
+  .quiz-guide .guide-title { font-weight: 700; color: var(--subject-dark); font-size: 14px; margin-bottom: 8px; }
+  .quiz-guide .guide-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; color: var(--text-secondary); }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon { flex-shrink: 0; font-weight: 700; color: var(--text); }
+  .rating-scale { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .rating-scale .rs-item { display: flex; align-items: center; gap: 5px; }
+  .rating-scale .rs-num {
+    width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center;
+    justify-content: center; font-size: 11px; font-weight: 800; color: #fff;
+  }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text { font-size: 12px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English Ch8 &mdash; Self-Test Quiz</div>
+  <h1>World Famous</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name it. Intermediate = explain it. Advanced = discuss and apply it.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[1]</span>
+    <span>Numbers in square brackets like <strong>[1]</strong> show how many marks that part is worth on the exam.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each on the exam. Get these right and you're building a solid base.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">What is the difference between a <strong>biography</strong> and an <strong>autobiography</strong>?</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      A <strong>biography</strong> is an account of someone's life written by <strong>another person</strong> (third person) [1]. An <strong>autobiography</strong> is an account of someone's life written by <strong>themselves</strong> (first person) [1].
+      <div class="mark-hint">The key word is WHO writes it. Biography = someone else. Autobiography = the person themselves. Mention the point of view (third/first) for full marks.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">Name <strong>four</strong> things a good biography should include.</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Any four from: <strong>early life/background</strong>, <strong>key achievements</strong>, <strong>challenges/setbacks</strong>, <strong>character traits/personality</strong>, <strong>impact on others</strong>, <strong>quotations</strong> [1 for two correct, 2 for four or more].
+      <div class="mark-hint">Think of biography as storytelling about a real person, not a CV. Include personality and challenges, not just dates and facts.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">What is <strong>synthesis</strong> in English? How is it different from <strong>summary</strong>?</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Synthesis</strong> means combining information from <strong>two or more texts</strong> into one coherent response [1]. <strong>Summary</strong> means shortening <strong>one text</strong> to its key points [1]. Synthesis blends multiple sources; summary condenses a single source.
+      <div class="mark-hint">The key distinction: synthesis = multiple sources woven together. Summary = one source shortened. If you organise by text ("Text A says... Text B says...") you are summarising, not synthesising.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">When writing a magazine article, what should your <strong>opening paragraph</strong> do? Name two features of a strong opening.</div>
+    <span class="q-marks">[2]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      The opening should <strong>grab the reader's attention</strong> (a "hook") [1]. Two features (any two): a rhetorical question, a surprising fact or statistic, a bold or controversial statement, a vivid description, a direct address to the reader [1].
+      <div class="mark-hint">NEVER start an article with "In this article I will..." That is the weakest possible opening. Start with something that makes the reader want to keep reading.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain It?</h2>
+    <div class="marks">Worth 3-4 marks each. You need PEE structure and clear explanation of effects.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">A biographer writes: <strong>"She walked into the boardroom as though she owned it, and within minutes, she did."</strong> Using PEE, explain how the writer presents this person.</div>
+    <span class="q-marks">[4]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>P:</strong> The biographer presents the subject as confident and powerful [1]. <strong>E:</strong> "She walked into the boardroom as though she owned it, and within minutes, she did" [1]. <strong>E:</strong> The phrase "as though she owned it" uses a common expression to show extreme confidence, but the twist "and within minutes, she did" transforms the metaphor into literal reality. This surprises the reader and suggests the subject is not just confident but genuinely commanding &mdash; someone who delivers on their self-assurance. The short, punchy ending creates a sense of admiration and inevitability [1 for effect on reader, 1 for exploring the twist/word choices].
+      <div class="mark-hint">Notice the TWIST: the phrase starts as a figure of speech but becomes literal. Good answers spot this cleverness and explain what it reveals about the character.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Explain what <strong>tone</strong> means in writing. Give two examples of different tones a biographer might use and explain what each would suggest about their attitude toward the subject.</div>
+    <span class="q-marks">[4]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Tone</strong> is the writer's attitude toward their subject, conveyed through their language choices [1]. Example 1: A <strong>reverential</strong> tone (using words like "extraordinary," "unmatched," "visionary") suggests the biographer deeply admires the subject and wants the reader to share that admiration [1]. Example 2: A <strong>critical</strong> or <strong>cynical</strong> tone (using words like "so-called genius," "questionable motives," "conveniently forgotten") suggests the biographer doubts or disapproves of the subject and wants the reader to question their reputation [1+1].
+      <div class="mark-hint">Don't just name the tone &mdash; give specific WORDS a writer might use and explain what ATTITUDE they reveal. That's where the marks are.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">Explain how <strong>descriptive writing in fiction</strong> differs from <strong>descriptive writing in non-fiction</strong>. Give one example of a technique that both share and explain how it would be used differently in each.</div>
+    <span class="q-marks">[4]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      Fiction description aims to create <strong>atmosphere and immerse</strong> the reader [1]. Non-fiction description aims to help the reader <strong>picture something accurately</strong> [1]. Both share <strong>sensory imagery</strong> (appealing to the senses). In fiction, a writer might say "the forest breathed darkness" (personification + atmosphere). In non-fiction, a writer might say "the forest floor was thick with damp, rotting leaves that gave off a sharp, earthy smell" (precise, factual sensory detail) [1]. Fiction has more freedom to use figurative language and exaggeration; non-fiction stays closer to truth [1].
+      <div class="mark-hint">The key difference is PURPOSE: fiction = atmosphere/immersion, non-fiction = accuracy/clarity. The shared technique should show HOW they use it differently, not just that they both use it.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Discuss It?</h2>
+    <div class="marks">Worth 5-6 marks each. These need full PEE paragraphs, comparison, and detailed analysis.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">Text A (autobiography): <strong>"I remember the exact moment I knew I was different. I was seven, sitting alone on the school steps while everyone else played, and I thought: I will make them notice me one day."</strong><br><br>Text B (biography): <strong>"From an early age, Rivera displayed a fierce independence that unsettled her teachers and fascinated her classmates in equal measure."</strong><br><br>Compare how these two passages present the same period of the subject's life. Which gives the reader a deeper understanding, and why?</div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>P:</strong> Both passages describe the subject's childhood, but the autobiography creates emotional intimacy while the biography provides external perspective [1]. <strong>E (Text A):</strong> "I remember the exact moment" and "sitting alone on the school steps" [1]. <strong>E:</strong> The first-person narration and specific memory ("exact moment," "seven," "school steps") makes the reader feel they are sharing a private, vulnerable memory. The reader empathises with the loneliness of the child and understands the determination in "I will make them notice me" as deeply personal [1]. <strong>E (Text B):</strong> "fierce independence that unsettled her teachers and fascinated her classmates" [1]. <strong>E:</strong> The biography offers a view of how others perceived her &mdash; information the autobiographer cannot provide. "Unsettled" and "fascinated" show she had a complex effect on people, which the autobiography's lonely image doesn't capture [1]. <strong>Overall:</strong> Text A gives deeper emotional understanding (we feel her isolation); Text B gives wider social understanding (we see her impact on others). Together they complement each other; neither alone is complete [1].
+      <div class="mark-hint">6 marks: identify both viewpoints, quote both, explain effect of each, compare, give an overall judgement. The best answers show that BOTH have strengths rather than simply picking a winner.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">Write the opening two paragraphs of a <strong>magazine article</strong> with the headline: <strong>"The Price of Fame: What They Don't Tell You."</strong> Use formal register, at least one rhetorical question, and at least one semi-colon.</div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Example response:</strong><br><br>
+      "What happens when the cameras stop rolling and the applause fades? For many celebrities, the answer is a silence so deafening it becomes unbearable. Fame, we are told, is the ultimate achievement; yet behind the red carpets and magazine covers lies a reality few are willing to discuss.<br><br>
+      The truth is that celebrity culture demands a sacrifice most people do not fully understand until it is too late. Privacy vanishes overnight. Relationships are dissected by strangers. Every mistake becomes permanent, archived in headlines that will outlive the person who made them. It is, perhaps, the cruellest irony of our age: the more people know your name, the less they know who you really are."<br><br>
+      <strong>Marking:</strong> [1] formal register (no slang, no contractions), [1] rhetorical question in opening, [1] semi-colon used correctly, [1] engaging hook, [1] strong vocabulary/sentence variety, [1] clear article voice with paragraph structure.
+      <div class="mark-hint">You don't need to match this exactly. The examiner is looking for: correct article format, formal register, at least one rhetorical question, at least one semi-colon, and engaging language that doesn't start with "In this article I will..."</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">A travel writer describes arriving in a city: <strong>"The heat hit me like a wall the moment I stepped off the plane. Everywhere I looked, colour screamed &mdash; orange awnings, turquoise shutters, walls the colour of burnt sand. The air tasted of dust and diesel and something sweet I could not name."</strong> Using PEE, analyse how the writer uses descriptive techniques to immerse the reader. Comment on at least <strong>two</strong> techniques.</div>
+    <span class="q-marks">[6]</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Technique 1 &mdash; Simile / sensory imagery (touch):</strong><br>
+      <strong>P:</strong> The writer uses a simile and tactile imagery to convey the intensity of the heat [1]. <strong>E:</strong> "The heat hit me like a wall" [1]. <strong>E:</strong> Comparing heat to a "wall" suggests something solid and inescapable. The verb "hit" implies sudden, physical force, as though the heat is an assault. This makes the reader feel the overwhelming, suffocating nature of the climate the moment the writer arrives [1].<br><br>
+      <strong>Technique 2 &mdash; Personification / visual imagery / synaesthesia:</strong><br>
+      <strong>P:</strong> The writer uses personification and vivid colour imagery to create an overwhelming, sensory-rich scene [1]. <strong>E:</strong> "colour screamed" and "orange awnings, turquoise shutters, walls the colour of burnt sand" [1]. <strong>E:</strong> "Screamed" personifies colour as something loud and aggressive &mdash; this is synaesthesia (describing one sense using another), which makes the visual experience feel almost physical. The list of specific colours ("orange," "turquoise," "burnt sand") paints a vivid picture and creates an exotic, vibrant atmosphere. The reader feels they are being bombarded with sensation, mirroring the writer's own disorientation [1].
+      <div class="mark-hint">Bonus: the phrase "something sweet I could not name" appeals to taste AND creates mystery &mdash; the reader is intrigued. If you spotted a third technique, even better. 3 marks per technique: name it, quote it, explain the effect on the reader in detail.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

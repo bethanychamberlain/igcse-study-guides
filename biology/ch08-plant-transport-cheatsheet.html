@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cheat Sheet: Plant Transport &mdash; Biology Ch8</title>
+<style>
+  :root {
+    --subject: #27ae60;
+    --subject-light: #e8f8f0;
+    --subject-dark: #1e8449;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --trick: #2e86c1;
+    --trick-bg: #eaf2f8;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .hero .left .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 22px; margin-top: 2px; }
+  .hero .badge {
+    background: rgba(255,255,255,0.2);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+
+  .card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--subject-light);
+  }
+
+  .vocab-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .vocab-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .vocab-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+  .vocab-table tr:last-child td { border-bottom: none; }
+  .vocab-table .confuse {
+    color: var(--confuse);
+    font-weight: 600;
+    font-size: 12px;
+  }
+
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: center;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table th:first-child { text-align: left; }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+    text-align: center;
+  }
+  .compare-table td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: var(--subject-dark);
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  .one-liner {
+    display: flex;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 13px;
+  }
+  .one-liner:last-child { border-bottom: none; }
+  .one-liner .term {
+    font-weight: 700;
+    color: var(--subject-dark);
+    min-width: 120px;
+    flex-shrink: 0;
+  }
+
+  .trick {
+    background: var(--trick-bg);
+    border-left: 4px solid var(--trick);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .trick .label {
+    font-weight: 700;
+    color: var(--trick);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  .warning {
+    background: var(--confuse-bg);
+    border-left: 4px solid var(--confuse);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 10px 0;
+    font-size: 13px;
+  }
+  .warning .label {
+    font-weight: 700;
+    color: var(--confuse);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; padding: 14px 16px; margin-bottom: 10px; }
+    .hero { padding: 16px 20px; }
+    .hero h1 { font-size: 18px; }
+    .trick, .warning { break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="left">
+    <div class="tag">Biology Ch8 &mdash; Cheat Sheet</div>
+    <h1>Plant Transport</h1>
+  </div>
+  <div class="badge">Pin this to your wall</div>
+</div>
+
+<!-- VOCAB TABLE -->
+<div class="card">
+  <h2>Key Vocabulary</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:25%;">Word</th>
+      <th style="width:45%;">What It Means</th>
+      <th style="width:30%;">Don't Confuse With</th>
+    </tr>
+    <tr>
+      <td><strong>Xylem</strong></td>
+      <td>Dead, hollow tubes strengthened with lignin. Transport water and minerals upward from roots to leaves.</td>
+      <td class="confuse">Phloem (alive, transports sugars both ways)</td>
+    </tr>
+    <tr>
+      <td><strong>Phloem</strong></td>
+      <td>Living sieve tubes with companion cells. Transports sucrose and amino acids from source to sink (both directions).</td>
+      <td class="confuse">Xylem (dead, one-way upward only)</td>
+    </tr>
+    <tr>
+      <td><strong>Translocation</strong></td>
+      <td>The transport of dissolved sugars in phloem from sources to sinks.</td>
+      <td class="confuse">Transpiration (that's water loss from leaves, not sugar movement)</td>
+    </tr>
+    <tr>
+      <td><strong>Transpiration</strong></td>
+      <td>Loss of water vapour from leaves, mainly through stomata on the lower surface.</td>
+      <td class="confuse">Evaporation (transpiration is specifically from plant leaves)</td>
+    </tr>
+    <tr>
+      <td><strong>Root hair cell</strong></td>
+      <td>Long thin extension of root epidermal cell. Huge surface area. Many mitochondria for active transport of minerals.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Osmosis</strong></td>
+      <td>Net movement of water molecules from a region of higher water potential to lower water potential through a partially permeable membrane.</td>
+      <td class="confuse">Diffusion (diffusion is any substance moving down its concentration gradient &mdash; osmosis is specifically water through a membrane)</td>
+    </tr>
+    <tr>
+      <td><strong>Active transport</strong></td>
+      <td>Movement of substances against the concentration gradient, using energy from respiration.</td>
+      <td class="confuse">Osmosis/diffusion (those are passive &mdash; no energy needed)</td>
+    </tr>
+    <tr>
+      <td><strong>Potometer</strong></td>
+      <td>Apparatus that measures water uptake by a cut shoot (approximately = transpiration rate). An air bubble moves along a capillary tube.</td>
+      <td class="confuse">It measures water uptake, not water loss directly</td>
+    </tr>
+    <tr>
+      <td><strong>Xerophyte</strong></td>
+      <td>A plant adapted to survive in dry conditions (e.g. cactus, marram grass).</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+    <tr>
+      <td><strong>Wilting</strong></td>
+      <td>Plant becomes limp when water loss exceeds water uptake &mdash; cells lose turgor pressure and become flaccid.</td>
+      <td class="confuse">&mdash;</td>
+    </tr>
+  </table>
+</div>
+
+<!-- COMPARISON TABLE: XYLEM vs PHLOEM -->
+<div class="card">
+  <h2>Xylem vs Phloem &mdash; Side by Side</h2>
+  <table class="compare-table">
+    <tr>
+      <th></th>
+      <th>Xylem</th>
+      <th>Phloem</th>
+    </tr>
+    <tr>
+      <td>Transports</td>
+      <td>Water + mineral ions</td>
+      <td>Sucrose + amino acids</td>
+    </tr>
+    <tr>
+      <td>Direction</td>
+      <td>One way: UP (roots &rarr; leaves)</td>
+      <td>Both ways (source &rarr; sink)</td>
+    </tr>
+    <tr>
+      <td>Cells</td>
+      <td>Dead &mdash; no cytoplasm</td>
+      <td>Alive &mdash; sieve tubes + companion cells</td>
+    </tr>
+    <tr>
+      <td>Wall</td>
+      <td>Thick, lignin (waterproof, strong)</td>
+      <td>Thin; sieve plates with pores</td>
+    </tr>
+    <tr>
+      <td>Structure</td>
+      <td>Hollow tubes, end walls removed</td>
+      <td>Sieve tubes + companion cells</td>
+    </tr>
+    <tr>
+      <td>Process</td>
+      <td>Transpiration stream</td>
+      <td>Translocation</td>
+    </tr>
+  </table>
+
+  <div class="warning">
+    <div class="label">Exam Trap &mdash; Phloem Does NOT Just Go Down</div>
+    Students often say "xylem goes up, phloem goes down." Wrong. Phloem goes <strong>both ways</strong> &mdash; from source to sink. In summer: leaves (source) &rarr; roots (sink). In spring: roots (source) &rarr; new leaves (sink).
+  </div>
+</div>
+
+<!-- COMPARISON TABLE: FACTORS AFFECTING TRANSPIRATION -->
+<div class="card">
+  <h2>Factors That Increase Transpiration Rate</h2>
+  <table class="compare-table">
+    <tr>
+      <th>Factor</th>
+      <th>Effect</th>
+      <th>Why</th>
+    </tr>
+    <tr>
+      <td>High temperature</td>
+      <td>Increases rate</td>
+      <td>More kinetic energy &rarr; water evaporates faster</td>
+    </tr>
+    <tr>
+      <td>Wind</td>
+      <td>Increases rate</td>
+      <td>Blows humid air away &rarr; steeper diffusion gradient</td>
+    </tr>
+    <tr>
+      <td>Low humidity</td>
+      <td>Increases rate</td>
+      <td>Bigger water potential gradient between leaf and air</td>
+    </tr>
+    <tr>
+      <td>High light intensity</td>
+      <td>Increases rate</td>
+      <td>Stomata open for photosynthesis &rarr; water escapes</td>
+    </tr>
+  </table>
+</div>
+
+<!-- ONE-SENTENCE SUMMARIES -->
+<div class="card">
+  <h2>Say It in One Sentence</h2>
+  <div class="one-liner">
+    <span class="term">Transpiration</span>
+    <span>Water evaporates from spongy mesophyll cells, diffuses out through stomata, and is replaced by water pulled up through the xylem.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Xylem</span>
+    <span>Dead hollow pipes waterproofed with lignin &mdash; no cytoplasm means no obstruction to water flow.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Phloem</span>
+    <span>Living sieve tubes that move dissolved sugars from wherever they are made or stored to wherever they are needed.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Root hair cell</span>
+    <span>Long thin projection that absorbs water by osmosis and minerals by active transport from the soil.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Potometer</span>
+    <span>Measures how fast a bubble moves along a tube connected to a cut shoot &mdash; faster bubble = faster water uptake.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Wilting</span>
+    <span>When water loss exceeds water uptake, cells go flaccid and the plant droops &mdash; which actually slows further water loss.</span>
+  </div>
+  <div class="one-liner">
+    <span class="term">Xerophyte</span>
+    <span>Plants in dry habitats with thick cuticles, sunken stomata, rolled leaves, or spines to reduce water loss.</span>
+  </div>
+</div>
+
+<!-- MEMORY TRICKS -->
+<div class="card">
+  <h2>Memory Tricks</h2>
+
+  <div class="trick">
+    <div class="label">X = eXit (water goes up and out)</div>
+    <strong>X</strong>ylem = water e<strong>X</strong>its the plant (goes up to leaves and out through stomata). <strong>Ph</strong>loem = <strong>ph</strong>ood (sugar) moves around. Both are in vascular bundles together.
+  </div>
+
+  <div class="trick">
+    <div class="label">WHTL &mdash; The 4 Transpiration Factors</div>
+    <strong>W</strong>ind, <strong>H</strong>eat, (low) <strong>H</strong>umidity, <strong>L</strong>ight. All four <strong>increase</strong> transpiration. On a hot, windy, dry, sunny day, transpiration is at its fastest.
+  </div>
+
+  <div class="trick">
+    <div class="label">The Water Journey in 4 Steps</div>
+    <strong>1.</strong> Soil &rarr; root hair cell (osmosis). <strong>2.</strong> Root &rarr; xylem (osmosis, cell to cell). <strong>3.</strong> Xylem &rarr; leaf (tension pulls water up, cohesion holds the column together). <strong>4.</strong> Leaf &rarr; atmosphere (evaporation then diffusion through stomata = transpiration).
+  </div>
+
+  <div class="trick">
+    <div class="label">Why Root Hair Cells Have Mitochondria</div>
+    Mitochondria = energy factory. Energy is needed for <strong>active transport</strong> of mineral ions against the concentration gradient. No mitochondria = no energy = no mineral uptake. This is also why waterlogged (no oxygen) roots can't absorb minerals.
+  </div>
+</div>
+
+<!-- EXAM QUICK-FIRE -->
+<div class="card">
+  <h2>Quick-Fire Exam Cues</h2>
+  <table class="vocab-table">
+    <tr>
+      <th style="width:50%;">If the Question Says...</th>
+      <th style="width:50%;">The Answer Is...</th>
+    </tr>
+    <tr>
+      <td>"Compare xylem and phloem"</td>
+      <td>Xylem: dead, lignin walls, water UP. Phloem: alive, sieve plates, sucrose BOTH ways (translocation)</td>
+    </tr>
+    <tr>
+      <td>"Why are xylem cells dead?"</td>
+      <td>No cytoplasm = <strong>no obstruction</strong> to water flow. Hollow tubes are more efficient for transport</td>
+    </tr>
+    <tr>
+      <td>"How does water enter root hair cells?"</td>
+      <td>By <strong>osmosis</strong> &mdash; soil has higher water potential than root cell cytoplasm</td>
+    </tr>
+    <tr>
+      <td>"How do mineral ions enter root hair cells?"</td>
+      <td>By <strong>active transport</strong> (against concentration gradient, using energy from respiration)</td>
+    </tr>
+    <tr>
+      <td>"Explain how wind increases transpiration"</td>
+      <td>Wind blows away <strong>humid air</strong> from around the leaf, maintaining a <strong>steep diffusion gradient</strong></td>
+    </tr>
+    <tr>
+      <td>"What does a potometer measure?"</td>
+      <td><strong>Water uptake</strong> by a cut shoot (approximately equal to transpiration rate)</td>
+    </tr>
+    <tr>
+      <td>"Describe two adaptations of xerophytes"</td>
+      <td>Thick waxy cuticle (reduces evaporation) + rolled leaves/sunken stomata (trap humid air, reducing gradient)</td>
+    </tr>
+    <tr>
+      <td>"What is the evidence for water transport in xylem?"</td>
+      <td>Celery in coloured water &mdash; dye travels up the <strong>xylem</strong> vessels, visible in cross-section</td>
+    </tr>
+  </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Test Quiz: All the World's a Stage &mdash; English Ch4</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --foundation: #27ae60;
+    --foundation-bg: #d5f5e3;
+    --intermediate: #f39c12;
+    --intermediate-bg: #fef9e7;
+    --advanced: #e74c3c;
+    --advanced-bg: #fdedec;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.8; }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  .controls { display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap; }
+  .btn { font-family: inherit; font-size: 13px; font-weight: 600; padding: 8px 18px; border: none; border-radius: 8px; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--subject); color: white; }
+  .btn-primary:hover { background: var(--subject-dark); }
+  .btn-outline { background: white; color: var(--subject-dark); border: 2px solid var(--subject); }
+  .btn-outline:hover { background: var(--subject-light); }
+  .score-display { margin-left: auto; font-size: 14px; font-weight: 600; color: var(--text-secondary); display: flex; align-items: center; gap: 8px; }
+
+  .tier-header { display: flex; align-items: center; gap: 12px; margin: 28px 0 12px; padding: 12px 16px; border-radius: 10px; }
+  .tier-header.foundation { background: var(--foundation-bg); }
+  .tier-header.intermediate { background: var(--intermediate-bg); }
+  .tier-header.advanced { background: var(--advanced-bg); }
+  .tier-header .dot { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .tier-header.foundation .dot { background: var(--foundation); }
+  .tier-header.intermediate .dot { background: var(--intermediate); }
+  .tier-header.advanced .dot { background: var(--advanced); }
+  .tier-header .info { flex: 1; }
+  .tier-header h2 { font-size: 16px; margin: 0; }
+  .tier-header.foundation h2 { color: #1a7a3a; }
+  .tier-header.intermediate h2 { color: #b8770e; }
+  .tier-header.advanced h2 { color: #c0392b; }
+  .tier-header .marks { font-size: 12px; color: var(--text-secondary); }
+
+  .q-card { background: var(--card); border-radius: 10px; margin-bottom: 12px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); overflow: hidden; }
+  .q-card .q-header { display: flex; align-items: center; gap: 10px; padding: 14px 20px; }
+  .q-num { width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 800; color: #fff; flex-shrink: 0; }
+  .q-card.foundation .q-num { background: var(--foundation); }
+  .q-card.intermediate .q-num { background: var(--intermediate); }
+  .q-card.advanced .q-num { background: var(--advanced); }
+  .q-text { flex: 1; font-size: 14px; }
+  .q-marks { font-size: 11px; font-weight: 700; color: var(--text-secondary); background: #f0f0f0; padding: 2px 8px; border-radius: 4px; white-space: nowrap; }
+
+  .q-answer { padding: 0 20px 16px; display: none; }
+  .q-answer.visible { display: block; }
+  .answer-box { background: var(--subject-light); border-left: 4px solid var(--subject); border-radius: 0 8px 8px 0; padding: 12px 16px; font-size: 13px; }
+  .answer-box .answer-label { font-weight: 700; color: var(--subject-dark); font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+  .mark-hint { margin-top: 8px; font-size: 12px; color: var(--text-secondary); font-style: italic; }
+
+  .self-rate { display: flex; gap: 6px; margin-top: 10px; align-items: center; }
+  .self-rate .rate-label { font-size: 11px; color: var(--text-secondary); margin-right: 4px; }
+  .rate-btn { width: 30px; height: 30px; border-radius: 6px; border: 2px solid #ddd; background: white; font-size: 12px; font-weight: 700; cursor: pointer; transition: all 0.15s; color: var(--text-secondary); }
+  .rate-btn[data-val="1"] { border-color: #e74c3c; color: #e74c3c; }
+  .rate-btn[data-val="2"] { border-color: #f39c12; color: #f39c12; }
+  .rate-btn[data-val="3"] { border-color: #3498db; color: #3498db; }
+  .rate-btn[data-val="4"] { border-color: #27ae60; color: #27ae60; }
+  .rate-btn:hover { opacity: 0.8; transform: scale(1.1); }
+  .rate-btn.selected[data-val="1"] { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .rate-btn.selected[data-val="2"] { background: #f39c12; color: white; border-color: #f39c12; }
+  .rate-btn.selected[data-val="3"] { background: #3498db; color: white; border-color: #3498db; }
+  .rate-btn.selected[data-val="4"] { background: #27ae60; color: white; border-color: #27ae60; }
+
+  .answer-lines { display: none; }
+
+  @media print {
+    body { background: #fff; padding: 10px; }
+    .controls { display: none; }
+    .q-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .q-answer { display: none !important; }
+    .self-rate { display: none; }
+    .answer-lines { display: block; padding: 4px 20px 16px; }
+    .answer-lines .line { border-bottom: 1px solid #d0d0d0; height: 26px; }
+    .tier-header { break-after: avoid; }
+  }
+
+  .quiz-guide { background: var(--card); border: 2px solid var(--subject); border-radius: 10px; padding: 16px 20px; margin-bottom: 20px; font-size: 13px; }
+  .quiz-guide .guide-title { font-weight: 700; color: var(--subject-dark); font-size: 14px; margin-bottom: 8px; }
+  .quiz-guide .guide-row { display: flex; gap: 8px; align-items: flex-start; margin-bottom: 6px; color: var(--text-secondary); }
+  .quiz-guide .guide-row:last-child { margin-bottom: 0; }
+  .quiz-guide .guide-icon { flex-shrink: 0; font-weight: 700; color: var(--text); }
+  .rating-scale { display: flex; gap: 12px; margin-top: 8px; flex-wrap: wrap; }
+  .rating-scale .rs-item { display: flex; align-items: center; gap: 5px; }
+  .rating-scale .rs-num { width: 22px; height: 22px; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #fff; }
+  .rs-1 { background: #e74c3c; }
+  .rs-2 { background: #f39c12; }
+  .rs-3 { background: #3498db; }
+  .rs-4 { background: #27ae60; }
+  .rating-scale .rs-text { font-size: 12px; color: var(--text-secondary); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English Ch4 &mdash; Self-Test Quiz</div>
+  <h1>All the World's a Stage</h1>
+  <p>10 questions across 3 difficulty levels. Foundation = name the technique. Intermediate = explain and apply it. Advanced = analyse and write extended responses.</p>
+</div>
+
+<div class="controls">
+  <button class="btn btn-primary" onclick="toggleAll()">Show All Answers</button>
+  <button class="btn btn-outline" onclick="hideAll()">Hide All Answers</button>
+  <button class="btn btn-outline" onclick="window.print()">Print Quiz</button>
+  <div class="score-display">
+    <span id="scoreText">Rate each answer to track your score</span>
+  </div>
+</div>
+
+<div class="quiz-guide">
+  <div class="guide-title">How This Works</div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9654;</span>
+    <span><strong>Click any question</strong> to show or hide the answer. Or use the buttons above to show/hide all.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">[2]</span>
+    <span>Numbers in square brackets like <strong>[2]</strong> in the answers show how many marks that part is worth.</span>
+  </div>
+  <div class="guide-row">
+    <span class="guide-icon">&#9733;</span>
+    <span><strong>Rate your answer</strong> after checking it &mdash; be honest, this is for you:</span>
+  </div>
+  <div class="rating-scale">
+    <div class="rs-item"><div class="rs-num rs-1">1</div><span class="rs-text">Wrong or blank</span></div>
+    <div class="rs-item"><div class="rs-num rs-2">2</div><span class="rs-text">Partially right</span></div>
+    <div class="rs-item"><div class="rs-num rs-3">3</div><span class="rs-text">Mostly right</span></div>
+    <div class="rs-item"><div class="rs-num rs-4">4</div><span class="rs-text">Nailed it</span></div>
+  </div>
+</div>
+
+<!-- ===== FOUNDATION ===== -->
+<div class="tier-header foundation">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Foundation &mdash; Can You Name It?</h2>
+    <div class="marks">Worth 1-2 marks each. Define key drama and writing terms from this chapter.</div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="1">
+  <div class="q-header">
+    <div class="q-num">1</div>
+    <div class="q-text">Define <strong>soliloquy</strong>, <strong>monologue</strong>, and <strong>dialogue</strong>. What is the key difference between the first two?</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Soliloquy:</strong> a speech where a character speaks their thoughts aloud while alone on stage &mdash; the audience hears, but other characters do not [1].<br>
+      <strong>Monologue:</strong> a long speech by one character addressed to other characters on stage [1].<br>
+      <strong>Dialogue:</strong> conversation between two or more characters [1].<br>
+      <strong>Key difference:</strong> In a soliloquy the other characters cannot hear; in a monologue they can.
+      <div class="mark-hint">The examiner tests whether you know soliloquy vs monologue. The "alone on stage / audience only" part is what earns the mark for soliloquy.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(1,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="2">
+  <div class="q-header">
+    <div class="q-num">2</div>
+    <div class="q-text">Name <strong>Aristotle's six elements</strong> of drama.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      1. <strong>Plot</strong> &mdash; the story and events [&frac12;]<br>
+      2. <strong>Character</strong> &mdash; the people in the drama [&frac12;]<br>
+      3. <strong>Theme/Thought</strong> &mdash; the ideas and messages [&frac12;]<br>
+      4. <strong>Diction/Language</strong> &mdash; the words used [&frac12;]<br>
+      5. <strong>Music/Sound</strong> &mdash; rhythm, sound effects, songs [&frac12;]<br>
+      6. <strong>Spectacle</strong> &mdash; the visual elements, staging, costumes [&frac12;]
+      <div class="mark-hint">You get half a mark each. Aristotle considered Plot the most important element. Memorise these in order of importance: Plot &gt; Character &gt; Theme &gt; Diction &gt; Music &gt; Spectacle.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(2,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="3">
+  <div class="q-header">
+    <div class="q-num">3</div>
+    <div class="q-text">What is a <strong>fatal flaw</strong> (hamartia) in a tragedy? Give one example of a famous character and their fatal flaw.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      A <strong>fatal flaw</strong> is a character trait that leads to the hero's downfall [1]. Example: Macbeth's fatal flaw is <strong>ambition</strong> &mdash; his desire for power drives him to murder and ultimately to his own death [1]. <em>Other valid examples:</em> Othello (jealousy), Romeo (impulsiveness), Hamlet (indecision).
+      <div class="mark-hint">One mark for the definition, one for a valid example. The key word is "leads to their downfall" &mdash; it must be a trait that causes disaster, not just a minor weakness.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(3,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card foundation" data-q="4">
+  <div class="q-header">
+    <div class="q-num">4</div>
+    <div class="q-text">What is <strong>register</strong> in writing? Give one example of when you would use formal register and one example of informal register.</div>
+    <span class="q-marks">2 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Register</strong> is the level of formality in language, chosen to suit the audience and purpose [1]. <strong>Formal:</strong> a letter to a headteacher, a newspaper article, or a job application. <strong>Informal:</strong> a text to a friend, a diary entry, or a blog post [1].
+      <div class="mark-hint">On the exam, if they ask you to write an article or letter, choosing the correct register is worth marks. A complaint letter = formal. A blog = informal. Getting this wrong costs marks across the whole response.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(4,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== INTERMEDIATE ===== -->
+<div class="tier-header intermediate">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Intermediate &mdash; Can You Explain and Apply It?</h2>
+    <div class="marks">Worth 3-5 marks each. You need to use PEE paragraphs and explain your thinking clearly.</div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="5">
+  <div class="q-header">
+    <div class="q-num">5</div>
+    <div class="q-text">A playwright includes the stage direction: <em>"[He turns away from her, gripping the edge of the table. Long pause.]"</em> Write a PEE paragraph explaining what this stage direction reveals about the character's emotions.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>P:</strong> The stage direction suggests the character is struggling with strong, suppressed emotions [1].<br>
+      <strong>E:</strong> The direction "[He turns away from her, gripping the edge of the table. Long pause.]" shows physical actions that reveal inner conflict [1].<br>
+      <strong>E:</strong> Turning away implies he cannot face her &mdash; perhaps out of guilt, anger or grief. The word "gripping" suggests tension and the effort of holding back emotion, while the "long pause" creates a moment of dramatic silence that builds suspense for the audience [2].
+      <div class="mark-hint">PEE = Point, Evidence, Explanation. The Explanation is where the marks are. Don't just say "he is upset" &mdash; explain HOW the specific words ("gripping," "turns away," "long pause") create that impression. That's analysis, not summary.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(5,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="6">
+  <div class="q-header">
+    <div class="q-num">6</div>
+    <div class="q-text">Explain three ways that reading a play <strong>script</strong> is different from reading a <strong>novel</strong>. For each difference, explain why it matters to how you analyse the text.</div>
+    <span class="q-marks">3 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      1. <strong>No narrator:</strong> In a script, you learn everything through dialogue and stage directions, not a narrator's description. This means you must infer character feelings from what they say and do, not from being told [1].<br>
+      2. <strong>Stage directions:</strong> These replace descriptive paragraphs. When analysing a script, you should quote and analyse stage directions just as you would quote language from a novel [1].<br>
+      3. <strong>Designed for performance:</strong> A script is meant to be seen and heard, so effects like pauses, lighting, and tone of voice are part of the meaning. When you analyse, consider what the audience would experience, not just what they would read [1].
+      <div class="mark-hint">One mark per valid difference with explanation. The examiner wants you to show you understand that scripts require a different analytical approach &mdash; you can't just summarise what characters say.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(6,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card intermediate" data-q="7">
+  <div class="q-header">
+    <div class="q-num">7</div>
+    <div class="q-text">You are asked to write a <strong>directed writing</strong> response: an article for a school magazine about a local theatre production. List the key features your article <strong>must</strong> include, and explain what register you would use and why.</div>
+    <span class="q-marks">4 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Key features:</strong> Engaging headline [1], short introductory paragraph summarising the topic, subheadings to organise sections, quotes (real or invented), a conclusion or recommendation.<br>
+      <strong>Register:</strong> Semi-formal [1] &mdash; formal enough for a published article but accessible for a student audience. Use Standard English and complete sentences, but the tone can be lively and engaging (not stiff or academic).<br>
+      <strong>Why:</strong> The purpose is to inform and entertain student readers [1], so overly formal language would feel wrong, but slang or text-speak would be inappropriate for a published article [1].
+      <div class="mark-hint">Directed writing questions always test: (1) Do you know the format features? (2) Did you match register to audience and purpose? Identify the audience + purpose FIRST, then choose your register. Write "Audience: ... Purpose: ..." at the top of your plan.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(7,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ADVANCED ===== -->
+<div class="tier-header advanced">
+  <div class="dot"></div>
+  <div class="info">
+    <h2>Advanced &mdash; Can You Analyse and Write?</h2>
+    <div class="marks">Worth 5-8 marks each. These need full PEE paragraphs, extended writing, and clear analytical reasoning.</div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="8">
+  <div class="q-header">
+    <div class="q-num">8</div>
+    <div class="q-text">A character in a play says: <em>"I never wanted this crown. It was thrust upon me like chains dressed as gold."</em> Write <strong>two PEE paragraphs</strong> analysing the language in this line. Focus on the metaphor and what it reveals about the character.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>PEE 1:</strong><br>
+      <strong>P:</strong> The speaker presents power as something unwanted and burdensome [1].<br>
+      <strong>E:</strong> The phrase "thrust upon me" suggests force and lack of choice [1].<br>
+      <strong>E:</strong> The verb "thrust" implies violence and urgency &mdash; the crown was not offered gently but forced on the character, which creates sympathy from the audience and establishes the character as a reluctant leader rather than an ambitious one [1].<br><br>
+      <strong>PEE 2:</strong><br>
+      <strong>P:</strong> The metaphor compares the crown to "chains dressed as gold," suggesting power is a form of imprisonment [1].<br>
+      <strong>E:</strong> "Chains" connotes captivity and restriction, while "dressed as gold" implies deception [1].<br>
+      <strong>E:</strong> The contrast between chains (suffering) and gold (wealth/status) suggests that what appears to be a privilege is actually a trap. This links to the theme of appearance vs reality, common in tragedy, and hints that the character's status will bring suffering rather than happiness [1].
+      <div class="mark-hint">Two PEE paragraphs = two clear points, each with its own evidence and explanation. The difference between a grade D and a grade B is the Explanation layer: don't just say what the metaphor means &mdash; explain the EFFECT on the audience and link to themes.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(8,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="9">
+  <div class="q-header">
+    <div class="q-num">9</div>
+    <div class="q-text">You are given two texts about the same event: a <strong>newspaper article</strong> reporting on a school play, and an <strong>advertisement</strong> promoting the same play. Explain <strong>four specific differences</strong> you would expect to find between these texts in terms of purpose, audience, language, and layout.</div>
+    <span class="q-marks">5 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      1. <strong>Purpose:</strong> The article aims to <strong>inform and report</strong> (what happened, who performed, how it went), while the advertisement aims to <strong>persuade</strong> (convince people to buy tickets) [1].<br>
+      2. <strong>Audience:</strong> The article targets general newspaper readers who may not know about the play [1], while the advertisement targets potential audience members who might attend.<br>
+      3. <strong>Language:</strong> The article would use <strong>factual, objective</strong> language with reported speech and past tense [1]. The advertisement would use <strong>emotive, persuasive</strong> language with imperatives ("Don't miss..."), superlatives ("the best..."), and present/future tense [1].<br>
+      4. <strong>Layout:</strong> The article would have a headline, byline, columns, and paragraphs. The advertisement would have bold graphics, large font, a slogan, and booking details [1].
+      <div class="mark-hint">Comparing texts is a common exam question. Use the framework: Purpose, Audience, Language, Layout (PALL). For each point, state what BOTH texts do &mdash; the examiner wants comparison, not just description of one text.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(9,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<div class="q-card advanced" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-text">Explain the term <strong>denouement</strong> and why it is important in both tragedy and comedy. Then write a short paragraph (3-4 sentences) describing a denouement for an <strong>original</strong> tragic character who has the fatal flaw of <strong>pride</strong>.</div>
+    <span class="q-marks">6 marks</span>
+  </div>
+  <div class="answer-lines"><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  <div class="q-answer">
+    <div class="answer-box">
+      <div class="answer-label">Answer</div>
+      <strong>Denouement:</strong> The final part of a play where all the plot threads are resolved and the outcome becomes clear [1]. In <strong>tragedy</strong>, the denouement shows the hero's downfall or death as a consequence of their fatal flaw [1]. In <strong>comedy</strong>, the denouement brings a happy resolution &mdash; misunderstandings are cleared up, couples unite, or order is restored [1].<br><br>
+      <strong>Example denouement (pride):</strong> "Having refused to listen to every warning, General Adira stands alone in the ruins of the city she swore she could defend single-handedly. The allies she dismissed now watch from a distance as she finally kneels &mdash; not to any enemy, but under the weight of the truth she rejected. Her pride, which once made her appear invincible, has destroyed everything she claimed to protect." [3 &mdash; for a clear tragic arc showing the fatal flaw causing the downfall, with consequences, and a moment of recognition]
+      <div class="mark-hint">3 marks for the definition (denouement + tragedy + comedy), 3 marks for the creative paragraph. The paragraph must show: (1) the fatal flaw (pride) causing (2) a downfall, with (3) consequences. The best answers include a moment of recognition where the character realises their mistake.</div>
+    </div>
+    <div class="self-rate">
+      <span class="rate-label">Rate your answer:</span>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="1">1</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="2">2</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="3">3</button>
+      <button class="rate-btn" onclick="rate(10,this)" data-val="4">4</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.add('visible'));
+  }
+  function hideAll() {
+    document.querySelectorAll('.q-answer').forEach(a => a.classList.remove('visible'));
+  }
+
+  document.querySelectorAll('.q-header').forEach(header => {
+    header.style.cursor = 'pointer';
+    header.addEventListener('click', () => {
+      const answer = header.parentElement.querySelector('.q-answer');
+      answer.classList.toggle('visible');
+    });
+  });
+
+  var ratings = {};
+  function rate(q, btn) {
+    var val = parseInt(btn.dataset.val);
+    ratings[q] = val;
+    btn.parentElement.querySelectorAll('.rate-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    updateScore();
+  }
+
+  function updateScore() {
+    var keys = Object.keys(ratings);
+    if (keys.length === 0) {
+      document.getElementById('scoreText').textContent = 'Rate each answer to track your score';
+      return;
+    }
+    var sum = 0;
+    keys.forEach(k => sum += ratings[k]);
+    var avg = (sum / keys.length).toFixed(1);
+    var rated = keys.length;
+    document.getElementById('scoreText').textContent = rated + '/10 rated | Avg: ' + avg + '/4';
+  }
+</script>
+</body>
+</html>

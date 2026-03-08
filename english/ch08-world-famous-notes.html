@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Note-Taking Guide: World Famous &mdash; English Ch8</title>
+<style>
+  :root {
+    --subject: #16a085;
+    --subject-light: #e8f6f3;
+    --subject-dark: #0e6655;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --write: #2e86c1;
+    --write-bg: #eaf2f8;
+    --why: #8e44ad;
+    --why-bg: #f4ecf7;
+    --confuse: #e74c3c;
+    --confuse-bg: #fdedec;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --check-done: #16a085;
+    --pee: #d35400;
+    --pee-bg: #fef0e7;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+    margin-bottom: 4px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 6px; }
+  .hero .subtitle { font-size: 15px; opacity: 0.9; }
+
+  /* Progress bar */
+  .progress-bar {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .progress-bar .track {
+    flex: 1;
+    height: 10px;
+    background: #eee;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .progress-bar .fill {
+    height: 100%;
+    background: var(--subject);
+    border-radius: 5px;
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-bar .label {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+
+  /* How-to card */
+  .how-to {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+  }
+  .how-to h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .how-to .legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .how-to .legend-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    font-size: 13px;
+  }
+  .how-to .legend-icon {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 800;
+    color: #fff;
+  }
+
+  /* Section header */
+  .section-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    font-size: 18px;
+    font-weight: 700;
+  }
+  .section-header .num {
+    opacity: 0.7;
+    font-size: 13px;
+    display: block;
+    margin-bottom: 2px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* Cards */
+  .card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 0;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    overflow: hidden;
+  }
+  .card + .card { border-radius: 10px; }
+
+  /* Blocks inside cards */
+  .block {
+    padding: 14px 20px;
+    border-left: 4px solid transparent;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+  }
+  .block + .block { border-top: 1px solid #f0f0f0; }
+
+  .block-write { border-left-color: #d6e4f0; }
+  .block-why { border-left-color: var(--why); background: var(--why-bg); }
+  .block-confuse { border-left-color: var(--confuse); background: var(--confuse-bg); }
+  .block-tip { border-left-color: var(--tip); background: var(--tip-bg); }
+  .block-pee { border-left-color: var(--pee); background: var(--pee-bg); }
+
+  .block .icon {
+    flex-shrink: 0;
+    width: 26px;
+    height: 26px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    color: #fff;
+  }
+  .block-write .icon { display: none; }
+  .block-why .icon { background: var(--why); }
+  .block-confuse .icon { background: var(--confuse); }
+  .block-tip .icon { background: var(--tip); }
+  .block-pee .icon { background: var(--pee); }
+
+  .block .body { flex: 1; }
+  .block .label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 3px;
+  }
+  .block-write .label { color: #9cbdd9; font-size: 10px; }
+  .block-why .label { color: var(--why); }
+  .block-confuse .label { color: var(--confuse); }
+  .block-tip .label { color: var(--tip); }
+  .block-pee .label { color: var(--pee); }
+
+  .block p { font-size: 14px; margin-top: 2px; }
+  .block strong { color: var(--text); }
+
+  /* Checkbox items */
+  .checklist {
+    list-style: none;
+    padding: 14px 20px;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 6px 0;
+    font-size: 14px;
+  }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--check-done);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Comparison table */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .compare-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 8px 10px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .compare-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #eee;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+
+  /* Intro text in a card */
+  .intro-text {
+    padding: 14px 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+  }
+
+  /* Before/After comparison box */
+  .before-after { padding: 14px 20px; }
+  .before-after .ba-label {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 6px;
+  }
+  .ba-box {
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-size: 13px;
+    margin-bottom: 10px;
+  }
+  .ba-box.bad {
+    background: #fdedec;
+    border-left: 4px solid #e74c3c;
+  }
+  .ba-box.good {
+    background: #d1f2eb;
+    border-left: 4px solid #16a085;
+  }
+  .ba-box .ba-tag {
+    font-weight: 700;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+  .ba-box.bad .ba-tag { color: #e74c3c; }
+  .ba-box.good .ba-tag { color: #0e6655; }
+
+  /* PEE highlight box */
+  .pee-hero {
+    background: linear-gradient(135deg, #d35400, #e67e22);
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin: 28px 0 16px;
+    text-align: center;
+  }
+  .pee-hero h2 { font-size: 22px; margin-bottom: 6px; }
+  .pee-hero p { font-size: 14px; opacity: 0.95; }
+
+  /* PEE step boxes */
+  .pee-steps {
+    padding: 14px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .pee-step {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 12px 16px;
+    border-radius: 8px;
+    background: #fef0e7;
+    border-left: 4px solid #d35400;
+  }
+  .pee-step .step-letter {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #d35400;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+  }
+  .pee-step .step-body { flex: 1; font-size: 14px; }
+  .pee-step .step-body strong {
+    display: block;
+    font-size: 15px;
+    margin-bottom: 2px;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 0; font-size: 13px; }
+    .hero { break-after: avoid; }
+    .progress-bar { display: none; }
+    .card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .section-header { break-after: avoid; }
+    .block { break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+    .pee-hero { break-inside: avoid; break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English &mdash; Chapter 8</div>
+  <h1>World Famous</h1>
+  <div class="subtitle">Biographical and autobiographical writing, descriptive techniques, comparing tones, synthesising information, article writing, and formal register</div>
+</div>
+
+<div class="progress-bar">
+  <span class="label" id="progressLabel">0 / 22 done</span>
+  <div class="track"><div class="fill" id="progressFill"></div></div>
+</div>
+
+<div class="how-to">
+  <h2>How to Use This Guide</h2>
+  <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">Read through your textbook chapter, then work through each section below. Tick the checkboxes as you go. Each coloured block tells you something different:</p>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--write);">W</div>
+      <div><strong>Write This Down</strong> &mdash; put this in your notes, word for word</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--why);">?</div>
+      <div><strong>Why This Matters</strong> &mdash; how it connects to exams or real life</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--confuse);">!</div>
+      <div><strong>Don't Confuse</strong> &mdash; common mix-ups to watch out for</div>
+    </div>
+    <div class="legend-item">
+      <div class="legend-icon" style="background:var(--tip);">T</div>
+      <div><strong>Study Tip</strong> &mdash; how to actually learn this, not just read it</div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SECTION 1: BIOGRAPHY VS AUTOBIOGRAPHY ===== -->
+<div class="section-header">
+  <span class="num">Section 8.1</span>
+  Biography vs Autobiography
+</div>
+<div class="card">
+  <div class="intro-text">
+    This chapter deals with writing about real people. Understanding the difference between biography and autobiography &mdash; and the <strong>effects of each viewpoint</strong> &mdash; is an exam skill.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down</div>
+      <table class="compare-table">
+        <tr>
+          <th>Type</th>
+          <th>Who Writes It</th>
+          <th>Point of View</th>
+          <th>Key Effect</th>
+        </tr>
+        <tr>
+          <td><strong>Biography</strong></td>
+          <td>Someone else writes about the person</td>
+          <td>Third person (he/she/they)</td>
+          <td>Can be more objective. Can include perspectives the subject is unaware of. Can praise OR criticise.</td>
+        </tr>
+        <tr>
+          <td><strong>Autobiography</strong></td>
+          <td>The person writes about themselves</td>
+          <td>First person (I/we)</td>
+          <td>Intimate and personal. Reader shares the subject's inner thoughts. But may be biased &mdash; the subject controls the narrative.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p><strong>Biography is NOT always more truthful than autobiography.</strong> A biographer can have their own agenda (they might admire or dislike the subject). An autobiographer can be brutally honest. The exam tests whether you can <em>evaluate</em> the reliability and bias of either form.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>Paper 1 may give you a biographical or autobiographical passage and ask you to explain <strong>how the writer presents</strong> the subject. You need to notice whether the writing is first or third person and discuss how that affects the reader's trust and emotional connection.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can define biography and autobiography</li>
+    <li><input type="checkbox"> I can explain the effect of each viewpoint on the reader</li>
+    <li><input type="checkbox"> I understand that neither form is automatically more reliable</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 2: BIOGRAPHICAL WRITING SKILLS ===== -->
+<div class="section-header">
+  <span class="num">Section 8.2</span>
+  Writing a Biography: Content and Structure
+</div>
+<div class="card">
+  <div class="intro-text">
+    Paper 2 (Directed Writing) may ask you to write a biographical piece based on information from a passage. Knowing what to include and how to structure it is worth several marks.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; What a Biography Should Include</div>
+      <p>
+        &bull; <strong>Early life</strong> &mdash; background, childhood, formative experiences<br>
+        &bull; <strong>Key achievements</strong> &mdash; what makes this person notable<br>
+        &bull; <strong>Challenges and setbacks</strong> &mdash; obstacles they overcame (this makes it compelling)<br>
+        &bull; <strong>Character traits</strong> &mdash; personality, values, motivations<br>
+        &bull; <strong>Impact on others</strong> &mdash; how they influenced their field or community<br>
+        &bull; <strong>Quotations</strong> &mdash; from the person or about them (adds authenticity)
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Biographical Structure</div>
+      <p>
+        1. <strong>Opening hook</strong> &mdash; a defining moment or striking detail that captures who this person is<br>
+        2. <strong>Background</strong> &mdash; early life and context<br>
+        3. <strong>Rise</strong> &mdash; how they achieved success or fame<br>
+        4. <strong>Complications</strong> &mdash; difficulties, controversies, turning points<br>
+        5. <strong>Legacy / conclusion</strong> &mdash; their lasting impact
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Don't Just List Facts</div>
+      <p>A biography is not a CV. The examiner wants you to <strong>shape a narrative</strong>. Use descriptive language, show the person's character through anecdotes, and comment on their significance. Think of it as storytelling about a real person.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the 6 content areas a biography should cover</li>
+    <li><input type="checkbox"> I can structure a biography with a hook, background, rise, complications, and legacy</li>
+    <li><input type="checkbox"> I understand that biography = storytelling, not just listing facts</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 3: DESCRIPTIVE WRITING ===== -->
+<div class="section-header">
+  <span class="num">Section 8.3</span>
+  Descriptive Writing: Fiction vs Non-Fiction
+</div>
+<div class="card">
+  <div class="intro-text">
+    Both fiction and non-fiction use descriptive writing, but for different purposes. The exam may ask you to write descriptively OR to analyse how a writer creates vivid descriptions.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Fiction vs Non-Fiction Description</div>
+      <table class="compare-table">
+        <tr>
+          <th>Aspect</th>
+          <th>Fiction</th>
+          <th>Non-Fiction</th>
+        </tr>
+        <tr>
+          <td><strong>Purpose</strong></td>
+          <td>Create atmosphere, build character, immerse the reader</td>
+          <td>Help the reader picture a real place, person, or event accurately</td>
+        </tr>
+        <tr>
+          <td><strong>Techniques</strong></td>
+          <td>Metaphor, simile, personification, sensory imagery, symbolism</td>
+          <td>Sensory detail, precise vocabulary, comparison, factual imagery</td>
+        </tr>
+        <tr>
+          <td><strong>Freedom</strong></td>
+          <td>Can invent, exaggerate, use fantasy</td>
+          <td>Must stay truthful; description serves accuracy</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; The 5 Senses Checklist</div>
+      <p>Strong descriptive writing uses at least 3 of the 5 senses:</p>
+      <p style="margin-top:6px;">
+        &bull; <strong>Sight</strong> &mdash; colours, shapes, movement, light and shadow<br>
+        &bull; <strong>Sound</strong> &mdash; loud/quiet, rhythm, specific sounds (crunching, hissing)<br>
+        &bull; <strong>Smell</strong> &mdash; often overlooked but very powerful for evoking memory<br>
+        &bull; <strong>Touch</strong> &mdash; texture, temperature, pressure<br>
+        &bull; <strong>Taste</strong> &mdash; less common but distinctive when used
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-pee">
+    <div class="icon">P</div>
+    <div class="body">
+      <div class="label">PEE In Action &mdash; Analysing Description</div>
+      <p><strong>P:</strong> The writer uses sensory imagery to immerse the reader in the scene. <strong>E:</strong> "The market was a riot of colour and noise &mdash; the sharp tang of spices catching in the throat, silk scarves rippling in the breeze like bright flags." <strong>E:</strong> The appeal to smell ("sharp tang of spices catching in the throat") makes the reader physically react, as though they can taste the air. The simile "like bright flags" suggests celebration and vitality, while "riot" implies something overwhelming and chaotic. The overall effect is to make the reader feel present in the scene, experiencing its energy first-hand.</p>
+    </div>
+  </div>
+
+  <div class="block block-tip">
+    <div class="icon">T</div>
+    <div class="body">
+      <div class="label">Study Tip &mdash; Practise Descriptive Paragraphs</div>
+      <p>Pick any place you know well (your room, a street, a market). Write one paragraph describing it using at least 3 senses. Then check: did you use any similes or metaphors? Did you create a mood? This is exactly what Paper 2 (Composition) rewards.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know how fiction and non-fiction description differ</li>
+    <li><input type="checkbox"> I can name all 5 senses and use at least 3 in a descriptive paragraph</li>
+    <li><input type="checkbox"> I can analyse descriptive writing using PEE</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 4: COMPARING TONES ===== -->
+<div class="section-header">
+  <span class="num">Section 8.4</span>
+  Comparing Tones Across Texts
+</div>
+<div class="card">
+  <div class="intro-text">
+    Paper 1 may give you two passages about the same topic and ask you to compare <strong>how the writers convey their attitudes</strong>. The skill is recognising tone and explaining how language choices create it.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Tone Vocabulary</div>
+      <p>Expand your vocabulary for describing tone:</p>
+      <p style="margin-top:6px;">
+        <strong>Positive:</strong> admiring, reverential, celebratory, enthusiastic, affectionate, nostalgic<br>
+        <strong>Negative:</strong> critical, dismissive, sarcastic, contemptuous, cynical, mocking<br>
+        <strong>Neutral/measured:</strong> objective, balanced, informative, detached, matter-of-fact<br>
+        <strong>Complex:</strong> bittersweet, ambivalent, ironic, wistful
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse &mdash; Tone vs Mood (Again)</div>
+      <p><strong>Tone</strong> = the writer's attitude toward their subject. <strong>Mood</strong> = the feeling created in the reader. They overlap but are not the same. A writer's <em>sarcastic tone</em> might create an <em>uncomfortable mood</em> in the reader.</p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Identify Tone</div>
+      <p>Ask these questions:</p>
+      <p style="margin-top:6px;">
+        &bull; What words does the writer choose &mdash; positive, negative, or neutral?<br>
+        &bull; Are they using humour, exaggeration, or understatement?<br>
+        &bull; Do they seem distant and objective, or personally involved?<br>
+        &bull; How would this sound if someone read it aloud? What voice would they use?
+      </p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I have a wide vocabulary for describing tone (not just "positive/negative")</li>
+    <li><input type="checkbox"> I can tell the difference between tone and mood</li>
+    <li><input type="checkbox"> I can identify tone by asking "what attitude does the writer show?"</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 5: SYNTHESISING INFORMATION ===== -->
+<div class="section-header">
+  <span class="num">Section 8.5</span>
+  Synthesising Information from Multiple Texts
+</div>
+<div class="card">
+  <div class="intro-text">
+    <strong>Synthesising</strong> means combining information from two or more sources into one coherent response. This is different from comparing (which highlights differences).
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Synthesis vs Summary vs Comparison</div>
+      <table class="compare-table">
+        <tr>
+          <th>Task</th>
+          <th>What You Do</th>
+        </tr>
+        <tr>
+          <td><strong>Summary</strong></td>
+          <td>Shorten ONE text to its key points. Your own words. No analysis.</td>
+        </tr>
+        <tr>
+          <td><strong>Comparison</strong></td>
+          <td>Show how TWO texts are similar and different. Focus on techniques and effects.</td>
+        </tr>
+        <tr>
+          <td><strong>Synthesis</strong></td>
+          <td>Combine information from TWO+ texts into one seamless response, as if writing from scratch.</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; How to Synthesise</div>
+      <p>
+        1. Read both texts and identify the <strong>key points</strong> from each<br>
+        2. Group related points together (even if they come from different texts)<br>
+        3. Write your response <strong>by topic, not by text</strong> &mdash; don't do "Text A says... Text B says..."<br>
+        4. Use your own words to blend the information smoothly<br>
+        5. Where texts agree, combine; where they add different details, include both
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-confuse">
+    <div class="icon">!</div>
+    <div class="body">
+      <div class="label">Don't Confuse</div>
+      <p>Synthesis is NOT "summarise Text A, then summarise Text B." The examiner wants you to <strong>weave information together</strong> so it reads as one unified answer. Organise by topic, not by source.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I know the difference between summary, comparison, and synthesis</li>
+    <li><input type="checkbox"> I can synthesise by organising information by TOPIC, not by text</li>
+    <li><input type="checkbox"> I can blend information from two sources into one smooth response</li>
+  </ul>
+</div>
+
+<!-- ===== SECTION 6: DIRECTED WRITING &mdash; ARTICLES ===== -->
+<div class="section-header">
+  <span class="num">Section 8.6</span>
+  Directed Writing: Writing an Article
+</div>
+<div class="card">
+  <div class="intro-text">
+    Paper 2, Question 1 (Directed Writing) may ask you to write an article. This is one of the most common text types tested. You need to know the format AND demonstrate strong writing skills.
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Article Structure</div>
+      <p>
+        1. <strong>Headline</strong> &mdash; catchy and relevant<br>
+        2. <strong>Opening hook</strong> &mdash; a question, a surprising fact, or a bold statement to grab attention<br>
+        3. <strong>Subheadings</strong> (optional) &mdash; useful for organising longer articles<br>
+        4. <strong>Body paragraphs</strong> &mdash; develop your points with evidence and examples<br>
+        5. <strong>Formal to semi-formal register</strong> &mdash; more polished than a blog post, less stiff than a report<br>
+        6. <strong>Closing paragraph</strong> &mdash; a call to action, a thought-provoking question, or a memorable final line
+      </p>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Formal English and Semi-Colons</div>
+      <p><strong>Formal register</strong> means: no slang, no contractions ("do not" instead of "don't"), sophisticated vocabulary, complex sentence structures.</p>
+      <p style="margin-top:6px;"><strong>The semi-colon (;)</strong> joins two closely related sentences without a conjunction:</p>
+      <p style="margin-top:6px;">"Fame brings opportunity; it also brings scrutiny."</p>
+      <p style="margin-top:6px;">Using semi-colons correctly shows the examiner you have strong technical accuracy &mdash; which contributes to the Writing mark on Paper 2.</p>
+    </div>
+  </div>
+
+  <div class="block block-why">
+    <div class="icon">?</div>
+    <div class="body">
+      <div class="label">Why This Matters</div>
+      <p>On Paper 2, you are marked on both <strong>Reading</strong> (how well you use the passage content) and <strong>Writing</strong> (language, structure, accuracy). A well-formatted article with a headline, clear paragraphs, and a strong opening immediately signals to the examiner that you know what you are doing.</p>
+    </div>
+  </div>
+
+  <div class="before-after">
+    <div class="ba-label">Before and After &mdash; Article Openings</div>
+    <div class="ba-box bad">
+      <div class="ba-tag">Weak Opening (Low marks)</div>
+      <p>"In this article I am going to write about fame and whether it is good or bad. There are many different opinions on this topic."</p>
+      <p style="margin-top:6px; font-style:italic; color:#c0392b;">Problem: Boring and tells the reader what you're going to do instead of doing it. No hook. No personality.</p>
+    </div>
+    <div class="ba-box good">
+      <div class="ba-tag">Strong Opening (High marks)</div>
+      <p>"What would you sacrifice for a million followers? Your privacy? Your friendships? Your sleep? In an age where fame is measured in likes, the cost of celebrity has never been higher &mdash; or more invisible."</p>
+      <p style="margin-top:6px; font-style:italic; color:#0e6655;">Why this works: Rhetorical questions engage the reader immediately. The dash creates a dramatic pause. The contrast between "never been higher" and "more invisible" is thought-provoking.</p>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can structure an article with headline, hook, body, and close</li>
+    <li><input type="checkbox"> I can write in formal/semi-formal register</li>
+    <li><input type="checkbox"> I know how to use a semi-colon correctly</li>
+    <li><input type="checkbox"> I can write an engaging opening that avoids "In this article I will..."</li>
+  </ul>
+</div>
+
+<!-- ===== PEE APPLIED TO CHAPTER 8 ===== -->
+<div class="pee-hero">
+  <h2>PEE FOR BIOGRAPHICAL AND DESCRIPTIVE ANALYSIS</h2>
+  <p>Whether you are analysing a biography, a description, or an article, PEE always applies. The explanation is where the marks live.</p>
+</div>
+
+<div class="card" style="border-radius: 10px;">
+  <div class="pee-steps">
+    <div class="pee-step">
+      <div class="step-letter">P</div>
+      <div class="step-body">
+        <strong>Point</strong>
+        State what the writer does. Name the choice or technique.<br>
+        <em>"The biographer presents their subject as heroic and inspiring."</em>
+      </div>
+    </div>
+    <div class="pee-step">
+      <div class="step-letter">E</div>
+      <div class="step-body">
+        <strong>Evidence</strong>
+        Quote the text. Only the relevant words.<br>
+        <em>"She rose from nothing, defying every expectation placed upon her."</em>
+      </div>
+    </div>
+    <div class="pee-step">
+      <div class="step-letter">E</div>
+      <div class="step-body">
+        <strong>Explanation</strong>
+        Explain the EFFECT. How does this make the reader feel? What does it suggest?<br>
+        <em>"The phrase 'rose from nothing' uses a metaphor of upward movement, suggesting triumph over adversity. 'Defying every expectation' implies strength and independence, which creates admiration in the reader. The biographer's word choices are entirely positive, which reveals their reverential attitude toward the subject."</em>
+      </div>
+    </div>
+  </div>
+
+  <ul class="checklist">
+    <li><input type="checkbox"> I can apply PEE to biographical and descriptive passages</li>
+    <li><input type="checkbox"> My explanations comment on specific word choices, not just the general idea</li>
+  </ul>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Chapter 8 Notes Complete</h2>
+  <p>You've covered biography, autobiography, descriptive writing, tone analysis, synthesis, and article writing. Now test yourself with the Chapter 8 quiz.</p>
+</div>
+
+<script>
+  // Progress tracking
+  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  const fill = document.getElementById('progressFill');
+  const label = document.getElementById('progressLabel');
+
+  function updateProgress() {
+    const total = checkboxes.length;
+    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    fill.style.width = (done / total * 100) + '%';
+    label.textContent = done + ' / ' + total + ' done';
+  }
+
+  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  updateProgress();
+</script>
+</body>
+</html>
