@@ -769,16 +769,21 @@ function showCard() {
   frontBadge.textContent = c.type.toUpperCase();
   backBadge.textContent = c.type.toUpperCase();
 
+  // Context-aware prompts
+  var isSpanish = c.type === 'spanish';
+  var normalPrompt = isSpanish ? 'How do you say this in Spanish?' : 'What does this mean?';
+  var reversePrompt = isSpanish ? 'What does this mean in English?' : 'What word part is this?';
+
   if (currentMode === 'normal') {
     document.getElementById('frontWord').textContent = c.word;
-    document.getElementById('frontPrompt').textContent = 'What does this mean?';
+    document.getElementById('frontPrompt').textContent = normalPrompt;
     document.getElementById('backMeaning').textContent = c.meaning;
     document.getElementById('backHook').textContent = c.hook;
     document.getElementById('backExamples').textContent = c.examples;
   } else {
     document.getElementById('cardArea').classList.add('reverse');
     document.getElementById('frontWord').textContent = c.meaning;
-    document.getElementById('frontPrompt').textContent = 'What word part is this?';
+    document.getElementById('frontPrompt').textContent = reversePrompt;
     document.getElementById('backMeaning').textContent = c.word;
     document.getElementById('backHook').textContent = c.hook;
     document.getElementById('backExamples').textContent = c.examples;
@@ -859,11 +864,24 @@ function showDone() {
 
 // ---- CONTROLS ----
 
+function updateModeLabels() {
+  var normal = document.getElementById('modeNormal');
+  var reverse = document.getElementById('modeReverse');
+  if (currentFilter === 'spanish') {
+    normal.textContent = 'English \u2192 Spanish';
+    reverse.textContent = 'Spanish \u2192 English';
+  } else {
+    normal.textContent = 'Word Part \u2192 Meaning';
+    reverse.textContent = 'Meaning \u2192 Word Part';
+  }
+}
+
 function setFilter(f) {
   currentFilter = f;
   var btns = document.querySelectorAll('.filter-btn');
   for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
   document.querySelector('[data-filter="' + f + '"]').classList.add('active');
+  updateModeLabels();
   buildDeck(false); // preserve progress across filter switches
 }
 
