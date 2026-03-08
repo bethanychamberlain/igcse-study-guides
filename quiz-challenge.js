@@ -14,6 +14,7 @@
   var qTotalTime = {};     // data-q -> cumulative seconds
   var qTextareas = {};     // data-q -> textarea element
   var originalParents = {}; // data-q -> {parent, nextSibling} for restoring position
+  var qWasSkipped = {};    // data-q -> true if "Later" was clicked at any point
   // Results saving handled by results.js (localStorage + Google Sheets)
 
   // ---- PAGE INFO (from URL) ----
@@ -429,12 +430,12 @@
     '.ch-list-input:focus{border-color:var(--subject);outline:none}' +
     '.ch-list-input::placeholder{color:#ccc}' +
     '.ch-hint-btn{font-family:inherit;font-size:11px;font-weight:600;padding:4px 10px;border:2px solid #3498db;' +
-      'border-radius:6px;background:#eaf2f8;color:#2471a3;cursor:pointer;white-space:nowrap;transition:all .15s;margin-left:4px}' +
+      'border-radius:6px;background:#eaf2f8;color:#2471a3;cursor:pointer;white-space:nowrap;transition:all .15s;margin-left:4px;pointer-events:auto}' +
     '.ch-hint-btn:hover{background:#3498db;color:#fff}' +
     '.ch-hint-btn.used-up{opacity:.4;pointer-events:none}' +
     '.ch-hint-info{font-size:11px;color:#e67e22;font-weight:600;margin-top:4px}' +
     '.ch-later-btn{font-family:inherit;font-size:12px;font-weight:600;padding:6px 14px;border:2px solid #f39c12;' +
-      'border-radius:6px;background:#fef9e7;color:#b8770e;cursor:pointer;margin-left:auto;white-space:nowrap;transition:all .15s}' +
+      'border-radius:6px;background:#fef9e7;color:#b8770e;cursor:pointer;margin-left:auto;white-space:nowrap;transition:all .15s;pointer-events:auto}' +
     '.ch-later-btn:hover{background:#f39c12;color:#fff}' +
     '.ch-later-btn.returned{border-color:#27ae60;background:#e8f8f0;color:#1a7a3a}' +
     '#skipped-section{margin-top:32px;display:none}' +
@@ -755,6 +756,8 @@
     var skipSection = document.getElementById('skipped-section');
     if (!skipSection) return;
 
+    qWasSkipped[qNum] = true;
+
     // Remember original position
     originalParents[qNum] = {
       parent: card.parentNode,
@@ -955,8 +958,10 @@
 
       var hintsUsed = qHints[qNum] || 0;
       var penalty = hintPenalty(hintsUsed);
-      var resultStr = result;
-      if (hintsUsed > 0) resultStr += ' (' + hintsUsed + ' hint' + (hintsUsed > 1 ? 's' : '') + ', ' + Math.round(penalty * 100) + '%)';
+      var parts = [result];
+      if (qWasSkipped[qNum]) parts.push('deferred');
+      if (hintsUsed > 0) parts.push(hintsUsed + ' hint' + (hintsUsed > 1 ? 's' : '') + ' ' + Math.round(penalty * 100) + '%');
+      var resultStr = parts.join(', ');
 
       rows.push({
         date: dateStr,
