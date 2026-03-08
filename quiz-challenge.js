@@ -150,6 +150,174 @@
 
   // results.js handles localStorage + Google Sheets (loaded before this script)
 
+  // ---- MC DETECTION ----
+  function isMCQuestion(card) {
+    var strongs = card.querySelectorAll('.q-text strong');
+    var letters = [];
+    for (var i = 0; i < strongs.length; i++) {
+      var t = strongs[i].textContent.trim();
+      if (/^[A-D]$/.test(t)) letters.push(t);
+    }
+    return letters.length >= 3; // at least A, B, C
+  }
+
+  function getMCOptions(card) {
+    // Extract MC option text from q-text
+    var qText = card.querySelector('.q-text');
+    if (!qText) return [];
+    var strongs = qText.querySelectorAll('strong');
+    var options = [];
+    for (var i = 0; i < strongs.length; i++) {
+      var letter = strongs[i].textContent.trim();
+      if (!/^[A-D]$/.test(letter)) continue;
+      // Get the text after this strong element until next <br> or strong
+      var text = '';
+      var node = strongs[i].nextSibling;
+      while (node && !(node.nodeType === 1 && (node.tagName === 'BR' || node.tagName === 'STRONG'))) {
+        text += node.textContent || '';
+        node = node.nextSibling;
+      }
+      options.push({letter: letter, text: text.trim()});
+    }
+    return options;
+  }
+
+  function getCorrectMCLetter(card) {
+    var ansBox = card.querySelector('.answer-box');
+    if (!ansBox) return '';
+    var firstStrong = ansBox.querySelector('strong');
+    if (firstStrong) {
+      var t = firstStrong.textContent.trim();
+      if (/^[A-D]$/.test(t)) return t;
+    }
+    return '';
+  }
+
+  // ---- HINT SYSTEM ----
+  var qHints = {};       // data-q -> number of hints used
+  var qHintData = {};    // data-q -> array of hint strings
+  var qMCEliminated = {}; // data-q -> set of eliminated letters
+
+  function buildHints(card) {
+    var qNum = getQNum(card);
+    var marks = getMarks(card);
+    var hints = [];
+
+    if (isMCQuestion(card)) {
+      // For MC: each hint eliminates a wrong option
+      var correct = getCorrectMCLetter(card);
+      var options = getMCOptions(card);
+      var wrong = [];
+      for (var i = 0; i < options.length; i++) {
+        if (options[i].letter !== correct) wrong.push(options[i].letter);
+      }
+      // Shuffle wrong options so eliminated ones vary
+      for (var j = wrong.length - 1; j > 0; j--) {
+        var k = Math.floor(Math.random() * (j + 1));
+        var tmp = wrong[j]; wrong[j] = wrong[k]; wrong[k] = tmp;
+      }
+      for (var w = 0; w < wrong.length; w++) {
+        hints.push({type: 'eliminate', letter: wrong[w]});
+      }
+    } else {
+      // For text: extract key terms from answer bold elements
+      var ansBox = card.querySelector('.answer-box');
+      if (ansBox) {
+        var bolds = ansBox.querySelectorAll('strong');
+        for (var b = 0; b < bolds.length; b++) {
+          var term = bolds[b].textContent.trim();
+          if (term.length > 1 && !/^[A-D]$/.test(term)) {
+            hints.push({type: 'firstLetter', term: term});
+          }
+        }
+      }
+      // If no bold terms found, use first words of answer text
+      if (hints.length === 0 && ansBox) {
+        var ansText = ansBox.textContent.replace(/Answer/i, '').trim();
+        var words = ansText.split(/\s+/).filter(function(w) { return w.length > 3; });
+        for (var ww = 0; ww < Math.min(words.length, 3); ww++) {
+          hints.push({type: 'firstLetter', term: words[ww]});
+        }
+      }
+    }
+    return hints;
+  }
+
+  function hintPenalty(numHints) {
+    if (numHints === 0) return 1;
+    if (numHints === 1) return 0.5;
+    if (numHints === 2) return 0.25;
+    return 0; // 3+ hints = no marks
+  }
+
+  function hintPenaltyText(numHints) {
+    if (numHints === 0) return '';
+    if (numHints === 1) return '1 hint used (\u201350%)';
+    if (numHints === 2) return '2 hints used (\u201375%)';
+    return numHints + ' hints used (\u2013100%)';
+  }
+
+  function useHint(card, qNum, btn) {
+    var hints = qHintData[qNum];
+    if (!hints || hints.length === 0) return;
+
+    var used = qHints[qNum];
+    if (used >= hints.length) return; // all used up
+
+    var hint = hints[used];
+    qHints[qNum] = used + 1;
+
+    if (hint.type === 'eliminate') {
+      // MC: cross out a wrong option
+      qMCEliminated[qNum][hint.letter] = true;
+      var mcWrap = card.querySelector('.ch-mc-wrap');
+      if (mcWrap) {
+        var opts = mcWrap.querySelectorAll('.ch-mc-option');
+        for (var i = 0; i < opts.length; i++) {
+          if (opts[i].getAttribute('data-letter') === hint.letter) {
+            opts[i].classList.add('eliminated');
+            // If this was selected, deselect it
+            if (opts[i].classList.contains('selected')) {
+              opts[i].classList.remove('selected');
+              if (qTextareas[qNum] && qTextareas[qNum]._ref) {
+                qTextareas[qNum]._ref.value = '';
+              }
+            }
+            break;
+          }
+        }
+      }
+    } else if (hint.type === 'firstLetter') {
+      // Text: show first letter of the next key term
+      var infoEl = document.getElementById('hint-info-' + qNum);
+      if (infoEl) {
+        // Build running list of revealed letters
+        var letters = [];
+        for (var j = 0; j <= used; j++) {
+          if (hints[j].type === 'firstLetter') {
+            letters.push(hints[j].term.charAt(0).toUpperCase() + '...');
+          }
+        }
+        if (letters.length > 0) {
+          infoEl.textContent = hintPenaltyText(qHints[qNum]) + ' \u2014 Key terms start with: ' + letters.join(', ');
+          return; // skip the default info update below
+        }
+      }
+    }
+
+    // Update penalty display
+    var infoEl = document.getElementById('hint-info-' + qNum);
+    if (infoEl) {
+      infoEl.textContent = hintPenaltyText(qHints[qNum]);
+    }
+
+    // Disable button if all hints exhausted
+    if (qHints[qNum] >= hints.length) {
+      btn.classList.add('used-up');
+      btn.textContent = 'No hints left';
+    }
+  }
+
   // ---- INJECT CHALLENGE BUTTON ----
   var controls = document.querySelector('.controls');
   if (!controls) return;
@@ -172,6 +340,20 @@
     '.ch-textarea:focus{border-color:var(--subject);outline:none}' +
     '.ch-strategy{font-size:12px;color:#7f8c8d;margin-top:6px;font-style:italic}' +
     '.ch-word-count{font-size:11px;color:#bdc3c7;text-align:right;margin-top:4px;font-variant-numeric:tabular-nums;transition:color .3s}' +
+    '.ch-mc-wrap{padding:8px 20px 16px}' +
+    '.ch-mc-option{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:4px 0;border:2px solid #ddd;border-radius:10px;' +
+      'cursor:pointer;transition:all .15s;font-size:14px}' +
+    '.ch-mc-option:hover{border-color:var(--subject);background:rgba(0,0,0,.02)}' +
+    '.ch-mc-option.selected{border-color:var(--subject);background:rgba(39,174,96,.08)}' +
+    '.ch-mc-option.eliminated{opacity:.3;pointer-events:none;text-decoration:line-through;border-style:dashed}' +
+    '.ch-mc-bubble{width:28px;height:28px;border-radius:50%;border:2px solid #bbb;display:flex;align-items:center;' +
+      'justify-content:center;font-weight:800;font-size:13px;color:#888;flex-shrink:0;transition:all .15s}' +
+    '.ch-mc-option.selected .ch-mc-bubble{background:var(--subject);border-color:var(--subject);color:#fff}' +
+    '.ch-hint-btn{font-family:inherit;font-size:11px;font-weight:600;padding:4px 10px;border:2px solid #3498db;' +
+      'border-radius:6px;background:#eaf2f8;color:#2471a3;cursor:pointer;white-space:nowrap;transition:all .15s;margin-left:4px}' +
+    '.ch-hint-btn:hover{background:#3498db;color:#fff}' +
+    '.ch-hint-btn.used-up{opacity:.4;pointer-events:none}' +
+    '.ch-hint-info{font-size:11px;color:#e67e22;font-weight:600;margin-top:4px}' +
     '.ch-later-btn{font-family:inherit;font-size:12px;font-weight:600;padding:6px 14px;border:2px solid #f39c12;' +
       'border-radius:6px;background:#fef9e7;color:#b8770e;cursor:pointer;margin-left:auto;white-space:nowrap;transition:all .15s}' +
     '.ch-later-btn:hover{background:#f39c12;color:#fff}' +
@@ -262,68 +444,136 @@
       var qNum = getQNum(card);
       var marks = getMarks(card);
 
+      var header = card.querySelector('.q-header');
+
+      // "Hint" button in the header row
+      qHints[qNum] = 0;
+      qHintData[qNum] = buildHints(card);
+      qMCEliminated[qNum] = {};
+      var hintBtn = el('button', 'ch-hint-btn', 'Hint');
+      hintBtn.title = 'Get a hint (costs marks)';
+      hintBtn.addEventListener('click', (function(c, q, btn) {
+        return function(e) {
+          e.stopPropagation();
+          useHint(c, q, btn);
+        };
+      })(card, qNum, hintBtn));
+      if (header) header.appendChild(hintBtn);
+
       // "Later" button in the header row
       var laterBtn = el('button', 'ch-later-btn', 'Later');
-      laterBtn.title = 'Skip for now — come back to it';
+      laterBtn.title = 'Skip for now \u2014 come back to it';
       laterBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         skipQuestion(card, qNum);
       });
-      var header = card.querySelector('.q-header');
       if (header) header.appendChild(laterBtn);
 
-      // Textarea wrapper
-      var wrap = el('div', 'ch-textarea-wrap');
-      var ta = document.createElement('textarea');
-      ta.className = 'ch-textarea';
-      ta.placeholder = 'Write your answer here...';
-      // Set height based on marks
-      ta.style.minHeight = Math.max(60, marks * 28 + 40) + 'px';
-      wrap.appendChild(ta);
-
-      // Strategy hint (subject-aware + command-word-aware)
+      var ismc = isMCQuestion(card);
       var qText = getQText(card);
-      var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, qText));
-      wrap.appendChild(hint);
 
-      // Word count for longer answers (4+ marks)
-      if (marks >= 4) {
-        var wc = el('div', 'ch-word-count', '0 words');
-        wrap.appendChild(wc);
-        ta.addEventListener('input', (function(wcEl) {
-          return function() {
-            var words = this.value.trim().split(/\s+/).filter(function(w){return w.length>0;});
-            var count = words.length;
-            wcEl.textContent = count + ' word' + (count !== 1 ? 's' : '');
-            // Color feedback for extended answers
-            if (count >= 150) wcEl.style.color = '#27ae60';
-            else if (count >= 50) wcEl.style.color = '#7f8c8d';
-            else wcEl.style.color = '#bdc3c7';
-          };
-        })(wc));
-      }
+      if (ismc) {
+        // ---- MC: render clickable bubbles ----
+        var mcWrap = el('div', 'ch-mc-wrap');
+        var options = getMCOptions(card);
+        var selectedRef = {value: ''};
+        for (var oi = 0; oi < options.length; oi++) {
+          (function(opt) {
+            var row = el('div', 'ch-mc-option');
+            row.setAttribute('data-letter', opt.letter);
+            var bubble = el('div', 'ch-mc-bubble', opt.letter);
+            var label = el('span', null, opt.text);
+            row.appendChild(bubble);
+            row.appendChild(label);
+            row.addEventListener('click', function() {
+              // Deselect all in this group
+              var siblings = mcWrap.querySelectorAll('.ch-mc-option');
+              for (var s = 0; s < siblings.length; s++) siblings[s].classList.remove('selected');
+              row.classList.add('selected');
+              selectedRef.value = opt.letter;
+            });
+            mcWrap.appendChild(row);
+          })(options[oi]);
+        }
 
-      // Insert after q-header
-      if (header && header.nextSibling) {
-        card.insertBefore(wrap, header.nextSibling);
+        // Strategy hint
+        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, qText));
+        mcWrap.appendChild(hint);
+
+        // Hint penalty info (hidden until hints used)
+        var hintInfo = el('div', 'ch-hint-info');
+        hintInfo.id = 'hint-info-' + qNum;
+        mcWrap.appendChild(hintInfo);
+
+        if (header && header.nextSibling) {
+          card.insertBefore(mcWrap, header.nextSibling);
+        } else {
+          card.appendChild(mcWrap);
+        }
+
+        // Store a fake textarea-like accessor for saving
+        qTextareas[qNum] = {value: '', _ref: selectedRef, _mc: mcWrap,
+          get value() { return this._ref.value; },
+          set disabled(v) { if(v) { var opts = this._mc.querySelectorAll('.ch-mc-option'); for(var i=0;i<opts.length;i++) opts[i].style.pointerEvents='none'; }},
+          set style(v) {}
+        };
       } else {
-        card.appendChild(wrap);
+        // ---- TEXT: render textarea ----
+        var wrap = el('div', 'ch-textarea-wrap');
+        var ta = document.createElement('textarea');
+        ta.className = 'ch-textarea';
+        ta.placeholder = 'Write your answer here...';
+        ta.style.minHeight = Math.max(60, marks * 28 + 40) + 'px';
+        wrap.appendChild(ta);
+
+        // Strategy hint
+        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, qText));
+        wrap.appendChild(hint);
+
+        // Hint penalty info
+        var hintInfo = el('div', 'ch-hint-info');
+        hintInfo.id = 'hint-info-' + qNum;
+        wrap.appendChild(hintInfo);
+
+        // Word count for longer answers (4+ marks)
+        if (marks >= 4) {
+          var wc = el('div', 'ch-word-count', '0 words');
+          wrap.appendChild(wc);
+          ta.addEventListener('input', (function(wcEl) {
+            return function() {
+              var words = this.value.trim().split(/\s+/).filter(function(w){return w.length>0;});
+              var count = words.length;
+              wcEl.textContent = count + ' word' + (count !== 1 ? 's' : '');
+              if (count >= 150) wcEl.style.color = '#27ae60';
+              else if (count >= 50) wcEl.style.color = '#7f8c8d';
+              else wcEl.style.color = '#bdc3c7';
+            };
+          })(wc));
+        }
+
+        if (header && header.nextSibling) {
+          card.insertBefore(wrap, header.nextSibling);
+        } else {
+          card.appendChild(wrap);
+        }
+        qTextareas[qNum] = ta;
       }
 
-      qTextareas[qNum] = ta;
       qTotalTime[qNum] = 0;
       qFocusTimes[qNum] = null;
 
-      // Track time in textarea
-      ta.addEventListener('focus', function() {
-        qFocusTimes[qNum] = Date.now();
-      });
-      ta.addEventListener('blur', function() {
-        if (qFocusTimes[qNum]) {
-          qTotalTime[qNum] += Math.round((Date.now() - qFocusTimes[qNum]) / 1000);
-          qFocusTimes[qNum] = null;
-        }
-      });
+      // Track time (textarea focus or MC interaction)
+      if (!ismc) {
+        qTextareas[qNum].addEventListener('focus', function() {
+          qFocusTimes[qNum] = Date.now();
+        });
+        qTextareas[qNum].addEventListener('blur', function() {
+          if (qFocusTimes[qNum]) {
+            qTotalTime[qNum] += Math.round((Date.now() - qFocusTimes[qNum]) / 1000);
+            qFocusTimes[qNum] = null;
+          }
+        });
+      }
     });
 
     // Create skipped section
@@ -468,10 +718,13 @@
       a.classList.add('visible');
     });
 
-    // Disable textareas
+    // Disable textareas and hide hint buttons
     Object.keys(qTextareas).forEach(function(qNum) {
       qTextareas[qNum].disabled = true;
       qTextareas[qNum].style.opacity = '0.7';
+    });
+    document.querySelectorAll('.ch-hint-btn').forEach(function(b) {
+      b.style.display = 'none';
     });
 
     // Hide timer, banner, finish button, later buttons, skip section
@@ -561,6 +814,11 @@
       if (answer.length > 0) result = 'attempted';
       if (originalParents[qNum]) result = 'skipped';
 
+      var hintsUsed = qHints[qNum] || 0;
+      var penalty = hintPenalty(hintsUsed);
+      var resultStr = result;
+      if (hintsUsed > 0) resultStr += ' (' + hintsUsed + ' hint' + (hintsUsed > 1 ? 's' : '') + ', ' + Math.round(penalty * 100) + '%)';
+
       rows.push({
         date: dateStr,
         time: timeStr,
@@ -569,7 +827,7 @@
         chapter: chapterLabel,
         item: 'Q' + qNum + ' (' + marks + 'mk): ' + qText,
         response: answer,
-        result: result,
+        result: resultStr,
         selfRating: rating,
         seconds: secs
       });
