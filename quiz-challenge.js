@@ -14,9 +14,7 @@
   var qTotalTime = {};     // data-q -> cumulative seconds
   var qTextareas = {};     // data-q -> textarea element
   var originalParents = {}; // data-q -> {parent, nextSibling} for restoring position
-  var saveDirHandle = null;
-  var RESULTS_FILE = 'study-results.csv';
-  var CSV_HEADERS = 'Date,Time,Type,Subject,Chapter,Item,Response,Result,Self-Rating,Seconds';
+  // Results saving handled by results.js (localStorage + Google Sheets)
 
   // ---- PAGE INFO (from URL) ----
   var SUBJECT_LABELS = {
@@ -150,31 +148,7 @@
     return marks + ' marks = extended answer. Plan before you write. Intro, ' + marks + ' key points with evidence/reasoning, brief conclusion. Aim for 150\u2013250 words.';
   }
 
-  // ---- IndexedDB for shared folder handle (same DB as flash-cards) ----
-  function openHandleDB() {
-    return new Promise(function(resolve, reject) {
-      var req = indexedDB.open('flashcard-settings', 1);
-      req.onupgradeneeded = function() { req.result.createObjectStore('handles'); };
-      req.onsuccess = function() { resolve(req.result); };
-      req.onerror = function() { reject(req.error); };
-    });
-  }
-  async function saveDirHandleToDB(handle) {
-    var db = await openHandleDB();
-    var tx = db.transaction('handles', 'readwrite');
-    tx.objectStore('handles').put(handle, 'saveDir');
-  }
-  async function loadDirHandleFromDB() {
-    try {
-      var db = await openHandleDB();
-      return new Promise(function(resolve) {
-        var tx = db.transaction('handles', 'readonly');
-        var req = tx.objectStore('handles').get('saveDir');
-        req.onsuccess = function() { resolve(req.result || null); };
-        req.onerror = function() { resolve(null); };
-      });
-    } catch(e) { return null; }
-  }
+  // results.js handles localStorage + Google Sheets (loaded before this script)
 
   // ---- INJECT CHALLENGE BUTTON ----
   var controls = document.querySelector('.controls');
@@ -534,12 +508,18 @@
     var saveBtn = el('button', null, 'Save Results');
     saveBtn.id = 'save-btn';
     saveBtn.addEventListener('click', saveResults);
-    var changeFolderBtn = el('button', null, 'Change save folder');
-    changeFolderBtn.style.cssText = 'font-family:inherit;font-size:12px;padding:8px 16px;background:#34495e;color:#fff;border:none;border-radius:10px;cursor:pointer;margin:4px';
-    changeFolderBtn.addEventListener('click', changeSaveFolder);
+    var saveStatus = el('p');
+    saveStatus.id = 'save-status';
+    saveStatus.style.cssText = 'font-size:12px;color:#7f8c8d;margin-top:8px';
+    var dlBtn = el('button', null, 'Download All as CSV');
+    dlBtn.style.cssText = 'font-family:inherit;font-size:12px;padding:8px 16px;background:#7f8c8d;color:#fff;border:none;border-radius:10px;cursor:pointer;margin:4px';
+    dlBtn.addEventListener('click', function() {
+      if (window.StudyResults) StudyResults.downloadCSV();
+    });
     saveSection.appendChild(sp);
     saveSection.appendChild(saveBtn);
-    saveSection.appendChild(changeFolderBtn);
+    saveSection.appendChild(saveStatus);
+    saveSection.appendChild(dlBtn);
 
     if (finishSection && finishSection.parentNode) {
       finishSection.parentNode.insertBefore(saveSection, finishSection);
@@ -548,34 +528,12 @@
     }
   }
 
-  // ---- SAVE RESULTS ----
-  async function ensureDirHandle() {
-    if (!saveDirHandle) {
-      saveDirHandle = await loadDirHandleFromDB();
+  // ---- SAVE RESULTS (via results.js — localStorage + Google Sheets) ----
+  function saveResults() {
+    if (!window.StudyResults) {
+      alert('Results module not loaded. Try refreshing the page.');
+      return;
     }
-    if (saveDirHandle) {
-      var perm = await saveDirHandle.queryPermission({mode: 'readwrite'});
-      if (perm !== 'granted') {
-        perm = await saveDirHandle.requestPermission({mode: 'readwrite'});
-      }
-      if (perm !== 'granted') saveDirHandle = null;
-    }
-    if (!saveDirHandle) {
-      saveDirHandle = await window.showDirectoryPicker({id: 'study-results', mode: 'readwrite'});
-      await saveDirHandleToDB(saveDirHandle);
-    }
-    return saveDirHandle;
-  }
-
-  function csvEscape(str) {
-    str = String(str).replace(/\n/g, ' ').replace(/\r/g, '');
-    if (str.indexOf(',') !== -1 || str.indexOf('"') !== -1) {
-      return '"' + str.replace(/"/g, '""') + '"';
-    }
-    return str;
-  }
-
-  async function saveResults() {
     var now = new Date();
     var dateStr = now.toLocaleDateString('en-US');
     var timeStr = now.toLocaleTimeString('en-US');
@@ -589,8 +547,8 @@
       }
     });
 
-    // Build rows
-    var newLines = [];
+    // Build result objects
+    var rows = [];
     qCards.forEach(function(card) {
       var qNum = getQNum(card);
       var marks = getMarks(card);
@@ -599,86 +557,39 @@
       var rating = pageRatings[qNum] || '';
       var secs = qTotalTime[qNum] || 0;
 
-      // Result = what actually happened (attempted/blank/skipped)
       var result = 'blank';
       if (answer.length > 0) result = 'attempted';
       if (originalParents[qNum]) result = 'skipped';
 
-      newLines.push([
-        dateStr,
-        timeStr,
-        'quiz',
-        csvEscape(subjectLabel),
-        csvEscape(chapterLabel),
-        csvEscape('Q' + qNum + ' (' + marks + 'mk): ' + qText),
-        csvEscape(answer),
-        result,
-        rating,
-        secs
-      ].join(','));
+      rows.push({
+        date: dateStr,
+        time: timeStr,
+        type: 'quiz',
+        subject: subjectLabel,
+        chapter: chapterLabel,
+        item: 'Q' + qNum + ' (' + marks + 'mk): ' + qText,
+        response: answer,
+        result: result,
+        selfRating: rating,
+        seconds: secs
+      });
     });
 
-    var newRows = newLines.join('\n');
+    StudyResults.save(rows);
+    var total = StudyResults.count();
+
     var saveBtn = document.getElementById('save-btn');
-
-    // Try File System Access API
-    if (window.showDirectoryPicker) {
-      try {
-        var dirHandle = await ensureDirHandle();
-        var existingCSV = '';
-        try {
-          var existingHandle = await dirHandle.getFileHandle(RESULTS_FILE);
-          var file = await existingHandle.getFile();
-          existingCSV = await file.text();
-        } catch(e) { /* file doesn't exist yet */ }
-
-        var finalCSV;
-        if (existingCSV && existingCSV.trim().length > 0) {
-          finalCSV = existingCSV.trimEnd() + '\n' + newRows;
-        } else {
-          finalCSV = CSV_HEADERS + '\n' + newRows;
-        }
-
-        var fileHandle = await dirHandle.getFileHandle(RESULTS_FILE, {create: true});
-        var writable = await fileHandle.createWritable();
-        await writable.write(finalCSV);
-        await writable.close();
-        if (saveBtn) {
-          saveBtn.textContent = 'Saved!';
-          saveBtn.style.background = '#27ae60';
-          setTimeout(function() {
-            saveBtn.textContent = 'Save Results';
-            saveBtn.style.background = '#2e86c1';
-          }, 2000);
-        }
-        return;
-      } catch (err) {
-        if (err.name === 'AbortError') return;
-      }
+    if (saveBtn) {
+      saveBtn.textContent = 'Saved!';
+      saveBtn.style.background = '#27ae60';
+      setTimeout(function() {
+        saveBtn.textContent = 'Save Results';
+        saveBtn.style.background = '#2e86c1';
+      }, 2500);
     }
-
-    // Fallback: download file
-    var csv = CSV_HEADERS + '\n' + newRows;
-    var blob = new Blob([csv], {type: 'text/csv'});
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = 'study-results-' + now.toISOString().slice(0,10) + '.csv';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  }
-
-  async function changeSaveFolder() {
-    if (!window.showDirectoryPicker) {
-      alert('Your browser does not support folder picking. Use Chrome or Edge.');
-      return;
+    var status = document.getElementById('save-status');
+    if (status) {
+      status.textContent = total + ' results stored locally' + (StudyResults.isSheetsConfigured() ? ' + synced to Google Sheets' : '');
     }
-    try {
-      saveDirHandle = await window.showDirectoryPicker({id: 'study-results', mode: 'readwrite'});
-      await saveDirHandleToDB(saveDirHandle);
-      alert('Save folder updated!');
-    } catch(e) { /* user cancelled */ }
   }
 })();

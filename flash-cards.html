@@ -483,7 +483,7 @@
   <button class="util-btn" onclick="shuffleDeck()">Shuffle</button>
   <button class="util-btn" onclick="reviewLearning()">Review "Still Learning"</button>
   <button class="util-btn" onclick="resetAll()">Reset All</button>
-  <button class="util-btn save-util" id="saveMidBtn" onclick="downloadCSV()">Save Progress</button>
+  <button class="util-btn save-util" id="saveMidBtn" onclick="saveSession()">Save Progress</button>
 </div>
 
 <!-- Done screen -->
@@ -491,12 +491,14 @@
   <h2>Deck Complete!</h2>
   <div class="score" id="doneScore">0%</div>
   <p id="doneSummary">You knew 0 out of 0 cards</p>
-  <button class="restart-btn download" id="saveBtn" onclick="downloadCSV()">Save Results</button>
-  <button class="restart-btn" style="font-size:12px;padding:8px 16px" onclick="changeSaveFolder()">Change save folder</button>
+  <button class="restart-btn download" id="saveBtn" onclick="saveSession()">Save Results</button>
+  <p id="doneSaveStatus" style="font-size:12px;color:#7f8c8d;margin:8px 0"></p>
   <button class="restart-btn review" onclick="reviewLearning()" id="doneReviewBtn">Review "Still Learning" Cards</button>
   <button class="restart-btn" onclick="resetAll()">Start Over</button>
+  <button class="restart-btn" style="font-size:12px;padding:8px 14px;background:#7f8c8d" onclick="StudyResults.downloadCSV()">Download All as CSV</button>
 </div>
 
+<script src="results.js"></script>
 <script>
 // ============================================================
 // CARD DATA
@@ -672,33 +674,7 @@ var learning = {};
 var results = [];
 var sessionStartTime = null;
 var cardStartTime = null;
-var saveDirHandle = null; // File System Access API — picked once, reused
-
-// Persist the chosen folder across browser sessions using IndexedDB
-function openHandleDB() {
-  return new Promise(function(resolve, reject) {
-    var req = indexedDB.open('flashcard-settings', 1);
-    req.onupgradeneeded = function() { req.result.createObjectStore('handles'); };
-    req.onsuccess = function() { resolve(req.result); };
-    req.onerror = function() { reject(req.error); };
-  });
-}
-async function saveDirHandleToDB(handle) {
-  var db = await openHandleDB();
-  var tx = db.transaction('handles', 'readwrite');
-  tx.objectStore('handles').put(handle, 'saveDir');
-}
-async function loadDirHandleFromDB() {
-  try {
-    var db = await openHandleDB();
-    return new Promise(function(resolve) {
-      var tx = db.transaction('handles', 'readonly');
-      var req = tx.objectStore('handles').get('saveDir');
-      req.onsuccess = function() { resolve(req.result || null); };
-      req.onerror = function() { resolve(null); };
-    });
-  } catch(e) { return null; }
-}
+var lastSavedIndex = 0; // track which results have been saved to avoid duplicates
 
 function getFilteredCards() {
   if (currentFilter === 'all') return ALL_CARDS.slice();
@@ -934,133 +910,60 @@ function resetAll() {
   buildDeck(true); // full reset — wipe known/learning/results
 }
 
-// ---- CSV EXPORT (appends to single study-results.csv) ----
-var RESULTS_FILENAME = 'study-results.csv';
-var CSV_HEADERS = 'Date,Time,Type,Subject,Chapter,Item,Response,Result,Self-Rating,Seconds';
+// ---- SAVE RESULTS (localStorage + Google Sheets via results.js) ----
+var RATING_MAP = {known: 4, learning: 2, skip: 0};
 
-function csvEscape(str) {
-  str = String(str);
-  if (str.indexOf(',') !== -1 || str.indexOf('"') !== -1 || str.indexOf('\n') !== -1) {
-    return '"' + str.replace(/"/g, '""') + '"';
-  }
-  return str;
-}
-
-function buildNewRows() {
+function buildResultRows() {
+  var unsaved = results.slice(lastSavedIndex);
+  if (unsaved.length === 0) return [];
   var now = new Date();
   var dateStr = now.toLocaleDateString('en-US');
   var timeStr = now.toLocaleTimeString('en-US');
-  var RATING_MAP = {known: 4, learning: 2, skip: 0};
-  var lines = [];
-  for (var i = 0; i < results.length; i++) {
-    var r = results[i];
-    var item = r.card.word + (currentMode === 'normal' ? ' → ?' : ' ← ' + r.card.meaning);
-    // Response = the correct answer (what they were trying to recall)
-    var correctAnswer = currentMode === 'normal' ? r.card.meaning : r.card.word;
-    lines.push([
-      dateStr,
-      timeStr,
-      'flashcard',
-      'Word Roots',
-      currentFilter === 'all' ? 'All' : currentFilter,
-      csvEscape(item),
-      csvEscape(correctAnswer),
-      r.status,
-      RATING_MAP[r.status] !== undefined ? RATING_MAP[r.status] : '',
-      r.seconds
-    ].join(','));
+  var rows = [];
+  for (var i = 0; i < unsaved.length; i++) {
+    var r = unsaved[i];
+    rows.push({
+      date: dateStr,
+      time: timeStr,
+      type: 'flashcard',
+      subject: 'Word Roots',
+      chapter: currentFilter === 'all' ? 'All' : currentFilter,
+      item: r.card.word + (currentMode === 'normal' ? ' \u2192 ?' : ' \u2190 ' + r.card.meaning),
+      response: currentMode === 'normal' ? r.card.meaning : r.card.word,
+      result: r.status,
+      selfRating: RATING_MAP[r.status] !== undefined ? RATING_MAP[r.status] : '',
+      seconds: r.seconds
+    });
   }
-  return lines.join('\n');
+  return rows;
 }
 
-async function ensureDirHandle() {
-  // Try to restore previously chosen folder from IndexedDB
-  if (!saveDirHandle) {
-    saveDirHandle = await loadDirHandleFromDB();
+function saveSession() {
+  var rows = buildResultRows();
+  if (rows.length === 0) {
+    flashSaveButtons('Nothing new to save');
+    return;
   }
-  // Verify we still have permission
-  if (saveDirHandle) {
-    var perm = await saveDirHandle.queryPermission({mode: 'readwrite'});
-    if (perm !== 'granted') {
-      perm = await saveDirHandle.requestPermission({mode: 'readwrite'});
-    }
-    if (perm !== 'granted') saveDirHandle = null;
+  StudyResults.save(rows);
+  lastSavedIndex = results.length;
+  var total = StudyResults.count();
+  flashSaveButtons('Saved! (' + total + ' total results stored)');
+  var status = document.getElementById('doneSaveStatus');
+  if (status) {
+    status.textContent = total + ' results stored locally' + (StudyResults.isSheetsConfigured() ? ' + synced to Google Sheets' : '');
   }
-  // If no saved handle, ask user to pick a folder
-  if (!saveDirHandle) {
-    saveDirHandle = await window.showDirectoryPicker({id: 'study-results', mode: 'readwrite'});
-    await saveDirHandleToDB(saveDirHandle);
-  }
-  return saveDirHandle;
 }
 
-async function downloadCSV() {
-  var newRows = buildNewRows();
-  var saveBtn = document.getElementById('saveBtn');
-
-  // Try File System Access API (Chrome/Edge) — append to study-results.csv
-  if (window.showDirectoryPicker) {
-    try {
-      var dirHandle = await ensureDirHandle();
-      // Try to read existing file
-      var existingCSV = '';
-      try {
-        var existingHandle = await dirHandle.getFileHandle(RESULTS_FILENAME);
-        var file = await existingHandle.getFile();
-        existingCSV = await file.text();
-      } catch(e) { /* file doesn't exist yet — that's fine */ }
-
-      // Build final content: headers + existing rows + new rows
-      var finalCSV;
-      if (existingCSV && existingCSV.trim().length > 0) {
-        // File exists — append new rows (no duplicate headers)
-        finalCSV = existingCSV.trimEnd() + '\n' + newRows;
-      } else {
-        // New file — add headers
-        finalCSV = CSV_HEADERS + '\n' + newRows;
-      }
-
-      var fileHandle = await dirHandle.getFileHandle(RESULTS_FILENAME, {create: true});
-      var writable = await fileHandle.createWritable();
-      await writable.write(finalCSV);
-      await writable.close();
-      // Update whichever save button was used
-      var btnsToFlash = [document.getElementById('saveBtn'), document.getElementById('saveMidBtn')];
-      for (var b = 0; b < btnsToFlash.length; b++) {
-        if (btnsToFlash[b]) {
-          btnsToFlash[b].textContent = 'Saved!';
-          (function(btn, orig) {
-            setTimeout(function() { btn.textContent = orig; }, 2000);
-          })(btnsToFlash[b], btnsToFlash[b] === document.getElementById('saveBtn') ? 'Save Results' : 'Save Progress');
-        }
-      }
-      return;
-    } catch (err) {
-      if (err.name === 'AbortError') return;
-    }
+function flashSaveButtons(msg) {
+  var btns = [document.getElementById('saveBtn'), document.getElementById('saveMidBtn')];
+  for (var b = 0; b < btns.length; b++) {
+    if (!btns[b]) continue;
+    var origText = btns[b] === document.getElementById('saveBtn') ? 'Save Results' : 'Save Progress';
+    btns[b].textContent = msg;
+    (function(btn, orig) {
+      setTimeout(function() { btn.textContent = orig; }, 2500);
+    })(btns[b], origText);
   }
-
-  // Fallback: download a standalone file (browsers without File System Access API)
-  var csv = CSV_HEADERS + '\n' + newRows;
-  var blob = new Blob([csv], {type: 'text/csv'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href = url;
-  var now = new Date();
-  a.download = 'study-results-' + now.toISOString().slice(0,10) + '.csv';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
-}
-
-async function changeSaveFolder() {
-  if (!window.showDirectoryPicker) { alert('Your browser does not support folder picking. Use Chrome or Edge.'); return; }
-  try {
-    saveDirHandle = await window.showDirectoryPicker({id: 'study-results', mode: 'readwrite'});
-    await saveDirHandleToDB(saveDirHandle);
-    alert('Save folder updated!');
-  } catch(e) { /* user cancelled */ }
 }
 
 // ---- KEYBOARD SHORTCUTS ----
