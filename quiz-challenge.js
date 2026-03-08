@@ -195,67 +195,28 @@
   }
 
   // ---- LIST QUESTION DETECTION ----
-  // Only short-answer listing questions (Name, List, State, Identify, Give)
-  // NOT extended response (Describe, Explain, Discuss, Compare, Evaluate, Suggest)
+  // Uses data-list="N" attribute on .q-card, set manually per question in HTML.
+  // No auto-detection — human judgment decides which questions get list boxes.
   function isListQuestion(card) {
-    if (isMCQuestion(card)) return false;
-    var qText = card.querySelector('.q-text');
-    var qStr = qText ? qText.textContent.trim().toLowerCase() : '';
-    // Exclude extended-response command words — these need freeform textareas
-    if (/^(describe|explain|discuss|compare|distinguish|evaluate|assess|suggest|predict|outline|draw|sketch)/.test(qStr)) return false;
-    // Also exclude high-mark questions (4+) — those are essays, not lists
-    if (getMarks(card) >= 4) return false;
-    var info = getListInfo(card);
-    return info.count >= 2;
+    return card.hasAttribute('data-list');
   }
 
-  function getListInfo(card) {
+  function getListCount(card) {
+    return parseInt(card.getAttribute('data-list'), 10) || 0;
+  }
+
+  function getListAnswers(card) {
     var ansBox = card.querySelector('.answer-box');
-    if (!ansBox) return {count: 0, labels: [], answers: []};
-
-    var ansHTML = ansBox.innerHTML;
-    var ansText = ansBox.textContent;
-
-    // Check for sub-parts like (a), (b), (c) in the question text
-    var qText = card.querySelector('.q-text');
-    var qStr = qText ? qText.textContent : '';
-    var subPartMatch = qStr.match(/\(([a-z])\)/g);
-    if (subPartMatch && subPartMatch.length >= 2) {
-      // Extract answers for each sub-part from the answer box
-      var labels = [];
-      var answers = [];
-      for (var i = 0; i < subPartMatch.length; i++) {
-        labels.push(subPartMatch[i]);
-        // Try to extract answer text for this part
-        var letter = subPartMatch[i].charAt(1);
-        var nextLetter = String.fromCharCode(letter.charCodeAt(0) + 1);
-        var partRegex = new RegExp('\\(' + letter + '\\)\\s*([^]*?)(?=\\(' + nextLetter + '\\)|$)');
-        var partMatch = ansText.match(partRegex);
-        answers.push(partMatch ? partMatch[1].replace(/\[\d+\]/g, '').trim() : '');
+    if (!ansBox) return [];
+    var bolds = ansBox.querySelectorAll('strong');
+    var answers = [];
+    for (var b = 0; b < bolds.length; b++) {
+      var term = bolds[b].textContent.trim();
+      if (term.length > 1 && !/^[A-D]$/.test(term) && !/^Answer$/i.test(term)) {
+        answers.push(term);
       }
-      return {count: labels.length, labels: labels, answers: answers};
     }
-
-    // Count [1] markers in answer — each represents a separate scoreable point
-    var markMatches = ansText.match(/\[\s*1\s*\]/g);
-    if (markMatches && markMatches.length >= 2) {
-      // Extract bold terms as the expected answers
-      var bolds = ansBox.querySelectorAll('strong');
-      var answers = [];
-      for (var b = 0; b < bolds.length; b++) {
-        var term = bolds[b].textContent.trim();
-        if (term.length > 1 && !/^[A-D]$/.test(term) && !/^Answer$/i.test(term)) {
-          answers.push(term);
-        }
-      }
-      var count = Math.max(markMatches.length, answers.length);
-      if (count < 2) return {count: 0, labels: [], answers: []};
-      var labels = [];
-      for (var n = 1; n <= count; n++) labels.push(n + '.');
-      return {count: count, labels: labels, answers: answers};
-    }
-
-    return {count: 0, labels: [], answers: []};
+    return answers;
   }
 
   // ---- HINT SYSTEM ----
@@ -286,10 +247,9 @@
       }
     } else if (isListQuestion(card)) {
       // For list questions: reveal first letter per box
-      var listInfo = getListInfo(card);
-      for (var li = 0; li < listInfo.answers.length; li++) {
-        var ans = listInfo.answers[li];
-        // Get the first significant word
+      var listAnswers = getListAnswers(card);
+      for (var li = 0; li < listAnswers.length; li++) {
+        var ans = listAnswers[li];
         var firstWord = ans.split(/[\s,;:]+/).filter(function(w) { return w.length > 1; })[0] || ans.charAt(0);
         hints.push({type: 'listLetter', index: li, term: firstWord});
       }
@@ -607,12 +567,12 @@
         };
       } else if (isListQuestion(card)) {
         // ---- LIST: render individual input boxes ----
-        var listInfo = getListInfo(card);
+        var listCount = getListCount(card);
         var listWrap = el('div', 'ch-list-wrap');
         var listInputs = [];
-        for (var li = 0; li < listInfo.count; li++) {
+        for (var li = 0; li < listCount; li++) {
           var row = el('div', 'ch-list-row');
-          var label = el('span', 'ch-list-label', listInfo.labels[li]);
+          var label = el('span', 'ch-list-label', (li + 1) + '.');
           var input = document.createElement('input');
           input.type = 'text';
           input.className = 'ch-list-input';
