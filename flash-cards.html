@@ -326,6 +326,8 @@
     transition: all 0.15s;
   }
   .util-btn:hover { border-color: var(--hero-dark); color: var(--hero-dark); }
+  .util-btn.save-util { border-color: var(--blue); color: var(--blue); }
+  .util-btn.save-util:hover { background: var(--blue); color: #fff; }
 
   /* Done screen */
   .done-screen {
@@ -481,6 +483,7 @@
   <button class="util-btn" onclick="shuffleDeck()">Shuffle</button>
   <button class="util-btn" onclick="reviewLearning()">Review "Still Learning"</button>
   <button class="util-btn" onclick="resetAll()">Reset All</button>
+  <button class="util-btn save-util" id="saveMidBtn" onclick="downloadCSV()">Save Progress</button>
 </div>
 
 <!-- Done screen -->
@@ -669,18 +672,34 @@ function getFilteredCards() {
   return ALL_CARDS.filter(function(c) { return c.type === currentFilter; });
 }
 
-function buildDeck() {
+function buildDeck(resetProgress) {
   var filtered = getFilteredCards();
   deck = [];
   for (var i = 0; i < filtered.length; i++) {
     deck.push({card: filtered[i], originalIndex: ALL_CARDS.indexOf(filtered[i])});
   }
   shuffleArray(deck);
+  // When switching filters, skip already-known cards to the end
+  if (!resetProgress) {
+    var unseen = [];
+    var seenKnown = [];
+    var seenLearning = [];
+    for (var j = 0; j < deck.length; j++) {
+      var oi = deck[j].originalIndex;
+      if (known[oi]) seenKnown.push(deck[j]);
+      else if (learning[oi]) seenLearning.push(deck[j]);
+      else unseen.push(deck[j]);
+    }
+    // Show: unseen first, then still-learning, then known at end
+    deck = unseen.concat(seenLearning).concat(seenKnown);
+  }
   currentIndex = 0;
-  known = {};
-  learning = {};
-  results = [];
-  sessionStartTime = Date.now();
+  if (resetProgress) {
+    known = {};
+    learning = {};
+    results = [];
+    sessionStartTime = Date.now();
+  }
   cardStartTime = null;
   showCard();
   updateProgress();
@@ -812,7 +831,7 @@ function setFilter(f) {
   var btns = document.querySelectorAll('.filter-btn');
   for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
   document.querySelector('[data-filter="' + f + '"]').classList.add('active');
-  buildDeck();
+  buildDeck(false); // preserve progress across filter switches
 }
 
 function setMode(m) {
@@ -825,11 +844,8 @@ function setMode(m) {
 function shuffleDeck() {
   shuffleArray(deck);
   currentIndex = 0;
-  known = {};
-  learning = {};
-  results = [];
-  sessionStartTime = Date.now();
   cardStartTime = null;
+  // Shuffle preserves known/learning — just re-orders remaining cards
   updateProgress();
   showCard();
   document.getElementById('doneScreen').style.display = 'none';
@@ -864,7 +880,7 @@ function reviewLearning() {
 }
 
 function resetAll() {
-  buildDeck();
+  buildDeck(true); // full reset — wipe known/learning/results
 }
 
 // ---- CSV EXPORT (appends to single study-results.csv) ----
@@ -946,9 +962,15 @@ async function downloadCSV() {
       var writable = await fileHandle.createWritable();
       await writable.write(finalCSV);
       await writable.close();
-      if (saveBtn) {
-        saveBtn.textContent = 'Saved!';
-        setTimeout(function() { saveBtn.textContent = 'Save Results'; }, 2000);
+      // Update whichever save button was used
+      var btnsToFlash = [document.getElementById('saveBtn'), document.getElementById('saveMidBtn')];
+      for (var b = 0; b < btnsToFlash.length; b++) {
+        if (btnsToFlash[b]) {
+          btnsToFlash[b].textContent = 'Saved!';
+          (function(btn, orig) {
+            setTimeout(function() { btn.textContent = orig; }, 2000);
+          })(btnsToFlash[b], btnsToFlash[b] === document.getElementById('saveBtn') ? 'Save Results' : 'Save Progress');
+        }
       }
       return;
     } catch (err) {
@@ -981,16 +1003,22 @@ async function changeSaveFolder() {
 
 // ---- KEYBOARD SHORTCUTS ----
 document.addEventListener('keydown', function(e) {
+  // Ignore if user is typing in an input/textarea
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   if (e.key === ' ' || e.key === 'Enter') {
     e.preventDefault();
     flipCard();
   } else if (e.key === '1') {
+    e.preventDefault();
     markCard('learning');
   } else if (e.key === '2') {
+    e.preventDefault();
     markCard('known');
   } else if (e.key === 'ArrowRight' || e.key === '3') {
+    e.preventDefault();
     markCard('skip');
   } else if (e.key === 'ArrowLeft') {
+    e.preventDefault();
     if (currentIndex > 0) {
       currentIndex--;
       showCard();
@@ -999,7 +1027,7 @@ document.addEventListener('keydown', function(e) {
 });
 
 // ---- INIT ----
-buildDeck();
+buildDeck(true);
 </script>
 
 <script src="nav.js"></script>
