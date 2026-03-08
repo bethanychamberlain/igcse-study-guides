@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoGebra Applet Picker — Math Ch1</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px; line-height: 1.5; color: #222;
+    max-width: 900px; margin: 0 auto; padding: 20px;
+    background: #f5f5f0;
+  }
+  h1 { font-size: 22px; margin-bottom: 6px; color: #e74c3c; }
+  .subtitle { color: #666; margin-bottom: 24px; font-size: 14px; }
+  .topic { margin-bottom: 32px; border: 1px solid #ddd; border-radius: 10px; background: #fff; overflow: hidden; }
+  .topic-header {
+    padding: 14px 18px; background: #f8f9fa; border-bottom: 1px solid #eee;
+    display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
+  }
+  .topic-header h2 { font-size: 16px; flex: 1; }
+  .topic-header .arrow { transition: transform 0.2s; font-size: 12px; color: #999; }
+  .topic.open .topic-header .arrow { transform: rotate(90deg); }
+  .topic-body { display: none; }
+  .topic.open .topic-body { display: block; }
+  .current-badge { font-size: 11px; background: #27ae60; color: #fff; padding: 2px 8px; border-radius: 10px; font-weight: 600; }
+  .option {
+    border-bottom: 1px solid #f0f0f0; padding: 16px 18px;
+  }
+  .option:last-child { border-bottom: none; }
+  .option-header {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+  }
+  .option-header strong { font-size: 14px; }
+  .option-header a { font-size: 12px; color: #2e86c1; }
+  .option-header .tag {
+    font-size: 10px; padding: 2px 6px; border-radius: 8px; font-weight: 700;
+  }
+  .tag-current { background: #d5f5e3; color: #1e8449; }
+  .tag-alt { background: #eaf2f8; color: #2e86c1; }
+  .ggb-container { width: 100%; max-width: 700px; margin: 0 auto; }
+  .load-btn {
+    display: inline-block; padding: 8px 20px; background: #e74c3c; color: #fff;
+    border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
+  }
+  .load-btn:hover { background: #c0392b; }
+  .load-btn:disabled { background: #ccc; cursor: default; }
+  .pick-btn {
+    display: inline-block; padding: 6px 16px; background: #27ae60; color: #fff;
+    border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;
+    margin-left: 8px;
+  }
+  .pick-btn:hover { background: #1e8449; }
+  .picked { background: #d5f5e3; border: 2px solid #27ae60; }
+  #picks { position: sticky; top: 0; z-index: 10; background: #fff3cd; padding: 12px 18px; border-radius: 8px; margin-bottom: 20px; font-size: 13px; border: 1px solid #ffc107; }
+  #picks strong { color: #856404; }
+  #picks code { background: #fff; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+</style>
+</head>
+<body>
+
+<h1>GeoGebra Applet Picker</h1>
+<p class="subtitle">Click a topic to expand, then "Load Applet" to preview each option. Click "Pick This One" to mark your choice.</p>
+
+<div id="picks"><strong>Your picks:</strong> <span id="pickList">none yet</span></div>
+
+<div id="topics"></div>
+
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+var topics = [
+  {
+    name: '1. Angles at a Point',
+    current: 'Xe6y6sxD',
+    options: [
+      { id: 'Xe6y6sxD', title: 'Angles at a Point (current)' },
+      { id: 'k8fhyykm', title: 'Angles at a point' },
+      { id: 'qvQ8pRJC', title: 'Angles at a Point (alt)' },
+      { id: 'cfg2dctn', title: 'Angles at a Point (alt 2)' }
+    ]
+  },
+  {
+    name: '2. Parallel Lines & Transversal',
+    current: 'MbmtG5dk',
+    options: [
+      { id: 'MbmtG5dk', title: 'Parallel Lines (current)' },
+      { id: 'wjsdvqek', title: 'Parallel Lines & Related Angles' },
+      { id: 'ta8B8vGV', title: 'Angles on Parallel Lines' },
+      { id: 'cywM9VXZ', title: 'Angles Formed by Parallel Lines and a Transversal' }
+    ]
+  },
+  {
+    name: '3. Interior & Exterior Angles of Polygons',
+    current: 'wphyjyd5',
+    options: [
+      { id: 'wphyjyd5', title: 'Polygon Angles (current)' },
+      { id: 'VafUetHY', title: 'Polygons & Angles' },
+      { id: 'hmk8vfke', title: 'Interior & Exterior Angles - Beyond the Hexagon' },
+      { id: 'n3vTayEA', title: 'Interior and Exterior Angles of Polygons' }
+    ]
+  },
+  {
+    name: '4. Lines of Symmetry & Rotational Symmetry',
+    current: 'h6a2yfms',
+    options: [
+      { id: 'h6a2yfms', title: 'Symmetry & Rotational Symmetry (current)' },
+      { id: 'WVaDhvbe', title: 'Regular Polygons symmetry lines + rotational sym' },
+      { id: 'n9zymruu', title: 'Rotational Symmetry of Regular Polygons' },
+      { id: 'HWtXDn3R', title: 'Order of rotational symmetry of regular polygons' }
+    ]
+  },
+  {
+    name: '5. Visualise the Area of a Circle',
+    current: 'ksVtb9x7',
+    options: [
+      { id: 'ksVtb9x7', title: 'Wedge/Sector Demonstration (current)' },
+      { id: 'AADN5Ruq', title: 'Visualise Area of Circle (original)' },
+      { id: 'sdgnevat', title: 'Visualizing the Area of a Circle and its Formula' },
+      { id: 'RTJtTHzq', title: 'Derive the Area of a Circle (By Peeling!)' },
+      { id: 'fyqAUV22', title: 'Area of Circles' }
+    ]
+  },
+  {
+    name: '6. Arc Length & Sector Area',
+    current: 'NWWDJdu8',
+    options: [
+      { id: 'NWWDJdu8', title: 'Arc & Sector (current)' },
+      { id: 'senUbWBP', title: 'Arc Length, Sector, Segment and Chord calculator' },
+      { id: 'q7ypbqe2', title: 'Arc Length and Area of Sector' },
+      { id: 'AwWPUG2q', title: 'Length of an Arc and Area of a Sector' }
+    ]
+  },
+  {
+    name: '7. Parallelogram Area = Rectangle Area',
+    current: 'RzeXmK4N',
+    options: [
+      { id: 'RzeXmK4N', title: 'Parallelogram Area Discovery (current)' },
+      { id: 'u86pwmfg', title: 'Parallelogram: Area' },
+      { id: 'ahybjzx8', title: 'Area of a Parallelogram Exploration' },
+      { id: 'x2ek5bm3', title: 'Area of a Parallelogram (Discovery)' }
+    ]
+  },
+  {
+    name: '8. Volume & Surface Area of Prisms',
+    current: 'E3mnA3Mz',
+    options: [
+      { id: 'E3mnA3Mz', title: 'Volume & Surface Area of Prisms (current)' },
+      { id: 'mBt7z4sE', title: 'Adjustable Triangular Prism' },
+      { id: 'mnqTYdrc', title: 'Triangular Prism - Surface Area and Volume' },
+      { id: 'Rwu222tq', title: 'Volume and Surface Area of Prisms' }
+    ]
+  },
+  {
+    name: '9. 3D Nets — Folding Shapes',
+    current: 'sgx8keqx',
+    options: [
+      { id: 'sgx8keqx', title: 'Unfolding Shapes in 3D (current)' },
+      { id: 'aJv7KdWB', title: 'Nets of 3D Shapes' },
+      { id: 'awvy9fpz', title: 'Folding and Unfolding a Net' },
+      { id: 'pCv2EvwD', title: 'Nets of solids (3-D shapes)' }
+    ]
+  },
+  {
+    name: '10. Bearings Illustrator',
+    current: 'BaFyeCFH',
+    options: [
+      { id: 'BaFyeCFH', title: 'Bearing Illustrator (current)' },
+      { id: 'cn6qcyuq', title: 'Bearings Applet and Questions' },
+      { id: 'nXNFgdvf', title: 'Bearings: Dynamic Illustrator' },
+      { id: 'hydx8tm2', title: 'Bearings: Practice with Compass + Protractor' }
+    ]
+  }
+];
+
+var picks = {};
+var counter = 0;
+
+function renderTopics() {
+  var container = document.getElementById('topics');
+  topics.forEach(function(topic, ti) {
+    var div = document.createElement('div');
+    div.className = 'topic';
+    div.id = 'topic-' + ti;
+
+    var header = document.createElement('div');
+    header.className = 'topic-header';
+    header.onclick = function() { div.classList.toggle('open'); };
+
+    var arrow = document.createElement('span');
+    arrow.className = 'arrow';
+    arrow.textContent = '\u25B6';
+    header.appendChild(arrow);
+
+    var h2 = document.createElement('h2');
+    h2.textContent = topic.name;
+    header.appendChild(h2);
+
+    div.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'topic-body';
+
+    topic.options.forEach(function(opt, oi) {
+      var optDiv = document.createElement('div');
+      optDiv.className = 'option';
+      optDiv.id = 'opt-' + ti + '-' + oi;
+
+      var optHeader = document.createElement('div');
+      optHeader.className = 'option-header';
+
+      var strong = document.createElement('strong');
+      strong.textContent = opt.title;
+      optHeader.appendChild(strong);
+
+      if (opt.id === topic.current) {
+        var tag = document.createElement('span');
+        tag.className = 'tag tag-current';
+        tag.textContent = 'CURRENT';
+        optHeader.appendChild(tag);
+      }
+
+      var link = document.createElement('a');
+      link.href = 'https://www.geogebra.org/m/' + opt.id;
+      link.target = '_blank';
+      link.textContent = opt.id;
+      optHeader.appendChild(link);
+
+      optDiv.appendChild(optHeader);
+
+      var btnRow = document.createElement('div');
+      btnRow.style.marginTop = '8px';
+      btnRow.style.display = 'flex';
+      btnRow.style.alignItems = 'center';
+      btnRow.style.gap = '8px';
+
+      var loadBtn = document.createElement('button');
+      loadBtn.className = 'load-btn';
+      loadBtn.textContent = 'Load Applet';
+      var ggbDiv = document.createElement('div');
+      ggbDiv.className = 'ggb-container';
+      ggbDiv.id = 'ggb-' + ti + '-' + oi;
+
+      loadBtn.onclick = (function(gId, gDiv, btn) {
+        return function() {
+          btn.disabled = true;
+          btn.textContent = 'Loading...';
+          var applet = new GGBApplet({
+            material_id: gId,
+            scaleContainerClass: 'ggb-container',
+            showToolBar: false,
+            showMenuBar: false,
+            showAlgebraInput: false,
+            showResetIcon: true,
+            enableRightClick: false,
+            allowStyleBar: false,
+            enableLabelDrags: false,
+            enableShiftDragZoom: false,
+            appletOnLoad: function() { btn.textContent = 'Loaded'; }
+          }, true);
+          applet.inject(gDiv);
+        };
+      })(opt.id, ggbDiv, loadBtn);
+
+      var pickBtn = document.createElement('button');
+      pickBtn.className = 'pick-btn';
+      pickBtn.textContent = '\u2713 Pick This One';
+      pickBtn.onclick = (function(tIdx, topicName, optId, optTitle, optDiv) {
+        return function() {
+          picks[tIdx] = { id: optId, title: optTitle, topic: topicName };
+          // highlight
+          var siblings = optDiv.parentNode.querySelectorAll('.option');
+          siblings.forEach(function(s) { s.classList.remove('picked'); });
+          optDiv.classList.add('picked');
+          updatePicks();
+        };
+      })(ti, topic.name, opt.id, opt.title, optDiv);
+
+      btnRow.appendChild(loadBtn);
+      btnRow.appendChild(pickBtn);
+      optDiv.appendChild(btnRow);
+      optDiv.appendChild(ggbDiv);
+      body.appendChild(optDiv);
+    });
+
+    div.appendChild(body);
+    container.appendChild(div);
+  });
+}
+
+function updatePicks() {
+  var el = document.getElementById('pickList');
+  var keys = Object.keys(picks);
+  if (keys.length === 0) {
+    el.textContent = 'none yet';
+    return;
+  }
+  while (el.firstChild) el.removeChild(el.firstChild);
+  keys.sort(function(a, b) { return parseInt(a) - parseInt(b); });
+  keys.forEach(function(k, i) {
+    var p = picks[k];
+    if (i > 0) {
+      var sep = document.createTextNode(' · ');
+      el.appendChild(sep);
+    }
+    var span = document.createElement('span');
+    var label = document.createTextNode((parseInt(k) + 1) + '. ');
+    span.appendChild(label);
+    var code = document.createElement('code');
+    code.textContent = p.id;
+    span.appendChild(code);
+    el.appendChild(span);
+  });
+}
+
+renderTopics();
+</script>
+
+</body>
+</html>

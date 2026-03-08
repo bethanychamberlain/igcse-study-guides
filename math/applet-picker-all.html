@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GeoGebra Applet Picker — All Math Chapters</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px; line-height: 1.5; color: #222;
+    max-width: 900px; margin: 0 auto; padding: 20px;
+    background: #f5f5f0;
+  }
+  h1 { font-size: 22px; margin-bottom: 6px; color: #e74c3c; }
+  .subtitle { color: #666; margin-bottom: 24px; font-size: 14px; }
+  .chapter-group { margin-bottom: 40px; }
+  .chapter-group h2 { font-size: 18px; color: #c0392b; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 2px solid #e74c3c; }
+  .topic { margin-bottom: 16px; border: 1px solid #ddd; border-radius: 10px; background: #fff; overflow: hidden; }
+  .topic-header {
+    padding: 14px 18px; background: #f8f9fa; border-bottom: 1px solid #eee;
+    display: flex; align-items: center; gap: 10px; cursor: pointer; user-select: none;
+  }
+  .topic-header h3 { font-size: 15px; flex: 1; }
+  .topic-header .arrow { transition: transform 0.2s; font-size: 12px; color: #999; }
+  .topic.open .topic-header .arrow { transform: rotate(90deg); }
+  .topic-body { display: none; }
+  .topic.open .topic-body { display: block; }
+  .option { border-bottom: 1px solid #f0f0f0; padding: 16px 18px; }
+  .option:last-child { border-bottom: none; }
+  .option-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; flex-wrap: wrap; }
+  .option-header strong { font-size: 14px; }
+  .option-header a { font-size: 12px; color: #2e86c1; }
+  .ggb-container { width: 100%; max-width: 700px; margin: 0 auto; }
+  .load-btn {
+    display: inline-block; padding: 8px 20px; background: #e74c3c; color: #fff;
+    border: none; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;
+  }
+  .load-btn:hover { background: #c0392b; }
+  .load-btn:disabled { background: #ccc; cursor: default; }
+  .pick-btn {
+    display: inline-block; padding: 6px 16px; background: #27ae60; color: #fff;
+    border: none; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 600;
+    margin-left: 8px;
+  }
+  .pick-btn:hover { background: #1e8449; }
+  .picked { background: #d5f5e3; border: 2px solid #27ae60; }
+  #picks {
+    position: sticky; top: 0; z-index: 10; background: #fff3cd; padding: 12px 18px;
+    border-radius: 8px; margin-bottom: 20px; font-size: 13px; border: 1px solid #ffc107;
+    max-height: 40vh; overflow-y: auto;
+  }
+  #picks strong { color: #856404; }
+  #picks code { background: #fff; padding: 1px 4px; border-radius: 3px; font-size: 12px; }
+  .pick-line { margin: 2px 0; }
+  .note { font-size: 13px; color: #888; font-style: italic; padding: 8px 18px; }
+</style>
+</head>
+<body>
+
+<h1>GeoGebra Applet Picker — Math Chapters 2-11</h1>
+<p class="subtitle">Click a topic to expand, "Load Applet" to preview, "Pick This One" to mark your choice. Chapters without visual topics (Ch03, Ch07, Ch10, Ch11) are skipped.</p>
+
+<div id="picks"><strong>Your picks:</strong><div id="pickList">none yet</div></div>
+
+<div id="topics"></div>
+
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+var chapters = [
+  {
+    chapter: 'Ch02 — Algebra 1',
+    topics: [
+      {
+        name: '2.1 Sequences',
+        options: [
+          { id: '403831', title: 'Visual Patterns' },
+          { id: '56202403', title: 'Arithmetic Progressions' },
+          { id: '27555638', title: 'Formula for nth Term' },
+          { id: '32513357', title: 'Sequences (classify & rules)' }
+        ]
+      },
+      {
+        name: '2.2 Solving Equations',
+        options: [
+          { id: '10031221', title: 'Equation Balance Model' },
+          { id: '51380095', title: 'Balance Scale Model to Solve Linear Equations' },
+          { id: '59907641', title: 'Building Linear Equations with Balance Models' },
+          { id: '39373182', title: 'Solving one and two step equations' }
+        ]
+      },
+      {
+        name: '2.3 Drawing Graphs',
+        options: [
+          { id: '3950863', title: 'Plotting Points (x,y): Dynamic Illustration' },
+          { id: '54646787', title: 'Plotting Coordinate Points' },
+          { id: '45634731', title: 'Drawing Straight Line Graphs' },
+          { id: '58192103', title: 'Linear Function: Equation to Table to Graph' }
+        ]
+      },
+      {
+        name: '2.4 Gradient and y = mx + c',
+        options: [
+          { id: '43224', title: 'Gradient and intercept for straight-lines' },
+          { id: '1323157', title: 'Effect of gradient/y-intercept on graph' },
+          { id: '104616', title: 'Forming Equation of a Line Given Graph' },
+          { id: '873', title: 'Slope Intercept Form' }
+        ]
+      }
+    ]
+  },
+  {
+    chapter: 'Ch04 — Handling Data 1',
+    topics: [
+      {
+        name: '4.1 Bar Charts & Pie Charts',
+        options: [
+          { id: 'uhJYg8zm', title: 'Pie Chart vs Bar Graph' },
+          { id: 'GkxswjpF', title: 'Interactive Pie Chart' },
+          { id: 'Bdh2mD4M', title: 'Pie Chart Generator' },
+          { id: 'jKctqxb7', title: 'Bar Chart Plotter' }
+        ]
+      },
+      {
+        name: '4.3 Averages: Mean, Median, Mode & Range',
+        options: [
+          { id: 'cBwfd69G', title: 'Mean, Mode, Median, Range' },
+          { id: 'qd7tr6Pr', title: 'Comparing Mean, Median, and Mode' },
+          { id: 'hdqthzt8', title: 'Outlier Effect on Mean, Median, Range' },
+          { id: 'YUuCrwVf', title: 'Mean median and mode for ungrouped data' }
+        ]
+      },
+      {
+        name: '4.4 Scatter Graphs & Correlation',
+        options: [
+          { id: 'wSR4EBqf', title: 'Correlation coefficient and line of best fit' },
+          { id: 'VJ8zmZwn', title: 'Line of Best Fit (4-step scaffolded)' },
+          { id: 'Ch5GyHqf', title: 'Line of best fit visual' },
+          { id: 'HtbCVAnb', title: 'Scatter Plots and Line of Best Fit' }
+        ]
+      }
+    ]
+  },
+  {
+    chapter: 'Ch05 — Shape & Space 2',
+    topics: [
+      {
+        name: '5.1 Transformations',
+        options: [
+          { id: 'nMHuhtQk', title: 'Explore Transformations (all 4 types)' },
+          { id: 'yq2nnewu', title: 'Rotation, Reflection, Enlargement, Translation' },
+          { id: 'am87p6rk', title: 'Transformations (Rotation/Reflection/Enlargement/Translation)' },
+          { id: 'ttJVXhYB', title: 'Geometric Transformations' }
+        ]
+      },
+      {
+        name: '5.2 Properties of Quadrilaterals',
+        options: [
+          { id: 'pgJ2gGks', title: 'Quadrilateral properties (drag to explore)' },
+          { id: 'JeY9Pqs4', title: 'Quadrilateral exploration (drag & label)' },
+          { id: 'q5pxtkaw', title: 'Properties of Quadrilaterals (build & measure)' },
+          { id: 'zfg24nfv', title: 'Exploration: Properties of a Rhombus' }
+        ]
+      },
+      {
+        name: '5.4 Pythagoras\' Theorem',
+        options: [
+          { id: 'adgkwqyn', title: 'Pythagoras\' Theorem (drag pieces proof)' },
+          { id: 'hjuqmyfe', title: 'Illustration of Pythagoras\' Theorem' },
+          { id: 'evvcMTUw', title: 'Investigating Pythagoras\' Theorem' },
+          { id: 'bXd4nfmU', title: 'Pythagoras Theorem - Area of Squares' }
+        ]
+      }
+    ]
+  },
+  {
+    chapter: 'Ch06 — Algebra 2',
+    topics: [
+      {
+        name: '6.2 Simultaneous Equations',
+        options: [
+          { id: 'FsMeUj4Q', title: 'Simultaneous Equations Graphical Solution' },
+          { id: 'jj6CgBzH', title: 'Solving Simultaneous Linear Equations Graphically' },
+          { id: 'nzsyqerk', title: 'Simultaneous Linear Equations (User Input)' },
+          { id: 'DjW2kCDE', title: 'Solutions to Simultaneous Linear Equations' }
+        ]
+      },
+      {
+        name: '6.6 Linear Graphs',
+        options: [
+          { id: 'jbeDGPms', title: 'Linear Graphs (y=mx+c)' },
+          { id: 'ghm7dqcq', title: 'Graphing Linear Equations: y = mx + c' },
+          { id: 's3jEhYHw', title: 'y = mx + c' },
+          { id: 'WVGxwKKn', title: 'Graph the Line' }
+        ]
+      }
+    ]
+  },
+  {
+    chapter: 'Ch08 — Probability',
+    topics: [
+      {
+        name: '8.4 Venn Diagrams',
+        options: [
+          { id: 'NpCCTRJS', title: 'Union and Intersection using Venn Diagram' },
+          { id: 'ps6bkt8u', title: 'Venn Diagrams for Statements about Two Sets' },
+          { id: 'Cy3CHcFD', title: 'Operation of 2 Sets' },
+          { id: 'bqmnb9q5', title: 'Venn Diagram - Interactive' }
+        ]
+      },
+      {
+        name: '8.5 Tree Diagrams',
+        options: [
+          { id: 'M85jmuEv', title: 'Probability Tree Diagrams' },
+          { id: 'TgKMHdWS', title: 'Probability Trees (roll 100 balls)' },
+          { id: 'cs74fbzh', title: 'Tree Diagram - 2 Coin Toss' },
+          { id: 'sw5juzpn', title: 'Tree Diagram For Probability!' }
+        ]
+      }
+    ]
+  },
+  {
+    chapter: 'Ch09 — Shape & Space 3',
+    topics: [
+      {
+        name: '9.1 Similar Shapes',
+        options: [
+          { id: 'ntczbaxv', title: 'Calculating Scale Factors of Similar Figures' },
+          { id: 't834xXPv', title: 'Similar Shapes' },
+          { id: 'HpYmnw8f', title: 'Similar Triangle Maker' },
+          { id: 'JhaRDXZP', title: 'Enlarging to a Scale Factor and Centre' }
+        ]
+      },
+      {
+        name: '9.3 Trigonometry — SOH CAH TOA',
+        options: [
+          { id: 'MRM5yZeP', title: 'Trigonometry: SOHCAHTOA' },
+          { id: 'UUrFubnN', title: 'True Meaning of Sine, Cosine, Tangent Ratios' },
+          { id: 'Wb5ze5PB', title: 'Sin, Cos and Tan - Right Angled Triangles' },
+          { id: 'ktyGCrqk', title: 'Trigonometry: Sine. Cosine. Tangent.' }
+        ]
+      }
+    ]
+  }
+];
+
+var picks = {};
+var counter = 0;
+
+function renderAll() {
+  var root = document.getElementById('topics');
+  chapters.forEach(function(ch, ci) {
+    var group = document.createElement('div');
+    group.className = 'chapter-group';
+    var h2 = document.createElement('h2');
+    h2.textContent = ch.chapter;
+    group.appendChild(h2);
+
+    ch.topics.forEach(function(topic, ti) {
+      var key = ci + '-' + ti;
+      var div = document.createElement('div');
+      div.className = 'topic';
+      div.id = 'topic-' + key;
+
+      var header = document.createElement('div');
+      header.className = 'topic-header';
+      header.onclick = function() { div.classList.toggle('open'); };
+
+      var arrow = document.createElement('span');
+      arrow.className = 'arrow';
+      arrow.textContent = '\u25B6';
+      header.appendChild(arrow);
+
+      var h3 = document.createElement('h3');
+      h3.textContent = topic.name;
+      header.appendChild(h3);
+
+      div.appendChild(header);
+
+      var body = document.createElement('div');
+      body.className = 'topic-body';
+
+      topic.options.forEach(function(opt, oi) {
+        var optDiv = document.createElement('div');
+        optDiv.className = 'option';
+        optDiv.id = 'opt-' + key + '-' + oi;
+
+        var optHeader = document.createElement('div');
+        optHeader.className = 'option-header';
+
+        var strong = document.createElement('strong');
+        strong.textContent = opt.title;
+        optHeader.appendChild(strong);
+
+        var link = document.createElement('a');
+        link.href = 'https://www.geogebra.org/m/' + opt.id;
+        link.target = '_blank';
+        link.textContent = opt.id;
+        optHeader.appendChild(link);
+
+        optDiv.appendChild(optHeader);
+
+        var btnRow = document.createElement('div');
+        btnRow.style.marginTop = '8px';
+        btnRow.style.display = 'flex';
+        btnRow.style.alignItems = 'center';
+        btnRow.style.gap = '8px';
+
+        var ggbDiv = document.createElement('div');
+        ggbDiv.className = 'ggb-container';
+        ggbDiv.id = 'ggb-' + key + '-' + oi;
+
+        var loadBtn = document.createElement('button');
+        loadBtn.className = 'load-btn';
+        loadBtn.textContent = 'Load Applet';
+        loadBtn.onclick = (function(gId, gDiv, btn) {
+          return function() {
+            btn.disabled = true;
+            btn.textContent = 'Loading...';
+            var applet = new GGBApplet({
+              material_id: gId,
+              scaleContainerClass: 'ggb-container',
+              showToolBar: false,
+              showMenuBar: false,
+              showAlgebraInput: false,
+              showResetIcon: true,
+              enableRightClick: false,
+              allowStyleBar: false,
+              enableLabelDrags: false,
+              enableShiftDragZoom: false,
+              appletOnLoad: function() { btn.textContent = 'Loaded'; }
+            }, true);
+            applet.inject(gDiv);
+          };
+        })(opt.id, ggbDiv, loadBtn);
+
+        var pickBtn = document.createElement('button');
+        pickBtn.className = 'pick-btn';
+        pickBtn.textContent = '\u2713 Pick This One';
+        pickBtn.onclick = (function(pKey, topicName, chName, optId, optTitle, optDiv) {
+          return function() {
+            picks[pKey] = { id: optId, title: optTitle, topic: topicName, chapter: chName };
+            var siblings = optDiv.parentNode.querySelectorAll('.option');
+            siblings.forEach(function(s) { s.classList.remove('picked'); });
+            optDiv.classList.add('picked');
+            updatePicks();
+          };
+        })(key, topic.name, ch.chapter, opt.id, opt.title, optDiv);
+
+        btnRow.appendChild(loadBtn);
+        btnRow.appendChild(pickBtn);
+        optDiv.appendChild(btnRow);
+        optDiv.appendChild(ggbDiv);
+        body.appendChild(optDiv);
+      });
+
+      div.appendChild(body);
+      group.appendChild(div);
+    });
+
+    root.appendChild(group);
+  });
+}
+
+function updatePicks() {
+  var el = document.getElementById('pickList');
+  var keys = Object.keys(picks);
+  if (keys.length === 0) {
+    el.textContent = 'none yet';
+    return;
+  }
+  while (el.firstChild) el.removeChild(el.firstChild);
+  keys.sort();
+  var lastCh = '';
+  keys.forEach(function(k) {
+    var p = picks[k];
+    if (p.chapter !== lastCh) {
+      lastCh = p.chapter;
+      var chDiv = document.createElement('div');
+      chDiv.style.fontWeight = '700';
+      chDiv.style.marginTop = '6px';
+      chDiv.style.color = '#856404';
+      chDiv.textContent = p.chapter;
+      el.appendChild(chDiv);
+    }
+    var line = document.createElement('div');
+    line.className = 'pick-line';
+    var text = document.createTextNode(p.topic + ': ');
+    line.appendChild(text);
+    var code = document.createElement('code');
+    code.textContent = p.id;
+    line.appendChild(code);
+    var title = document.createTextNode(' — ' + p.title);
+    line.appendChild(title);
+    el.appendChild(line);
+  });
+}
+
+renderAll();
+</script>
+
+</body>
+</html>

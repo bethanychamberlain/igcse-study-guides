@@ -298,6 +298,123 @@
   .end-card h2 { font-size: 20px; margin-bottom: 8px; }
   .end-card p { opacity: 0.9; font-size: 14px; }
 
+  /* ===== Collapsible applet system ===== */
+  .applet-wrap {
+    margin: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .applet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .applet-header:hover { background: #eee; }
+  .applet-arrow {
+    font-size: 10px;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .applet-wrap:not(.collapsed) .applet-arrow { transform: rotate(90deg); }
+  .applet-content { border-top: 1px solid #e0e0e0; overflow: hidden; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: #f8f9fa; }
+  .applet-wrap.collapsed .applet-content { display: none; }
+  .ggb-container { width: 100%; max-width: 700px; }
+  .applet-content .ggb-label {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 700px;
+  }
+  .applet-content .ggb-label strong { color: var(--subject-dark); }
+
+  /* Angle reference card (floated beside text, click-through) */
+  .angle-ref {
+    float: right;
+    width: 230px;
+    margin: 0 0 8px 14px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+    font-size: 12px;
+    cursor: pointer;
+    user-select: none;
+    transition: border-color 0.2s;
+  }
+  .angle-ref:hover { border-color: #bbb; }
+  .angle-ref-title {
+    padding: 5px 10px;
+    background: #f8f9fa;
+    font-weight: 700;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid #e0e0e0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .angle-ref-title .tap-arrow {
+    font-size: 18px;
+    color: #aaa;
+    line-height: 1;
+    transition: color 0.15s;
+  }
+  .angle-ref:hover .tap-arrow { color: #666; }
+  .angle-ref svg { display: block; width: 100%; }
+  .angle-ref-legend { padding: 4px 10px 6px; border-top: 1px solid #e0e0e0; }
+  .angle-ref-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 3px 4px;
+    border-radius: 4px;
+    font-size: 11px;
+    line-height: 1.3;
+    transition: background 0.15s;
+  }
+  .angle-ref-row.active { background: #f0f0f0; font-weight: 700; }
+  .angle-ref-letter {
+    width: 20px;
+    height: 20px;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-weight: 800;
+    font-size: 12px;
+    flex-shrink: 0;
+  }
+  .angle-ref-dots {
+    display: flex;
+    justify-content: center;
+    gap: 6px;
+    padding: 4px 0 6px;
+  }
+  .angle-ref-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #ddd;
+    transition: background 0.15s;
+  }
+  .angle-ref-dot.active { background: #888; }
+
   /* Print */
   @media print {
     body { background: #fff; padding: 0; font-size: 13px; }
@@ -307,6 +424,8 @@
     .section-header { break-after: avoid; }
     .block { break-inside: avoid; }
     .end-card { break-inside: avoid; }
+    .applet-wrap { display: none; }
+    .angle-ref { float: none; width: auto; margin: 8px 0; }
   }
 </style>
 </head>
@@ -368,14 +487,54 @@
     </div>
   </div>
 
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Angles at a Point
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="qvQ8pRJC"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the rays to change the angles and watch them always sum to 360&deg;.</div>
+    </div>
+  </div>
+
   <div class="block block-write">
     <div class="icon">W</div>
     <div class="body">
+      <div class="angle-ref" id="angleRefCard">
+        <div class="angle-ref-title">
+          <span>Quick Reference</span>
+          <span class="tap-arrow">&#9654;</span>
+        </div>
+        <svg id="refSvg" viewBox="0 0 230 150"></svg>
+        <div class="angle-ref-legend">
+          <div class="angle-ref-row active" id="refRow0">
+            <span class="angle-ref-letter" style="background:#2e86c1">Z</span>
+            <div><strong>Alternate</strong> = Equal</div>
+          </div>
+        </div>
+        <div class="angle-ref-dots">
+          <span class="angle-ref-dot active" id="refDot0"></span>
+          <span class="angle-ref-dot" id="refDot1"></span>
+          <span class="angle-ref-dot" id="refDot2"></span>
+        </div>
+      </div>
       <div class="label">Write This Down &mdash; Parallel Line Angle Facts</div>
       <p>When a line crosses two parallel lines, it creates special angle pairs:</p>
       <p><strong>Alternate angles</strong> (Z-angles) are <strong>equal</strong>. They make a Z shape.</p>
       <p><strong>Corresponding angles</strong> (F-angles) are <strong>equal</strong>. They make an F shape.</p>
       <p><strong>Co-interior angles</strong> (C-angles or allied angles) add up to <strong>180&deg;</strong>. They make a C or U shape.</p>
+    </div>
+  </div>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Parallel Lines &amp; Transversal
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="cywM9VXZ"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the points to change the transversal angle. Toggle checkboxes to highlight corresponding, alternate, and co-interior angle pairs.</div>
     </div>
   </div>
 
@@ -447,6 +606,24 @@
       <p style="margin-top:4px;"><strong>Each interior angle = (n &minus; 2) &times; 180&deg; &divide; n</strong></p>
       <p><strong>Each exterior angle = 360&deg; &divide; n</strong></p>
       <p style="margin-top:4px;">And remember: <strong>interior + exterior = 180&deg;</strong> (they always add up to a straight line).</p>
+    </div>
+  </div>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Interior &amp; Exterior Angles of Polygons
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="hmk8vfke"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Change the number of sides with the slider and see how interior &amp; exterior angles change. Notice the exterior angles always sum to 360&deg;!</div>
+    </div>
+  </div>
+
+  <div class="block block-write">
+    <div class="icon">W</div>
+    <div class="body">
+      <div class="label">Write This Down &mdash; Worked Example</div>
       <div class="worked">
         <p><strong>Example:</strong> Find each interior angle of a regular octagon (8 sides).</p>
         <div class="step"><span class="step-num">1.</span><span class="step-text">Each interior angle = (8 &minus; 2) &times; 180&deg; &divide; 8 = 6 &times; 180&deg; &divide; 8</span></div>
@@ -506,6 +683,17 @@
     </div>
   </div>
 
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Lines of Symmetry &amp; Rotational Symmetry
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="HWtXDn3R"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Change the number of sides to see how lines of symmetry and rotational symmetry change for regular polygons.</div>
+    </div>
+  </div>
+
   <div class="block block-tip">
     <div class="icon">T</div>
     <div class="body">
@@ -547,6 +735,17 @@
     </div>
   </div>
 
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Visualise the Area of a Circle
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="fyqAUV22"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Increase the number of wedges and watch them rearrange into a rectangle &mdash; proving that A = &pi;r&sup2;.</div>
+    </div>
+  </div>
+
   <div class="block block-confuse">
     <div class="icon">!</div>
     <div class="body">
@@ -569,6 +768,17 @@
         <div class="step"><span class="step-num">2.</span><span class="step-text">= (1/4) &times; 16&pi; = 4&pi;</span></div>
         <div class="result">Answer: 4&pi; = 12.6 cm (1 d.p.)</div>
       </div>
+    </div>
+  </div>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Arc Length &amp; Sector Area
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="NWWDJdu8"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Adjust the radius and sector angle to see how arc length and sector area change. Notice they&rsquo;re always a fraction (&theta;/360) of the full circle.</div>
     </div>
   </div>
 
@@ -610,6 +820,17 @@
         <tr><td>Trapezium</td><td>A = &frac12; &times; (a + b) &times; h</td></tr>
         <tr><td>Circle</td><td>A = &pi;r&sup2;</td></tr>
       </table>
+    </div>
+  </div>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Parallelogram Area = Rectangle Area
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="x2ek5bm3"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the slider to cut and rearrange the parallelogram into a rectangle &mdash; proving that Area = base &times; height.</div>
     </div>
   </div>
 
@@ -691,6 +912,17 @@
     </div>
   </div>
 
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Volume &amp; Surface Area of Prisms
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="E3mnA3Mz"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Change the dimensions and shape of the prism to see how volume and surface area are calculated. Rotate the 3D view to see all faces.</div>
+    </div>
+  </div>
+
   <div class="block block-confuse">
     <div class="icon">!</div>
     <div class="body">
@@ -761,11 +993,33 @@
     </div>
   </div>
 
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: 3D Nets &mdash; Folding Shapes
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="sgx8keqx"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Explore nets of common 3D shapes. Watch them fold and unfold to see how flat patterns become solid objects.</div>
+    </div>
+  </div>
+
   <div class="block block-tip">
     <div class="icon">T</div>
     <div class="body">
       <div class="label">Study Tip &mdash; Bearings in Scale Drawings</div>
       <p>Bearings are measured <strong>clockwise from North</strong> and always written as <strong>3 digits</strong> (e.g., 045&deg;, not 45&deg;). If a scale drawing question involves bearings, use a protractor from the North line and measure clockwise.</p>
+    </div>
+  </div>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Bearings Illustrator
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="cn6qcyuq"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Enter distances and bearings to plot a path. See how bearings are measured clockwise from North.</div>
     </div>
   </div>
 
@@ -821,21 +1075,193 @@
   <p>You've covered angle facts, polygons, symmetry, circles, area, volume, surface area, and scale drawing. Now test yourself with the quiz.</p>
 </div>
 
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
 <script>
   // Progress tracking
-  const checkboxes = document.querySelectorAll('input[type="checkbox"]');
-  const fill = document.getElementById('progressFill');
-  const label = document.getElementById('progressLabel');
+  var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  var fill = document.getElementById('progressFill');
+  var label = document.getElementById('progressLabel');
 
   function updateProgress() {
-    const total = checkboxes.length;
-    const done = Array.from(checkboxes).filter(cb => cb.checked).length;
+    var total = checkboxes.length;
+    var done = Array.from(checkboxes).filter(function(cb) { return cb.checked; }).length;
     fill.style.width = (done / total * 100) + '%';
     label.textContent = done + ' / ' + total + ' done';
   }
 
-  checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
+  checkboxes.forEach(function(cb) { cb.addEventListener('change', updateProgress); });
   updateProgress();
+
+  // Collapsible applets with GeoGebra API lazy-load
+  function toggleApplet(headerEl) {
+    var wrap = headerEl.parentNode;
+    wrap.classList.toggle('collapsed');
+    if (!wrap.classList.contains('collapsed')) {
+      var container = wrap.querySelector('.ggb-container[data-material-id]');
+      if (container) {
+        var id = container.getAttribute('data-material-id');
+        container.removeAttribute('data-material-id');
+        var applet = new GGBApplet({
+          material_id: id,
+          scaleContainerClass: 'ggb-container',
+          showToolBar: false,
+          showMenuBar: false,
+          showAlgebraInput: false,
+          showResetIcon: true,
+          enableRightClick: false,
+          allowStyleBar: false,
+          enableLabelDrags: false,
+          enableShiftDragZoom: false
+        }, true);
+        applet.inject(container);
+      }
+    }
+  }
+
+  // Click-through angle reference card
+  (function() {
+    var svg = document.getElementById('refSvg');
+    var card = document.getElementById('angleRefCard');
+    if (!svg || !card) return;
+    var NS = 'http://www.w3.org/2000/svg';
+    var current = 0;
+    var modes = ['alternate', 'corresponding', 'cointerior'];
+
+    card.addEventListener('click', function() {
+      current = (current + 1) % 3;
+      drawRef();
+      updateUI();
+    });
+
+    function el(tag, attrs) {
+      var e = document.createElementNS(NS, tag);
+      if (attrs) Object.keys(attrs).forEach(function(k) { e.setAttribute(k, attrs[k]); });
+      return e;
+    }
+
+    function arcPath(cx, cy, r, a1, a2) {
+      var x1 = cx + r * Math.cos(a1), y1 = cy + r * Math.sin(a1);
+      var x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+      var lg = (a2 - a1 > Math.PI) ? 1 : 0;
+      return 'M' + cx + ',' + cy + ' L' + x1 + ',' + y1 +
+             ' A' + r + ',' + r + ' 0 ' + lg + ' 1 ' + x2 + ',' + y2 + ' Z';
+    }
+
+    // Fixed geometry
+    var deg = 55, rad = deg * Math.PI / 180;
+    var ly1 = 35, ly2 = 110;
+    var p1x = 85, p2x = p1x + (ly2 - ly1) / Math.tan(rad);
+    var dirX = Math.cos(rad), dirY = Math.sin(rad);
+    var ext = 18, R = 22;
+
+    var C = [
+      { s: '#2e86c1', f: 'rgba(46,134,193,0.3)' },
+      { s: '#27ae60', f: 'rgba(39,174,96,0.3)' },
+      { s: '#e67e22', f: 'rgba(230,126,34,0.3)' }
+    ];
+
+    function drawRef() {
+      while (svg.firstChild) svg.removeChild(svg.firstChild);
+      var m = modes[current], c = C[current];
+      var sw = '4';
+
+      // 1. Base diagram (grey, thin — drawn first so color goes on top)
+      svg.appendChild(el('line', { x1: 10, y1: ly1, x2: 220, y2: ly1, stroke: '#ccc', 'stroke-width': '1.5' }));
+      svg.appendChild(el('line', { x1: 10, y1: ly2, x2: 220, y2: ly2, stroke: '#ccc', 'stroke-width': '1.5' }));
+      svg.appendChild(el('line', {
+        x1: p1x - ext * dirX, y1: ly1 - ext * dirY,
+        x2: p2x + ext * dirX, y2: ly2 + ext * dirY,
+        stroke: '#ccc', 'stroke-width': '1.5'
+      }));
+      [ly1, ly2].forEach(function(ly) {
+        svg.appendChild(el('path', { d: 'M48,' + (ly - 4) + ' L53,' + ly + ' L48,' + (ly + 4), fill: 'none', stroke: '#bbb', 'stroke-width': '1' }));
+        svg.appendChild(el('path', { d: 'M52,' + (ly - 4) + ' L57,' + ly + ' L52,' + (ly + 4), fill: 'none', stroke: '#bbb', 'stroke-width': '1' }));
+      });
+
+      // 2. Colored line segments forming Z / F / C letter shapes
+      if (m === 'alternate') {
+        // Z: right of P1 → transversal → left of P2
+        svg.appendChild(el('line', { x1: p1x, y1: ly1, x2: 210, y2: ly1, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+        svg.appendChild(el('line', { x1: p1x, y1: ly1, x2: p2x, y2: ly2, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+        svg.appendChild(el('line', { x1: 20, y1: ly2, x2: p2x, y2: ly2, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+      }
+      if (m === 'corresponding') {
+        // F: right of P1 → full transversal → right of P2
+        svg.appendChild(el('line', { x1: p1x, y1: ly1, x2: 210, y2: ly1, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+        svg.appendChild(el('line', { x1: p1x - ext * dirX, y1: ly1 - ext * dirY, x2: p2x + ext * dirX, y2: ly2 + ext * dirY, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+        svg.appendChild(el('line', { x1: p2x, y1: ly2, x2: 210, y2: ly2, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+      }
+      if (m === 'cointerior') {
+        // C: right of P1 → transversal → right of P2 (encloses the co-interior angles)
+        svg.appendChild(el('line', { x1: p1x, y1: ly1, x2: 210, y2: ly1, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+        svg.appendChild(el('line', { x1: p1x, y1: ly1, x2: p2x, y2: ly2, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+        svg.appendChild(el('line', { x1: p2x, y1: ly2, x2: 210, y2: ly2, stroke: c.s, 'stroke-width': sw, 'stroke-linecap': 'round' }));
+      }
+
+      // 3. Angle arcs + labels
+      if (m === 'alternate') {
+        svg.appendChild(el('path', { d: arcPath(p1x, ly1, R, 0, rad), fill: c.f, stroke: c.s, 'stroke-width': '2' }));
+        svg.appendChild(el('path', { d: arcPath(p2x, ly2, R, Math.PI, Math.PI + rad), fill: c.f, stroke: c.s, 'stroke-width': '2' }));
+        addAngleLabel(p1x, ly1, 0, rad, R + 14, deg + '\u00B0', c.s, 'start');
+        addAngleLabel(p2x, ly2, Math.PI, Math.PI + rad, R + 14, deg + '\u00B0', c.s, 'end');
+      }
+      if (m === 'corresponding') {
+        svg.appendChild(el('path', { d: arcPath(p1x, ly1, R, 0, rad), fill: c.f, stroke: c.s, 'stroke-width': '2' }));
+        svg.appendChild(el('path', { d: arcPath(p2x, ly2, R, 0, rad), fill: c.f, stroke: c.s, 'stroke-width': '2' }));
+        addAngleLabel(p1x, ly1, 0, rad, R + 14, deg + '\u00B0', c.s, 'start');
+        addAngleLabel(p2x, ly2, 0, rad, R + 14, deg + '\u00B0', c.s, 'start');
+      }
+      if (m === 'cointerior') {
+        var supDeg = 180 - deg;
+        svg.appendChild(el('path', { d: arcPath(p1x, ly1, R, 0, rad), fill: c.f, stroke: c.s, 'stroke-width': '2' }));
+        svg.appendChild(el('path', { d: arcPath(p2x, ly2, R, Math.PI + rad, 2 * Math.PI), fill: c.f, stroke: c.s, 'stroke-width': '2' }));
+        addAngleLabel(p1x, ly1, 0, rad, R + 14, deg + '\u00B0', c.s, 'start');
+        addAngleLabel(p2x, ly2, Math.PI + rad, 2 * Math.PI, R + 14, supDeg + '\u00B0', c.s, 'end');
+      }
+
+      // 4. Intersection dots (on top of everything)
+      svg.appendChild(el('circle', { cx: p1x, cy: ly1, r: '3', fill: '#555' }));
+      svg.appendChild(el('circle', { cx: p2x, cy: ly2, r: '3', fill: '#555' }));
+    }
+
+    function addAngleLabel(cx, cy, a1, a2, r, text, color, anchor) {
+      var mid = (a1 + a2) / 2;
+      var t = el('text', {
+        x: cx + r * Math.cos(mid), y: cy + r * Math.sin(mid) + 4,
+        fill: color, 'font-size': '11', 'font-weight': '700'
+      });
+      if (anchor === 'end') t.setAttribute('text-anchor', 'end');
+      t.textContent = text;
+      svg.appendChild(t);
+    }
+
+    var labels = [
+      { letter: 'Z', bg: '#2e86c1', text: 'Alternate = Equal' },
+      { letter: 'F', bg: '#27ae60', text: 'Corresponding = Equal' },
+      { letter: 'C', bg: '#e67e22', text: 'Co-interior = 180\u00B0' }
+    ];
+
+    function updateUI() {
+      var row = document.getElementById('refRow0');
+      var badge = row.querySelector('.angle-ref-letter');
+      var info = row.querySelector('div');
+      var l = labels[current];
+      badge.textContent = l.letter;
+      badge.style.background = l.bg;
+      var b = document.createElement('strong');
+      b.textContent = l.text;
+      while (info.firstChild) info.removeChild(info.firstChild);
+      info.appendChild(b);
+      for (var i = 0; i < 3; i++) {
+        var dot = document.getElementById('refDot' + i);
+        if (i === current) { dot.classList.add('active'); }
+        else { dot.classList.remove('active'); }
+      }
+    }
+
+    drawRef();
+    updateUI();
+  })();
 </script>
 <script src="../nav.js"></script>
 </body>
