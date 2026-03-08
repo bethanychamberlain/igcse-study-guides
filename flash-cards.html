@@ -90,6 +90,38 @@
   .filter-btn.active[data-filter="english"] { background: var(--teal); border-color: var(--teal); }
   .filter-btn.active[data-filter="spanish"] { background: var(--orange); border-color: var(--orange); }
 
+  /* Origin sub-filter */
+  .origin-row { margin-top: -8px; }
+  .origin-btn {
+    padding: 4px 12px;
+    border: 2px solid var(--border);
+    border-radius: 20px;
+    background: var(--card);
+    font-size: 11px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .origin-btn:hover { border-color: #555; color: #333; }
+  .origin-btn.active { background: #555; color: #fff; border-color: #555; }
+  .origin-btn.active[data-origin="G"] { background: #1a5276; border-color: #1a5276; }
+  .origin-btn.active[data-origin="L"] { background: #7d3c98; border-color: #7d3c98; }
+
+  /* Origin badge on card */
+  .origin-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-left: 6px;
+    vertical-align: middle;
+    letter-spacing: 0.5px;
+  }
+  .origin-tag.G { background: #d4e6f1; color: #1a5276; }
+  .origin-tag.L { background: #e8daef; color: #7d3c98; }
+
   /* Mode toggle */
   .mode-row {
     width: 100%;
@@ -423,6 +455,11 @@
   <button class="filter-btn" data-filter="english" onclick="setFilter('english')">English</button>
   <button class="filter-btn" data-filter="spanish" onclick="setFilter('spanish')">Spanish</button>
 </div>
+<div class="controls origin-row" id="originRow">
+  <button class="origin-btn active" data-origin="all" onclick="setOrigin('all')">All Origins</button>
+  <button class="origin-btn" data-origin="G" onclick="setOrigin('G')">Greek</button>
+  <button class="origin-btn" data-origin="L" onclick="setOrigin('L')">Latin</button>
+</div>
 
 <!-- Mode toggle -->
 <div class="mode-row">
@@ -448,13 +485,13 @@
   <div class="card-counter" id="cardCounter">1 / 120</div>
   <div class="card-flipper" id="cardFlipper" onclick="flipCard()">
     <div class="card-front" id="cardFront">
-      <div class="card-type-badge prefix" id="frontBadge">PREFIX</div>
+      <div class="card-type-badge prefix" id="frontBadge">PREFIX</div><span class="origin-tag G" id="frontOrigin">Greek</span>
       <div class="word-part" id="frontWord">photo-</div>
       <div class="prompt" id="frontPrompt">What does this mean?</div>
       <div class="tap-hint">Tap to flip &middot; Space bar</div>
     </div>
     <div class="card-back" id="cardBack">
-      <div class="card-type-badge prefix" id="backBadge">PREFIX</div>
+      <div class="card-type-badge prefix" id="backBadge">PREFIX</div><span class="origin-tag G" id="backOrigin">Greek</span>
       <div class="meaning" id="backMeaning">light</div>
       <div class="hook" id="backHook">photograph = light writing</div>
       <div class="examples" id="backExamples">photosynthesis, photon, phototropism</div>
@@ -504,119 +541,119 @@
 // CARD DATA
 // ============================================================
 var ALL_CARDS = [
-  // ---- PREFIXES (42) ----
-  {type:"prefix", word:"a- / an-", meaning:"without, not", hook:"\"a\" = absent", examples:"anaerobic, abiotic, anion"},
-  {type:"prefix", word:"anti-", meaning:"against", hook:"anti-hero fights against", examples:"antibiotic, antibody, antiseptic"},
-  {type:"prefix", word:"auto-", meaning:"self", hook:"auto-pilot = flies itself", examples:"autotroph, autobiography"},
-  {type:"prefix", word:"bi-", meaning:"two", hook:"bicycle = two wheels", examples:"binomial, bilateral, biography"},
-  {type:"prefix", word:"bio-", meaning:"life", hook:"biology = study of life", examples:"biodegradable, biotechnology, biomass"},
-  {type:"prefix", word:"chloro-", meaning:"green", hook:"chlorine pool = greenish", examples:"chlorophyll, chloroplast"},
-  {type:"prefix", word:"co- / con-", meaning:"together, with", hook:"co-operate = work together", examples:"condensation, compound, codominance"},
-  {type:"prefix", word:"contra-", meaning:"against, opposite", hook:"contradict = say opposite", examples:"contrast, contradict, counterargument"},
-  {type:"prefix", word:"de-", meaning:"remove, down, reverse", hook:"delete = remove", examples:"decompose, deforest, denature"},
-  {type:"prefix", word:"di-", meaning:"two", hook:"di = dos (Spanish 2!)", examples:"dioxide, diploid, disaccharide"},
-  {type:"prefix", word:"dis-", meaning:"apart, not", hook:"disconnect = pull apart", examples:"dissolve, distillation, displacement"},
-  {type:"prefix", word:"ecto-", meaning:"outside", hook:"ecto = exit = outside", examples:"ectothermic (cold-blooded)"},
-  {type:"prefix", word:"electro-", meaning:"electric", hook:"electricity!", examples:"electrolysis, electrode, electromagnetic"},
-  {type:"prefix", word:"endo-", meaning:"inside, within", hook:"endo sounds like in-do", examples:"endothermic, endocrine"},
-  {type:"prefix", word:"epi-", meaning:"upon, above, outer", hook:"epic = above ordinary", examples:"epidermis (outer skin layer)"},
-  {type:"prefix", word:"eu-", meaning:"true, good", hook:"euphoria = truly good feeling", examples:"eukaryote, eutrophication"},
-  {type:"prefix", word:"ex- / exo-", meaning:"out, outside", hook:"exit = go out", examples:"exothermic, excretion, exhale"},
-  {type:"prefix", word:"hetero-", meaning:"different", hook:"hetero = not the same", examples:"heterozygous, heterotroph"},
-  {type:"prefix", word:"homo-", meaning:"same", hook:"homogeneous = all same", examples:"homozygous, homologous"},
-  {type:"prefix", word:"hydro-", meaning:"water", hook:"hydrate = add water", examples:"hydrolysis, hydrocarbon, hydrogen"},
-  {type:"prefix", word:"hyper-", meaning:"over, excess", hook:"hyperactive = too active", examples:"hypertonic, hyperbole"},
-  {type:"prefix", word:"hypo-", meaning:"under, below", hook:"opposite of hyper", examples:"hypotonic, hypothesis, hypothermia"},
-  {type:"prefix", word:"in- / im-", meaning:"not, into", hook:"impossible = not possible", examples:"impermeable, incomplete, insoluble"},
-  {type:"prefix", word:"inter-", meaning:"between", hook:"internet = between networks", examples:"intercostal, intermolecular"},
-  {type:"prefix", word:"intra-", meaning:"within", hook:"intranet = within one network", examples:"intracellular, intramolecular"},
-  {type:"prefix", word:"iso-", meaning:"equal", hook:"isosceles = equal sides", examples:"isotope, isotonic, isomer"},
-  {type:"prefix", word:"mal-", meaning:"bad, wrong", hook:"malware = bad software", examples:"malnutrition, malignant"},
-  {type:"prefix", word:"micro-", meaning:"small", hook:"microphone = small sound", examples:"microscope, microorganism"},
-  {type:"prefix", word:"mono-", meaning:"one", hook:"monopoly = one owner", examples:"monosaccharide, monomer, monoxide"},
-  {type:"prefix", word:"multi-", meaning:"many", hook:"multiplayer = many players", examples:"multicellular"},
-  {type:"prefix", word:"photo-", meaning:"light", hook:"photograph = light writing", examples:"photosynthesis, phototropism, photon"},
-  {type:"prefix", word:"poly-", meaning:"many", hook:"polygon = many angles", examples:"polymer, polysaccharide"},
-  {type:"prefix", word:"pre-", meaning:"before", hook:"preview = see before", examples:"predict, precipitate"},
-  {type:"prefix", word:"pro-", meaning:"before, forward", hook:"progress = move forward", examples:"prokaryote, product, protease"},
-  {type:"prefix", word:"re-", meaning:"again, back", hook:"replay = play again", examples:"reversible, reproduce, respiration, redox"},
-  {type:"prefix", word:"semi-", meaning:"half, partly", hook:"semi-final = halfway", examples:"semi-permeable, semicircle"},
-  {type:"prefix", word:"sub-", meaning:"under, below", hook:"submarine = under the sea", examples:"sublimation, substrate, subatomic"},
-  {type:"prefix", word:"super-", meaning:"above, beyond", hook:"superhero = beyond normal", examples:"supersaturated, supernova"},
-  {type:"prefix", word:"thermo-", meaning:"heat", hook:"thermos flask = keeps heat", examples:"thermometer, exothermic, thermal"},
-  {type:"prefix", word:"trans-", meaning:"across", hook:"transport = carry across", examples:"transpiration, translocation, transformer"},
-  {type:"prefix", word:"tri-", meaning:"three", hook:"triangle = three angles", examples:"triangle, triple bond, triglyceride"},
-  {type:"prefix", word:"uni-", meaning:"one", hook:"unicorn = one horn", examples:"unicellular, universal indicator"},
+  // ---- PREFIXES (42) ---- origin: G=Greek, L=Latin
+  {type:"prefix", origin:"G", word:"a- / an-", meaning:"without, not", hook:"\"a\" = absent", examples:"anaerobic, abiotic, anion"},
+  {type:"prefix", origin:"G", word:"anti-", meaning:"against", hook:"anti-hero fights against", examples:"antibiotic, antibody, antiseptic"},
+  {type:"prefix", origin:"G", word:"auto-", meaning:"self", hook:"auto-pilot = flies itself", examples:"autotroph, autobiography"},
+  {type:"prefix", origin:"L", word:"bi-", meaning:"two", hook:"bicycle = two wheels", examples:"binomial, bilateral, biography"},
+  {type:"prefix", origin:"G", word:"bio-", meaning:"life", hook:"biology = study of life", examples:"biodegradable, biotechnology, biomass"},
+  {type:"prefix", origin:"G", word:"chloro-", meaning:"green", hook:"chlorine pool = greenish", examples:"chlorophyll, chloroplast"},
+  {type:"prefix", origin:"L", word:"co- / con-", meaning:"together, with", hook:"co-operate = work together", examples:"condensation, compound, codominance"},
+  {type:"prefix", origin:"L", word:"contra-", meaning:"against, opposite", hook:"contradict = say opposite", examples:"contrast, contradict, counterargument"},
+  {type:"prefix", origin:"L", word:"de-", meaning:"remove, down, reverse", hook:"delete = remove", examples:"decompose, deforest, denature"},
+  {type:"prefix", origin:"G", word:"di-", meaning:"two", hook:"di = dos (Spanish 2!)", examples:"dioxide, diploid, disaccharide"},
+  {type:"prefix", origin:"L", word:"dis-", meaning:"apart, not", hook:"disconnect = pull apart", examples:"dissolve, distillation, displacement"},
+  {type:"prefix", origin:"G", word:"ecto-", meaning:"outside", hook:"ecto = exit = outside", examples:"ectothermic (cold-blooded)"},
+  {type:"prefix", origin:"G", word:"electro-", meaning:"electric", hook:"electricity!", examples:"electrolysis, electrode, electromagnetic"},
+  {type:"prefix", origin:"G", word:"endo-", meaning:"inside, within", hook:"endo sounds like in-do", examples:"endothermic, endocrine"},
+  {type:"prefix", origin:"G", word:"epi-", meaning:"upon, above, outer", hook:"epic = above ordinary", examples:"epidermis (outer skin layer)"},
+  {type:"prefix", origin:"G", word:"eu-", meaning:"true, good", hook:"euphoria = truly good feeling", examples:"eukaryote, eutrophication"},
+  {type:"prefix", origin:"L", word:"ex- / exo-", meaning:"out, outside", hook:"exit = go out", examples:"exothermic, excretion, exhale"},
+  {type:"prefix", origin:"G", word:"hetero-", meaning:"different", hook:"hetero = not the same", examples:"heterozygous, heterotroph"},
+  {type:"prefix", origin:"G", word:"homo-", meaning:"same", hook:"homogeneous = all same", examples:"homozygous, homologous"},
+  {type:"prefix", origin:"G", word:"hydro-", meaning:"water", hook:"hydrate = add water", examples:"hydrolysis, hydrocarbon, hydrogen"},
+  {type:"prefix", origin:"G", word:"hyper-", meaning:"over, excess", hook:"hyperactive = too active", examples:"hypertonic, hyperbole"},
+  {type:"prefix", origin:"G", word:"hypo-", meaning:"under, below", hook:"opposite of hyper", examples:"hypotonic, hypothesis, hypothermia"},
+  {type:"prefix", origin:"L", word:"in- / im-", meaning:"not, into", hook:"impossible = not possible", examples:"impermeable, incomplete, insoluble"},
+  {type:"prefix", origin:"L", word:"inter-", meaning:"between", hook:"internet = between networks", examples:"intercostal, intermolecular"},
+  {type:"prefix", origin:"L", word:"intra-", meaning:"within", hook:"intranet = within one network", examples:"intracellular, intramolecular"},
+  {type:"prefix", origin:"G", word:"iso-", meaning:"equal", hook:"isosceles = equal sides", examples:"isotope, isotonic, isomer"},
+  {type:"prefix", origin:"L", word:"mal-", meaning:"bad, wrong", hook:"malware = bad software", examples:"malnutrition, malignant"},
+  {type:"prefix", origin:"G", word:"micro-", meaning:"small", hook:"microphone = small sound", examples:"microscope, microorganism"},
+  {type:"prefix", origin:"G", word:"mono-", meaning:"one", hook:"monopoly = one owner", examples:"monosaccharide, monomer, monoxide"},
+  {type:"prefix", origin:"L", word:"multi-", meaning:"many", hook:"multiplayer = many players", examples:"multicellular"},
+  {type:"prefix", origin:"G", word:"photo-", meaning:"light", hook:"photograph = light writing", examples:"photosynthesis, phototropism, photon"},
+  {type:"prefix", origin:"G", word:"poly-", meaning:"many", hook:"polygon = many angles", examples:"polymer, polysaccharide"},
+  {type:"prefix", origin:"L", word:"pre-", meaning:"before", hook:"preview = see before", examples:"predict, precipitate"},
+  {type:"prefix", origin:"G", word:"pro-", meaning:"before, forward", hook:"progress = move forward", examples:"prokaryote, product, protease"},
+  {type:"prefix", origin:"L", word:"re-", meaning:"again, back", hook:"replay = play again", examples:"reversible, reproduce, respiration, redox"},
+  {type:"prefix", origin:"L", word:"semi-", meaning:"half, partly", hook:"semi-final = halfway", examples:"semi-permeable, semicircle"},
+  {type:"prefix", origin:"L", word:"sub-", meaning:"under, below", hook:"submarine = under the sea", examples:"sublimation, substrate, subatomic"},
+  {type:"prefix", origin:"L", word:"super-", meaning:"above, beyond", hook:"superhero = beyond normal", examples:"supersaturated, supernova"},
+  {type:"prefix", origin:"G", word:"thermo-", meaning:"heat", hook:"thermos flask = keeps heat", examples:"thermometer, exothermic, thermal"},
+  {type:"prefix", origin:"L", word:"trans-", meaning:"across", hook:"transport = carry across", examples:"transpiration, translocation, transformer"},
+  {type:"prefix", origin:"G", word:"tri-", meaning:"three", hook:"triangle = three angles", examples:"triangle, triple bond, triglyceride"},
+  {type:"prefix", origin:"L", word:"uni-", meaning:"one", hook:"unicorn = one horn", examples:"unicellular, universal indicator"},
 
   // ---- SUFFIXES (26) ----
-  {type:"suffix", word:"-ase", meaning:"enzyme", hook:"always an enzyme!", examples:"amylase, protease, lipase, lactase"},
-  {type:"suffix", word:"-ate", meaning:"salt with oxygen", hook:"-ate has an O", examples:"sulfate, nitrate, carbonate, phosphate"},
-  {type:"suffix", word:"-tion / -sion", meaning:"process, action", hook:"action \u2192 -tion", examples:"evaporation, oxidation, erosion"},
-  {type:"suffix", word:"-cyte", meaning:"cell", hook:"cyto = cell, -cyte = a cell", examples:"phagocyte, lymphocyte, erythrocyte"},
-  {type:"suffix", word:"-gen", meaning:"producer, creator", hook:"generator = creates", examples:"pathogen, hydrogen, oxygen, allergen"},
-  {type:"suffix", word:"-ide", meaning:"2-element compound", hook:"-ide = inside (just 2)", examples:"chloride, oxide, sulphide, hydroxide"},
-  {type:"suffix", word:"-ine", meaning:"chemical substance", hook:"medicine ends in -ine", examples:"chlorine, adrenaline, caffeine"},
-  {type:"suffix", word:"-ism", meaning:"condition, system", hook:"organism = living system", examples:"metabolism, organism, tropism, magnetism"},
-  {type:"suffix", word:"-itis", meaning:"inflammation", hook:"-itis = it IS swollen!", examples:"bronchitis, arthritis, hepatitis"},
-  {type:"suffix", word:"-logy", meaning:"study of", hook:"-logy = logic of a subject", examples:"biology, ecology, technology"},
-  {type:"suffix", word:"-lysis", meaning:"splitting apart", hook:"analysis = break apart", examples:"hydrolysis, electrolysis, dialysis"},
-  {type:"suffix", word:"-mer", meaning:"part, unit", hook:"partner \u2192 part-mer", examples:"polymer, monomer, isomer"},
-  {type:"suffix", word:"-meter", meaning:"measure", hook:"metre stick measures", examples:"thermometer, voltmeter, ammeter"},
-  {type:"suffix", word:"-oid", meaning:"resembling", hook:"android = resembles a man", examples:"asteroid, humanoid, thyroid"},
-  {type:"suffix", word:"-ose", meaning:"sugar", hook:"-ose = oh so sweet", examples:"glucose, fructose, sucrose, lactose"},
-  {type:"suffix", word:"-osis", meaning:"condition, process", hook:"-osis = ongoing thing", examples:"osmosis, mitosis, meiosis"},
-  {type:"suffix", word:"-phyll", meaning:"leaf", hook:"a leaf = a fill of green", examples:"chlorophyll, mesophyll"},
-  {type:"suffix", word:"-plasm", meaning:"formed material", hook:"plasma = living goo", examples:"cytoplasm, protoplasm"},
-  {type:"suffix", word:"-scope", meaning:"to look, to view", hook:"scope it out = look at it", examples:"microscope, stethoscope, oscilloscope"},
-  {type:"suffix", word:"-synthesis", meaning:"putting together", hook:"synthesizer puts sounds together", examples:"photosynthesis, biosynthesis"},
-  {type:"suffix", word:"-troph", meaning:"feed, nourish", hook:"trophy feeds your ego", examples:"autotroph, heterotroph, eutrophication"},
-  {type:"suffix", word:"-vore", meaning:"eater", hook:"devour = eat greedily", examples:"herbivore, carnivore, omnivore"},
-  {type:"suffix", word:"-phage", meaning:"eat, devour", hook:"Pac-Man is a phage!", examples:"phagocyte, bacteriophage"},
-  {type:"suffix", word:"-philic", meaning:"loving, attracted to", hook:"Philadelphia = city of love", examples:"hydrophilic (water-loving)"},
-  {type:"suffix", word:"-phobic", meaning:"fearing, repelled by", hook:"phobia = fear", examples:"hydrophobic (water-fearing)"},
-  {type:"suffix", word:"-graphy", meaning:"writing, recording", hook:"autograph = self-writing", examples:"chromatography, biography, autobiography"},
+  {type:"suffix", origin:"G", word:"-ase", meaning:"enzyme", hook:"always an enzyme!", examples:"amylase, protease, lipase, lactase"},
+  {type:"suffix", origin:"L", word:"-ate", meaning:"salt with oxygen", hook:"-ate has an O", examples:"sulfate, nitrate, carbonate, phosphate"},
+  {type:"suffix", origin:"L", word:"-tion / -sion", meaning:"process, action", hook:"action \u2192 -tion", examples:"evaporation, oxidation, erosion"},
+  {type:"suffix", origin:"G", word:"-cyte", meaning:"cell", hook:"cyto = cell, -cyte = a cell", examples:"phagocyte, lymphocyte, erythrocyte"},
+  {type:"suffix", origin:"G", word:"-gen", meaning:"producer, creator", hook:"generator = creates", examples:"pathogen, hydrogen, oxygen, allergen"},
+  {type:"suffix", origin:"G", word:"-ide", meaning:"2-element compound", hook:"-ide = inside (just 2)", examples:"chloride, oxide, sulphide, hydroxide"},
+  {type:"suffix", origin:"L", word:"-ine", meaning:"chemical substance", hook:"medicine ends in -ine", examples:"chlorine, adrenaline, caffeine"},
+  {type:"suffix", origin:"G", word:"-ism", meaning:"condition, system", hook:"organism = living system", examples:"metabolism, organism, tropism, magnetism"},
+  {type:"suffix", origin:"G", word:"-itis", meaning:"inflammation", hook:"-itis = it IS swollen!", examples:"bronchitis, arthritis, hepatitis"},
+  {type:"suffix", origin:"G", word:"-logy", meaning:"study of", hook:"-logy = logic of a subject", examples:"biology, ecology, technology"},
+  {type:"suffix", origin:"G", word:"-lysis", meaning:"splitting apart", hook:"analysis = break apart", examples:"hydrolysis, electrolysis, dialysis"},
+  {type:"suffix", origin:"G", word:"-mer", meaning:"part, unit", hook:"partner \u2192 part-mer", examples:"polymer, monomer, isomer"},
+  {type:"suffix", origin:"G", word:"-meter", meaning:"measure", hook:"metre stick measures", examples:"thermometer, voltmeter, ammeter"},
+  {type:"suffix", origin:"G", word:"-oid", meaning:"resembling", hook:"android = resembles a man", examples:"asteroid, humanoid, thyroid"},
+  {type:"suffix", origin:"G", word:"-ose", meaning:"sugar", hook:"-ose = oh so sweet", examples:"glucose, fructose, sucrose, lactose"},
+  {type:"suffix", origin:"G", word:"-osis", meaning:"condition, process", hook:"-osis = ongoing thing", examples:"osmosis, mitosis, meiosis"},
+  {type:"suffix", origin:"G", word:"-phyll", meaning:"leaf", hook:"a leaf = a fill of green", examples:"chlorophyll, mesophyll"},
+  {type:"suffix", origin:"G", word:"-plasm", meaning:"formed material", hook:"plasma = living goo", examples:"cytoplasm, protoplasm"},
+  {type:"suffix", origin:"G", word:"-scope", meaning:"to look, to view", hook:"scope it out = look at it", examples:"microscope, stethoscope, oscilloscope"},
+  {type:"suffix", origin:"G", word:"-synthesis", meaning:"putting together", hook:"synthesizer puts sounds together", examples:"photosynthesis, biosynthesis"},
+  {type:"suffix", origin:"G", word:"-troph", meaning:"feed, nourish", hook:"trophy feeds your ego", examples:"autotroph, heterotroph, eutrophication"},
+  {type:"suffix", origin:"L", word:"-vore", meaning:"eater", hook:"devour = eat greedily", examples:"herbivore, carnivore, omnivore"},
+  {type:"suffix", origin:"G", word:"-phage", meaning:"eat, devour", hook:"Pac-Man is a phage!", examples:"phagocyte, bacteriophage"},
+  {type:"suffix", origin:"G", word:"-philic", meaning:"loving, attracted to", hook:"Philadelphia = city of love", examples:"hydrophilic (water-loving)"},
+  {type:"suffix", origin:"G", word:"-phobic", meaning:"fearing, repelled by", hook:"phobia = fear", examples:"hydrophobic (water-fearing)"},
+  {type:"suffix", origin:"G", word:"-graphy", meaning:"writing, recording", hook:"autograph = self-writing", examples:"chromatography, biography, autobiography"},
 
   // ---- ROOTS - science (27) ----
-  {type:"root", word:"aer", meaning:"air", hook:"aerial = in the air", examples:"aerobic, anaerobic"},
-  {type:"root", word:"aqua", meaning:"water", hook:"aquarium = water tank", examples:"aquatic, aqueous"},
-  {type:"root", word:"cardi", meaning:"heart", hook:"cardiac arrest = heart stops", examples:"cardiac, cardiovascular"},
-  {type:"root", word:"carn", meaning:"flesh, meat", hook:"chili con carne = with meat", examples:"carnivore"},
-  {type:"root", word:"chrom", meaning:"colour", hook:"Chrome logo = colourful", examples:"chromosome, chromatography"},
-  {type:"root", word:"cyt / cyto", meaning:"cell", hook:"city of cells", examples:"cytoplasm, phagocyte, lymphocyte"},
-  {type:"root", word:"derm", meaning:"skin", hook:"dermatologist = skin doctor", examples:"epidermis, dermis"},
-  {type:"root", word:"gastr", meaning:"stomach", hook:"gastric flu = stomach flu", examples:"gastric juice, gastrointestinal"},
-  {type:"root", word:"gen / gene", meaning:"birth, produce", hook:"generation = birth of new", examples:"gene, genetics, genotype, hydrogen"},
-  {type:"root", word:"glyc", meaning:"sugar, sweet", hook:"glycerine = sweet liquid", examples:"glycogen, glycolysis, triglyceride"},
-  {type:"root", word:"haem", meaning:"blood", hook:"haemorrhage = blood loss", examples:"haemoglobin, haemophilia"},
-  {type:"root", word:"herb", meaning:"plant, grass", hook:"herb garden = plants", examples:"herbivore, herbicide"},
-  {type:"root", word:"kin / kine", meaning:"movement", hook:"kinetic = moving", examples:"kinetic energy, kinase"},
-  {type:"root", word:"morph", meaning:"shape, form", hook:"Power Rangers morph!", examples:"metamorphosis, morphology"},
-  {type:"root", word:"neur", meaning:"nerve", hook:"neural = nerve-related", examples:"neuron, neurotransmitter"},
-  {type:"root", word:"nuc / nucle", meaning:"centre, kernel", hook:"nucleus = centre", examples:"nucleus, nucleon, nuclear"},
-  {type:"root", word:"oxy / oxi", meaning:"oxygen", hook:"oxygen!", examples:"oxidation, oxygen, deoxygenated"},
-  {type:"root", word:"path", meaning:"disease, feeling", hook:"sympathy = feeling with", examples:"pathogen, pathology, empathy"},
-  {type:"root", word:"phot", meaning:"light", hook:"photo = captured light", examples:"photon, photosynthesis"},
-  {type:"root", word:"pulmo", meaning:"lung", hook:"pulmonary = lung-related", examples:"pulmonary artery/vein"},
-  {type:"root", word:"ren", meaning:"kidney", hook:"renal = kidney ward", examples:"renal artery, renal capsule"},
-  {type:"root", word:"sacchar", meaning:"sugar", hook:"saccharin = fake sugar", examples:"monosaccharide, polysaccharide"},
-  {type:"root", word:"spir", meaning:"breathe", hook:"inspire = breathe in", examples:"respiration, transpiration"},
-  {type:"root", word:"stom", meaning:"mouth, opening", hook:"stomach starts at mouth", examples:"stomach, stomata"},
-  {type:"root", word:"terr", meaning:"earth, land", hook:"terrain = type of land", examples:"terrestrial, territory"},
-  {type:"root", word:"vas / vascul", meaning:"vessel, tube", hook:"vase = a vessel", examples:"cardiovascular, vascular bundle"},
-  {type:"root", word:"vol / volt", meaning:"turn, energy", hook:"revolve = turn around", examples:"volt, voltmeter, revolution, evolution"},
+  {type:"root", origin:"G", word:"aer", meaning:"air", hook:"aerial = in the air", examples:"aerobic, anaerobic"},
+  {type:"root", origin:"L", word:"aqua", meaning:"water", hook:"aquarium = water tank", examples:"aquatic, aqueous"},
+  {type:"root", origin:"G", word:"cardi", meaning:"heart", hook:"cardiac arrest = heart stops", examples:"cardiac, cardiovascular"},
+  {type:"root", origin:"L", word:"carn", meaning:"flesh, meat", hook:"chili con carne = with meat", examples:"carnivore"},
+  {type:"root", origin:"G", word:"chrom", meaning:"colour", hook:"Chrome logo = colourful", examples:"chromosome, chromatography"},
+  {type:"root", origin:"G", word:"cyt / cyto", meaning:"cell", hook:"city of cells", examples:"cytoplasm, phagocyte, lymphocyte"},
+  {type:"root", origin:"G", word:"derm", meaning:"skin", hook:"dermatologist = skin doctor", examples:"epidermis, dermis"},
+  {type:"root", origin:"G", word:"gastr", meaning:"stomach", hook:"gastric flu = stomach flu", examples:"gastric juice, gastrointestinal"},
+  {type:"root", origin:"G", word:"gen / gene", meaning:"birth, produce", hook:"generation = birth of new", examples:"gene, genetics, genotype, hydrogen"},
+  {type:"root", origin:"G", word:"glyc", meaning:"sugar, sweet", hook:"glycerine = sweet liquid", examples:"glycogen, glycolysis, triglyceride"},
+  {type:"root", origin:"G", word:"haem", meaning:"blood", hook:"haemorrhage = blood loss", examples:"haemoglobin, haemophilia"},
+  {type:"root", origin:"L", word:"herb", meaning:"plant, grass", hook:"herb garden = plants", examples:"herbivore, herbicide"},
+  {type:"root", origin:"G", word:"kin / kine", meaning:"movement", hook:"kinetic = moving", examples:"kinetic energy, kinase"},
+  {type:"root", origin:"G", word:"morph", meaning:"shape, form", hook:"Power Rangers morph!", examples:"metamorphosis, morphology"},
+  {type:"root", origin:"G", word:"neur", meaning:"nerve", hook:"neural = nerve-related", examples:"neuron, neurotransmitter"},
+  {type:"root", origin:"L", word:"nuc / nucle", meaning:"centre, kernel", hook:"nucleus = centre", examples:"nucleus, nucleon, nuclear"},
+  {type:"root", origin:"G", word:"oxy / oxi", meaning:"oxygen", hook:"oxygen!", examples:"oxidation, oxygen, deoxygenated"},
+  {type:"root", origin:"G", word:"path", meaning:"disease, feeling", hook:"sympathy = feeling with", examples:"pathogen, pathology, empathy"},
+  {type:"root", origin:"G", word:"phot", meaning:"light", hook:"photo = captured light", examples:"photon, photosynthesis"},
+  {type:"root", origin:"L", word:"pulmo", meaning:"lung", hook:"pulmonary = lung-related", examples:"pulmonary artery/vein"},
+  {type:"root", origin:"L", word:"ren", meaning:"kidney", hook:"renal = kidney ward", examples:"renal artery, renal capsule"},
+  {type:"root", origin:"G", word:"sacchar", meaning:"sugar", hook:"saccharin = fake sugar", examples:"monosaccharide, polysaccharide"},
+  {type:"root", origin:"L", word:"spir", meaning:"breathe", hook:"inspire = breathe in", examples:"respiration, transpiration"},
+  {type:"root", origin:"G", word:"stom", meaning:"mouth, opening", hook:"stomach starts at mouth", examples:"stomach, stomata"},
+  {type:"root", origin:"L", word:"terr", meaning:"earth, land", hook:"terrain = type of land", examples:"terrestrial, territory"},
+  {type:"root", origin:"L", word:"vas / vascul", meaning:"vessel, tube", hook:"vase = a vessel", examples:"cardiovascular, vascular bundle"},
+  {type:"root", origin:"L", word:"vol / volt", meaning:"turn, energy", hook:"revolve = turn around", examples:"volt, voltmeter, revolution, evolution"},
 
-  // ---- ENGLISH ROOTS (11) ----
-  {type:"english", word:"bene-", meaning:"good, well", hook:"benefit = good thing", examples:"benevolent, beneficial, benefactor"},
-  {type:"english", word:"dict", meaning:"say, speak", hook:"dictionary = book of sayings", examples:"contradict, predict, diction"},
-  {type:"english", word:"duc / duct", meaning:"lead", hook:"conductor leads orchestra", examples:"introduction, deduct, induce"},
-  {type:"english", word:"fac / fect", meaning:"make, do", hook:"factory = place that makes", examples:"effect, factor, manufacture"},
-  {type:"english", word:"loc", meaning:"place", hook:"location = a place", examples:"local, location, translocation"},
-  {type:"english", word:"man / manu", meaning:"hand", hook:"manual = by hand", examples:"manufacture, manuscript, manipulate"},
-  {type:"english", word:"narr", meaning:"tell", hook:"narrator tells the story", examples:"narrative, narrator, narration"},
-  {type:"english", word:"scrib / script", meaning:"write", hook:"scribble = write messily", examples:"describe, script, manuscript"},
-  {type:"english", word:"spec / spect", meaning:"look, see", hook:"spectacles = glasses", examples:"perspective, inspect, spectrum"},
-  {type:"english", word:"ver / veri", meaning:"true", hook:"very = truly", examples:"verify, verdict"},
-  {type:"english", word:"voc / vok", meaning:"voice, call", hook:"vocal = using voice", examples:"evoke, provocative, advocate"},
+  // ---- ENGLISH ROOTS (11) — all Latin ----
+  {type:"english", origin:"L", word:"bene-", meaning:"good, well", hook:"benefit = good thing", examples:"benevolent, beneficial, benefactor"},
+  {type:"english", origin:"L", word:"dict", meaning:"say, speak", hook:"dictionary = book of sayings", examples:"contradict, predict, diction"},
+  {type:"english", origin:"L", word:"duc / duct", meaning:"lead", hook:"conductor leads orchestra", examples:"introduction, deduct, induce"},
+  {type:"english", origin:"L", word:"fac / fect", meaning:"make, do", hook:"factory = place that makes", examples:"effect, factor, manufacture"},
+  {type:"english", origin:"L", word:"loc", meaning:"place", hook:"location = a place", examples:"local, location, translocation"},
+  {type:"english", origin:"L", word:"man / manu", meaning:"hand", hook:"manual = by hand", examples:"manufacture, manuscript, manipulate"},
+  {type:"english", origin:"L", word:"narr", meaning:"tell", hook:"narrator tells the story", examples:"narrative, narrator, narration"},
+  {type:"english", origin:"L", word:"scrib / script", meaning:"write", hook:"scribble = write messily", examples:"describe, script, manuscript"},
+  {type:"english", origin:"L", word:"spec / spect", meaning:"look, see", hook:"spectacles = glasses", examples:"perspective, inspect, spectrum"},
+  {type:"english", origin:"L", word:"ver / veri", meaning:"true", hook:"very = truly", examples:"verify, verdict"},
+  {type:"english", origin:"L", word:"voc / vok", meaning:"voice, call", hook:"vocal = using voice", examples:"evoke, provocative, advocate"},
 
   // ---- SPANISH GRAMMAR & VOCAB (48) ----
 
@@ -695,6 +732,7 @@ var ALL_CARDS = [
 // STATE
 // ============================================================
 var currentFilter = 'all';
+var currentOrigin = 'all';
 var currentMode = 'normal';
 var deck = [];
 var currentIndex = 0;
@@ -707,8 +745,14 @@ var cardStartTime = null;
 var lastSavedIndex = 0; // track which results have been saved to avoid duplicates
 
 function getFilteredCards() {
-  if (currentFilter === 'all') return ALL_CARDS.slice();
-  return ALL_CARDS.filter(function(c) { return c.type === currentFilter; });
+  var cards = ALL_CARDS;
+  if (currentFilter !== 'all') {
+    cards = cards.filter(function(c) { return c.type === currentFilter; });
+  }
+  if (currentOrigin !== 'all') {
+    cards = cards.filter(function(c) { return c.origin === currentOrigin; });
+  }
+  return cards.slice();
 }
 
 function buildDeck(resetProgress) {
@@ -774,6 +818,22 @@ function showCard() {
   backBadge.className = 'card-type-badge ' + c.type;
   frontBadge.textContent = c.type.toUpperCase();
   backBadge.textContent = c.type.toUpperCase();
+
+  // Origin badge (Greek/Latin)
+  var frontOrigin = document.getElementById('frontOrigin');
+  var backOrigin = document.getElementById('backOrigin');
+  if (c.origin) {
+    var label = c.origin === 'G' ? 'Greek' : 'Latin';
+    frontOrigin.textContent = label;
+    frontOrigin.className = 'origin-tag ' + c.origin;
+    frontOrigin.style.display = '';
+    backOrigin.textContent = label;
+    backOrigin.className = 'origin-tag ' + c.origin;
+    backOrigin.style.display = '';
+  } else {
+    frontOrigin.style.display = 'none';
+    backOrigin.style.display = 'none';
+  }
 
   // Context-aware prompts
   var isSpanish = c.type === 'spanish';
@@ -888,7 +948,25 @@ function setFilter(f) {
   for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
   document.querySelector('[data-filter="' + f + '"]').classList.add('active');
   updateModeLabels();
+  // Show origin sub-filter for word-part types (not spanish)
+  var hasOrigin = (f !== 'spanish');
+  document.getElementById('originRow').style.display = hasOrigin ? 'flex' : 'none';
+  // Reset origin filter when switching to spanish
+  if (f === 'spanish' && currentOrigin !== 'all') {
+    currentOrigin = 'all';
+    var oBtns = document.querySelectorAll('.origin-btn');
+    for (var j = 0; j < oBtns.length; j++) { oBtns[j].classList.remove('active'); }
+    document.querySelector('[data-origin="all"]').classList.add('active');
+  }
   buildDeck(false); // preserve progress across filter switches
+}
+
+function setOrigin(o) {
+  currentOrigin = o;
+  var btns = document.querySelectorAll('.origin-btn');
+  for (var i = 0; i < btns.length; i++) { btns[i].classList.remove('active'); }
+  document.querySelector('[data-origin="' + o + '"]').classList.add('active');
+  buildDeck(false);
 }
 
 function setMode(m) {
