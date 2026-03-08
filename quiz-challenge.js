@@ -58,13 +58,96 @@
     return t ? t.textContent.trim().substring(0, 120) : '';
   }
 
-  function strategyHint(marks) {
-    if (marks <= 1) return '1 mark = 1 precise point. No waffle.';
-    if (marks === 2) return '2 marks = 2 distinct points. One sentence each.';
-    if (marks === 3) return '3 marks = 3 distinct points in full sentences.';
-    if (marks === 4) return '4 marks = 4 points. Use a clear structure.';
-    if (marks <= 6) return marks + ' marks = structured answer. Intro point + ' + (marks-1) + ' supporting points. Full sentences, clear reasoning chain.';
-    return marks + ' marks = extended answer. Plan before you write. ' + marks + ' distinct scoreable points needed.';
+  // Detect IGCSE command word from question text
+  function detectCommand(qText) {
+    var t = qText.toLowerCase();
+    if (/^(state|name|give|list|identify|write down)\b/.test(t)) return 'state';
+    if (/^define\b/.test(t)) return 'define';
+    if (/^describe\b/.test(t)) return 'describe';
+    if (/^explain\b/.test(t)) return 'explain';
+    if (/^(compare|distinguish)\b/.test(t)) return 'compare';
+    if (/^(discuss|evaluate|assess)\b/.test(t)) return 'discuss';
+    if (/^(suggest|predict)\b/.test(t)) return 'suggest';
+    if (/^(calculate|work out|find the value)\b/.test(t)) return 'calculate';
+    if (/^(draw|sketch|label|complete the diagram)\b/.test(t)) return 'draw';
+    if (/^(outline|summarise|summarize)\b/.test(t)) return 'outline';
+    if (/write\b/.test(t) && /equation/.test(t)) return 'equation';
+    if (/\bquot(e|ation)\b/.test(t) || /from the (text|passage|extract)/.test(t)) return 'quote';
+    if (/\banalys[ei]/.test(t) || /\beffect\b.*on the reader/.test(t) || /\blanguage\b/.test(t)) return 'analyse';
+    return null;
+  }
+
+  function strategyHint(marks, subject, qText) {
+    var cmd = detectCommand(qText);
+
+    // ---- ENGLISH ----
+    if (subject === 'english') {
+      if (cmd === 'quote') return marks + ' mark' + (marks>1?'s':'') + ' \u2014 Find and copy the exact words from the text. Use quotation marks.';
+      if (cmd === 'analyse' || (marks >= 3 && !cmd)) {
+        if (marks <= 3) return marks + ' marks \u2014 Use P.E.E.: Point (what you notice) \u2192 Evidence (quote with \u201c...\u201d) \u2192 Explanation (what effect it has and why).';
+        if (marks <= 5) return marks + ' marks \u2014 Write ' + Math.ceil(marks/2) + ' P.E.E. paragraphs. Point \u2192 Evidence (\u201cquote\u201d) \u2192 Explanation of effect on the reader.';
+        return marks + ' marks \u2014 Extended response. Plan first. Write ' + Math.ceil(marks/2) + '+ P.E.E. paragraphs with varied vocabulary. Aim for 200\u2013300 words.';
+      }
+      if (marks <= 1) return '1 mark \u2014 Short, precise answer. One clear point.';
+      if (marks <= 2) return marks + ' marks \u2014 ' + marks + ' clear points from the text. Quote where possible.';
+      if (marks >= 5) return marks + ' marks \u2014 Use P.E.E. structure. Point \u2192 Evidence (\u201cquote\u201d) \u2192 Explanation. Aim for ' + Math.ceil(marks/2) + ' paragraphs.';
+      return marks + ' marks \u2014 ' + marks + ' distinct points. Use P.E.E. if the question asks about language or effect.';
+    }
+
+    // ---- SPANISH ----
+    if (subject === 'spanish') {
+      if (marks <= 2) return marks + ' mark' + (marks>1?'s':'') + ' \u2014 Check: verb tense correct? Adjective agreement? Accent marks?';
+      if (marks <= 4) return marks + ' marks \u2014 Use connectives (porque, tambi\u00e9n, sin embargo). Check gender/number agreement on every noun+adjective.';
+      return marks + ' marks \u2014 Extended writing. Use a variety of tenses (present + past). Include opinions (creo que, en mi opini\u00f3n). Check every verb ending.';
+    }
+
+    // ---- MATH ----
+    if (subject === 'math') {
+      if (cmd === 'calculate' || cmd === 'draw') {
+        return marks + ' mark' + (marks>1?'s':'') + ' \u2014 Show ALL working. Write the formula first, then substitute, then answer with correct units.';
+      }
+      if (marks <= 1) return '1 mark \u2014 Give the exact value. Include units if the question uses them.';
+      return marks + ' marks \u2014 Show your working step by step. Each step can earn a mark even if the final answer is wrong.';
+    }
+
+    // ---- SCIENCE (Biology, Chemistry, Physics) ----
+    // Command-word-specific hints
+    if (cmd === 'state' || cmd === 'define') {
+      return marks + ' mark' + (marks>1?'s':'') + ' \u2014 Brief and precise. Use the correct scientific term. No explanation needed.';
+    }
+    if (cmd === 'calculate') {
+      return marks + ' marks \u2014 Write the formula \u2192 substitute values \u2192 calculate \u2192 answer with correct UNITS. Each step earns marks.';
+    }
+    if (cmd === 'equation') {
+      var isChemistry = subject === 'chemistry';
+      return marks + ' mark' + (marks>1?'s':'') + ' \u2014 ' + (isChemistry ? 'Reactants \u2192 Products. Check: is it balanced? State symbols (s), (l), (g), (aq) if asked.' : 'Write the word equation with an arrow \u2192 not an equals sign.');
+    }
+    if (cmd === 'describe') {
+      return marks + ' marks \u2014 Say WHAT happens, step by step. ' + marks + ' distinct points. Use scientific terms. Don\'t explain why unless asked.';
+    }
+    if (cmd === 'explain') {
+      return marks + ' marks \u2014 Say what happens AND why. Use \u201cbecause\u201d to link cause \u2192 effect. ' + marks + ' distinct reasoning points.';
+    }
+    if (cmd === 'compare') {
+      return marks + ' marks \u2014 Name a similarity AND a difference (use \u201cwhereas\u201d / \u201cbut\u201d). Always mention BOTH things being compared in each point.';
+    }
+    if (cmd === 'suggest') {
+      return marks + ' marks \u2014 Apply what you know to a new situation. There may be more than one right answer \u2014 just give a logical, scientific reason.';
+    }
+    if (cmd === 'discuss') {
+      return marks + ' marks \u2014 Arguments FOR and AGAINST. Use evidence. Finish with a conclusion stating your view.';
+    }
+    if (cmd === 'draw') {
+      return marks + ' mark' + (marks>1?'s':'') + ' \u2014 Use a ruler for straight lines. Label clearly. Include units on axes if it\u2019s a graph.';
+    }
+
+    // Generic fallback by marks (still subject-tinted)
+    if (marks <= 1) return '1 mark = 1 precise point. No waffle \u2014 one correct scientific term or fact.';
+    if (marks === 2) return '2 marks = 2 distinct points. State + give a reason (use \u201cbecause\u201d).';
+    if (marks === 3) return '3 marks = 3 distinct points in full sentences. Use scientific terminology.';
+    if (marks === 4) return '4 marks = structured answer. ' + (subject === 'chemistry' ? 'Include equations if relevant. ' : '') + '4 scoreable points with clear reasoning.';
+    if (marks <= 6) return marks + ' marks = structured response. Plan: intro point + ' + (marks-1) + ' supporting points with reasoning. ' + (subject === 'physics' ? 'Show formulas and units.' : 'Use key scientific terms.');
+    return marks + ' marks = extended answer. Plan before you write. Intro, ' + marks + ' key points with evidence/reasoning, brief conclusion. Aim for 150\u2013250 words.';
   }
 
   // ---- IndexedDB for shared folder handle (same DB as flash-cards) ----
@@ -114,6 +197,7 @@
       'font-family:inherit;font-size:14px;line-height:1.5;resize:vertical;transition:border-color .2s}' +
     '.ch-textarea:focus{border-color:var(--subject);outline:none}' +
     '.ch-strategy{font-size:12px;color:#7f8c8d;margin-top:6px;font-style:italic}' +
+    '.ch-word-count{font-size:11px;color:#bdc3c7;text-align:right;margin-top:4px;font-variant-numeric:tabular-nums;transition:color .3s}' +
     '.ch-later-btn{font-family:inherit;font-size:12px;font-weight:600;padding:6px 14px;border:2px solid #f39c12;' +
       'border-radius:6px;background:#fef9e7;color:#b8770e;cursor:pointer;margin-left:auto;white-space:nowrap;transition:all .15s}' +
     '.ch-later-btn:hover{background:#f39c12;color:#fff}' +
@@ -223,9 +307,27 @@
       ta.style.minHeight = Math.max(60, marks * 28 + 40) + 'px';
       wrap.appendChild(ta);
 
-      // Strategy hint
-      var hint = el('div', 'ch-strategy', strategyHint(marks));
+      // Strategy hint (subject-aware + command-word-aware)
+      var qText = getQText(card);
+      var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, qText));
       wrap.appendChild(hint);
+
+      // Word count for longer answers (4+ marks)
+      if (marks >= 4) {
+        var wc = el('div', 'ch-word-count', '0 words');
+        wrap.appendChild(wc);
+        ta.addEventListener('input', (function(wcEl) {
+          return function() {
+            var words = this.value.trim().split(/\s+/).filter(function(w){return w.length>0;});
+            var count = words.length;
+            wcEl.textContent = count + ' word' + (count !== 1 ? 's' : '');
+            // Color feedback for extended answers
+            if (count >= 150) wcEl.style.color = '#27ae60';
+            else if (count >= 50) wcEl.style.color = '#7f8c8d';
+            else wcEl.style.color = '#bdc3c7';
+          };
+        })(wc));
+      }
 
       // Insert after q-header
       if (header && header.nextSibling) {
