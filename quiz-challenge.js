@@ -193,6 +193,62 @@
     return '';
   }
 
+  // ---- LIST QUESTION DETECTION ----
+  function isListQuestion(card) {
+    if (isMCQuestion(card)) return false;
+    var info = getListInfo(card);
+    return info.count >= 2;
+  }
+
+  function getListInfo(card) {
+    var ansBox = card.querySelector('.answer-box');
+    if (!ansBox) return {count: 0, labels: [], answers: []};
+
+    var ansHTML = ansBox.innerHTML;
+    var ansText = ansBox.textContent;
+
+    // Check for sub-parts like (a), (b), (c) in the question text
+    var qText = card.querySelector('.q-text');
+    var qStr = qText ? qText.textContent : '';
+    var subPartMatch = qStr.match(/\(([a-z])\)/g);
+    if (subPartMatch && subPartMatch.length >= 2) {
+      // Extract answers for each sub-part from the answer box
+      var labels = [];
+      var answers = [];
+      for (var i = 0; i < subPartMatch.length; i++) {
+        labels.push(subPartMatch[i]);
+        // Try to extract answer text for this part
+        var letter = subPartMatch[i].charAt(1);
+        var nextLetter = String.fromCharCode(letter.charCodeAt(0) + 1);
+        var partRegex = new RegExp('\\(' + letter + '\\)\\s*([^]*?)(?=\\(' + nextLetter + '\\)|$)');
+        var partMatch = ansText.match(partRegex);
+        answers.push(partMatch ? partMatch[1].replace(/\[\d+\]/g, '').trim() : '');
+      }
+      return {count: labels.length, labels: labels, answers: answers};
+    }
+
+    // Count [1] markers in answer — each represents a separate scoreable point
+    var markMatches = ansText.match(/\[\s*1\s*\]/g);
+    if (markMatches && markMatches.length >= 2) {
+      // Extract bold terms as the expected answers
+      var bolds = ansBox.querySelectorAll('strong');
+      var answers = [];
+      for (var b = 0; b < bolds.length; b++) {
+        var term = bolds[b].textContent.trim();
+        if (term.length > 1 && !/^[A-D]$/.test(term) && !/^Answer$/i.test(term)) {
+          answers.push(term);
+        }
+      }
+      var count = Math.max(markMatches.length, answers.length);
+      if (count < 2) return {count: 0, labels: [], answers: []};
+      var labels = [];
+      for (var n = 1; n <= count; n++) labels.push(n + '.');
+      return {count: count, labels: labels, answers: answers};
+    }
+
+    return {count: 0, labels: [], answers: []};
+  }
+
   // ---- HINT SYSTEM ----
   var qHints = {};       // data-q -> number of hints used
   var qHintData = {};    // data-q -> array of hint strings
@@ -218,6 +274,15 @@
       }
       for (var w = 0; w < wrong.length; w++) {
         hints.push({type: 'eliminate', letter: wrong[w]});
+      }
+    } else if (isListQuestion(card)) {
+      // For list questions: reveal first letter per box
+      var listInfo = getListInfo(card);
+      for (var li = 0; li < listInfo.answers.length; li++) {
+        var ans = listInfo.answers[li];
+        // Get the first significant word
+        var firstWord = ans.split(/[\s,;:]+/).filter(function(w) { return w.length > 1; })[0] || ans.charAt(0);
+        hints.push({type: 'listLetter', index: li, term: firstWord});
       }
     } else {
       // For text: extract key terms from answer bold elements
@@ -287,6 +352,13 @@
           }
         }
       }
+    } else if (hint.type === 'listLetter') {
+      // List question: show first letter as placeholder in the specific input box
+      var inputEl = document.getElementById('list-input-' + qNum + '-' + hint.index);
+      if (inputEl) {
+        inputEl.placeholder = hint.term.charAt(0).toUpperCase() + '...';
+        inputEl.style.borderColor = '#3498db';
+      }
     } else if (hint.type === 'firstLetter') {
       // Text: show first letter of the next key term
       var infoEl = document.getElementById('hint-info-' + qNum);
@@ -349,6 +421,13 @@
     '.ch-mc-bubble{width:28px;height:28px;border-radius:50%;border:2px solid #bbb;display:flex;align-items:center;' +
       'justify-content:center;font-weight:800;font-size:13px;color:#888;flex-shrink:0;transition:all .15s}' +
     '.ch-mc-option.selected .ch-mc-bubble{background:var(--subject);border-color:var(--subject);color:#fff}' +
+    '.ch-list-wrap{padding:8px 20px 16px}' +
+    '.ch-list-row{display:flex;align-items:center;gap:8px;margin:4px 0}' +
+    '.ch-list-label{font-weight:700;font-size:13px;color:#7f8c8d;min-width:24px;text-align:right}' +
+    '.ch-list-input{flex:1;border:2px solid #ddd;border-radius:8px;padding:8px 12px;' +
+      'font-family:inherit;font-size:14px;line-height:1.4;transition:border-color .2s}' +
+    '.ch-list-input:focus{border-color:var(--subject);outline:none}' +
+    '.ch-list-input::placeholder{color:#ccc}' +
     '.ch-hint-btn{font-family:inherit;font-size:11px;font-weight:600;padding:4px 10px;border:2px solid #3498db;' +
       'border-radius:6px;background:#eaf2f8;color:#2471a3;cursor:pointer;white-space:nowrap;transition:all .15s;margin-left:4px}' +
     '.ch-hint-btn:hover{background:#3498db;color:#fff}' +
@@ -517,6 +596,53 @@
           set disabled(v) { if(v) { var opts = this._mc.querySelectorAll('.ch-mc-option'); for(var i=0;i<opts.length;i++) opts[i].style.pointerEvents='none'; }},
           set style(v) {}
         };
+      } else if (isListQuestion(card)) {
+        // ---- LIST: render individual input boxes ----
+        var listInfo = getListInfo(card);
+        var listWrap = el('div', 'ch-list-wrap');
+        var listInputs = [];
+        for (var li = 0; li < listInfo.count; li++) {
+          var row = el('div', 'ch-list-row');
+          var label = el('span', 'ch-list-label', listInfo.labels[li]);
+          var input = document.createElement('input');
+          input.type = 'text';
+          input.className = 'ch-list-input';
+          input.id = 'list-input-' + qNum + '-' + li;
+          input.placeholder = '';
+          row.appendChild(label);
+          row.appendChild(input);
+          listWrap.appendChild(row);
+          listInputs.push(input);
+        }
+
+        // Strategy hint
+        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, qText));
+        listWrap.appendChild(hint);
+
+        // Hint penalty info
+        var hintInfo = el('div', 'ch-hint-info');
+        hintInfo.id = 'hint-info-' + qNum;
+        listWrap.appendChild(hintInfo);
+
+        if (header && header.nextSibling) {
+          card.insertBefore(listWrap, header.nextSibling);
+        } else {
+          card.appendChild(listWrap);
+        }
+
+        // Store a fake textarea-like accessor that joins all inputs
+        qTextareas[qNum] = {_inputs: listInputs, _wrap: listWrap,
+          get value() {
+            var vals = [];
+            for (var i = 0; i < this._inputs.length; i++) {
+              var v = this._inputs[i].value.trim();
+              if (v) vals.push(v);
+            }
+            return vals.join('; ');
+          },
+          set disabled(v) { if(v) { for(var i=0;i<this._inputs.length;i++) this._inputs[i].disabled=true; }},
+          set style(v) {}
+        };
       } else {
         // ---- TEXT: render textarea ----
         var wrap = el('div', 'ch-textarea-wrap');
@@ -562,17 +688,23 @@
       qTotalTime[qNum] = 0;
       qFocusTimes[qNum] = null;
 
-      // Track time (textarea focus or MC interaction)
+      // Track time (textarea/input focus)
       if (!ismc) {
-        qTextareas[qNum].addEventListener('focus', function() {
-          qFocusTimes[qNum] = Date.now();
-        });
-        qTextareas[qNum].addEventListener('blur', function() {
-          if (qFocusTimes[qNum]) {
-            qTotalTime[qNum] += Math.round((Date.now() - qFocusTimes[qNum]) / 1000);
-            qFocusTimes[qNum] = null;
-          }
-        });
+        var focusTargets = qTextareas[qNum]._inputs || [qTextareas[qNum]];
+        for (var ft = 0; ft < focusTargets.length; ft++) {
+          if (!focusTargets[ft] || !focusTargets[ft].addEventListener) continue;
+          (function(q) {
+            focusTargets[ft].addEventListener('focus', function() {
+              if (!qFocusTimes[q]) qFocusTimes[q] = Date.now();
+            });
+            focusTargets[ft].addEventListener('blur', function() {
+              if (qFocusTimes[q]) {
+                qTotalTime[q] += Math.round((Date.now() - qFocusTimes[q]) / 1000);
+                qFocusTimes[q] = null;
+              }
+            });
+          })(qNum);
+        }
       }
     });
 
@@ -718,10 +850,17 @@
       a.classList.add('visible');
     });
 
-    // Disable textareas and hide hint buttons
+    // Disable textareas/inputs and hide hint buttons
     Object.keys(qTextareas).forEach(function(qNum) {
       qTextareas[qNum].disabled = true;
-      qTextareas[qNum].style.opacity = '0.7';
+      // For real textareas, dim them; for fake accessors (MC/list), dim the wrapper
+      if (qTextareas[qNum].style && typeof qTextareas[qNum].style === 'object') {
+        qTextareas[qNum].style.opacity = '0.7';
+      } else if (qTextareas[qNum]._wrap) {
+        qTextareas[qNum]._wrap.style.opacity = '0.7';
+      } else if (qTextareas[qNum]._mc) {
+        qTextareas[qNum]._mc.style.opacity = '0.7';
+      }
     });
     document.querySelectorAll('.ch-hint-btn').forEach(function(b) {
       b.style.display = 'none';
