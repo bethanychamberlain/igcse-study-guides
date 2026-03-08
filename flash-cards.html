@@ -771,8 +771,8 @@ function showCard() {
 
   // Context-aware prompts
   var isSpanish = c.type === 'spanish';
-  var normalPrompt = isSpanish ? 'How do you say this in Spanish?' : 'What does this mean?';
-  var reversePrompt = isSpanish ? 'What does this mean in English?' : 'What word part is this?';
+  var normalPrompt = isSpanish ? 'What does this mean in English?' : 'What does this mean?';
+  var reversePrompt = isSpanish ? 'How do you say this in Spanish?' : 'What word part is this?';
 
   if (currentMode === 'normal') {
     document.getElementById('frontWord').textContent = c.word;
@@ -868,8 +868,8 @@ function updateModeLabels() {
   var normal = document.getElementById('modeNormal');
   var reverse = document.getElementById('modeReverse');
   if (currentFilter === 'spanish') {
-    normal.textContent = 'English \u2192 Spanish';
-    reverse.textContent = 'Spanish \u2192 English';
+    normal.textContent = 'Spanish \u2192 English';
+    reverse.textContent = 'English \u2192 Spanish';
   } else {
     normal.textContent = 'Word Part \u2192 Meaning';
     reverse.textContent = 'Meaning \u2192 Word Part';
