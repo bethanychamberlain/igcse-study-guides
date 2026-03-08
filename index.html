@@ -20,9 +20,9 @@
     --physics: #2e86c1;
     --physics-light: #eaf2f8;
     --physics-dark: #1a5276;
-    --english: #16a085;
-    --english-light: #e8f6f3;
-    --english-dark: #0e6655;
+    --english: #c2185b;
+    --english-light: #fce4ec;
+    --english-dark: #880e4f;
     --spanish: #e67e22;
     --spanish-light: #fef5e7;
     --spanish-dark: #b8610a;
@@ -127,13 +127,22 @@
   .legend-icon.c { background: #7f8c8d; }
   .legend-icon.q { background: #95a5a6; }
 
+  /* Subject grid — 2 columns on desktop, 1 on mobile */
+  .subject-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
   /* Subject sections */
   .subject-section {
     background: var(--card);
     border-radius: 12px;
     overflow: hidden;
-    margin-bottom: 20px;
     box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    flex-direction: column;
   }
   .subject-header {
     padding: 14px 24px;
@@ -159,6 +168,7 @@
   }
   .subject-section.collapsed .toggle { transform: rotate(-90deg); }
   .subject-section.collapsed .chapter-list { display: none; }
+  .subject-grid .subject-section .chapter-list { display: block !important; }
 
   .biology .subject-header { background: linear-gradient(135deg, var(--biology-dark), var(--biology)); }
   .chemistry .subject-header { background: linear-gradient(135deg, var(--chemistry-dark), var(--chemistry)); }
@@ -168,7 +178,7 @@
   .math .subject-header { background: linear-gradient(135deg, var(--math-dark), var(--math)); }
 
   /* Chapter rows */
-  .chapter-list { padding: 8px 16px; }
+  .chapter-list { padding: 8px 16px; max-height: 360px; overflow-y: auto; }
   .ch-row {
     display: flex;
     align-items: center;
@@ -240,7 +250,9 @@
     color: var(--text-secondary);
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 700px) {
+    .subject-grid { grid-template-columns: 1fr; }
+    .chapter-list { max-height: none; }
     .steps { grid-template-columns: 1fr; }
     .legend { flex-direction: column; align-items: flex-start; gap: 8px; }
     .ch-name { font-size: 13px; }
@@ -312,6 +324,8 @@
     <span>Self-Test Quiz</span>
   </div>
 </div>
+
+<div class="subject-grid">
 
 <!-- ============================================================ -->
 <!-- BIOLOGY — 21 chapters                                         -->
@@ -1084,10 +1098,12 @@
   </div>
 </div>
 
+</div><!-- /subject-grid -->
+
 <!-- ============================================================ -->
 <!-- CROSS-SUBJECT RESOURCES                                       -->
 <!-- ============================================================ -->
-<div class="subject-section" style="margin-top: 8px;">
+<div class="subject-section" style="margin-bottom: 20px;">
   <div class="subject-header" style="background: linear-gradient(135deg, #2c3e50, #34495e);" onclick="this.parentElement.classList.toggle('collapsed')">
     <h2>Cross-Subject Tools</h2>
     <span class="ch-count">Useful everywhere</span>
