@@ -6,8 +6,8 @@
 (function() {
   // ============================================================
   // GOOGLE SHEETS CONFIGURATION
-  // After deploying your Google Apps Script, paste the URL here:
-  var SHEETS_URL = '';
+  var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzwQywmHmRgm9J3U-UjI6KXnmke5DCX1nplLgOAtPo81BGkWgy1jWLu1r08_N021Hv3/exec';
+  var SHEETS_KEY = 'igcse-study-2026'; // must match the key in your Apps Script
   // ============================================================
 
   var STORAGE_KEY = 'study-results';
@@ -56,7 +56,7 @@
         method: 'POST',
         mode: 'no-cors',
         headers: {'Content-Type': 'text/plain'},
-        body: JSON.stringify({rows: sheetRows})
+        body: JSON.stringify({key: SHEETS_KEY, rows: sheetRows})
       }).catch(function(err) {
         console.warn('Google Sheets sync failed:', err);
       });
