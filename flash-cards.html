@@ -920,24 +920,35 @@ function resetAll() {
 var RESULTS_FILENAME = 'study-results.csv';
 var CSV_HEADERS = 'Date,Time,Type,Subject,Chapter,Item,Response,Result,Self-Rating,Seconds';
 
+function csvEscape(str) {
+  str = String(str);
+  if (str.indexOf(',') !== -1 || str.indexOf('"') !== -1 || str.indexOf('\n') !== -1) {
+    return '"' + str.replace(/"/g, '""') + '"';
+  }
+  return str;
+}
+
 function buildNewRows() {
   var now = new Date();
   var dateStr = now.toLocaleDateString('en-US');
   var timeStr = now.toLocaleTimeString('en-US');
+  var RATING_MAP = {known: 4, learning: 2, skip: 0};
   var lines = [];
   for (var i = 0; i < results.length; i++) {
     var r = results[i];
     var item = r.card.word + (currentMode === 'normal' ? ' → ?' : ' ← ' + r.card.meaning);
+    // Response = the correct answer (what they were trying to recall)
+    var correctAnswer = currentMode === 'normal' ? r.card.meaning : r.card.word;
     lines.push([
       dateStr,
       timeStr,
       'flashcard',
       'Word Roots',
       currentFilter === 'all' ? 'All' : currentFilter,
-      '"' + item.replace(/"/g, '""') + '"',
-      '',
+      csvEscape(item),
+      csvEscape(correctAnswer),
       r.status,
-      '',
+      RATING_MAP[r.status] !== undefined ? RATING_MAP[r.status] : '',
       r.seconds
     ].join(','));
   }

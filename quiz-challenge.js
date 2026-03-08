@@ -599,6 +599,11 @@
       var rating = pageRatings[qNum] || '';
       var secs = qTotalTime[qNum] || 0;
 
+      // Result = what actually happened (attempted/blank/skipped)
+      var result = 'blank';
+      if (answer.length > 0) result = 'attempted';
+      if (originalParents[qNum]) result = 'skipped';
+
       newLines.push([
         dateStr,
         timeStr,
@@ -607,7 +612,7 @@
         csvEscape(chapterLabel),
         csvEscape('Q' + qNum + ' (' + marks + 'mk): ' + qText),
         csvEscape(answer),
-        rating,
+        result,
         rating,
         secs
       ].join(','));
