@@ -195,8 +195,16 @@
   }
 
   // ---- LIST QUESTION DETECTION ----
+  // Only short-answer listing questions (Name, List, State, Identify, Give)
+  // NOT extended response (Describe, Explain, Discuss, Compare, Evaluate, Suggest)
   function isListQuestion(card) {
     if (isMCQuestion(card)) return false;
+    var qText = card.querySelector('.q-text');
+    var qStr = qText ? qText.textContent.trim().toLowerCase() : '';
+    // Exclude extended-response command words — these need freeform textareas
+    if (/^(describe|explain|discuss|compare|distinguish|evaluate|assess|suggest|predict|outline|draw|sketch)/.test(qStr)) return false;
+    // Also exclude high-mark questions (4+) — those are essays, not lists
+    if (getMarks(card) >= 4) return false;
     var info = getListInfo(card);
     return info.count >= 2;
   }
