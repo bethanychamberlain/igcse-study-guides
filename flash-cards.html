@@ -411,7 +411,7 @@
 
 <div class="header">
   <h1>Flash Cards</h1>
-  <p>120 word parts to decode any IGCSE exam word</p>
+  <p>136 cards: word roots, English vocab &amp; Spanish grammar</p>
 </div>
 
 <!-- Filter buttons -->
@@ -616,14 +616,47 @@ var ALL_CARDS = [
   {type:"english", word:"ver / veri", meaning:"true", hook:"very = truly", examples:"verify, verdict"},
   {type:"english", word:"voc / vok", meaning:"voice, call", hook:"vocal = using voice", examples:"evoke, provocative, advocate"},
 
-  // ---- SPANISH COGNATE PATTERNS (7) ----
-  {type:"spanish", word:"-tion \u2192 -ci\u00f3n", meaning:"English -tion = Spanish -ci\u00f3n", hook:"education \u2192 educaci\u00f3n", examples:"information \u2192 informaci\u00f3n"},
-  {type:"spanish", word:"-ty \u2192 -dad", meaning:"English -ty = Spanish -dad", hook:"university \u2192 universidad", examples:"liberty \u2192 libertad, city \u2192 ciudad"},
-  {type:"spanish", word:"-ous \u2192 -oso", meaning:"English -ous = Spanish -oso", hook:"famous \u2192 famoso", examples:"nervous \u2192 nervioso, delicious \u2192 delicioso"},
-  {type:"spanish", word:"-ment \u2192 -mento", meaning:"English -ment = Spanish -mento", hook:"apartment \u2192 apartamento", examples:"moment \u2192 momento"},
-  {type:"spanish", word:"-al \u2192 -al", meaning:"Same ending!", hook:"natural \u2192 natural", examples:"normal \u2192 normal, hospital \u2192 hospital"},
-  {type:"spanish", word:"-ble \u2192 -ble", meaning:"Same ending!", hook:"possible \u2192 posible", examples:"terrible \u2192 terrible"},
-  {type:"spanish", word:"-ist \u2192 -ista", meaning:"English -ist = Spanish -ista", hook:"artist \u2192 artista", examples:"tourist \u2192 turista, dentist \u2192 dentista"}
+  // ---- SPANISH GRAMMAR & VOCAB (30) ----
+
+  // -- Ser vs Estar (8) --
+  {type:"spanish", word:"SER: when?", meaning:"Permanent things — DOCTOR", hook:"D=Description, O=Occupation, C=Characteristic, T=Time, O=Origin, R=Relationship", examples:"Ella ES alta. \u00c9l ES profesor. Son las tres."},
+  {type:"spanish", word:"ESTAR: when?", meaning:"Temporary states + location", hook:"PLACE: Position, Location, Action, Condition, Emotion", examples:"Estoy cansado. El gato EST\u00c1 en la mesa."},
+  {type:"spanish", word:"Ella es aburrida", meaning:"She is boring (personality)", hook:"SER = what she's LIKE (permanent trait)", examples:"Es aburrida = nobody wants to talk to her"},
+  {type:"spanish", word:"Ella est\u00e1 aburrida", meaning:"She is bored (right now)", hook:"ESTAR = how she FEELS (temporary state)", examples:"Est\u00e1 aburrida = she'll feel different later"},
+  {type:"spanish", word:"\u00c9l es listo", meaning:"He is clever (personality)", hook:"SER + listo = smart person", examples:"Mi hermano es muy listo"},
+  {type:"spanish", word:"\u00c9l est\u00e1 listo", meaning:"He is ready (right now)", hook:"ESTAR + listo = ready to go", examples:"\u00bfEst\u00e1s listo para el examen?"},
+  {type:"spanish", word:"ser: yo, t\u00fa, \u00e9l, nosotros, ellos", meaning:"soy, eres, es, somos, son", hook:"Soy = I am (forever me)", examples:"Soy estudiante. Eres mi amigo. Somos ingleses."},
+  {type:"spanish", word:"estar: yo, t\u00fa, \u00e9l, nosotros, ellos", meaning:"estoy, est\u00e1s, est\u00e1, estamos, est\u00e1n", hook:"Estoy = I am (right now)", examples:"Estoy bien. Est\u00e1s en casa. Estamos contentos."},
+
+  // -- Possessives (6) --
+  {type:"spanish", word:"my (singular / plural)", meaning:"mi / mis", hook:"mi libro, mis libros", examples:"mi casa, mis amigos, mi familia"},
+  {type:"spanish", word:"your - t\u00fa (sing / plural)", meaning:"tu / tus", hook:"NO accent! t\u00fa = you, tu = your", examples:"tu hermano, tus padres, tu escuela"},
+  {type:"spanish", word:"his / her / your-usted (s / pl)", meaning:"su / sus", hook:"su = his, her, your (formal) \u2014 context tells you which", examples:"su madre (his/her mum), sus libros"},
+  {type:"spanish", word:"our (masc / fem / plural)", meaning:"nuestro / nuestra / nuestros / nuestras", hook:"Nuestro changes for gender AND number!", examples:"nuestro colegio, nuestra casa, nuestros amigos"},
+  {type:"spanish", word:"their / your-ustedes (s / pl)", meaning:"su / sus (same as his/her!)", hook:"su/sus does triple duty \u2014 his, her, their", examples:"su profesor = his/her/their teacher"},
+  {type:"spanish", word:"Possessives: what changes?", meaning:"Only nuestro/vuestro change for gender. Mi/tu/su only change for number (add -s).", hook:"mi\u2192mis, tu\u2192tus, su\u2192sus (easy!) nuestro\u2192nuestra/nuestros/nuestras (tricky!)", examples:"mis hermanas, nuestras hermanas"},
+
+  // -- Articles (4) --
+  {type:"spanish", word:"el / la / los / las", meaning:"the (masc sing / fem sing / masc pl / fem pl)", hook:"el chico, la chica, los chicos, las chicas", examples:"el libro, la mesa, los libros, las mesas"},
+  {type:"spanish", word:"un / una / unos / unas", meaning:"a/some (masc sing / fem sing / masc pl / fem pl)", hook:"un = a (masc), una = a (fem)", examples:"un perro, una gata, unos libros, unas casas"},
+  {type:"spanish", word:"Trick: el agua, el \u00e1guila", meaning:"Feminine nouns starting with stressed a- use EL (but stay feminine!)", hook:"el agua fr\u00eda (not *la agua*) \u2014 el is just for sound, still feminine", examples:"el agua limpia, el \u00e1guila bonita, las aguas"},
+  {type:"spanish", word:"al / del", meaning:"a + el = al, de + el = del", hook:"Voy AL parque (not *a el*). Es del profesor (not *de el*).", examples:"Vamos al cine. El libro del chico."},
+
+  // -- Imperfect Tense (5) --
+  {type:"spanish", word:"Imperfect: -ar verbs (hablar)", meaning:"-aba, -abas, -aba, -\u00e1bamos, -aban", hook:"ABA = Always Be A-talking (in the past)", examples:"hablaba, hablabas, habl\u00e1bamos, hablaban"},
+  {type:"spanish", word:"Imperfect: -er/-ir verbs (comer/vivir)", meaning:"-\u00eda, -\u00eddas, -\u00eda, -\u00edamos, -\u00edan", hook:"\u00cdA = I Always (used to do it)", examples:"com\u00eda, viv\u00edas, com\u00edamos, viv\u00edan"},
+  {type:"spanish", word:"Imperfect: 3 irregulars", meaning:"ser: era/eras/era/\u00e9ramos/eran, ir: iba/ibas/iba/\u00edbamos/iban, ver: ve\u00eda/ve\u00edas/ve\u00eda/ve\u00edamos/ve\u00edan", hook:"Only 3 verbs are irregular in imperfect! SER, IR, VER.", examples:"Cuando era joven... Iba al colegio... Ve\u00eda la tele..."},
+  {type:"spanish", word:"When to use imperfect?", meaning:"Used to / was doing / descriptions in the past", hook:"Think: USED TO or WAS ...ING or setting a scene", examples:"Cuando era ni\u00f1o, jugaba al f\u00fatbol = When I was a kid, I used to play football"},
+
+  // -- Comparatives (4) --
+  {type:"spanish", word:"more...than / less...than", meaning:"m\u00e1s...que / menos...que", hook:"M\u00e1s = more (like massive!), menos = less", examples:"Soy m\u00e1s alto que t\u00fa. Es menos dif\u00edcil que ingl\u00e9s."},
+  {type:"spanish", word:"as...as", meaning:"tan + adjective + como", hook:"TAN...COMO = as...as", examples:"Soy tan alto como mi hermano = I'm as tall as my brother"},
+  {type:"spanish", word:"better / worse (irregular)", meaning:"mejor / peor (never say *m\u00e1s bueno* or *m\u00e1s malo*)", hook:"mejor = better, peor = worse \u2014 just memorise these two", examples:"Este libro es mejor que ese. Mi nota es peor que la tuya."},
+
+  // -- Key Irregular Verbs Present Tense (3) --
+  {type:"spanish", word:"ir (to go): present", meaning:"voy, vas, va, vamos, van", hook:"VOY = I GO (sounds like voyage!)", examples:"Voy al colegio. Vamos a la playa. Van a casa."},
+  {type:"spanish", word:"tener (to have): present", meaning:"tengo, tienes, tiene, tenemos, tienen", hook:"TENGO = I have (ten fingers, I got them!)", examples:"Tengo 15 a\u00f1os. Tienes raz\u00f3n. Tiene hambre."},
+  {type:"spanish", word:"hacer (to do/make): present", meaning:"hago, haces, hace, hacemos, hacen", hook:"HAGO = I do (ha! go do it!)", examples:"Hago los deberes. \u00bfQu\u00e9 haces? Hace fr\u00edo."}
 ];
 
 // ============================================================
