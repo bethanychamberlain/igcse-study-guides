@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing Task: World Famous &mdash; English Ch8</title>
+<style>
+  :root {
+    --subject: #c2185b;
+    --subject-light: #fce4ec;
+    --subject-dark: #880e4f;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --accent: #2e86c1;
+    --accent-bg: #eaf2f8;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --success: #27ae60;
+    --success-bg: #d5f5e3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+  .hero .time-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* Intro box */
+  .intro-box {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+  .intro-box h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .intro-box p { margin-bottom: 8px; }
+  .intro-box p:last-child { margin-bottom: 0; }
+  .skills-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .skills-list li {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Exercise sections */
+  .ex-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .ex-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .ex-info h2 { font-size: 17px; font-weight: 700; }
+  .ex-time {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  .ex-card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .ex-card p { font-size: 14px; margin-bottom: 10px; }
+  .ex-card p:last-child { margin-bottom: 0; }
+
+  /* Prompt text */
+  .prompt {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .prompt strong { color: var(--subject-dark); }
+
+  /* Suggestion chips */
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0 16px;
+  }
+  .suggestions .chip {
+    background: #f0f0f0;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Labelling exercise — B/A buttons */
+  .fo-list {
+    list-style: none;
+    counter-reset: fo;
+  }
+  .fo-item {
+    counter-increment: fo;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  .fo-item:last-child { border-bottom: none; }
+  .fo-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .fo-text { flex: 1; font-style: italic; line-height: 1.5; }
+  .fo-buttons {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .fo-btn {
+    width: 32px;
+    height: 28px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
+  .fo-btn.selected-b { background: var(--accent); color: white; border-color: var(--accent); }
+  .fo-btn.selected-a { background: var(--subject); color: white; border-color: var(--subject); }
+
+  /* Rewrite / fill-in blocks */
+  .rewrite-block {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .flat-sentence {
+    background: #eaf2f8;
+    border-left: 4px solid var(--accent);
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .flat-sentence .flat-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 2px;
+  }
+  .rewrite-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .rewrite-area {
+    width: 100%;
+    min-height: 60px;
+    border: 2px dashed var(--subject);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    line-height: 1.5;
+    background: #fff;
+  }
+  .rewrite-area:focus {
+    outline: none;
+    border-style: solid;
+    border-color: var(--subject);
+    box-shadow: 0 0 0 2px var(--subject-light);
+  }
+
+  /* Tip boxes */
+  .tip-box {
+    background: var(--tip-bg);
+    border-left: 4px solid var(--tip);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  .tip-box .tip-label {
+    font-weight: 700;
+    color: #b8770e;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Tone row blocks */
+  .tone-row {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 12px;
+  }
+  .tone-row-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--subject-dark);
+    margin-bottom: 6px;
+  }
+  .tone-row-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+
+  /* Checkbox list for key detail selector */
+  .detail-list {
+    list-style: none;
+    padding: 0;
+  }
+  .detail-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .detail-list li:last-child { border-bottom: none; }
+  .detail-list input[type="checkbox"] {
+    margin-top: 3px;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--accent);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Template box */
+  .template-box {
+    background: #f9f9f9;
+    border: 2px dashed var(--subject);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 14px 0;
+    font-size: 14px;
+    line-height: 2;
+  }
+  .template-box .fill-line {
+    display: inline-block;
+    border-bottom: 2px solid var(--subject);
+    min-width: 140px;
+    margin: 0 4px;
+    color: var(--subject);
+    font-style: italic;
+    font-size: 12px;
+  }
+
+  /* Free writing area */
+  .writing-area {
+    width: 100%;
+    min-height: 180px;
+    border: 2px solid var(--subject);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.7;
+    resize: vertical;
+    background: #fff;
+  }
+  .writing-area:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--subject-light);
+  }
+  .word-count {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .word-count.in-range { color: var(--success); font-weight: 600; }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--subject);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Score box */
+  .score-box {
+    background: var(--subject-light);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    text-align: center;
+  }
+  .score-box .score-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--subject-dark);
+  }
+  .score-box .score-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .score-msg {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Vocab button */
+  .vocab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: var(--subject);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s;
+    margin-top: 10px;
+  }
+  .vocab-link:hover { background: var(--subject-dark); }
+  .vocab-link .vocab-icon {
+    font-size: 15px;
+  }
+  .vocab-link-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--accent);
+    transition: all 0.15s;
+  }
+  .vocab-link-inline:hover { background: var(--accent); color: #fff; }
+
+  /* Print styles */
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 13px; }
+    .hero { break-after: avoid; padding: 16px 20px; }
+    .hero h1 { font-size: 20px; }
+    .intro-box { break-inside: avoid; }
+    .ex-header { break-after: avoid; }
+    .ex-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+
+    /* Hide interactive elements */
+    textarea, .rewrite-area, .writing-area { display: none; }
+    .fo-buttons { display: none; }
+    .vocab-link, .vocab-link-inline { display: none; }
+    .word-count { display: none; }
+
+    /* Show print lines instead */
+    .print-lines { display: block !important; }
+    .print-lines .line {
+      border-bottom: 1px solid #ccc;
+      height: 28px;
+    }
+    .print-fo-blank { display: inline !important; }
+
+    /* Keep checklist visible */
+    .score-box { display: none; }
+  }
+
+  /* Hide print elements on screen */
+  .print-lines { display: none; }
+  .print-fo-blank { display: none; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English Ch8 &mdash; Writing Task</div>
+  <h1>World Famous &mdash; Your Turn</h1>
+  <p>Learn to write about real people &mdash; practising biography, formal tone, and selecting the details that matter most.</p>
+  <div class="time-badge">About 35 minutes &mdash; 5 exercises</div>
+</div>
+
+<div class="intro-box">
+  <h2>What You're Practising</h2>
+  <p>This task builds from recognising biography vs autobiography, through tone and detail selection, to writing your own mini-biography. Each exercise feeds into the next, so work through them in order.</p>
+  <ul class="skills-list">
+    <li>Biography writing</li>
+    <li>Formal tone</li>
+    <li>Key detail selection</li>
+    <li>Summarising</li>
+  </ul>
+  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+</div>
+
+<!-- ===== EXERCISE 1: BIO VS AUTO ===== -->
+<div class="ex-header">
+  <div class="ex-num">1</div>
+  <div class="ex-info">
+    <h2>Bio vs Auto</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">Read each short passage. Decide: is it <strong>biography</strong> (B) &mdash; written about someone else in third person &mdash; or <strong>autobiography</strong> (A) &mdash; written about yourself in first person? Click the correct button.</p>
+
+  <ul class="fo-list">
+    <li class="fo-item">
+      <span class="fo-num">1</span>
+      <span class="fo-text">"Serena Williams was born in Saginaw, Michigan, in 1981. She began playing tennis at the age of three and went on to win 23 Grand Slam singles titles, more than any other player in the Open Era."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="1" data-val="B" onclick="pickType(this)">B</button>
+        <button class="fo-btn" data-q="1" data-val="A" onclick="pickType(this)">A</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">2</span>
+      <span class="fo-text">"I remember the first time I stood on a proper stage. My hands were shaking so badly I nearly dropped the microphone. But once the music started, something clicked &mdash; I forgot the crowd and just sang."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="2" data-val="B" onclick="pickType(this)">B</button>
+        <button class="fo-btn" data-q="2" data-val="A" onclick="pickType(this)">A</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">3</span>
+      <span class="fo-text">"The young scientist spent two years working in near-total isolation. According to her colleagues, she rarely left the laboratory before midnight. Her dedication resulted in a breakthrough that changed modern medicine."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="3" data-val="B" onclick="pickType(this)">B</button>
+        <button class="fo-btn" data-q="3" data-val="A" onclick="pickType(this)">A</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">4</span>
+      <span class="fo-text">"Looking back, moving to Denmark was the hardest thing I've ever done. Everything was unfamiliar &mdash; the language, the food, even the way people said hello. But it was also the best decision of my life."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="4" data-val="B" onclick="pickType(this)">B</button>
+        <button class="fo-btn" data-q="4" data-val="A" onclick="pickType(this)">A</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">5</span>
+      <span class="fo-text">"Marcus Rashford grew up in Wythenshawe, Manchester, in a family that often struggled to afford meals. He used his platform as a professional footballer to campaign against child food poverty, forcing the UK government to change its policy."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="5" data-val="B" onclick="pickType(this)">B</button>
+        <button class="fo-btn" data-q="5" data-val="A" onclick="pickType(this)">A</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">6</span>
+      <span class="fo-text">"People always ask me why I started the business so young. The truth is, I didn't have a grand plan. I just noticed that nobody at school could get decent coffee, so I bought a second-hand espresso machine and set up in the common room."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="6" data-val="B" onclick="pickType(this)">B</button>
+        <button class="fo-btn" data-q="6" data-val="A" onclick="pickType(this)">A</button>
+      </div>
+    </li>
+  </ul>
+
+  <div class="tip-box">
+    <div class="tip-label">Key difference</div>
+    <strong>Biography</strong> = third person (he, she, they), factual tone, written by someone else. <strong>Autobiography</strong> = first person (I, me, my), personal tone, written by the person themselves. Look for pronouns &mdash; that's the fastest way to tell.
+  </div>
+</div>
+
+<!-- ===== EXERCISE 2: TONE SLIDER ===== -->
+<div class="ex-header">
+  <div class="ex-num">2</div>
+  <div class="ex-info">
+    <h2>Tone Slider</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">Below are 3 facts about a person. For each one, write the same fact <strong>twice</strong>: once in a <strong>formal tone</strong> (for a textbook biography) and once in an <strong>informal tone</strong> (as if telling a friend).</p>
+
+  <div class="rewrite-block">
+    <div class="flat-sentence">
+      <span class="flat-label">Fact 1</span>
+      "She moved to a new country at age 14."
+    </div>
+    <div class="tone-row" style="margin-top:10px;">
+      <div class="tone-row-label">Formal:</div>
+      <div class="tone-row-hint">Think textbook &mdash; no slang, no contractions, measured and objective.</div>
+      <textarea class="rewrite-area" rows="2" placeholder="e.g. 'At the age of fourteen, she relocated to...'"></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="tone-row">
+      <div class="tone-row-label">Informal:</div>
+      <div class="tone-row-hint">Think texting a friend &mdash; casual, might use "like" or "basically", shows personality.</div>
+      <textarea class="rewrite-area" rows="2" placeholder="e.g. 'So basically she just up and moved to a whole new country when she was 14...'"></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+  </div>
+
+  <div class="rewrite-block">
+    <div class="flat-sentence">
+      <span class="flat-label">Fact 2</span>
+      "He failed his first exam but later became top of the class."
+    </div>
+    <div class="tone-row" style="margin-top:10px;">
+      <div class="tone-row-label">Formal:</div>
+      <div class="tone-row-hint">Neutral, factual. Let the facts speak for themselves.</div>
+      <textarea class="rewrite-area" rows="2" placeholder="Your formal version..."></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="tone-row">
+      <div class="tone-row-label">Informal:</div>
+      <div class="tone-row-hint">Show some emotion. How would you actually tell this story?</div>
+      <textarea class="rewrite-area" rows="2" placeholder="Your informal version..."></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+  </div>
+
+  <div class="rewrite-block">
+    <div class="flat-sentence">
+      <span class="flat-label">Fact 3</span>
+      "They started their own business at 16."
+    </div>
+    <div class="tone-row" style="margin-top:10px;">
+      <div class="tone-row-label">Formal:</div>
+      <div class="tone-row-hint">Imagine this sentence in an encyclopedia entry.</div>
+      <textarea class="rewrite-area" rows="2" placeholder="Your formal version..."></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="tone-row">
+      <div class="tone-row-label">Informal:</div>
+      <div class="tone-row-hint">Imagine telling your best friend this over lunch.</div>
+      <textarea class="rewrite-area" rows="2" placeholder="Your informal version..."></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label">Formal vs Informal</div>
+    <strong>Formal</strong>: no contractions (use "did not" not "didn't"), no slang, complete sentences, objective tone.<br>
+    <strong>Informal</strong>: contractions are fine, conversational, opinions and reactions welcome, sentence fragments okay.<br>
+    In Exercise 4, you'll write a biography &mdash; that means <strong>formal tone</strong>. This exercise helps you feel the difference.
+  </div>
+</div>
+
+<!-- ===== EXERCISE 3: KEY DETAIL SELECTOR ===== -->
+<div class="ex-header">
+  <div class="ex-num">3</div>
+  <div class="ex-info">
+    <h2>Key Detail Selector</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">Here are 10 facts about a fictional person called <strong>Amira Hassan</strong>. A good biography doesn't include everything &mdash; it selects the details that matter most. <strong>Tick the 5 facts you would include in a short biography.</strong></p>
+
+  <ul class="detail-list" id="detailList">
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>Born in Cairo, Egypt, in 2002.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>Her favourite colour is green.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>Moved to London with her family at age 10 and learned English as a second language.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>She usually has toast with Nutella for breakfast.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>Won a national young scientists competition at age 15 for her research on water purification.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>Her cat is called Mango.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>Gave a TEDx talk at age 17 about making clean water accessible in developing countries.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>She once tripped over on stage during a school assembly.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>Founded a non-profit organisation that has provided water filters to over 5,000 families.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="countDetails()">
+      <span>Plans to study biomedical engineering at university and wants to develop low-cost medical technology.</span>
+    </li>
+  </ul>
+
+  <div id="detailCount" style="font-size:13px; color:var(--text-secondary); margin-top:8px; font-weight:600;">0 of 5 selected</div>
+
+  <div class="tip-box">
+    <div class="tip-label">How to choose key details</div>
+    Ask yourself: does this fact tell the reader <strong>who this person is</strong>, <strong>what they achieved</strong>, or <strong>why they matter</strong>? If the answer is no &mdash; if it's just a random personal fact &mdash; leave it out. A biography is about significance, not trivia.
+  </div>
+</div>
+
+<!-- ===== EXERCISE 4: YOUR MINI-BIOGRAPHY ===== -->
+<div class="ex-header">
+  <div class="ex-num">4</div>
+  <div class="ex-info">
+    <h2>Your Mini-Biography</h2>
+    <div class="ex-time">About 15 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">Pick someone you admire or find interesting. Write a short biography about them (<strong>80&ndash;120 words</strong>) in third person with a formal-ish tone. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+
+  <p class="prompt"><strong>Who could you write about?</strong></p>
+  <div class="suggestions">
+    <span class="chip">A sportsperson</span>
+    <span class="chip">A musician</span>
+    <span class="chip">A YouTuber</span>
+    <span class="chip">A historical figure</span>
+    <span class="chip">A family member</span>
+    <span class="chip">A teacher or coach</span>
+  </div>
+
+  <p class="prompt"><strong>Step 1 &mdash; Plan with this template:</strong></p>
+
+  <div class="template-box">
+    <p>Full name: <span class="fill-line"></span></p>
+    <p>Known for: <span class="fill-line"></span></p>
+    <p>Key early life detail: <span class="fill-line"></span></p>
+    <p>Biggest achievement: <span class="fill-line"></span></p>
+    <p>Why they matter: <span class="fill-line"></span></p>
+  </div>
+  <div class="print-lines">
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div>
+  </div>
+
+  <p class="prompt" style="margin-top:20px;"><strong>Step 2 &mdash; Write it for real.</strong> Turn your notes into a flowing <strong>80&ndash;120 word</strong> biography. Use third person (he/she/they) and a formal tone &mdash; no slang, no "like". <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Stuck for words? Vocabulary Bank &#8599;</a></p>
+
+  <div class="tip-box">
+    <div class="tip-label">Your biography should</div>
+    &bull; Be in <strong>third person</strong> throughout &mdash; this is biography, not autobiography<br>
+    &bull; Use a <strong>formal tone</strong> &mdash; no slang, no "like", no text-speak<br>
+    &bull; Select only the <strong>key details</strong> (like you practised in Exercise 3)<br>
+    &bull; Follow a <strong>logical order</strong> &mdash; usually chronological (early life &rarr; achievements &rarr; impact)<br>
+    &bull; End by showing <strong>why this person matters</strong>
+  </div>
+
+  <textarea class="writing-area" id="mainParagraph" placeholder="Write your mini-biography here..." oninput="countWords(this)"></textarea>
+  <div class="word-count" id="wordCount">0 words</div>
+  <div class="print-lines">
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+</div>
+
+<!-- ===== EXERCISE 5: WRITER'S CHECKLIST ===== -->
+<div class="ex-header">
+  <div class="ex-num">5</div>
+  <div class="ex-info">
+    <h2>Writer's Checklist</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt"><strong>Read your biography from Exercise 4 out loud.</strong> Yes, actually out loud &mdash; you'll hear awkward phrasing that you won't catch by reading silently. Then check each box honestly.</p>
+
+  <ul class="checklist" id="writerChecklist">
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>3rd person throughout</strong> &mdash; No "I" or "me" anywhere. It's all "he", "she", or "they".</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Key details selected</strong> &mdash; Not everything, just what matters. No favourite colours or breakfast habits.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Chronological or logical order</strong> &mdash; The facts flow in a sequence that makes sense to the reader.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Formal tone</strong> &mdash; No slang, no "like", no contractions. Reads like a textbook, not a text message.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Shows WHY this person matters</strong> &mdash; Not just what they did, but why it's significant.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Clear and varied sentences</strong> &mdash; Not every sentence starts the same way. Mix short and long.</span>
+    </li>
+  </ul>
+
+  <div class="score-box" id="scoreBox">
+    <div class="score-num" id="scoreNum">0 / 6</div>
+    <div class="score-label">checks</div>
+    <div class="score-msg" id="scoreMsg">Tick the boxes above as you check each one</div>
+  </div>
+
+  <div class="tip-box" style="margin-top:14px;">
+    <div class="tip-label">What to do with your score</div>
+    <strong>0&ndash;2 checks:</strong> Go back to Exercise 4 and revise. Use your template &mdash; you already have the key details.<br>
+    <strong>3&ndash;4 checks:</strong> Solid start. Pick one unchecked box and try to fix just that one thing.<br>
+    <strong>5&ndash;6 checks:</strong> Excellent work. This reads like a proper biography.
+  </div>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Writing Task Complete</h2>
+  <p>You've practised telling biography from autobiography, controlling formal vs informal tone, selecting key details, and writing a mini-biography. These skills come up in IGCSE English summary and directed writing tasks.</p>
+</div>
+
+<script>
+  // Bio vs Auto button handler
+  function pickType(btn) {
+    var q = btn.dataset.q;
+    var val = btn.dataset.val;
+    var siblings = btn.parentElement.querySelectorAll('.fo-btn');
+    siblings.forEach(function(b) {
+      b.classList.remove('selected-b', 'selected-a');
+    });
+    // Correct answers: 1=B, 2=A, 3=B, 4=A, 5=B, 6=A
+    btn.classList.add(val === 'B' ? 'selected-b' : 'selected-a');
+  }
+
+  // Key detail counter
+  function countDetails() {
+    var boxes = document.querySelectorAll('#detailList input[type="checkbox"]');
+    var checked = 0;
+    boxes.forEach(function(cb) { if (cb.checked) checked++; });
+    var el = document.getElementById('detailCount');
+    el.textContent = checked + ' of 5 selected';
+    if (checked === 5) {
+      el.style.color = '#27ae60';
+    } else if (checked > 5) {
+      el.style.color = '#e74c3c';
+      el.textContent = checked + ' selected — pick only 5!';
+    } else {
+      el.style.color = '#555';
+    }
+  }
+
+  // Word counter
+  function countWords(textarea) {
+    var text = textarea.value.trim();
+    var count = text.length === 0 ? 0 : text.split(/\s+/).length;
+    var el = document.getElementById('wordCount');
+    el.textContent = count + ' word' + (count !== 1 ? 's' : '');
+    if (count >= 80 && count <= 120) {
+      el.className = 'word-count in-range';
+    } else {
+      el.className = 'word-count';
+    }
+  }
+
+  // Checklist scoring
+  function updateChecklist() {
+    var boxes = document.querySelectorAll('#writerChecklist input[type="checkbox"]');
+    var checked = 0;
+    boxes.forEach(function(cb) { if (cb.checked) checked++; });
+    document.getElementById('scoreNum').textContent = checked + ' / 6';
+    var msg = '';
+    if (checked <= 2) msg = 'Go back to Exercise 4 and revise your biography.';
+    else if (checked <= 4) msg = 'Solid start! Pick one unchecked box and fix just that.';
+    else msg = 'Excellent! This reads like a proper biography.';
+    document.getElementById('scoreMsg').textContent = msg;
+  }
+</script>
+<script src="../nav.js"></script>
+</body>
+</html>

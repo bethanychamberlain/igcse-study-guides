@@ -74,14 +74,14 @@
       label: 'English', color: '#c2185b',
       chapters: [
         {slug:'ch01-travellers-tales', title:"Travellers' Tales", types:['notes','cheatsheet','quiz','writing']},
-        {slug:'ch02-world-of-nature', title:'World of Nature'},
-        {slug:'ch03-points-of-view', title:'Points of View'},
-        {slug:'ch04-all-the-world', title:'All the World'},
-        {slug:'ch05-family-friends', title:'Family & Friends'},
-        {slug:'ch06-material-world', title:'Material World'},
-        {slug:'ch07-believe-it-or-not', title:'Believe It or Not'},
-        {slug:'ch08-world-famous', title:'World Famous'},
-        {slug:'ch09-endings', title:'Endings'}
+        {slug:'ch02-world-of-nature', title:'World of Nature', types:['notes','cheatsheet','quiz','writing']},
+        {slug:'ch03-points-of-view', title:'Points of View', types:['notes','cheatsheet','quiz','writing']},
+        {slug:'ch04-all-the-world', title:'All the World', types:['notes','cheatsheet','quiz','writing']},
+        {slug:'ch05-family-friends', title:'Family & Friends', types:['notes','cheatsheet','quiz','writing']},
+        {slug:'ch06-material-world', title:'Material World', types:['notes','cheatsheet','quiz','writing']},
+        {slug:'ch07-believe-it-or-not', title:'Believe It or Not', types:['notes','cheatsheet','quiz','writing']},
+        {slug:'ch08-world-famous', title:'World Famous', types:['notes','cheatsheet','quiz','writing']},
+        {slug:'ch09-endings', title:'Endings', types:['notes','cheatsheet','quiz','writing']}
       ]
     },
     spanish: {
