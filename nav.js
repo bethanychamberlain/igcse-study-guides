@@ -73,7 +73,7 @@
     english: {
       label: 'English', color: '#c2185b',
       chapters: [
-        {slug:'ch01-travellers-tales', title:"Travellers' Tales"},
+        {slug:'ch01-travellers-tales', title:"Travellers' Tales", types:['notes','cheatsheet','quiz','writing']},
         {slug:'ch02-world-of-nature', title:'World of Nature'},
         {slug:'ch03-points-of-view', title:'Points of View'},
         {slug:'ch04-all-the-world', title:'All the World'},
@@ -113,8 +113,9 @@
     }
   };
 
-  var TYPES = ['notes', 'cheatsheet', 'quiz'];
-  var TYPE_LABELS = {notes: 'Notes', cheatsheet: 'Cheatsheet', quiz: 'Quiz'};
+  var ALL_TYPES = ['notes', 'cheatsheet', 'quiz', 'writing'];
+  var DEFAULT_TYPES = ['notes', 'cheatsheet', 'quiz'];
+  var TYPE_LABELS = {notes: 'Notes', cheatsheet: 'Cheatsheet', quiz: 'Quiz', writing: 'Writing'};
 
   // Helper to create elements
   function el(tag, cls, text, attrs) {
@@ -156,10 +157,10 @@
 
   var currentType = null;
   var currentSlug = null;
-  for (var t = 0; t < TYPES.length; t++) {
-    var suffix = '-' + TYPES[t] + '.html';
+  for (var t = 0; t < ALL_TYPES.length; t++) {
+    var suffix = '-' + ALL_TYPES[t] + '.html';
     if (filename.indexOf(suffix) !== -1) {
-      currentType = TYPES[t];
+      currentType = ALL_TYPES[t];
       currentSlug = filename.replace(suffix, '');
       break;
     }
@@ -200,10 +201,11 @@
   }
   row.appendChild(chNav);
 
-  // Type switcher (Notes / Cheatsheet / Quiz)
+  // Type switcher (Notes / Cheatsheet / Quiz / Writing if available)
+  var chapterTypes = chapter.types || DEFAULT_TYPES;
   var typesDiv = el('div', 'sn-types');
-  for (var j = 0; j < TYPES.length; j++) {
-    var tp = TYPES[j];
+  for (var j = 0; j < chapterTypes.length; j++) {
+    var tp = chapterTypes[j];
     var cls = 'sn-type' + (tp === currentType ? ' sn-active' : '');
     typesDiv.appendChild(makeLink(currentSlug + '-' + tp + '.html', cls, TYPE_LABELS[tp]));
   }

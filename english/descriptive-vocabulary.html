@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descriptive Vocabulary Bank &mdash; English</title>
+<style>
+  :root {
+    --subject: #c2185b;
+    --subject-light: #fce4ec;
+    --subject-dark: #880e4f;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --sight: #2e86c1;
+    --sight-bg: #eaf2f8;
+    --sound: #8e44ad;
+    --sound-bg: #f4ecf7;
+    --smell: #27ae60;
+    --smell-bg: #d5f5e3;
+    --taste: #e67e22;
+    --taste-bg: #fef5e7;
+    --touch: #e74c3c;
+    --touch-bg: #fdedec;
+    --emotion: #c2185b;
+    --emotion-bg: #fce4ec;
+    --common: #95a5a6;
+    --intermediate: #2e86c1;
+    --advanced: #8e44ad;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 6px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+
+  /* Controls bar */
+  .controls {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: center;
+  }
+  .controls label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+  }
+  .view-tabs {
+    display: flex;
+    gap: 4px;
+  }
+  .view-tab {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .view-tab:hover { border-color: var(--subject); color: var(--subject); }
+  .view-tab.active {
+    background: var(--subject);
+    color: white;
+    border-color: var(--subject);
+  }
+  .search-box {
+    margin-left: auto;
+    position: relative;
+  }
+  .search-box input {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 6px 12px 6px 30px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    width: 200px;
+    outline: none;
+  }
+  .search-box input:focus { border-color: var(--subject); }
+  .search-box::before {
+    content: '\1F50D';
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    opacity: 0.5;
+  }
+
+  /* Sense sections */
+  .sense-section {
+    margin-bottom: 20px;
+  }
+  .sense-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    border-radius: 10px 10px 0 0;
+  }
+  .sense-header .icon {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    color: white;
+  }
+  .sense-header h2 { font-size: 16px; }
+  .sense-header .count {
+    margin-left: auto;
+    font-size: 12px;
+    opacity: 0.7;
+    font-weight: 600;
+  }
+
+  .sense-sight .sense-header { background: var(--sight-bg); }
+  .sense-sight .sense-header h2 { color: var(--sight); }
+  .sense-sight .icon { background: var(--sight); }
+  .sense-sound .sense-header { background: var(--sound-bg); }
+  .sense-sound .sense-header h2 { color: var(--sound); }
+  .sense-sound .icon { background: var(--sound); }
+  .sense-smell .sense-header { background: var(--smell-bg); }
+  .sense-smell .sense-header h2 { color: var(--smell); }
+  .sense-smell .icon { background: var(--smell); }
+  .sense-taste .sense-header { background: var(--taste-bg); }
+  .sense-taste .sense-header h2 { color: var(--taste); }
+  .sense-taste .icon { background: var(--taste); }
+  .sense-touch .sense-header { background: var(--touch-bg); }
+  .sense-touch .sense-header h2 { color: var(--touch); }
+  .sense-touch .icon { background: var(--touch); }
+  .sense-emotion .sense-header { background: var(--emotion-bg); }
+  .sense-emotion .sense-header h2 { color: var(--emotion); }
+  .sense-emotion .icon { background: var(--emotion); }
+
+  .sense-body {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 16px 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+
+  /* Subcategory labels */
+  .subcat {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--text-secondary);
+    margin: 14px 0 8px;
+  }
+  .subcat:first-child { margin-top: 0; }
+
+  /* Word chips */
+  .words {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+  .word {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: default;
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+  .word:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  }
+  .word .eg {
+    font-size: 11px;
+    font-style: italic;
+    opacity: 0;
+    max-width: 0;
+    overflow: hidden;
+    transition: all 0.25s;
+    white-space: nowrap;
+    color: var(--text-secondary);
+  }
+  .word:hover .eg,
+  .word.show-eg .eg {
+    opacity: 0.8;
+    max-width: 300px;
+    margin-left: 2px;
+  }
+
+  /* Sense-colored chips */
+  .word-sight { background: var(--sight-bg); color: var(--sight); }
+  .word-sound { background: var(--sound-bg); color: var(--sound); }
+  .word-smell { background: var(--smell-bg); color: var(--smell); }
+  .word-taste { background: var(--taste-bg); color: var(--taste); }
+  .word-touch { background: var(--touch-bg); color: var(--touch); }
+  .word-emotion { background: var(--emotion-bg); color: var(--emotion); }
+
+  /* Level dots */
+  .lvl {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .lvl-c { background: var(--common); }
+  .lvl-i { background: var(--intermediate); }
+  .lvl-a { background: var(--advanced); }
+
+  /* Intensity view */
+  .intensity-group {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .intensity-label {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .flat-word {
+    display: inline-block;
+    background: #fdedec;
+    color: #e74c3c;
+    padding: 2px 10px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    text-decoration: line-through;
+    text-decoration-color: rgba(231,76,60,0.4);
+  }
+  .arrow-chain {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+  }
+  .arrow-chain .word {
+    background: #f0f0f0;
+    color: var(--text);
+  }
+  .arrow-chain .arrow {
+    color: #ccc;
+    font-size: 14px;
+    font-weight: 700;
+  }
+  .arrow-chain .word:nth-child(n+7) {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    font-weight: 600;
+  }
+  .arrow-chain .word:nth-child(n+11) {
+    background: var(--subject);
+    color: white;
+    font-weight: 600;
+  }
+
+  /* Level view */
+  .level-section {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .level-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+  }
+  .level-header .lvl-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .level-header h2 { font-size: 16px; }
+  .level-header .desc {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-left: auto;
+  }
+  .level-common .level-header h2 { color: #7f8c8d; }
+  .level-common .lvl-dot { background: var(--common); }
+  .level-intermediate .level-header h2 { color: var(--intermediate); }
+  .level-intermediate .lvl-dot { background: var(--intermediate); }
+  .level-advanced .level-header h2 { color: var(--advanced); }
+  .level-advanced .lvl-dot { background: var(--advanced); }
+
+  /* Legend */
+  .legend {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  /* Print */
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 12px; }
+    .controls { display: none; }
+    .hero { padding: 16px 20px; }
+    .sense-body, .intensity-group, .level-section {
+      box-shadow: none;
+      border: 1px solid #ddd;
+      break-inside: avoid;
+    }
+    .word .eg { opacity: 0.7 !important; max-width: 300px !important; }
+    .word:hover { transform: none; box-shadow: none; }
+  }
+
+  @media (max-width: 600px) {
+    .search-box { margin-left: 0; width: 100%; }
+    .search-box input { width: 100%; }
+    .view-tabs { width: 100%; }
+    .view-tab { flex: 1; text-align: center; padding: 6px 8px; font-size: 12px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English &mdash; Writing Reference</div>
+  <h1>Descriptive Vocabulary Bank</h1>
+  <p>250+ words to replace "nice," "good," "big," and "really." Hover over any word to see an example. Use the tabs to find what you need.</p>
+</div>
+
+<div class="controls">
+  <label>Organise by:</label>
+  <div class="view-tabs">
+    <button class="view-tab active" onclick="showView('sense', this)">By Sense</button>
+    <button class="view-tab" onclick="showView('intensity', this)">By Intensity</button>
+    <button class="view-tab" onclick="showView('level', this)">By Level</button>
+  </div>
+  <div class="search-box">
+    <input type="text" id="searchInput" placeholder="Search words..." oninput="filterWords()">
+  </div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><div class="lvl lvl-c"></div> Common &mdash; you know these</div>
+  <div class="legend-item"><div class="lvl lvl-i"></div> Intermediate &mdash; strong IGCSE vocabulary</div>
+  <div class="legend-item"><div class="lvl lvl-a"></div> Advanced &mdash; impressive when used well</div>
+  <div class="legend-item" style="margin-left:auto; font-style:italic;">Hover a word to see an example phrase</div>
+</div>
+
+<!-- All content generated by JS below -->
+<div id="content"></div>
+
+<script>
+// ============================================================
+// VOCABULARY DATA
+// Each word: [word, sense, level, example, subcategory, intensity-group]
+// sense: sight/sound/smell/taste/touch/emotion
+// level: c=common, i=intermediate, a=advanced
+// ============================================================
+var WORDS = [
+  // ===== SIGHT =====
+  // Colour & light
+  ["golden", "sight", "c", "golden light on the old stone walls", "colour & light", "beautiful"],
+  ["crimson", "sight", "i", "crimson flowers spilling over the balcony", "colour & light", "beautiful"],
+  ["turquoise", "sight", "i", "turquoise water in the harbour", "colour & light", "beautiful"],
+  ["amber", "sight", "i", "amber glow of the street lamps", "colour & light", "beautiful"],
+  ["ivory", "sight", "i", "ivory columns lining the entrance", "colour & light", null],
+  ["slate", "sight", "c", "slate-grey clouds rolling in", "colour & light", null],
+  ["emerald", "sight", "i", "emerald hillsides after the rain", "colour & light", "beautiful"],
+  ["dusty", "sight", "c", "dusty shelves in the old bookshop", "colour & light", "old"],
+  ["faded", "sight", "c", "faded paint peeling from the shutters", "colour & light", "old"],
+  ["gleaming", "sight", "i", "gleaming marble floor", "colour & light", "beautiful"],
+  ["dappled", "sight", "a", "dappled sunlight through the trees", "colour & light", null],
+  ["shimmering", "sight", "i", "shimmering heat rising from the pavement", "colour & light", "hot"],
+  ["dazzling", "sight", "i", "dazzling white sand", "colour & light", "beautiful"],
+  ["dim", "sight", "c", "dim corridor leading underground", "colour & light", "dark"],
+  ["shadowy", "sight", "c", "shadowy arches of the Gothic Quarter", "colour & light", "dark"],
+  ["flickering", "sight", "c", "flickering candles in the church", "colour & light", null],
+  ["radiant", "sight", "i", "radiant morning sun", "colour & light", "beautiful"],
+  ["luminous", "sight", "a", "luminous stained-glass windows", "colour & light", "beautiful"],
+  ["hazy", "sight", "c", "hazy outline of the mountains", "colour & light", null],
+  ["vivid", "sight", "i", "vivid colours of the market stalls", "colour & light", "beautiful"],
+
+  // Shape, size & structure
+  ["towering", "sight", "c", "towering spires of the cathedral", "shape & size", "big"],
+  ["sprawling", "sight", "i", "sprawling city viewed from the hilltop", "shape & size", "big"],
+  ["narrow", "sight", "c", "narrow alleyway barely wide enough for two", "shape & size", "small"],
+  ["vast", "sight", "i", "vast open square", "shape & size", "big"],
+  ["miniature", "sight", "c", "miniature balconies on every floor", "shape & size", "small"],
+  ["jagged", "sight", "i", "jagged rock formations in the cave", "shape & size", null],
+  ["angular", "sight", "i", "angular modern sculpture", "shape & size", null],
+  ["looming", "sight", "i", "looming cliff face above us", "shape & size", "big"],
+  ["squat", "sight", "i", "squat stone buildings lining the road", "shape & size", "small"],
+  ["soaring", "sight", "i", "soaring ceiling far above our heads", "shape & size", "big"],
+  ["imposing", "sight", "i", "imposing iron gates at the entrance", "shape & size", "big"],
+  ["colossal", "sight", "a", "colossal pillars holding up the roof", "shape & size", "big"],
+  ["monumental", "sight", "a", "monumental staircase of white stone", "shape & size", "big"],
+  ["crumbling", "sight", "c", "crumbling wall overtaken by vines", "shape & size", "old"],
+  ["ornate", "sight", "i", "ornate carvings around the doorway", "shape & size", "beautiful"],
+  ["intricate", "sight", "i", "intricate mosaic covering the floor", "shape & size", "beautiful"],
+
+  // Movement & activity
+  ["bustling", "sight", "c", "bustling morning crowd at the market", "movement", "busy"],
+  ["swirling", "sight", "i", "swirling patterns in the stonework", "movement", null],
+  ["drifting", "sight", "c", "smoke drifting from a food stall", "movement", null],
+  ["darting", "sight", "i", "children darting between the tables", "movement", "busy"],
+  ["surging", "sight", "i", "surging crowd pushing toward the entrance", "movement", "busy"],
+  ["rippling", "sight", "i", "rippling reflections in the fountain", "movement", null],
+  ["streaming", "sight", "i", "sunlight streaming through the windows", "movement", null],
+  ["swarming", "sight", "i", "tourists swarming around the monument", "movement", "busy"],
+  ["teeming", "sight", "a", "teeming square full of performers", "movement", "busy"],
+
+  // ===== SOUND =====
+  // Volume & intensity
+  ["thundering", "sound", "i", "thundering waterfall echoing off the rocks", "volume", "loud"],
+  ["roaring", "sound", "c", "roaring traffic on the main road", "volume", "loud"],
+  ["murmuring", "sound", "i", "murmuring conversation at nearby tables", "volume", "quiet"],
+  ["whispering", "sound", "c", "whispering voices in the cathedral", "volume", "quiet"],
+  ["deafening", "sound", "i", "deafening music from the open bar", "volume", "loud"],
+  ["hushed", "sound", "i", "hushed silence inside the museum", "volume", "quiet"],
+  ["faint", "sound", "c", "faint church bells in the distance", "volume", "quiet"],
+  ["piercing", "sound", "i", "piercing whistle of the train", "volume", "loud"],
+  ["booming", "sound", "c", "booming voice of the tour guide", "volume", "loud"],
+  ["muffled", "sound", "i", "muffled footsteps on the stone floor", "volume", "quiet"],
+
+  // Quality & character
+  ["melodic", "sound", "i", "melodic street musician on guitar", "quality", null],
+  ["shrill", "sound", "i", "shrill seagulls circling above", "quality", "loud"],
+  ["raspy", "sound", "i", "raspy voice of the old waiter", "quality", null],
+  ["crisp", "sound", "i", "crisp echo of our footsteps in the cave", "quality", null],
+  ["echoing", "sound", "c", "echoing laughter in the stairwell", "quality", null],
+  ["rhythmic", "sound", "i", "rhythmic clatter of the train on the tracks", "quality", null],
+  ["discordant", "sound", "a", "discordant honking of impatient drivers", "quality", "loud"],
+  ["tinkling", "sound", "i", "tinkling of glasses at the outdoor cafe", "quality", "quiet"],
+  ["rumbling", "sound", "c", "rumbling of the metro beneath our feet", "quality", "loud"],
+
+  // Specific sounds
+  ["chattering", "sound", "c", "chattering tourists filling the square", "specific sounds", "busy"],
+  ["chanting", "sound", "i", "chanting from inside the monastery", "specific sounds", null],
+  ["rustling", "sound", "i", "rustling of leaves in the courtyard", "specific sounds", "quiet"],
+  ["crackling", "sound", "i", "crackling of the wood-fired oven", "specific sounds", null],
+  ["splashing", "sound", "c", "splashing fountain in the centre of the plaza", "specific sounds", null],
+  ["clattering", "sound", "c", "clattering plates in the busy kitchen", "specific sounds", "busy"],
+  ["humming", "sound", "c", "humming of the air conditioning", "specific sounds", "quiet"],
+  ["buzzing", "sound", "c", "buzzing of scooters weaving through traffic", "specific sounds", "busy"],
+  ["clinking", "sound", "c", "clinking of cutlery at the long table", "specific sounds", null],
+
+  // ===== SMELL =====
+  // Pleasant
+  ["fragrant", "smell", "i", "fragrant lavender fields along the road", "pleasant", "good-smell"],
+  ["aromatic", "smell", "i", "aromatic spices piled high on the stall", "pleasant", "good-smell"],
+  ["sweet-smelling", "smell", "c", "sweet-smelling bakery on the corner", "pleasant", "good-smell"],
+  ["fresh", "smell", "c", "fresh sea breeze off the harbour", "pleasant", "good-smell"],
+  ["floral", "smell", "i", "floral scent from the garden wall", "pleasant", "good-smell"],
+  ["earthy", "smell", "i", "earthy dampness inside the cave", "pleasant", null],
+  ["woody", "smell", "i", "woody aroma of the old wine barrels", "pleasant", "good-smell"],
+  ["zesty", "smell", "i", "zesty citrus from the fruit stall", "pleasant", "good-smell"],
+  ["heady", "smell", "a", "heady perfume of jasmine at night", "pleasant", "good-smell"],
+  ["intoxicating", "smell", "a", "intoxicating smell of chocolate being melted", "pleasant", "good-smell"],
+
+  // Unpleasant
+  ["acrid", "smell", "a", "acrid exhaust from the passing bus", "unpleasant", "bad-smell"],
+  ["musty", "smell", "i", "musty air in the underground passage", "unpleasant", "bad-smell"],
+  ["pungent", "smell", "i", "pungent cheese on the market counter", "unpleasant", null],
+  ["stale", "smell", "c", "stale air in the crowded train", "unpleasant", "bad-smell"],
+  ["smoky", "smell", "c", "smoky haze from the street-food grill", "unpleasant", null],
+  ["dank", "smell", "i", "dank corridor leading to the crypt", "unpleasant", "bad-smell"],
+  ["sour", "smell", "c", "sour tang of overripe fruit", "unpleasant", "bad-smell"],
+  ["stifling", "smell", "i", "stifling mix of perfume and sweat on the metro", "unpleasant", "hot"],
+
+  // Food-related
+  ["savoury", "smell", "c", "savoury roasted garlic filling the street", "food", "good-smell"],
+  ["buttery", "smell", "c", "buttery croissants from the patisserie", "food", "good-smell"],
+  ["yeasty", "smell", "i", "yeasty warmth from the bread oven", "food", "good-smell"],
+  ["herby", "smell", "c", "herby steam rising from the paella", "food", "good-smell"],
+  ["rich", "smell", "c", "rich dark chocolate at the workshop", "food", "good-smell"],
+  ["tangy", "smell", "i", "tangy tomato sauce bubbling on the stove", "food", null],
+
+  // ===== TASTE =====
+  // Flavour
+  ["bitter", "taste", "c", "bitter dark espresso at the counter", "flavour", null],
+  ["sweet", "taste", "c", "sweet glaze on the churros", "flavour", null],
+  ["salty", "taste", "c", "salty olives in a small ceramic bowl", "flavour", null],
+  ["tangy", "taste", "i", "tangy lemon dressing on the salad", "flavour", null],
+  ["bland", "taste", "c", "bland hotel breakfast cereal", "flavour", "bad-food"],
+  ["sharp", "taste", "i", "sharp aged cheese melting on the tongue", "flavour", "good-food"],
+  ["mellow", "taste", "i", "mellow honey drizzled over yoghurt", "flavour", "good-food"],
+  ["fiery", "taste", "i", "fiery chilli sauce on the tapas", "flavour", null],
+  ["delicate", "taste", "i", "delicate flavour of the white fish", "flavour", "good-food"],
+  ["mouth-watering", "taste", "c", "mouth-watering smell from the food truck", "flavour", "good-food"],
+  ["divine", "taste", "i", "divine pastry that melted in my mouth", "flavour", "good-food"],
+  ["exquisite", "taste", "a", "exquisite combination of salt and caramel", "flavour", "good-food"],
+
+  // Texture (in mouth)
+  ["creamy", "taste", "c", "creamy gelato on a hot afternoon", "texture in mouth", "good-food"],
+  ["crunchy", "taste", "c", "crunchy crust on the baguette", "texture in mouth", null],
+  ["chewy", "taste", "c", "chewy nougat from the sweet stall", "texture in mouth", null],
+  ["silky", "taste", "i", "silky hot chocolate at the workshop", "texture in mouth", "good-food"],
+  ["flaky", "taste", "c", "flaky layers of the croissant", "texture in mouth", "good-food"],
+  ["tender", "taste", "c", "tender grilled chicken at the family dinner", "texture in mouth", "good-food"],
+  ["juicy", "taste", "c", "juicy slices of fresh mango", "texture in mouth", "good-food"],
+  ["crumbly", "taste", "c", "crumbly shortbread from the bakery", "texture in mouth", null],
+  ["velvety", "taste", "a", "velvety mousse served in a tiny glass", "texture in mouth", "good-food"],
+
+  // ===== TOUCH =====
+  // Temperature
+  ["scorching", "touch", "i", "scorching metal railing in the midday sun", "temperature", "hot"],
+  ["sweltering", "touch", "i", "sweltering heat of the afternoon walk", "temperature", "hot"],
+  ["lukewarm", "touch", "c", "lukewarm tap water at the hostel", "temperature", null],
+  ["cool", "touch", "c", "cool shade of the narrow street", "temperature", "cold"],
+  ["freezing", "touch", "c", "freezing morning air before sunrise", "temperature", "cold"],
+  ["icy", "touch", "c", "icy wind on the Montserrat summit", "temperature", "cold"],
+  ["balmy", "touch", "i", "balmy evening breeze by the harbour", "temperature", null],
+  ["biting", "touch", "i", "biting wind at the top of the funicular", "temperature", "cold"],
+  ["blistering", "touch", "a", "blistering pavement through my thin shoes", "temperature", "hot"],
+  ["refreshing", "touch", "c", "refreshing spray from the fountain", "temperature", null],
+  ["stifling", "touch", "i", "stifling heat on the crowded bus", "temperature", "hot"],
+  ["mild", "touch", "c", "mild evening perfect for walking", "temperature", null],
+
+  // Texture (physical)
+  ["rough", "touch", "c", "rough stone wall of the old church", "texture", null],
+  ["smooth", "touch", "c", "smooth marble under my fingertips", "texture", null],
+  ["gritty", "touch", "i", "gritty sand between my toes", "texture", null],
+  ["velvety", "touch", "i", "velvety petals in the garden", "texture", null],
+  ["sticky", "touch", "c", "sticky melted chocolate on my hands", "texture", null],
+  ["slippery", "touch", "c", "slippery cave floor from the dripping water", "texture", null],
+  ["coarse", "touch", "i", "coarse rope banister on the stairs", "texture", null],
+  ["prickly", "touch", "c", "prickly dry grass in the park", "texture", null],
+  ["spongy", "touch", "i", "spongy moss on the cave walls", "texture", null],
+  ["damp", "touch", "c", "damp stone steps leading underground", "texture", "cold"],
+  ["weathered", "touch", "i", "weathered wooden door with peeling paint", "texture", "old"],
+
+  // ===== EMOTION =====
+  // Positive
+  ["exhilarating", "emotion", "i", "exhilarating view from the top of the mountain", "positive", "good"],
+  ["peaceful", "emotion", "c", "peaceful courtyard with just the sound of a fountain", "positive", "good"],
+  ["awe-inspiring", "emotion", "i", "awe-inspiring height of the cathedral ceiling", "positive", "beautiful"],
+  ["enchanting", "emotion", "i", "enchanting maze of medieval streets", "positive", "beautiful"],
+  ["invigorating", "emotion", "a", "invigorating morning walk to the summit", "positive", "good"],
+  ["heartwarming", "emotion", "c", "heartwarming family dinner around a big table", "positive", "good"],
+  ["captivating", "emotion", "i", "captivating story from the museum guide", "positive", "good"],
+  ["magical", "emotion", "c", "magical feeling of being inside the cathedral", "positive", "beautiful"],
+  ["thrilling", "emotion", "c", "thrilling funicular ride up the hill", "positive", "good"],
+  ["serene", "emotion", "i", "serene monastery high above the clouds", "positive", "quiet"],
+
+  // Negative / uncomfortable
+  ["overwhelming", "emotion", "i", "overwhelming number of tourists in the queue", "difficult", "busy"],
+  ["claustrophobic", "emotion", "i", "claustrophobic feeling in the underground passage", "difficult", null],
+  ["exhausting", "emotion", "c", "exhausting climb in the afternoon heat", "difficult", "hot"],
+  ["disorienting", "emotion", "i", "disorienting tangle of identical alleyways", "difficult", null],
+  ["unsettling", "emotion", "i", "unsettling silence deep inside the cave", "difficult", null],
+
+  // Complex / mixed
+  ["bittersweet", "emotion", "i", "bittersweet last evening before heading home", "complex", null],
+  ["nostalgic", "emotion", "i", "nostalgic when I saw the photos afterwards", "complex", null],
+  ["surreal", "emotion", "i", "surreal to be standing where Romans once walked", "complex", null],
+  ["humbling", "emotion", "i", "humbling size of the ancient stone walls", "complex", "big"],
+  ["mesmerising", "emotion", "i", "mesmerising light through the coloured glass", "complex", "beautiful"],
+  ["unfamiliar", "emotion", "c", "unfamiliar language swirling around me", "complex", null],
+  ["dreamlike", "emotion", "i", "dreamlike quality of the misty mountain top", "complex", null]
+];
+
+// ============================================================
+// INTENSITY GROUPS (flat word -> upgrade chain)
+// ============================================================
+var INTENSITY_GROUPS = [
+  {
+    flat: "nice / good",
+    desc: "General positive",
+    chain: ["pleasant","lovely","charming","delightful","wonderful","captivating","enchanting","exquisite","magnificent","sublime"]
+  },
+  {
+    flat: "big",
+    desc: "Size and scale",
+    chain: ["large","tall","towering","vast","immense","imposing","soaring","colossal","monumental","humbling"]
+  },
+  {
+    flat: "small",
+    desc: "Smallness and detail",
+    chain: ["little","narrow","compact","miniature","tiny","squat","delicate","intricate"]
+  },
+  {
+    flat: "hot",
+    desc: "Temperature (warm)",
+    chain: ["warm","balmy","sweltering","scorching","stifling","blistering","shimmering"]
+  },
+  {
+    flat: "cold",
+    desc: "Temperature (cool)",
+    chain: ["cool","chilly","freezing","icy","biting","bitter","damp"]
+  },
+  {
+    flat: "loud",
+    desc: "Volume (high)",
+    chain: ["noisy","booming","roaring","thundering","piercing","deafening","shrill","discordant"]
+  },
+  {
+    flat: "quiet",
+    desc: "Volume (low)",
+    chain: ["soft","faint","hushed","murmuring","whispering","muffled","tinkling","serene"]
+  },
+  {
+    flat: "beautiful",
+    desc: "Visual appeal",
+    chain: ["pretty","vivid","gleaming","stunning","dazzling","radiant","ornate","luminous","mesmerising","awe-inspiring"]
+  },
+  {
+    flat: "old",
+    desc: "Age and wear",
+    chain: ["aged","faded","dusty","weathered","crumbling","ancient","timeworn"]
+  },
+  {
+    flat: "busy",
+    desc: "Activity and crowds",
+    chain: ["lively","bustling","buzzing","chattering","swarming","surging","teeming","overwhelming"]
+  },
+  {
+    flat: "good (food)",
+    desc: "Food quality",
+    chain: ["tasty","savoury","flavourful","mouth-watering","delicate","divine","exquisite","velvety"]
+  },
+  {
+    flat: "bad (smell)",
+    desc: "Unpleasant smells",
+    chain: ["stale","sour","musty","smoky","dank","pungent","acrid","stifling"]
+  }
+];
+
+// ============================================================
+// RENDERING
+// ============================================================
+var contentEl = document.getElementById('content');
+
+function makeWordChip(w, colorClass) {
+  var span = document.createElement('span');
+  span.className = 'word ' + (colorClass || '');
+  span.dataset.word = w[0].toLowerCase();
+  span.dataset.sense = w[1];
+  span.dataset.level = w[2];
+
+  var dot = document.createElement('span');
+  dot.className = 'lvl lvl-' + w[2];
+  span.appendChild(dot);
+
+  span.appendChild(document.createTextNode(w[0]));
+
+  if (w[3]) {
+    var eg = document.createElement('span');
+    eg.className = 'eg';
+    eg.textContent = '\u2014 ' + w[3];
+    span.appendChild(eg);
+  }
+  return span;
+}
+
+// ----- SENSE VIEW -----
+function renderSenseView() {
+  var senses = [
+    {id:'sight', label:'Sight', icon:'\uD83D\uDC41'},
+    {id:'sound', label:'Sound', icon:'\uD83D\uDD0A'},
+    {id:'smell', label:'Smell', icon:'\uD83C\uDF3A'},
+    {id:'taste', label:'Taste', icon:'\uD83C\uDF74'},
+    {id:'touch', label:'Touch', icon:'\u270B'},
+    {id:'emotion', label:'Emotion', icon:'\uD83D\uDCAD'}
+  ];
+  var frag = document.createDocumentFragment();
+
+  senses.forEach(function(s) {
+    var words = WORDS.filter(function(w) { return w[1] === s.id; });
+    var subcats = [];
+    var subcatMap = {};
+    words.forEach(function(w) {
+      var sc = w[4] || 'general';
+      if (!subcatMap[sc]) {
+        subcatMap[sc] = [];
+        subcats.push(sc);
+      }
+      subcatMap[sc].push(w);
+    });
+
+    var section = document.createElement('div');
+    section.className = 'sense-section sense-' + s.id;
+
+    var header = document.createElement('div');
+    header.className = 'sense-header';
+    var icon = document.createElement('div');
+    icon.className = 'icon';
+    icon.textContent = s.icon;
+    header.appendChild(icon);
+    var h2 = document.createElement('h2');
+    h2.textContent = s.label;
+    header.appendChild(h2);
+    var count = document.createElement('span');
+    count.className = 'count';
+    count.textContent = words.length + ' words';
+    header.appendChild(count);
+    section.appendChild(header);
+
+    var body = document.createElement('div');
+    body.className = 'sense-body';
+    subcats.forEach(function(sc) {
+      var label = document.createElement('div');
+      label.className = 'subcat';
+      label.textContent = sc;
+      body.appendChild(label);
+      var wordsDiv = document.createElement('div');
+      wordsDiv.className = 'words';
+      subcatMap[sc].forEach(function(w) {
+        wordsDiv.appendChild(makeWordChip(w, 'word-' + s.id));
+      });
+      body.appendChild(wordsDiv);
+    });
+    section.appendChild(body);
+    frag.appendChild(section);
+  });
+  return frag;
+}
+
+// ----- INTENSITY VIEW -----
+function renderIntensityView() {
+  var frag = document.createDocumentFragment();
+
+  var intro = document.createElement('p');
+  intro.style.cssText = 'font-size:14px;color:var(--text-secondary);margin-bottom:16px;';
+  intro.textContent = 'Each row starts with a boring "flat" word and builds to more vivid alternatives. Words get more intense and specific as you go right.';
+  frag.appendChild(intro);
+
+  INTENSITY_GROUPS.forEach(function(g) {
+    var group = document.createElement('div');
+    group.className = 'intensity-group';
+
+    var label = document.createElement('div');
+    label.className = 'intensity-label';
+    var flat = document.createElement('span');
+    flat.className = 'flat-word';
+    flat.textContent = g.flat;
+    label.appendChild(flat);
+    label.appendChild(document.createTextNode(' \u2192 ' + g.desc));
+    group.appendChild(label);
+
+    var chain = document.createElement('div');
+    chain.className = 'arrow-chain';
+    g.chain.forEach(function(word, idx) {
+      if (idx > 0) {
+        var arrow = document.createElement('span');
+        arrow.className = 'arrow';
+        arrow.textContent = '\u203A';
+        chain.appendChild(arrow);
+      }
+      var match = WORDS.find(function(w) { return w[0] === word; });
+      var chip = document.createElement('span');
+      chip.className = 'word';
+      chip.dataset.word = word.toLowerCase();
+      chip.textContent = word;
+      if (match && match[3]) {
+        var eg = document.createElement('span');
+        eg.className = 'eg';
+        eg.textContent = '\u2014 ' + match[3];
+        chip.appendChild(eg);
+      }
+      chain.appendChild(chip);
+    });
+    group.appendChild(chain);
+    frag.appendChild(group);
+  });
+  return frag;
+}
+
+// ----- LEVEL VIEW -----
+function renderLevelView() {
+  var levels = [
+    {id:'c', label:'Common', desc:'Words you already know \u2014 use confidently'},
+    {id:'i', label:'Intermediate', desc:'Strong IGCSE vocabulary \u2014 aim for these'},
+    {id:'a', label:'Advanced', desc:'Impressive when used naturally \u2014 don\'t force them'}
+  ];
+  var frag = document.createDocumentFragment();
+
+  levels.forEach(function(lv) {
+    var words = WORDS.filter(function(w) { return w[2] === lv.id; });
+    var senseOrder = ['sight','sound','smell','taste','touch','emotion'];
+    var senseLabels = {sight:'Sight',sound:'Sound',smell:'Smell',taste:'Taste',touch:'Touch',emotion:'Emotion'};
+
+    var section = document.createElement('div');
+    section.className = 'level-section level-' + (lv.id === 'c' ? 'common' : lv.id === 'i' ? 'intermediate' : 'advanced');
+
+    var header = document.createElement('div');
+    header.className = 'level-header';
+    var dot = document.createElement('div');
+    dot.className = 'lvl-dot';
+    header.appendChild(dot);
+    var h2 = document.createElement('h2');
+    h2.textContent = lv.label + ' (' + words.length + ' words)';
+    header.appendChild(h2);
+    var desc = document.createElement('span');
+    desc.className = 'desc';
+    desc.textContent = lv.desc;
+    header.appendChild(desc);
+    section.appendChild(header);
+
+    senseOrder.forEach(function(sense) {
+      var sw = words.filter(function(w) { return w[1] === sense; });
+      if (sw.length === 0) return;
+      var label = document.createElement('div');
+      label.className = 'subcat';
+      label.textContent = senseLabels[sense];
+      section.appendChild(label);
+      var wordsDiv = document.createElement('div');
+      wordsDiv.className = 'words';
+      sw.forEach(function(w) {
+        wordsDiv.appendChild(makeWordChip(w, 'word-' + sense));
+      });
+      section.appendChild(wordsDiv);
+    });
+
+    frag.appendChild(section);
+  });
+  return frag;
+}
+
+// ============================================================
+// VIEW SWITCHING
+// ============================================================
+var views = {
+  sense: renderSenseView,
+  intensity: renderIntensityView,
+  level: renderLevelView
+};
+var currentView = 'sense';
+
+function showView(view, btn) {
+  currentView = view;
+  document.querySelectorAll('.view-tab').forEach(function(t) { t.classList.remove('active'); });
+  if (btn) btn.classList.add('active');
+  while (contentEl.firstChild) { contentEl.removeChild(contentEl.firstChild); }
+  contentEl.appendChild(views[view]());
+  filterWords();
+}
+
+// ============================================================
+// SEARCH / FILTER
+// ============================================================
+function filterWords() {
+  var query = document.getElementById('searchInput').value.toLowerCase().trim();
+  var allWords = contentEl.querySelectorAll('.word');
+
+  allWords.forEach(function(el) {
+    var word = el.dataset.word || el.textContent.toLowerCase();
+    if (!query || word.indexOf(query) !== -1) {
+      el.style.display = '';
+    } else {
+      el.style.display = 'none';
+    }
+  });
+
+  // Hide empty sections
+  contentEl.querySelectorAll('.sense-section, .intensity-group, .level-section').forEach(function(section) {
+    var visibleWords = section.querySelectorAll('.word:not([style*="display: none"])');
+    section.style.display = visibleWords.length > 0 ? '' : 'none';
+  });
+
+  // Hide empty subcategory labels
+  contentEl.querySelectorAll('.subcat').forEach(function(label) {
+    var next = label.nextElementSibling;
+    if (next && next.classList.contains('words')) {
+      var vis = next.querySelectorAll('.word:not([style*="display: none"])');
+      label.style.display = vis.length > 0 ? '' : 'none';
+    }
+  });
+}
+
+// Initial render
+showView('sense');
+</script>
+</body>
+</html>

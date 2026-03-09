@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Writing Task: Travellers' Tales &mdash; English Ch1</title>
+<style>
+  :root {
+    --subject: #c2185b;
+    --subject-light: #fce4ec;
+    --subject-dark: #880e4f;
+    --bg: #f5f5f0;
+    --card: #ffffff;
+    --text: #222;
+    --text-secondary: #555;
+    --border: #e0e0e0;
+    --accent: #2e86c1;
+    --accent-bg: #eaf2f8;
+    --tip: #f39c12;
+    --tip-bg: #fef9e7;
+    --success: #27ae60;
+    --success-bg: #d5f5e3;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text);
+    max-width: 820px;
+    margin: 0 auto;
+    padding: 20px;
+    background: var(--bg);
+  }
+
+  /* Hero */
+  .hero {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 14px;
+    padding: 28px 32px;
+    margin-bottom: 20px;
+  }
+  .hero .tag {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    opacity: 0.8;
+  }
+  .hero h1 { font-size: 24px; margin-top: 2px; margin-bottom: 8px; }
+  .hero p { font-size: 14px; opacity: 0.9; }
+  .hero .time-badge {
+    display: inline-block;
+    background: rgba(255,255,255,0.2);
+    padding: 4px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
+  }
+
+  /* Intro box */
+  .intro-box {
+    background: var(--card);
+    border: 2px solid var(--subject);
+    border-radius: 10px;
+    padding: 20px 24px;
+    margin-bottom: 24px;
+    font-size: 14px;
+  }
+  .intro-box h2 {
+    font-size: 16px;
+    color: var(--subject-dark);
+    margin-bottom: 10px;
+  }
+  .intro-box p { margin-bottom: 8px; }
+  .intro-box p:last-child { margin-bottom: 0; }
+  .skills-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+  }
+  .skills-list li {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 3px 12px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  /* Exercise sections */
+  .ex-header {
+    background: var(--subject);
+    color: #fff;
+    border-radius: 10px 10px 0 0;
+    padding: 14px 20px;
+    margin-top: 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .ex-num {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .ex-info h2 { font-size: 17px; font-weight: 700; }
+  .ex-time {
+    font-size: 12px;
+    opacity: 0.85;
+  }
+
+  .ex-card {
+    background: var(--card);
+    border-radius: 0 0 10px 10px;
+    padding: 20px 24px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .ex-card p { font-size: 14px; margin-bottom: 10px; }
+  .ex-card p:last-child { margin-bottom: 0; }
+
+  /* Prompt text */
+  .prompt {
+    font-size: 14px;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+  .prompt strong { color: var(--subject-dark); }
+
+  /* Suggestion chips */
+  .suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin: 10px 0 16px;
+  }
+  .suggestions .chip {
+    background: #f0f0f0;
+    padding: 4px 12px;
+    border-radius: 14px;
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  /* Senses grid table */
+  .senses-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+  .senses-table th {
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    padding: 10px 12px;
+    text-align: left;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .senses-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+  .senses-table td:first-child {
+    font-weight: 700;
+    color: var(--subject-dark);
+    white-space: nowrap;
+    width: 80px;
+  }
+  .senses-table td:nth-child(2) { width: 45%; }
+  .senses-table td:nth-child(3) { width: 45%; }
+  .senses-table textarea {
+    width: 100%;
+    min-height: 36px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 6px 10px;
+    font-family: inherit;
+    font-size: 13px;
+    resize: vertical;
+    line-height: 1.4;
+  }
+  .senses-table textarea:focus {
+    outline: none;
+    border-color: var(--subject);
+    box-shadow: 0 0 0 2px var(--subject-light);
+  }
+  .sense-hint {
+    font-size: 11px;
+    color: #999;
+    font-style: italic;
+    display: block;
+    margin-top: 3px;
+  }
+
+  /* Flat-to-vivid exercise */
+  .rewrite-block {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 14px;
+  }
+  .flat-sentence {
+    background: #fdedec;
+    border-left: 4px solid #e74c3c;
+    border-radius: 0 6px 6px 0;
+    padding: 10px 14px;
+    font-size: 14px;
+    margin-bottom: 8px;
+  }
+  .flat-sentence .flat-label {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #e74c3c;
+    display: block;
+    margin-bottom: 2px;
+  }
+  .rewrite-hint {
+    font-size: 12px;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-bottom: 8px;
+  }
+  .rewrite-area {
+    width: 100%;
+    min-height: 60px;
+    border: 2px dashed var(--subject);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: inherit;
+    font-size: 14px;
+    resize: vertical;
+    line-height: 1.5;
+    background: #fff;
+  }
+  .rewrite-area:focus {
+    outline: none;
+    border-style: solid;
+    border-color: var(--subject);
+    box-shadow: 0 0 0 2px var(--subject-light);
+  }
+
+  /* Fact or Feeling labels */
+  .fo-list {
+    list-style: none;
+    counter-reset: fo;
+  }
+  .fo-item {
+    counter-increment: fo;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
+  }
+  .fo-item:last-child { border-bottom: none; }
+  .fo-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .fo-text { flex: 1; }
+  .fo-buttons {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .fo-btn {
+    width: 32px;
+    height: 28px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+  }
+  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
+  .fo-btn.selected-f { background: var(--accent); color: white; border-color: var(--accent); }
+  .fo-btn.selected-o { background: var(--subject); color: white; border-color: var(--subject); }
+
+  /* Tip boxes */
+  .tip-box {
+    background: var(--tip-bg);
+    border-left: 4px solid var(--tip);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  .tip-box .tip-label {
+    font-weight: 700;
+    color: #b8770e;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 2px;
+  }
+
+  /* Template box */
+  .template-box {
+    background: #f9f9f9;
+    border: 2px dashed var(--subject);
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin: 14px 0;
+    font-size: 14px;
+    line-height: 2;
+  }
+  .template-box .fill-line {
+    display: inline-block;
+    border-bottom: 2px solid var(--subject);
+    min-width: 140px;
+    margin: 0 4px;
+    color: var(--subject);
+    font-style: italic;
+    font-size: 12px;
+  }
+
+  /* Free writing area */
+  .writing-area {
+    width: 100%;
+    min-height: 180px;
+    border: 2px solid var(--subject);
+    border-radius: 8px;
+    padding: 16px 20px;
+    font-family: inherit;
+    font-size: 15px;
+    line-height: 1.7;
+    resize: vertical;
+    background: #fff;
+  }
+  .writing-area:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--subject-light);
+  }
+  .word-count {
+    text-align: right;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-top: 4px;
+  }
+  .word-count.in-range { color: var(--success); font-weight: 600; }
+
+  /* Checklist */
+  .checklist {
+    list-style: none;
+    padding: 0;
+  }
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .checklist li:last-child { border-bottom: none; }
+  .checklist input[type="checkbox"] {
+    margin-top: 3px;
+    width: 20px;
+    height: 20px;
+    accent-color: var(--subject);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+
+  /* Score box */
+  .score-box {
+    background: var(--subject-light);
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin-top: 14px;
+    text-align: center;
+  }
+  .score-box .score-num {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--subject-dark);
+  }
+  .score-box .score-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+  .score-msg {
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 6px;
+  }
+
+  /* End card */
+  .end-card {
+    background: linear-gradient(135deg, var(--subject-dark), var(--subject));
+    color: #fff;
+    border-radius: 12px;
+    padding: 24px;
+    margin-top: 28px;
+    text-align: center;
+  }
+  .end-card h2 { font-size: 20px; margin-bottom: 8px; }
+  .end-card p { opacity: 0.9; font-size: 14px; }
+
+  /* Vocab button */
+  .vocab-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 18px;
+    background: var(--subject);
+    color: #fff;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    transition: background 0.15s;
+    margin-top: 10px;
+  }
+  .vocab-link:hover { background: var(--subject-dark); }
+  .vocab-link .vocab-icon {
+    font-size: 15px;
+  }
+  .vocab-link-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 14px;
+    background: var(--accent-bg);
+    color: var(--accent);
+    text-decoration: none;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--accent);
+    transition: all 0.15s;
+  }
+  .vocab-link-inline:hover { background: var(--accent); color: #fff; }
+
+  /* Print styles */
+  @media print {
+    body { background: #fff; padding: 10px; font-size: 13px; }
+    .hero { break-after: avoid; padding: 16px 20px; }
+    .hero h1 { font-size: 20px; }
+    .intro-box { break-inside: avoid; }
+    .ex-header { break-after: avoid; }
+    .ex-card { box-shadow: none; border: 1px solid #ddd; break-inside: avoid; }
+    .end-card { break-inside: avoid; }
+
+    /* Hide interactive elements */
+    textarea, .rewrite-area, .writing-area { display: none; }
+    .fo-buttons { display: none; }
+    .vocab-link, .vocab-link-inline { display: none; }
+    .word-count { display: none; }
+
+    /* Show print lines instead */
+    .print-lines { display: block !important; }
+    .print-lines .line {
+      border-bottom: 1px solid #ccc;
+      height: 28px;
+    }
+    .print-fo-blank { display: inline !important; }
+
+    /* Keep checklist visible */
+    .score-box { display: none; }
+  }
+
+  /* Hide print elements on screen */
+  .print-lines { display: none; }
+  .print-fo-blank { display: none; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="tag">English Ch1 &mdash; Writing Task</div>
+  <h1>Travellers' Tales &mdash; Your Turn</h1>
+  <p>You just got back from France and Spain. Now use what you learned in Chapter 1 to write about it like a real travel writer.</p>
+  <div class="time-badge">About 35 minutes &mdash; 5 exercises</div>
+</div>
+
+<div class="intro-box">
+  <h2>What You're Practising</h2>
+  <p>This task builds up step by step. Each exercise feeds into the next, so don't skip ahead. By the end, you'll have written a vivid descriptive paragraph about a real moment from your trip.</p>
+  <ul class="skills-list">
+    <li>Sensory language</li>
+    <li>Specific word choice</li>
+    <li>Fact vs opinion</li>
+    <li>Descriptive writing</li>
+    <li>The 6 traits of good travel writing</li>
+  </ul>
+  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+</div>
+
+<!-- ===== EXERCISE 1: SENSES GRID ===== -->
+<div class="ex-header">
+  <div class="ex-num">1</div>
+  <div class="ex-info">
+    <h2>Senses Grid</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">Think about your trip to France and Spain. <strong>Pick ONE moment that stands out</strong> &mdash; it doesn't have to be the "best" moment, just one you remember clearly.</p>
+
+  <p class="prompt">It could be any of these, or something else entirely:</p>
+  <div class="suggestions">
+    <span class="chip">Walking through a market</span>
+    <span class="chip">Entering a famous building</span>
+    <span class="chip">Eating something new</span>
+    <span class="chip">A view from up high</span>
+    <span class="chip">A crowded street</span>
+    <span class="chip">Exploring caves</span>
+    <span class="chip">A quiet moment</span>
+    <span class="chip">A bus or train journey</span>
+  </div>
+
+  <p class="prompt"><strong>My moment:</strong></p>
+  <textarea class="rewrite-area" rows="1" placeholder="Briefly describe the moment you're choosing (e.g. 'Walking through Mercat de la Boqueria in Barcelona')"></textarea>
+  <div class="print-lines"><div class="line"></div></div>
+
+  <p class="prompt" style="margin-top:16px;">Now fill in as many senses as you can remember. <strong>You need at least 3 out of 5.</strong></p>
+
+  <table class="senses-table">
+    <tr>
+      <th>Sense</th>
+      <th>What do you remember?</th>
+      <th>One specific detail</th>
+    </tr>
+    <tr>
+      <td>Sight</td>
+      <td>
+        <textarea placeholder="Colours, shapes, light, movement, people..."></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+      <td>
+        <textarea placeholder="e.g. 'bright orange juice in tall glass cups'"></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+    </tr>
+    <tr>
+      <td>Sound</td>
+      <td>
+        <textarea placeholder="Voices, music, traffic, silence, echoes..."></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+      <td>
+        <textarea placeholder="e.g. 'vendors shouting prices in Spanish'"></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+    </tr>
+    <tr>
+      <td>Smell</td>
+      <td>
+        <textarea placeholder="Food, flowers, rain, exhaust, stone..."></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+      <td>
+        <textarea placeholder="e.g. 'warm bread from a bakery stall'"></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+    </tr>
+    <tr>
+      <td>Taste</td>
+      <td>
+        <textarea placeholder="Sweet, salty, spicy, bitter, fresh..."></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+      <td>
+        <textarea placeholder="e.g. 'the chocolate was thick and slightly bitter'"></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+    </tr>
+    <tr>
+      <td>Touch</td>
+      <td>
+        <textarea placeholder="Temperature, texture, wind, stone, fabric..."></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+      <td>
+        <textarea placeholder="e.g. 'cool stone walls inside the cave'"></textarea>
+        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+      </td>
+    </tr>
+  </table>
+
+  <div class="tip-box">
+    <div class="tip-label">Tip</div>
+    If you can't remember a sense for your moment, that's fine &mdash; leave it blank. But push yourself to get at least 3. Close your eyes for 10 seconds and try to put yourself back in that moment.
+  </div>
+</div>
+
+<!-- ===== EXERCISE 2: FLAT TO VIVID ===== -->
+<div class="ex-header">
+  <div class="ex-num">2</div>
+  <div class="ex-info">
+    <h2>Flat to Vivid</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">These sentences are <strong>flat and boring</strong>. A travel writer would never write them. Rewrite each one using <strong>specific, vivid details</strong> &mdash; use memories from your trip if you can. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Stuck for words? Open the Vocabulary Bank &#8599;</a></p>
+
+  <div class="rewrite-block">
+    <div class="flat-sentence">
+      <span class="flat-label">Flat</span>
+      "The food at the market was good."
+    </div>
+    <div class="rewrite-hint">Think: What food? What did it look/smell/taste like? Be specific.</div>
+    <textarea class="rewrite-area" placeholder="Your vivid version..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  </div>
+
+  <div class="rewrite-block">
+    <div class="flat-sentence">
+      <span class="flat-label">Flat</span>
+      "The building was really big and impressive."
+    </div>
+    <div class="rewrite-hint">Think: How did it make you feel looking up at it? What details caught your eye &mdash; the stone, the windows, the height?</div>
+    <textarea class="rewrite-area" placeholder="Your vivid version..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  </div>
+
+  <div class="rewrite-block">
+    <div class="flat-sentence">
+      <span class="flat-label">Flat</span>
+      "It was hot and we walked around the city all day."
+    </div>
+    <div class="rewrite-hint">Think: What did the heat feel like on your skin? What sounds surrounded you? What did you notice in the streets?</div>
+    <textarea class="rewrite-area" placeholder="Your vivid version..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+  </div>
+
+  <div class="tip-box">
+    <div class="tip-label">Remember from Chapter 1</div>
+    Good travel writing uses <strong>specific details</strong>, not vague words. "Turquoise waters" is better than "nice water." "Sharp, white goat's cheese" is better than "good cheese." The more specific you are, the more the reader can picture it.
+  </div>
+</div>
+
+<!-- ===== EXERCISE 3: FACT OR FEELING? ===== -->
+<div class="ex-header">
+  <div class="ex-num">3</div>
+  <div class="ex-info">
+    <h2>Fact or Feeling?</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">Label each statement <strong>F</strong> (fact &mdash; can be verified) or <strong>O</strong> (opinion &mdash; personal feeling or judgment).</p>
+
+  <ul class="fo-list">
+    <li class="fo-item">
+      <span class="fo-num">1</span>
+      <span class="fo-text">"Barcelona is located on the northeast coast of Spain."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="1" data-val="F" onclick="pickFO(this)">F</button>
+        <button class="fo-btn" data-q="1" data-val="O" onclick="pickFO(this)">O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">2</span>
+      <span class="fo-text">"The Sagrada Familia was the most incredible building I have ever seen."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="2" data-val="F" onclick="pickFO(this)">F</button>
+        <button class="fo-btn" data-q="2" data-val="O" onclick="pickFO(this)">O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">3</span>
+      <span class="fo-text">"Montserrat is a mountain range about 50 km northwest of Barcelona."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="3" data-val="F" onclick="pickFO(this)">F</button>
+        <button class="fo-btn" data-q="3" data-val="O" onclick="pickFO(this)">O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">4</span>
+      <span class="fo-text">"The chocolate workshop was the best activity on the whole trip."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="4" data-val="F" onclick="pickFO(this)">F</button>
+        <button class="fo-btn" data-q="4" data-val="O" onclick="pickFO(this)">O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">5</span>
+      <span class="fo-text">"The Cougnac caves contain prehistoric paintings that are over 25,000 years old."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="5" data-val="F" onclick="pickFO(this)">F</button>
+        <button class="fo-btn" data-q="5" data-val="O" onclick="pickFO(this)">O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">6</span>
+      <span class="fo-text">"French bread tastes so much better than anything you can get in Denmark."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="6" data-val="F" onclick="pickFO(this)">F</button>
+        <button class="fo-btn" data-q="6" data-val="O" onclick="pickFO(this)">O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">7</span>
+      <span class="fo-text">"The Gothic Quarter in Barcelona has streets dating back to Roman times."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="7" data-val="F" onclick="pickFO(this)">F</button>
+        <button class="fo-btn" data-q="7" data-val="O" onclick="pickFO(this)">O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">8</span>
+      <span class="fo-text">"Walking through the old streets felt like stepping back in time."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="8" data-val="F" onclick="pickFO(this)">F</button>
+        <button class="fo-btn" data-q="8" data-val="O" onclick="pickFO(this)">O</button>
+      </div>
+    </li>
+  </ul>
+
+  <div class="tip-box" style="margin-top:16px;">
+    <div class="tip-label">Now connect it</div>
+    Look back at your Senses Grid from Exercise 1. Most of your sensory details are probably <strong>opinions</strong> (personal impressions). That's normal &mdash; travel writing blends facts with feelings. The skill is knowing which is which and using both deliberately.
+  </div>
+</div>
+
+<!-- ===== EXERCISE 4: YOUR TRAVEL PARAGRAPH ===== -->
+<div class="ex-header">
+  <div class="ex-num">4</div>
+  <div class="ex-info">
+    <h2>Your Travel Paragraph</h2>
+    <div class="ex-time">About 15 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">Now bring it all together. You're going to write a descriptive paragraph about the moment you chose in Exercise 1.</p>
+
+  <p class="prompt"><strong>Step 1 &mdash; Fill in the template</strong> (this is your planning step, not your final answer):</p>
+
+  <div class="template-box">
+    <p>I was in <span class="fill-line">place</span> on a <span class="fill-line">day / time of day</span>.</p>
+    <p>We were <span class="fill-line">what you were doing</span>.</p>
+    <p>The first thing I noticed was <span class="fill-line">a sight detail from your grid</span>.</p>
+    <p>I could hear <span class="fill-line">a sound detail</span> and smell <span class="fill-line">a smell detail</span>.</p>
+    <p>It felt <span class="fill-line">a touch detail &mdash; temperature, texture</span>.</p>
+    <p>This moment made me feel <span class="fill-line">an emotion</span> because <span class="fill-line">why</span>.</p>
+  </div>
+  <div class="print-lines">
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+
+  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing paragraph in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+
+  <div class="tip-box">
+    <div class="tip-label">Your paragraph should</div>
+    &bull; Use <strong>at least 3 senses</strong> from your grid<br>
+    &bull; Include at least one <strong>specific detail</strong> (a name, colour, temperature, flavour)<br>
+    &bull; Have <strong>varied sentence lengths</strong> &mdash; try one short punchy sentence for impact<br>
+    &bull; End with <strong>how the moment made you feel</strong> (your personal impression)
+  </div>
+
+  <textarea class="writing-area" id="mainParagraph" placeholder="Write your paragraph here..." oninput="countWords(this)"></textarea>
+  <div class="word-count" id="wordCount">0 words</div>
+  <div class="print-lines">
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+  </div>
+</div>
+
+<!-- ===== EXERCISE 5: WRITER'S CHECKLIST ===== -->
+<div class="ex-header">
+  <div class="ex-num">5</div>
+  <div class="ex-info">
+    <h2>Writer's Checklist</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt"><strong>Read your paragraph from Exercise 4 out loud.</strong> Yes, actually out loud &mdash; you'll hear awkward phrasing that you won't catch by reading silently. Then check each box honestly.</p>
+
+  <p class="prompt" style="font-size:13px; color:var(--text-secondary);">These are the 6 characteristics of good travel writing from Chapter 1:</p>
+
+  <ul class="checklist" id="writerChecklist">
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Clear writing</strong> &mdash; Could someone who wasn't on the trip follow what you're describing?</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Your personality</strong> &mdash; Does it sound like YOU wrote it, not a textbook? Can the reader sense your reaction?</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>At least 3 senses</strong> &mdash; Count them. Did you go beyond just what things looked like?</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Specific details</strong> &mdash; No "nice," "good," "really big," or "amazing." Every adjective should paint a picture.</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>Varied sentences</strong> &mdash; Do you have at least one short sentence and one longer one? Read it aloud &mdash; does it flow?</span>
+    </li>
+    <li>
+      <input type="checkbox" onchange="updateChecklist()">
+      <span><strong>No clich&eacute;s</strong> &mdash; No "bustling market," "breathtaking view," "time of my life," or "words can't describe." Find YOUR words.</span>
+    </li>
+  </ul>
+
+  <div class="score-box" id="scoreBox">
+    <div class="score-num" id="scoreNum">0 / 6</div>
+    <div class="score-label">checks</div>
+    <div class="score-msg" id="scoreMsg">Tick the boxes above as you check each one</div>
+  </div>
+
+  <div class="tip-box" style="margin-top:14px;">
+    <div class="tip-label">What to do with your score</div>
+    <strong>0&ndash;2 checks:</strong> Go back to Exercise 4 and revise. Use your Senses Grid &mdash; you already have the details, you just need to put them in.<br>
+    <strong>3&ndash;4 checks:</strong> Solid start. Pick one unchecked box and try to fix just that one thing.<br>
+    <strong>5&ndash;6 checks:</strong> Excellent work. You're writing like a real travel writer.
+  </div>
+</div>
+
+<!-- ===== END CARD ===== -->
+<div class="end-card">
+  <h2>Writing Task Complete</h2>
+  <p>You've practised sensory language, specific word choice, fact vs opinion, and descriptive writing. Keep this paragraph &mdash; we'll build on these skills in later chapters.</p>
+</div>
+
+<script>
+  // Fact or Feeling buttons
+  function pickFO(btn) {
+    var q = btn.dataset.q;
+    var val = btn.dataset.val;
+    var siblings = btn.parentElement.querySelectorAll('.fo-btn');
+    siblings.forEach(function(b) {
+      b.classList.remove('selected-f', 'selected-o');
+    });
+    btn.classList.add(val === 'F' ? 'selected-f' : 'selected-o');
+  }
+
+  // Word counter
+  function countWords(textarea) {
+    var text = textarea.value.trim();
+    var count = text.length === 0 ? 0 : text.split(/\s+/).length;
+    var el = document.getElementById('wordCount');
+    el.textContent = count + ' word' + (count !== 1 ? 's' : '');
+    if (count >= 80 && count <= 120) {
+      el.className = 'word-count in-range';
+    } else {
+      el.className = 'word-count';
+    }
+  }
+
+  // Checklist scoring
+  function updateChecklist() {
+    var boxes = document.querySelectorAll('#writerChecklist input[type="checkbox"]');
+    var checked = 0;
+    boxes.forEach(function(cb) { if (cb.checked) checked++; });
+    document.getElementById('scoreNum').textContent = checked + ' / 6';
+    var msg = '';
+    if (checked <= 2) msg = 'Go back to Exercise 4 and revise your paragraph.';
+    else if (checked <= 4) msg = 'Solid start! Pick one unchecked box and fix just that.';
+    else msg = 'Excellent! You\'re writing like a real travel writer.';
+    document.getElementById('scoreMsg').textContent = msg;
+  }
+</script>
+<script src="../nav.js"></script>
+</body>
+</html>
