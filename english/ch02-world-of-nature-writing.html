@@ -325,11 +325,8 @@
     transition: all 0.15s;
     color: var(--text-secondary);
   }
-  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
-  .fo-btn.selected-i { background: var(--accent); color: white; border-color: var(--accent); }
-  .fo-btn.selected-p { background: var(--subject); color: white; border-color: var(--subject); }
-  .fo-btn.selected-a { background: #e74c3c; color: white; border-color: #e74c3c; }
-  .fo-btn.selected-e { background: var(--success); color: white; border-color: var(--success); }
+  .fo-btn:hover { opacity: 0.8; }
+  .fo-item { transition: border-left 0.2s, background 0.2s; border-left: 4px solid transparent; padding-left: 6px; }
 
   /* Tip boxes */
   .tip-box {
@@ -538,7 +535,7 @@
     <li>Arguing &amp; persuading</li>
     <li>Vocabulary (animal &amp; nature imagery)</li>
   </ul>
-  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+  <a href="descriptive-vocabulary.html#ch2" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
 </div>
 
 <!-- ===== EXERCISE 1: NATURE AROUND YOU ===== -->
@@ -608,7 +605,7 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt">These sentences are <strong>flat and boring</strong>. Rewrite each one using <strong>personification</strong> &mdash; give the natural thing a human action, emotion, or personality. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Stuck for words? Open the Vocabulary Bank &#8599;</a></p>
+  <p class="prompt">These sentences are <strong>flat and boring</strong>. Rewrite each one using <strong>personification</strong> &mdash; give the natural thing a human action, emotion, or personality. <a href="descriptive-vocabulary.html#ch2" target="_blank" class="vocab-link-inline">Stuck for words? Open the Vocabulary Bank &#8599;</a></p>
 
   <div class="rewrite-block">
     <div class="flat-sentence">
@@ -663,10 +660,10 @@
       <span class="fo-text">"Denmark has over 7,000 km of coastline."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="1" data-val="I" onclick="pickPurpose(this)">I</button>
-        <button class="fo-btn" data-q="1" data-val="P" onclick="pickPurpose(this)">P</button>
-        <button class="fo-btn" data-q="1" data-val="A" onclick="pickPurpose(this)">A</button>
-        <button class="fo-btn" data-q="1" data-val="E" onclick="pickPurpose(this)">E</button>
+        <button class="fo-btn" data-q="1" data-val="I" onclick="pickOption(this)" data-color="#2e86c1">I</button>
+        <button class="fo-btn" data-q="1" data-val="P" onclick="pickOption(this)" data-color="#c2185b">P</button>
+        <button class="fo-btn" data-q="1" data-val="A" onclick="pickOption(this)" data-color="#e74c3c">A</button>
+        <button class="fo-btn" data-q="1" data-val="E" onclick="pickOption(this)" data-color="#27ae60">E</button>
       </div>
     </li>
     <li class="fo-item">
@@ -674,10 +671,10 @@
       <span class="fo-text">"We must protect our forests before it's too late."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="2" data-val="I" onclick="pickPurpose(this)">I</button>
-        <button class="fo-btn" data-q="2" data-val="P" onclick="pickPurpose(this)">P</button>
-        <button class="fo-btn" data-q="2" data-val="A" onclick="pickPurpose(this)">A</button>
-        <button class="fo-btn" data-q="2" data-val="E" onclick="pickPurpose(this)">E</button>
+        <button class="fo-btn" data-q="2" data-val="I" onclick="pickOption(this)" data-color="#2e86c1">I</button>
+        <button class="fo-btn" data-q="2" data-val="P" onclick="pickOption(this)" data-color="#c2185b">P</button>
+        <button class="fo-btn" data-q="2" data-val="A" onclick="pickOption(this)" data-color="#e74c3c">A</button>
+        <button class="fo-btn" data-q="2" data-val="E" onclick="pickOption(this)" data-color="#27ae60">E</button>
       </div>
     </li>
     <li class="fo-item">
@@ -685,10 +682,10 @@
       <span class="fo-text">"The old oak tree groaned like a tired grandfather settling into his armchair."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="3" data-val="I" onclick="pickPurpose(this)">I</button>
-        <button class="fo-btn" data-q="3" data-val="P" onclick="pickPurpose(this)">P</button>
-        <button class="fo-btn" data-q="3" data-val="A" onclick="pickPurpose(this)">A</button>
-        <button class="fo-btn" data-q="3" data-val="E" onclick="pickPurpose(this)">E</button>
+        <button class="fo-btn" data-q="3" data-val="I" onclick="pickOption(this)" data-color="#2e86c1">I</button>
+        <button class="fo-btn" data-q="3" data-val="P" onclick="pickOption(this)" data-color="#c2185b">P</button>
+        <button class="fo-btn" data-q="3" data-val="A" onclick="pickOption(this)" data-color="#e74c3c">A</button>
+        <button class="fo-btn" data-q="3" data-val="E" onclick="pickOption(this)" data-color="#27ae60">E</button>
       </div>
     </li>
     <li class="fo-item">
@@ -696,10 +693,10 @@
       <span class="fo-text">"You should visit the Danish coast &mdash; it will take your breath away."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="4" data-val="I" onclick="pickPurpose(this)">I</button>
-        <button class="fo-btn" data-q="4" data-val="P" onclick="pickPurpose(this)">P</button>
-        <button class="fo-btn" data-q="4" data-val="A" onclick="pickPurpose(this)">A</button>
-        <button class="fo-btn" data-q="4" data-val="E" onclick="pickPurpose(this)">E</button>
+        <button class="fo-btn" data-q="4" data-val="I" onclick="pickOption(this)" data-color="#2e86c1">I</button>
+        <button class="fo-btn" data-q="4" data-val="P" onclick="pickOption(this)" data-color="#c2185b">P</button>
+        <button class="fo-btn" data-q="4" data-val="A" onclick="pickOption(this)" data-color="#e74c3c">A</button>
+        <button class="fo-btn" data-q="4" data-val="E" onclick="pickOption(this)" data-color="#27ae60">E</button>
       </div>
     </li>
   </ul>
@@ -734,7 +731,7 @@
     <div class="line"></div><div class="line"></div>
   </div>
 
-  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing paragraph in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing paragraph in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html#ch2" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
 
   <div class="tip-box">
     <div class="tip-label">Your paragraph should</div>
@@ -814,14 +811,21 @@
 
 <script>
   // Purpose label buttons
-  function pickPurpose(btn) {
-    var q = btn.dataset.q;
-    var val = btn.dataset.val;
+  function pickOption(btn) {
+    var color = btn.getAttribute('data-color');
+    var item = btn.closest('.fo-item');
     var siblings = btn.parentElement.querySelectorAll('.fo-btn');
     siblings.forEach(function(b) {
-      b.classList.remove('selected-i', 'selected-p', 'selected-a', 'selected-e');
+      b.style.background = 'white';
+      b.style.color = b.getAttribute('data-color');
+      b.style.borderColor = b.getAttribute('data-color');
     });
-    btn.classList.add('selected-' + val.toLowerCase());
+    btn.style.background = color;
+    btn.style.color = 'white';
+    btn.style.borderColor = color;
+    item.style.borderLeft = '4px solid ' + color;
+    item.style.background = color + '12';
+    item.style.borderRadius = '0 0 0 0';
   }
 
   // Word counter
@@ -849,6 +853,12 @@
     else msg = 'Excellent! You\'ve brought nature to life on the page.';
     document.getElementById('scoreMsg').textContent = msg;
   }
+
+  // Init button colors
+  document.querySelectorAll('.fo-btn').forEach(function(b) {
+    var c = b.getAttribute('data-color');
+    if (c) { b.style.borderColor = c; b.style.color = c; }
+  });
 </script>
 <script src="../nav.js"></script>
 </body>

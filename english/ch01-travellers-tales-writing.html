@@ -302,9 +302,8 @@
     transition: all 0.15s;
     color: var(--text-secondary);
   }
-  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
-  .fo-btn.selected-f { background: var(--accent); color: white; border-color: var(--accent); }
-  .fo-btn.selected-o { background: var(--subject); color: white; border-color: var(--subject); }
+  .fo-btn:hover { opacity: 0.8; }
+  .fo-item { transition: border-left 0.2s, background 0.2s; border-left: 4px solid transparent; padding-left: 6px; }
 
   /* Tip boxes */
   .tip-box {
@@ -514,7 +513,7 @@
     <li>Descriptive writing</li>
     <li>The 6 traits of good travel writing</li>
   </ul>
-  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+  <a href="descriptive-vocabulary.html#ch1" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
 </div>
 
 <!-- ===== EXERCISE 1: SENSES GRID ===== -->
@@ -624,7 +623,7 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt">These sentences are <strong>flat and boring</strong>. A travel writer would never write them. Rewrite each one using <strong>specific, vivid details</strong> &mdash; use memories from your trip if you can. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Stuck for words? Open the Vocabulary Bank &#8599;</a></p>
+  <p class="prompt">These sentences are <strong>flat and boring</strong>. A travel writer would never write them. Rewrite each one using <strong>specific, vivid details</strong> &mdash; use memories from your trip if you can. <a href="descriptive-vocabulary.html#ch1" target="_blank" class="vocab-link-inline">Stuck for words? Open the Vocabulary Bank &#8599;</a></p>
 
   <div class="rewrite-block">
     <div class="flat-sentence">
@@ -679,8 +678,8 @@
       <span class="fo-text">"Barcelona is located on the northeast coast of Spain."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="1" data-val="F" onclick="pickFO(this)">F</button>
-        <button class="fo-btn" data-q="1" data-val="O" onclick="pickFO(this)">O</button>
+        <button class="fo-btn" data-q="1" data-val="F" onclick="pickOption(this)" data-color="#2e86c1">F</button>
+        <button class="fo-btn" data-q="1" data-val="O" onclick="pickOption(this)" data-color="#c2185b">O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -688,8 +687,8 @@
       <span class="fo-text">"The Sagrada Familia was the most incredible building I have ever seen."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="2" data-val="F" onclick="pickFO(this)">F</button>
-        <button class="fo-btn" data-q="2" data-val="O" onclick="pickFO(this)">O</button>
+        <button class="fo-btn" data-q="2" data-val="F" onclick="pickOption(this)" data-color="#2e86c1">F</button>
+        <button class="fo-btn" data-q="2" data-val="O" onclick="pickOption(this)" data-color="#c2185b">O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -697,8 +696,8 @@
       <span class="fo-text">"Montserrat is a mountain range about 50 km northwest of Barcelona."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="3" data-val="F" onclick="pickFO(this)">F</button>
-        <button class="fo-btn" data-q="3" data-val="O" onclick="pickFO(this)">O</button>
+        <button class="fo-btn" data-q="3" data-val="F" onclick="pickOption(this)" data-color="#2e86c1">F</button>
+        <button class="fo-btn" data-q="3" data-val="O" onclick="pickOption(this)" data-color="#c2185b">O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -706,8 +705,8 @@
       <span class="fo-text">"The chocolate workshop was the best activity on the whole trip."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="4" data-val="F" onclick="pickFO(this)">F</button>
-        <button class="fo-btn" data-q="4" data-val="O" onclick="pickFO(this)">O</button>
+        <button class="fo-btn" data-q="4" data-val="F" onclick="pickOption(this)" data-color="#2e86c1">F</button>
+        <button class="fo-btn" data-q="4" data-val="O" onclick="pickOption(this)" data-color="#c2185b">O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -715,8 +714,8 @@
       <span class="fo-text">"The Cougnac caves contain prehistoric paintings that are over 25,000 years old."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="5" data-val="F" onclick="pickFO(this)">F</button>
-        <button class="fo-btn" data-q="5" data-val="O" onclick="pickFO(this)">O</button>
+        <button class="fo-btn" data-q="5" data-val="F" onclick="pickOption(this)" data-color="#2e86c1">F</button>
+        <button class="fo-btn" data-q="5" data-val="O" onclick="pickOption(this)" data-color="#c2185b">O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -724,8 +723,8 @@
       <span class="fo-text">"French bread tastes so much better than anything you can get in Denmark."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="6" data-val="F" onclick="pickFO(this)">F</button>
-        <button class="fo-btn" data-q="6" data-val="O" onclick="pickFO(this)">O</button>
+        <button class="fo-btn" data-q="6" data-val="F" onclick="pickOption(this)" data-color="#2e86c1">F</button>
+        <button class="fo-btn" data-q="6" data-val="O" onclick="pickOption(this)" data-color="#c2185b">O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -733,8 +732,8 @@
       <span class="fo-text">"The Gothic Quarter in Barcelona has streets dating back to Roman times."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="7" data-val="F" onclick="pickFO(this)">F</button>
-        <button class="fo-btn" data-q="7" data-val="O" onclick="pickFO(this)">O</button>
+        <button class="fo-btn" data-q="7" data-val="F" onclick="pickOption(this)" data-color="#2e86c1">F</button>
+        <button class="fo-btn" data-q="7" data-val="O" onclick="pickOption(this)" data-color="#c2185b">O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -742,8 +741,8 @@
       <span class="fo-text">"Walking through the old streets felt like stepping back in time."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="8" data-val="F" onclick="pickFO(this)">F</button>
-        <button class="fo-btn" data-q="8" data-val="O" onclick="pickFO(this)">O</button>
+        <button class="fo-btn" data-q="8" data-val="F" onclick="pickOption(this)" data-color="#2e86c1">F</button>
+        <button class="fo-btn" data-q="8" data-val="O" onclick="pickOption(this)" data-color="#c2185b">O</button>
       </div>
     </li>
   </ul>
@@ -780,7 +779,7 @@
     <div class="line"></div><div class="line"></div><div class="line"></div>
   </div>
 
-  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing paragraph in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing paragraph in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html#ch1" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
 
   <div class="tip-box">
     <div class="tip-label">Your paragraph should</div>
@@ -862,14 +861,21 @@
 
 <script>
   // Fact or Feeling buttons
-  function pickFO(btn) {
-    var q = btn.dataset.q;
-    var val = btn.dataset.val;
+  function pickOption(btn) {
+    var color = btn.getAttribute('data-color');
+    var item = btn.closest('.fo-item');
     var siblings = btn.parentElement.querySelectorAll('.fo-btn');
     siblings.forEach(function(b) {
-      b.classList.remove('selected-f', 'selected-o');
+      b.style.background = 'white';
+      b.style.color = b.getAttribute('data-color');
+      b.style.borderColor = b.getAttribute('data-color');
     });
-    btn.classList.add(val === 'F' ? 'selected-f' : 'selected-o');
+    btn.style.background = color;
+    btn.style.color = 'white';
+    btn.style.borderColor = color;
+    item.style.borderLeft = '4px solid ' + color;
+    item.style.background = color + '12';
+    item.style.borderRadius = '0 0 0 0';
   }
 
   // Word counter
@@ -897,6 +903,12 @@
     else msg = 'Excellent! You\'re writing like a real travel writer.';
     document.getElementById('scoreMsg').textContent = msg;
   }
+
+  // Init button colors
+  document.querySelectorAll('.fo-btn').forEach(function(b) {
+    var c = b.getAttribute('data-color');
+    if (c) { b.style.borderColor = c; b.style.color = c; }
+  });
 </script>
 <script src="../nav.js"></script>
 </body>

@@ -167,6 +167,9 @@
     padding: 10px 0;
     border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
+    transition: border-left 0.2s, background 0.2s;
+    border-left: 4px solid transparent;
+    padding-left: 6px;
   }
   .fo-item:last-child { border-bottom: none; }
   .fo-num {
@@ -200,9 +203,7 @@
     transition: all 0.15s;
     color: var(--text-secondary);
   }
-  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
-  .fo-btn.selected-n { background: var(--accent); color: white; border-color: var(--accent); }
-  .fo-btn.selected-b { background: #e74c3c; color: white; border-color: #e74c3c; }
+  .fo-btn:hover { opacity: 0.8; }
 
   /* Rewrite / fill-in blocks */
   .rewrite-block {
@@ -510,7 +511,7 @@
     <li>Inverted pyramid</li>
     <li>Fact vs opinion</li>
   </ul>
-  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+  <a href="descriptive-vocabulary.html#ch7" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
 </div>
 
 <!-- ===== EXERCISE 1: BIAS DETECTOR ===== -->
@@ -535,8 +536,8 @@
       <span class="fo-text">"The school cancelled the annual trip due to budget cuts."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="1" data-val="N" onclick="pickBias(this)">N</button>
-        <button class="fo-btn" data-q="1" data-val="B" onclick="pickBias(this)">B</button>
+        <button class="fo-btn" data-q="1" data-val="N" data-color="#2e86c1" onclick="pickOption(this)">N</button>
+        <button class="fo-btn" data-q="1" data-val="B" data-color="#e74c3c" onclick="pickOption(this)">B</button>
       </div>
     </li>
     <li class="fo-item">
@@ -544,8 +545,8 @@
       <span class="fo-text">"The school cruelly ripped away students' only fun trip of the year."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="2" data-val="N" onclick="pickBias(this)">N</button>
-        <button class="fo-btn" data-q="2" data-val="B" onclick="pickBias(this)">B</button>
+        <button class="fo-btn" data-q="2" data-val="N" data-color="#2e86c1" onclick="pickOption(this)">N</button>
+        <button class="fo-btn" data-q="2" data-val="B" data-color="#e74c3c" onclick="pickOption(this)">B</button>
       </div>
     </li>
     <li class="fo-item">
@@ -553,8 +554,8 @@
       <span class="fo-text">"A spokesperson confirmed that the trip would not take place this term."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="3" data-val="N" onclick="pickBias(this)">N</button>
-        <button class="fo-btn" data-q="3" data-val="B" onclick="pickBias(this)">B</button>
+        <button class="fo-btn" data-q="3" data-val="N" data-color="#2e86c1" onclick="pickOption(this)">N</button>
+        <button class="fo-btn" data-q="3" data-val="B" data-color="#e74c3c" onclick="pickOption(this)">B</button>
       </div>
     </li>
     <li class="fo-item">
@@ -562,8 +563,8 @@
       <span class="fo-text">"Outraged students slammed the school's ridiculous decision to axe the beloved trip."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="4" data-val="N" onclick="pickBias(this)">N</button>
-        <button class="fo-btn" data-q="4" data-val="B" onclick="pickBias(this)">B</button>
+        <button class="fo-btn" data-q="4" data-val="N" data-color="#2e86c1" onclick="pickOption(this)">N</button>
+        <button class="fo-btn" data-q="4" data-val="B" data-color="#e74c3c" onclick="pickOption(this)">B</button>
       </div>
     </li>
     <li class="fo-item">
@@ -571,8 +572,8 @@
       <span class="fo-text">"The trip was cancelled after the school reviewed its spending priorities."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="5" data-val="N" onclick="pickBias(this)">N</button>
-        <button class="fo-btn" data-q="5" data-val="B" onclick="pickBias(this)">B</button>
+        <button class="fo-btn" data-q="5" data-val="N" data-color="#2e86c1" onclick="pickOption(this)">N</button>
+        <button class="fo-btn" data-q="5" data-val="B" data-color="#e74c3c" onclick="pickOption(this)">B</button>
       </div>
     </li>
     <li class="fo-item">
@@ -580,8 +581,8 @@
       <span class="fo-text">"The school wisely saved thousands by scrapping a pointless trip nobody needed."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="6" data-val="N" onclick="pickBias(this)">N</button>
-        <button class="fo-btn" data-q="6" data-val="B" onclick="pickBias(this)">B</button>
+        <button class="fo-btn" data-q="6" data-val="N" data-color="#2e86c1" onclick="pickOption(this)">N</button>
+        <button class="fo-btn" data-q="6" data-val="B" data-color="#e74c3c" onclick="pickOption(this)">B</button>
       </div>
     </li>
   </ul>
@@ -700,7 +701,7 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt"><strong>Write a short news report about something from your life at the efterskole</strong> &mdash; real or made up. Use the inverted pyramid: most important facts first. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+  <p class="prompt"><strong>Write a short news report about something from your life at the efterskole</strong> &mdash; real or made up. Use the inverted pyramid: most important facts first. <a href="descriptive-vocabulary.html#ch7" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
 
   <p class="prompt"><strong>Pick your event:</strong></p>
   <div class="suggestions">
@@ -809,17 +810,22 @@
 </div>
 
 <script>
-  // Bias detection N/B buttons
-  function pickBias(btn) {
-    var q = btn.dataset.q;
-    var val = btn.dataset.val;
+  // Color-coded multi-choice buttons
+  function pickOption(btn) {
+    var color = btn.getAttribute('data-color');
+    var item = btn.closest('.fo-item');
     var siblings = btn.parentElement.querySelectorAll('.fo-btn');
     siblings.forEach(function(b) {
-      b.classList.remove('selected-n', 'selected-b');
+      b.style.background = 'white';
+      b.style.color = b.getAttribute('data-color');
+      b.style.borderColor = b.getAttribute('data-color');
     });
-    // Correct answers: 1=N, 2=B, 3=N, 4=B, 5=N, 6=B
-    var correct = {1:'N', 2:'B', 3:'N', 4:'B', 5:'N', 6:'B'};
-    btn.classList.add(val === correct[q] ? 'selected-n' : 'selected-b');
+    btn.style.background = color;
+    btn.style.color = 'white';
+    btn.style.borderColor = color;
+    item.style.borderLeft = '4px solid ' + color;
+    item.style.background = color + '12';
+    item.style.borderRadius = '0 0 0 0';
   }
 
   // Word counter
@@ -847,6 +853,12 @@
     else msg = 'Strong news writing. You could work at a newspaper.';
     document.getElementById('scoreMsg').textContent = msg;
   }
+
+  // Init button colors from data-color attributes
+  document.querySelectorAll('.fo-btn').forEach(function(b) {
+    var c = b.getAttribute('data-color');
+    if (c) { b.style.borderColor = c; b.style.color = c; }
+  });
 </script>
 <script src="../nav.js"></script>
 </body>

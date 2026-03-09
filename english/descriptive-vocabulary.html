@@ -416,11 +416,58 @@
     .vocab-popup { display: none !important; }
   }
 
+  /* Chapter filter row */
+  .filter-row {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 10px 20px;
+    margin-bottom: 12px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    align-items: center;
+  }
+  .filter-row label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-right: 4px;
+  }
+  .ch-pill {
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border: 2px solid #ddd;
+    border-radius: 14px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+    white-space: nowrap;
+  }
+  .ch-pill:hover { border-color: var(--subject); color: var(--subject); }
+  .ch-pill.active {
+    background: var(--subject);
+    color: white;
+    border-color: var(--subject);
+  }
+  .ch-pill .ch-count {
+    font-size: 10px;
+    opacity: 0.7;
+    margin-left: 2px;
+  }
+
   @media (max-width: 600px) {
     .search-box { margin-left: 0; width: 100%; }
     .search-box input { width: 100%; }
     .view-tabs { width: 100%; }
     .view-tab { flex: 1; text-align: center; padding: 6px 8px; font-size: 12px; }
+    .filter-row { gap: 4px; }
+    .ch-pill { font-size: 10px; padding: 3px 8px; }
   }
 </style>
 </head>
@@ -442,6 +489,20 @@
   <div class="search-box">
     <input type="text" id="searchInput" placeholder="Search words..." oninput="filterWords()">
   </div>
+</div>
+
+<div class="filter-row" id="chapterFilter">
+  <label>Focus on chapter:</label>
+  <button class="ch-pill active" onclick="pickChapter(0, this)">All</button>
+  <button class="ch-pill" onclick="pickChapter(1, this)">Ch1 Travel</button>
+  <button class="ch-pill" onclick="pickChapter(2, this)">Ch2 Nature</button>
+  <button class="ch-pill" onclick="pickChapter(3, this)">Ch3 Mood</button>
+  <button class="ch-pill" onclick="pickChapter(4, this)">Ch4 Drama</button>
+  <button class="ch-pill" onclick="pickChapter(5, this)">Ch5 Character</button>
+  <button class="ch-pill" onclick="pickChapter(6, this)">Ch6 Persuasion</button>
+  <button class="ch-pill" onclick="pickChapter(7, this)">Ch7 News</button>
+  <button class="ch-pill" onclick="pickChapter(8, this)">Ch8 Biography</button>
+  <button class="ch-pill" onclick="pickChapter(9, this)">Ch9 Endings</button>
 </div>
 
 <div class="legend">
@@ -751,6 +812,74 @@ var INTENSITY_GROUPS = [
 ];
 
 // ============================================================
+// CHAPTER TOPIC FILTER
+// Maps chapter number to relevant sense+subcategory combinations
+// 0 = all words (no filter)
+// ============================================================
+var CHAPTER_RELEVANCE = {
+  1: null, // Travel writing uses ALL senses and words
+  2: { // Nature & personification
+    sight: ['colour & light', 'movement & activity'],
+    sound: true, smell: ['pleasant','unpleasant'],
+    touch: ['temperature','texture'], emotion: true
+  },
+  3: { // Mood & atmosphere
+    sight: ['colour & light', 'movement & activity'],
+    sound: ['quality','volume'], touch: ['temperature'],
+    emotion: true
+  },
+  4: { // Drama & dialogue — movement, emotion, sound
+    sight: ['movement & activity'],
+    sound: ['quality','specific'], emotion: true
+  },
+  5: { // Character — appearance, movement, emotion
+    sight: ['shape & size', 'movement & activity'],
+    sound: ['specific'], emotion: true
+  },
+  6: { // Persuasion — powerful emotional words
+    emotion: true, taste: ['flavour'],
+    sight: ['shape & size']
+  },
+  7: { // News — factual/neutral, sight and structure
+    sight: ['shape & size', 'colour & light'],
+    sound: ['volume']
+  },
+  8: { // Biography — appearance, emotion, achievement
+    sight: ['shape & size', 'movement & activity'],
+    emotion: ['positive','complex']
+  },
+  9: { // Endings — figurative, atmospheric
+    sight: ['colour & light', 'movement & activity'],
+    sound: ['quality'], touch: ['temperature','texture'],
+    emotion: true
+  }
+};
+
+var currentChapter = 0;
+
+function wordMatchesChapter(wordData, ch) {
+  if (ch === 0 || ch === 1) return true; // all words or Ch1=all
+  var rules = CHAPTER_RELEVANCE[ch];
+  if (!rules) return true;
+  var sense = wordData[1];
+  var subcat = (wordData[4] || 'general').toLowerCase();
+  var senseRule = rules[sense];
+  if (!senseRule) return false;
+  if (senseRule === true) return true;
+  for (var i = 0; i < senseRule.length; i++) {
+    if (subcat.indexOf(senseRule[i].toLowerCase()) !== -1) return true;
+  }
+  return false;
+}
+
+function pickChapter(ch, btn) {
+  currentChapter = ch;
+  document.querySelectorAll('.ch-pill').forEach(function(p) { p.classList.remove('active'); });
+  btn.classList.add('active');
+  filterWords();
+}
+
+// ============================================================
 // RENDERING
 // ============================================================
 var contentEl = document.getElementById('content');
@@ -1055,7 +1184,18 @@ function filterWords() {
 
   allWords.forEach(function(el) {
     var word = el.dataset.word || el.textContent.toLowerCase();
-    if (!query || word.indexOf(query) !== -1) {
+    var matchesSearch = !query || word.indexOf(query) !== -1;
+
+    // Chapter filter: find the word data
+    var matchesChapter = true;
+    if (currentChapter > 0) {
+      var wordData = WORDS.find(function(w) { return w[0].toLowerCase() === word; });
+      if (wordData) {
+        matchesChapter = wordMatchesChapter(wordData, currentChapter);
+      }
+    }
+
+    if (matchesSearch && matchesChapter) {
       el.style.display = '';
     } else {
       el.style.display = 'none';
@@ -1076,6 +1216,18 @@ function filterWords() {
       label.style.display = vis.length > 0 ? '' : 'none';
     }
   });
+}
+
+// Check URL hash for chapter pre-selection (e.g. #ch2)
+var hashMatch = window.location.hash.match(/^#ch(\d)$/);
+if (hashMatch) {
+  var ch = parseInt(hashMatch[1]);
+  if (ch >= 1 && ch <= 9) {
+    currentChapter = ch;
+    var pills = document.querySelectorAll('.ch-pill');
+    pills.forEach(function(p) { p.classList.remove('active'); });
+    if (pills[ch]) pills[ch].classList.add('active');
+  }
 }
 
 // Initial render

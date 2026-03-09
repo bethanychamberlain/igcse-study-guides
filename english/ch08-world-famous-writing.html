@@ -167,6 +167,9 @@
     padding: 10px 0;
     border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
+    transition: border-left 0.2s, background 0.2s;
+    border-left: 4px solid transparent;
+    padding-left: 6px;
   }
   .fo-item:last-child { border-bottom: none; }
   .fo-num {
@@ -200,9 +203,7 @@
     transition: all 0.15s;
     color: var(--text-secondary);
   }
-  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
-  .fo-btn.selected-b { background: var(--accent); color: white; border-color: var(--accent); }
-  .fo-btn.selected-a { background: var(--subject); color: white; border-color: var(--subject); }
+  .fo-btn:hover { opacity: 0.8; }
 
   /* Rewrite / fill-in blocks */
   .rewrite-block {
@@ -503,7 +504,7 @@
     <li>Key detail selection</li>
     <li>Summarising</li>
   </ul>
-  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+  <a href="descriptive-vocabulary.html#ch8" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
 </div>
 
 <!-- ===== EXERCISE 1: BIO VS AUTO ===== -->
@@ -523,8 +524,8 @@
       <span class="fo-text">"Serena Williams was born in Saginaw, Michigan, in 1981. She began playing tennis at the age of three and went on to win 23 Grand Slam singles titles, more than any other player in the Open Era."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="1" data-val="B" onclick="pickType(this)">B</button>
-        <button class="fo-btn" data-q="1" data-val="A" onclick="pickType(this)">A</button>
+        <button class="fo-btn" data-q="1" data-val="B" onclick="pickOption(this)" data-color="#2e86c1">B</button>
+        <button class="fo-btn" data-q="1" data-val="A" onclick="pickOption(this)" data-color="#c2185b">A</button>
       </div>
     </li>
     <li class="fo-item">
@@ -532,8 +533,8 @@
       <span class="fo-text">"I remember the first time I stood on a proper stage. My hands were shaking so badly I nearly dropped the microphone. But once the music started, something clicked &mdash; I forgot the crowd and just sang."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="2" data-val="B" onclick="pickType(this)">B</button>
-        <button class="fo-btn" data-q="2" data-val="A" onclick="pickType(this)">A</button>
+        <button class="fo-btn" data-q="2" data-val="B" onclick="pickOption(this)" data-color="#2e86c1">B</button>
+        <button class="fo-btn" data-q="2" data-val="A" onclick="pickOption(this)" data-color="#c2185b">A</button>
       </div>
     </li>
     <li class="fo-item">
@@ -541,8 +542,8 @@
       <span class="fo-text">"The young scientist spent two years working in near-total isolation. According to her colleagues, she rarely left the laboratory before midnight. Her dedication resulted in a breakthrough that changed modern medicine."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="3" data-val="B" onclick="pickType(this)">B</button>
-        <button class="fo-btn" data-q="3" data-val="A" onclick="pickType(this)">A</button>
+        <button class="fo-btn" data-q="3" data-val="B" onclick="pickOption(this)" data-color="#2e86c1">B</button>
+        <button class="fo-btn" data-q="3" data-val="A" onclick="pickOption(this)" data-color="#c2185b">A</button>
       </div>
     </li>
     <li class="fo-item">
@@ -550,8 +551,8 @@
       <span class="fo-text">"Looking back, moving to Denmark was the hardest thing I've ever done. Everything was unfamiliar &mdash; the language, the food, even the way people said hello. But it was also the best decision of my life."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="4" data-val="B" onclick="pickType(this)">B</button>
-        <button class="fo-btn" data-q="4" data-val="A" onclick="pickType(this)">A</button>
+        <button class="fo-btn" data-q="4" data-val="B" onclick="pickOption(this)" data-color="#2e86c1">B</button>
+        <button class="fo-btn" data-q="4" data-val="A" onclick="pickOption(this)" data-color="#c2185b">A</button>
       </div>
     </li>
     <li class="fo-item">
@@ -559,8 +560,8 @@
       <span class="fo-text">"Marcus Rashford grew up in Wythenshawe, Manchester, in a family that often struggled to afford meals. He used his platform as a professional footballer to campaign against child food poverty, forcing the UK government to change its policy."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="5" data-val="B" onclick="pickType(this)">B</button>
-        <button class="fo-btn" data-q="5" data-val="A" onclick="pickType(this)">A</button>
+        <button class="fo-btn" data-q="5" data-val="B" onclick="pickOption(this)" data-color="#2e86c1">B</button>
+        <button class="fo-btn" data-q="5" data-val="A" onclick="pickOption(this)" data-color="#c2185b">A</button>
       </div>
     </li>
     <li class="fo-item">
@@ -568,8 +569,8 @@
       <span class="fo-text">"People always ask me why I started the business so young. The truth is, I didn't have a grand plan. I just noticed that nobody at school could get decent coffee, so I bought a second-hand espresso machine and set up in the common room."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="6" data-val="B" onclick="pickType(this)">B</button>
-        <button class="fo-btn" data-q="6" data-val="A" onclick="pickType(this)">A</button>
+        <button class="fo-btn" data-q="6" data-val="B" onclick="pickOption(this)" data-color="#2e86c1">B</button>
+        <button class="fo-btn" data-q="6" data-val="A" onclick="pickOption(this)" data-color="#c2185b">A</button>
       </div>
     </li>
   </ul>
@@ -727,7 +728,7 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt">Pick someone you admire or find interesting. Write a short biography about them (<strong>80&ndash;120 words</strong>) in third person with a formal-ish tone. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+  <p class="prompt">Pick someone you admire or find interesting. Write a short biography about them (<strong>80&ndash;120 words</strong>) in third person with a formal-ish tone. <a href="descriptive-vocabulary.html#ch8" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
 
   <p class="prompt"><strong>Who could you write about?</strong></p>
   <div class="suggestions">
@@ -753,7 +754,7 @@
     <div class="line"></div><div class="line"></div>
   </div>
 
-  <p class="prompt" style="margin-top:20px;"><strong>Step 2 &mdash; Write it for real.</strong> Turn your notes into a flowing <strong>80&ndash;120 word</strong> biography. Use third person (he/she/they) and a formal tone &mdash; no slang, no "like". <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Stuck for words? Vocabulary Bank &#8599;</a></p>
+  <p class="prompt" style="margin-top:20px;"><strong>Step 2 &mdash; Write it for real.</strong> Turn your notes into a flowing <strong>80&ndash;120 word</strong> biography. Use third person (he/she/they) and a formal tone &mdash; no slang, no "like". <a href="descriptive-vocabulary.html#ch8" target="_blank" class="vocab-link-inline">Stuck for words? Vocabulary Bank &#8599;</a></p>
 
   <div class="tip-box">
     <div class="tip-label">Your biography should</div>
@@ -834,15 +835,21 @@
 
 <script>
   // Bio vs Auto button handler
-  function pickType(btn) {
-    var q = btn.dataset.q;
-    var val = btn.dataset.val;
+  function pickOption(btn) {
+    var color = btn.getAttribute('data-color');
+    var item = btn.closest('.fo-item');
     var siblings = btn.parentElement.querySelectorAll('.fo-btn');
     siblings.forEach(function(b) {
-      b.classList.remove('selected-b', 'selected-a');
+      b.style.background = 'white';
+      b.style.color = b.getAttribute('data-color');
+      b.style.borderColor = b.getAttribute('data-color');
     });
-    // Correct answers: 1=B, 2=A, 3=B, 4=A, 5=B, 6=A
-    btn.classList.add(val === 'B' ? 'selected-b' : 'selected-a');
+    btn.style.background = color;
+    btn.style.color = 'white';
+    btn.style.borderColor = color;
+    item.style.borderLeft = '4px solid ' + color;
+    item.style.background = color + '12';
+    item.style.borderRadius = '0 0 0 0';
   }
 
   // Key detail counter
@@ -887,6 +894,11 @@
     else msg = 'Excellent! This reads like a proper biography.';
     document.getElementById('scoreMsg').textContent = msg;
   }
+
+  document.querySelectorAll('.fo-btn').forEach(function(b) {
+    var c = b.getAttribute('data-color');
+    if (c) { b.style.borderColor = c; b.style.color = c; }
+  });
 </script>
 <script src="../nav.js"></script>
 </body>

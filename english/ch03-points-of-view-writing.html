@@ -262,10 +262,8 @@
     color: var(--text-secondary);
     padding: 0 6px;
   }
-  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
-  .fo-btn.selected-1 { background: var(--accent); color: white; border-color: var(--accent); }
-  .fo-btn.selected-l { background: var(--subject); color: white; border-color: var(--subject); }
-  .fo-btn.selected-o { background: var(--success); color: white; border-color: var(--success); }
+  .fo-btn:hover { opacity: 0.8; }
+  .fo-item { transition: border-left 0.2s, background 0.2s; border-left: 4px solid transparent; padding-left: 6px; }
 
   /* Tip boxes */
   .tip-box {
@@ -474,7 +472,7 @@
     <li>1st vs 3rd person</li>
     <li>Creating atmosphere</li>
   </ul>
-  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+  <a href="descriptive-vocabulary.html#ch3" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
 </div>
 
 <!-- ===== EXERCISE 1: SAME MOMENT, TWO EYES ===== -->
@@ -521,7 +519,7 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt">These sentences are <strong>neutral &mdash; no mood at all</strong>. Rewrite each one <strong>twice</strong>: once to create a <strong>positive</strong> mood and once to create a <strong>tense or negative</strong> mood. Same basic fact, completely different feeling. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Stuck for words? Open the Vocabulary Bank &#8599;</a></p>
+  <p class="prompt">These sentences are <strong>neutral &mdash; no mood at all</strong>. Rewrite each one <strong>twice</strong>: once to create a <strong>positive</strong> mood and once to create a <strong>tense or negative</strong> mood. Same basic fact, completely different feeling. <a href="descriptive-vocabulary.html#ch3" target="_blank" class="vocab-link-inline">Stuck for words? Open the Vocabulary Bank &#8599;</a></p>
 
   <div class="rewrite-block">
     <div class="flat-sentence">
@@ -595,9 +593,9 @@
       <span class="fo-text">"I could hear the rain hitting the windows during the test. My mind kept drifting back to the weekend, and I had to force myself to focus on question three."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="1" data-val="1" onclick="pickPerspective(this)">1st</button>
-        <button class="fo-btn" data-q="1" data-val="L" onclick="pickPerspective(this)">3L</button>
-        <button class="fo-btn" data-q="1" data-val="O" onclick="pickPerspective(this)">3O</button>
+        <button class="fo-btn" data-q="1" data-val="1" onclick="pickOption(this)" data-color="#2e86c1">1st</button>
+        <button class="fo-btn" data-q="1" data-val="L" onclick="pickOption(this)" data-color="#c2185b">3L</button>
+        <button class="fo-btn" data-q="1" data-val="O" onclick="pickOption(this)" data-color="#27ae60">3O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -605,9 +603,9 @@
       <span class="fo-text">"Marcus kicked the ball hard, hoping no one had noticed his mistake. On the other side of the pitch, Elias grinned &mdash; he had noticed, and he was already planning how to use it."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="2" data-val="1" onclick="pickPerspective(this)">1st</button>
-        <button class="fo-btn" data-q="2" data-val="L" onclick="pickPerspective(this)">3L</button>
-        <button class="fo-btn" data-q="2" data-val="O" onclick="pickPerspective(this)">3O</button>
+        <button class="fo-btn" data-q="2" data-val="1" onclick="pickOption(this)" data-color="#2e86c1">1st</button>
+        <button class="fo-btn" data-q="2" data-val="L" onclick="pickOption(this)" data-color="#c2185b">3L</button>
+        <button class="fo-btn" data-q="2" data-val="O" onclick="pickOption(this)" data-color="#27ae60">3O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -615,9 +613,9 @@
       <span class="fo-text">"She stared out the bus window at the flat Danish countryside. The grey sky seemed to stretch on forever, and she wondered if the sun would ever come back."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="3" data-val="1" onclick="pickPerspective(this)">1st</button>
-        <button class="fo-btn" data-q="3" data-val="L" onclick="pickPerspective(this)">3L</button>
-        <button class="fo-btn" data-q="3" data-val="O" onclick="pickPerspective(this)">3O</button>
+        <button class="fo-btn" data-q="3" data-val="1" onclick="pickOption(this)" data-color="#2e86c1">1st</button>
+        <button class="fo-btn" data-q="3" data-val="L" onclick="pickOption(this)" data-color="#c2185b">3L</button>
+        <button class="fo-btn" data-q="3" data-val="O" onclick="pickOption(this)" data-color="#27ae60">3O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -625,9 +623,9 @@
       <span class="fo-text">"I didn't want to admit it, but the cold was getting to me. My fingers were numb and I couldn't feel my toes inside my trainers."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="4" data-val="1" onclick="pickPerspective(this)">1st</button>
-        <button class="fo-btn" data-q="4" data-val="L" onclick="pickPerspective(this)">3L</button>
-        <button class="fo-btn" data-q="4" data-val="O" onclick="pickPerspective(this)">3O</button>
+        <button class="fo-btn" data-q="4" data-val="1" onclick="pickOption(this)" data-color="#2e86c1">1st</button>
+        <button class="fo-btn" data-q="4" data-val="L" onclick="pickOption(this)" data-color="#c2185b">3L</button>
+        <button class="fo-btn" data-q="4" data-val="O" onclick="pickOption(this)" data-color="#27ae60">3O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -635,9 +633,9 @@
       <span class="fo-text">"Jake thought the assembly would never end. Next to him, Sofia was secretly relieved &mdash; it meant less time in maths. At the front, Mr Hansen could sense the whole room losing patience."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="5" data-val="1" onclick="pickPerspective(this)">1st</button>
-        <button class="fo-btn" data-q="5" data-val="L" onclick="pickPerspective(this)">3L</button>
-        <button class="fo-btn" data-q="5" data-val="O" onclick="pickPerspective(this)">3O</button>
+        <button class="fo-btn" data-q="5" data-val="1" onclick="pickOption(this)" data-color="#2e86c1">1st</button>
+        <button class="fo-btn" data-q="5" data-val="L" onclick="pickOption(this)" data-color="#c2185b">3L</button>
+        <button class="fo-btn" data-q="5" data-val="O" onclick="pickOption(this)" data-color="#27ae60">3O</button>
       </div>
     </li>
     <li class="fo-item">
@@ -645,9 +643,9 @@
       <span class="fo-text">"He sat alone in the common room, scrolling through his phone. He told himself he wasn't bothered that no one had texted back, but his jaw was tight and his knee wouldn't stop bouncing."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="6" data-val="1" onclick="pickPerspective(this)">1st</button>
-        <button class="fo-btn" data-q="6" data-val="L" onclick="pickPerspective(this)">3L</button>
-        <button class="fo-btn" data-q="6" data-val="O" onclick="pickPerspective(this)">3O</button>
+        <button class="fo-btn" data-q="6" data-val="1" onclick="pickOption(this)" data-color="#2e86c1">1st</button>
+        <button class="fo-btn" data-q="6" data-val="L" onclick="pickOption(this)" data-color="#c2185b">3L</button>
+        <button class="fo-btn" data-q="6" data-val="O" onclick="pickOption(this)" data-color="#27ae60">3O</button>
       </div>
     </li>
   </ul>
@@ -682,7 +680,7 @@
     <div class="line"></div><div class="line"></div>
   </div>
 
-  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing paragraph in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing paragraph in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html#ch3" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
 
   <div class="tip-box">
     <div class="tip-label">Your paragraph should</div>
@@ -762,20 +760,21 @@
 
 <script>
   // Perspective Detective buttons
-  function pickPerspective(btn) {
-    var q = btn.dataset.q;
-    var val = btn.dataset.val;
+  function pickOption(btn) {
+    var color = btn.getAttribute('data-color');
+    var item = btn.closest('.fo-item');
     var siblings = btn.parentElement.querySelectorAll('.fo-btn');
     siblings.forEach(function(b) {
-      b.classList.remove('selected-1', 'selected-l', 'selected-o');
+      b.style.background = 'white';
+      b.style.color = b.getAttribute('data-color');
+      b.style.borderColor = b.getAttribute('data-color');
     });
-    if (val === '1') {
-      btn.classList.add('selected-1');
-    } else if (val === 'L') {
-      btn.classList.add('selected-l');
-    } else {
-      btn.classList.add('selected-o');
-    }
+    btn.style.background = color;
+    btn.style.color = 'white';
+    btn.style.borderColor = color;
+    item.style.borderLeft = '4px solid ' + color;
+    item.style.background = color + '12';
+    item.style.borderRadius = '0 0 0 0';
   }
 
   // Word counter
@@ -803,6 +802,12 @@
     else msg = 'Excellent! You\'re controlling perspective and mood like a real writer.';
     document.getElementById('scoreMsg').textContent = msg;
   }
+
+  // Init button colors
+  document.querySelectorAll('.fo-btn').forEach(function(b) {
+    var c = b.getAttribute('data-color');
+    if (c) { b.style.borderColor = c; b.style.color = c; }
+  });
 </script>
 <script src="../nav.js"></script>
 </body>

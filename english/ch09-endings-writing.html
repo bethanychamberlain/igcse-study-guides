@@ -167,6 +167,9 @@
     padding: 10px 0;
     border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
+    transition: border-left 0.2s, background 0.2s;
+    border-left: 4px solid transparent;
+    padding-left: 6px;
   }
   .fo-item:last-child { border-bottom: none; }
   .fo-num {
@@ -201,11 +204,7 @@
     color: var(--text-secondary);
     padding: 0 6px;
   }
-  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
-  .fo-btn.selected-s { background: var(--accent); color: white; border-color: var(--accent); }
-  .fo-btn.selected-m { background: var(--subject); color: white; border-color: var(--subject); }
-  .fo-btn.selected-p { background: var(--success); color: white; border-color: var(--success); }
-  .fo-btn.selected-sy { background: var(--tip); color: white; border-color: var(--tip); }
+  .fo-btn:hover { opacity: 0.8; }
 
   /* Rewrite / fill-in blocks */
   .rewrite-block {
@@ -497,7 +496,7 @@
     <li>Building to a resolution</li>
     <li>Creating satisfying endings</li>
   </ul>
-  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+  <a href="descriptive-vocabulary.html#ch9" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
 </div>
 
 <!-- ===== EXERCISE 1: FIGURATIVE LANGUAGE SPOTTER ===== -->
@@ -524,10 +523,10 @@
       <span class="fo-text">"Time crawled like a wounded animal."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="1" data-val="S" onclick="pickDevice(this)">S</button>
-        <button class="fo-btn" data-q="1" data-val="M" onclick="pickDevice(this)">M</button>
-        <button class="fo-btn" data-q="1" data-val="P" onclick="pickDevice(this)">P</button>
-        <button class="fo-btn" data-q="1" data-val="SY" onclick="pickDevice(this)">SY</button>
+        <button class="fo-btn" data-q="1" data-val="S" onclick="pickOption(this)" data-color="#2e86c1">S</button>
+        <button class="fo-btn" data-q="1" data-val="M" onclick="pickOption(this)" data-color="#c2185b">M</button>
+        <button class="fo-btn" data-q="1" data-val="P" onclick="pickOption(this)" data-color="#27ae60">P</button>
+        <button class="fo-btn" data-q="1" data-val="SY" onclick="pickOption(this)" data-color="#f39c12">SY</button>
       </div>
     </li>
     <li class="fo-item">
@@ -535,10 +534,10 @@
       <span class="fo-text">"The empty chair was a hole in the room."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="2" data-val="S" onclick="pickDevice(this)">S</button>
-        <button class="fo-btn" data-q="2" data-val="M" onclick="pickDevice(this)">M</button>
-        <button class="fo-btn" data-q="2" data-val="P" onclick="pickDevice(this)">P</button>
-        <button class="fo-btn" data-q="2" data-val="SY" onclick="pickDevice(this)">SY</button>
+        <button class="fo-btn" data-q="2" data-val="S" onclick="pickOption(this)" data-color="#2e86c1">S</button>
+        <button class="fo-btn" data-q="2" data-val="M" onclick="pickOption(this)" data-color="#c2185b">M</button>
+        <button class="fo-btn" data-q="2" data-val="P" onclick="pickOption(this)" data-color="#27ae60">P</button>
+        <button class="fo-btn" data-q="2" data-val="SY" onclick="pickOption(this)" data-color="#f39c12">SY</button>
       </div>
     </li>
     <li class="fo-item">
@@ -546,10 +545,10 @@
       <span class="fo-text">"The wind whispered goodbye through the trees."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="3" data-val="S" onclick="pickDevice(this)">S</button>
-        <button class="fo-btn" data-q="3" data-val="M" onclick="pickDevice(this)">M</button>
-        <button class="fo-btn" data-q="3" data-val="P" onclick="pickDevice(this)">P</button>
-        <button class="fo-btn" data-q="3" data-val="SY" onclick="pickDevice(this)">SY</button>
+        <button class="fo-btn" data-q="3" data-val="S" onclick="pickOption(this)" data-color="#2e86c1">S</button>
+        <button class="fo-btn" data-q="3" data-val="M" onclick="pickOption(this)" data-color="#c2185b">M</button>
+        <button class="fo-btn" data-q="3" data-val="P" onclick="pickOption(this)" data-color="#27ae60">P</button>
+        <button class="fo-btn" data-q="3" data-val="SY" onclick="pickOption(this)" data-color="#f39c12">SY</button>
       </div>
     </li>
     <li class="fo-item">
@@ -557,10 +556,10 @@
       <span class="fo-text">"He placed his old jersey in the box &mdash; that chapter was closed."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="4" data-val="S" onclick="pickDevice(this)">S</button>
-        <button class="fo-btn" data-q="4" data-val="M" onclick="pickDevice(this)">M</button>
-        <button class="fo-btn" data-q="4" data-val="P" onclick="pickDevice(this)">P</button>
-        <button class="fo-btn" data-q="4" data-val="SY" onclick="pickDevice(this)">SY</button>
+        <button class="fo-btn" data-q="4" data-val="S" onclick="pickOption(this)" data-color="#2e86c1">S</button>
+        <button class="fo-btn" data-q="4" data-val="M" onclick="pickOption(this)" data-color="#c2185b">M</button>
+        <button class="fo-btn" data-q="4" data-val="P" onclick="pickOption(this)" data-color="#27ae60">P</button>
+        <button class="fo-btn" data-q="4" data-val="SY" onclick="pickOption(this)" data-color="#f39c12">SY</button>
       </div>
     </li>
     <li class="fo-item">
@@ -568,10 +567,10 @@
       <span class="fo-text">"Her smile was as sharp as broken glass."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="5" data-val="S" onclick="pickDevice(this)">S</button>
-        <button class="fo-btn" data-q="5" data-val="M" onclick="pickDevice(this)">M</button>
-        <button class="fo-btn" data-q="5" data-val="P" onclick="pickDevice(this)">P</button>
-        <button class="fo-btn" data-q="5" data-val="SY" onclick="pickDevice(this)">SY</button>
+        <button class="fo-btn" data-q="5" data-val="S" onclick="pickOption(this)" data-color="#2e86c1">S</button>
+        <button class="fo-btn" data-q="5" data-val="M" onclick="pickOption(this)" data-color="#c2185b">M</button>
+        <button class="fo-btn" data-q="5" data-val="P" onclick="pickOption(this)" data-color="#27ae60">P</button>
+        <button class="fo-btn" data-q="5" data-val="SY" onclick="pickOption(this)" data-color="#f39c12">SY</button>
       </div>
     </li>
     <li class="fo-item">
@@ -579,10 +578,10 @@
       <span class="fo-text">"The clock on the wall watched them leave, one by one."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="6" data-val="S" onclick="pickDevice(this)">S</button>
-        <button class="fo-btn" data-q="6" data-val="M" onclick="pickDevice(this)">M</button>
-        <button class="fo-btn" data-q="6" data-val="P" onclick="pickDevice(this)">P</button>
-        <button class="fo-btn" data-q="6" data-val="SY" onclick="pickDevice(this)">SY</button>
+        <button class="fo-btn" data-q="6" data-val="S" onclick="pickOption(this)" data-color="#2e86c1">S</button>
+        <button class="fo-btn" data-q="6" data-val="M" onclick="pickOption(this)" data-color="#c2185b">M</button>
+        <button class="fo-btn" data-q="6" data-val="P" onclick="pickOption(this)" data-color="#27ae60">P</button>
+        <button class="fo-btn" data-q="6" data-val="SY" onclick="pickOption(this)" data-color="#f39c12">SY</button>
       </div>
     </li>
   </ul>
@@ -706,7 +705,7 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt">Now write the <strong>ending</strong> of your efterskole story &mdash; just the resolution, the final scene. Use what you mapped in Exercise 3 and the figurative language you practised in Exercises 1 and 2. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+  <p class="prompt">Now write the <strong>ending</strong> of your efterskole story &mdash; just the resolution, the final scene. Use what you mapped in Exercise 3 and the figurative language you practised in Exercises 1 and 2. <a href="descriptive-vocabulary.html#ch9" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
 
   <p class="prompt"><strong>Step 1 &mdash; Fill in the template</strong> (planning step, not your final answer):</p>
 
@@ -731,7 +730,7 @@
     &bull; <strong>Leave some space</strong> &mdash; the best endings let the reader feel something, not just understand something
   </div>
 
-  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing passage in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Stuck for words? Vocabulary Bank &#8599;</a></p>
+  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing passage in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html#ch9" target="_blank" class="vocab-link-inline">Stuck for words? Vocabulary Bank &#8599;</a></p>
 
   <textarea class="writing-area" id="mainParagraph" placeholder="Write the ending of your efterskole story here..." oninput="countWords(this)"></textarea>
   <div class="word-count" id="wordCount">0 words</div>
@@ -803,15 +802,21 @@
 
 <script>
   // Figurative language device buttons
-  function pickDevice(btn) {
-    var q = btn.dataset.q;
-    var val = btn.dataset.val;
+  function pickOption(btn) {
+    var color = btn.getAttribute('data-color');
+    var item = btn.closest('.fo-item');
     var siblings = btn.parentElement.querySelectorAll('.fo-btn');
     siblings.forEach(function(b) {
-      b.classList.remove('selected-s', 'selected-m', 'selected-p', 'selected-sy');
+      b.style.background = 'white';
+      b.style.color = b.getAttribute('data-color');
+      b.style.borderColor = b.getAttribute('data-color');
     });
-    var cls = 'selected-' + val.toLowerCase();
-    btn.classList.add(cls);
+    btn.style.background = color;
+    btn.style.color = 'white';
+    btn.style.borderColor = color;
+    item.style.borderLeft = '4px solid ' + color;
+    item.style.background = color + '12';
+    item.style.borderRadius = '0 0 0 0';
   }
 
   // Word counter
@@ -839,6 +844,11 @@
     else msg = 'Excellent! This ending resonates.';
     document.getElementById('scoreMsg').textContent = msg;
   }
+
+  document.querySelectorAll('.fo-btn').forEach(function(b) {
+    var c = b.getAttribute('data-color');
+    if (c) { b.style.borderColor = c; b.style.color = c; }
+  });
 </script>
 <script src="../nav.js"></script>
 </body>

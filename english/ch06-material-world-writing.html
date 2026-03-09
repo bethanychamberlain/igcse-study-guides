@@ -269,6 +269,9 @@
     padding: 10px 0;
     border-bottom: 1px solid #f0f0f0;
     font-size: 14px;
+    transition: border-left 0.2s, background 0.2s;
+    border-left: 4px solid transparent;
+    padding-left: 6px;
   }
   .fo-item:last-child { border-bottom: none; }
   .fo-num {
@@ -304,13 +307,7 @@
     transition: all 0.15s;
     color: var(--text-secondary);
   }
-  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
-  .fo-btn.selected-r3 { background: var(--accent); color: white; border-color: var(--accent); }
-  .fo-btn.selected-rq { background: var(--subject); color: white; border-color: var(--subject); }
-  .fo-btn.selected-em { background: #e74c3c; color: white; border-color: #e74c3c; }
-  .fo-btn.selected-da { background: var(--success); color: white; border-color: var(--success); }
-  .fo-btn.selected-rp { background: var(--tip); color: white; border-color: var(--tip); }
-  .fo-btn.selected-st { background: #8e44ad; color: white; border-color: #8e44ad; }
+  .fo-btn:hover { opacity: 0.8; }
 
   /* Device legend */
   .device-legend {
@@ -545,7 +542,7 @@
     <li>Argument structure</li>
     <li>Counter-arguments</li>
   </ul>
-  <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
+  <a href="descriptive-vocabulary.html#ch6" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
 </div>
 
 <!-- ===== EXERCISE 1: RHETORICAL DEVICE SPOTTER ===== -->
@@ -574,12 +571,12 @@
       <span class="fo-text">"Phones help us learn, connect, and stay safe &mdash; so why ban them?"</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="1" data-val="R3" onclick="pickDevice(this)">R3</button>
-        <button class="fo-btn" data-q="1" data-val="RQ" onclick="pickDevice(this)">RQ</button>
-        <button class="fo-btn" data-q="1" data-val="EM" onclick="pickDevice(this)">EM</button>
-        <button class="fo-btn" data-q="1" data-val="DA" onclick="pickDevice(this)">DA</button>
-        <button class="fo-btn" data-q="1" data-val="RP" onclick="pickDevice(this)">RP</button>
-        <button class="fo-btn" data-q="1" data-val="ST" onclick="pickDevice(this)">ST</button>
+        <button class="fo-btn" data-q="1" data-val="R3" data-color="#2e86c1" onclick="pickOption(this)">R3</button>
+        <button class="fo-btn" data-q="1" data-val="RQ" data-color="#c2185b" onclick="pickOption(this)">RQ</button>
+        <button class="fo-btn" data-q="1" data-val="EM" data-color="#e74c3c" onclick="pickOption(this)">EM</button>
+        <button class="fo-btn" data-q="1" data-val="DA" data-color="#27ae60" onclick="pickOption(this)">DA</button>
+        <button class="fo-btn" data-q="1" data-val="RP" data-color="#f39c12" onclick="pickOption(this)">RP</button>
+        <button class="fo-btn" data-q="1" data-val="ST" data-color="#8e44ad" onclick="pickOption(this)">ST</button>
       </div>
     </li>
     <li class="fo-item">
@@ -587,12 +584,12 @@
       <span class="fo-text">"Do you really want to spend your best years sitting in a classroom with no say in how things work?"</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="2" data-val="R3" onclick="pickDevice(this)">R3</button>
-        <button class="fo-btn" data-q="2" data-val="RQ" onclick="pickDevice(this)">RQ</button>
-        <button class="fo-btn" data-q="2" data-val="EM" onclick="pickDevice(this)">EM</button>
-        <button class="fo-btn" data-q="2" data-val="DA" onclick="pickDevice(this)">DA</button>
-        <button class="fo-btn" data-q="2" data-val="RP" onclick="pickDevice(this)">RP</button>
-        <button class="fo-btn" data-q="2" data-val="ST" onclick="pickDevice(this)">ST</button>
+        <button class="fo-btn" data-q="2" data-val="R3" data-color="#2e86c1" onclick="pickOption(this)">R3</button>
+        <button class="fo-btn" data-q="2" data-val="RQ" data-color="#c2185b" onclick="pickOption(this)">RQ</button>
+        <button class="fo-btn" data-q="2" data-val="EM" data-color="#e74c3c" onclick="pickOption(this)">EM</button>
+        <button class="fo-btn" data-q="2" data-val="DA" data-color="#27ae60" onclick="pickOption(this)">DA</button>
+        <button class="fo-btn" data-q="2" data-val="RP" data-color="#f39c12" onclick="pickOption(this)">RP</button>
+        <button class="fo-btn" data-q="2" data-val="ST" data-color="#8e44ad" onclick="pickOption(this)">ST</button>
       </div>
     </li>
     <li class="fo-item">
@@ -600,12 +597,12 @@
       <span class="fo-text">"Students who eat a proper lunch perform 23% better in afternoon lessons, according to a 2024 NHS study."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="3" data-val="R3" onclick="pickDevice(this)">R3</button>
-        <button class="fo-btn" data-q="3" data-val="RQ" onclick="pickDevice(this)">RQ</button>
-        <button class="fo-btn" data-q="3" data-val="EM" onclick="pickDevice(this)">EM</button>
-        <button class="fo-btn" data-q="3" data-val="DA" onclick="pickDevice(this)">DA</button>
-        <button class="fo-btn" data-q="3" data-val="RP" onclick="pickDevice(this)">RP</button>
-        <button class="fo-btn" data-q="3" data-val="ST" onclick="pickDevice(this)">ST</button>
+        <button class="fo-btn" data-q="3" data-val="R3" data-color="#2e86c1" onclick="pickOption(this)">R3</button>
+        <button class="fo-btn" data-q="3" data-val="RQ" data-color="#c2185b" onclick="pickOption(this)">RQ</button>
+        <button class="fo-btn" data-q="3" data-val="EM" data-color="#e74c3c" onclick="pickOption(this)">EM</button>
+        <button class="fo-btn" data-q="3" data-val="DA" data-color="#27ae60" onclick="pickOption(this)">DA</button>
+        <button class="fo-btn" data-q="3" data-val="RP" data-color="#f39c12" onclick="pickOption(this)">RP</button>
+        <button class="fo-btn" data-q="3" data-val="ST" data-color="#8e44ad" onclick="pickOption(this)">ST</button>
       </div>
     </li>
     <li class="fo-item">
@@ -613,12 +610,12 @@
       <span class="fo-text">"These students are exhausted. These students are stressed. These students deserve better."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="4" data-val="R3" onclick="pickDevice(this)">R3</button>
-        <button class="fo-btn" data-q="4" data-val="RQ" onclick="pickDevice(this)">RQ</button>
-        <button class="fo-btn" data-q="4" data-val="EM" onclick="pickDevice(this)">EM</button>
-        <button class="fo-btn" data-q="4" data-val="DA" onclick="pickDevice(this)">DA</button>
-        <button class="fo-btn" data-q="4" data-val="RP" onclick="pickDevice(this)">RP</button>
-        <button class="fo-btn" data-q="4" data-val="ST" onclick="pickDevice(this)">ST</button>
+        <button class="fo-btn" data-q="4" data-val="R3" data-color="#2e86c1" onclick="pickOption(this)">R3</button>
+        <button class="fo-btn" data-q="4" data-val="RQ" data-color="#c2185b" onclick="pickOption(this)">RQ</button>
+        <button class="fo-btn" data-q="4" data-val="EM" data-color="#e74c3c" onclick="pickOption(this)">EM</button>
+        <button class="fo-btn" data-q="4" data-val="DA" data-color="#27ae60" onclick="pickOption(this)">DA</button>
+        <button class="fo-btn" data-q="4" data-val="RP" data-color="#f39c12" onclick="pickOption(this)">RP</button>
+        <button class="fo-btn" data-q="4" data-val="ST" data-color="#8e44ad" onclick="pickOption(this)">ST</button>
       </div>
     </li>
     <li class="fo-item">
@@ -626,12 +623,12 @@
       <span class="fo-text">"Imagine being told you can't even drink water during a two-hour exam &mdash; cruel and unnecessary."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="5" data-val="R3" onclick="pickDevice(this)">R3</button>
-        <button class="fo-btn" data-q="5" data-val="RQ" onclick="pickDevice(this)">RQ</button>
-        <button class="fo-btn" data-q="5" data-val="EM" onclick="pickDevice(this)">EM</button>
-        <button class="fo-btn" data-q="5" data-val="DA" onclick="pickDevice(this)">DA</button>
-        <button class="fo-btn" data-q="5" data-val="RP" onclick="pickDevice(this)">RP</button>
-        <button class="fo-btn" data-q="5" data-val="ST" onclick="pickDevice(this)">ST</button>
+        <button class="fo-btn" data-q="5" data-val="R3" data-color="#2e86c1" onclick="pickOption(this)">R3</button>
+        <button class="fo-btn" data-q="5" data-val="RQ" data-color="#c2185b" onclick="pickOption(this)">RQ</button>
+        <button class="fo-btn" data-q="5" data-val="EM" data-color="#e74c3c" onclick="pickOption(this)">EM</button>
+        <button class="fo-btn" data-q="5" data-val="DA" data-color="#27ae60" onclick="pickOption(this)">DA</button>
+        <button class="fo-btn" data-q="5" data-val="RP" data-color="#f39c12" onclick="pickOption(this)">RP</button>
+        <button class="fo-btn" data-q="5" data-val="ST" data-color="#8e44ad" onclick="pickOption(this)">ST</button>
       </div>
     </li>
     <li class="fo-item">
@@ -639,12 +636,12 @@
       <span class="fo-text">"You know what it feels like to have no voice. You deserve to be heard."</span>
       <span class="print-fo-blank">___</span>
       <div class="fo-buttons">
-        <button class="fo-btn" data-q="6" data-val="R3" onclick="pickDevice(this)">R3</button>
-        <button class="fo-btn" data-q="6" data-val="RQ" onclick="pickDevice(this)">RQ</button>
-        <button class="fo-btn" data-q="6" data-val="EM" onclick="pickDevice(this)">EM</button>
-        <button class="fo-btn" data-q="6" data-val="DA" onclick="pickDevice(this)">DA</button>
-        <button class="fo-btn" data-q="6" data-val="RP" onclick="pickDevice(this)">RP</button>
-        <button class="fo-btn" data-q="6" data-val="ST" onclick="pickDevice(this)">ST</button>
+        <button class="fo-btn" data-q="6" data-val="R3" data-color="#2e86c1" onclick="pickOption(this)">R3</button>
+        <button class="fo-btn" data-q="6" data-val="RQ" data-color="#c2185b" onclick="pickOption(this)">RQ</button>
+        <button class="fo-btn" data-q="6" data-val="EM" data-color="#e74c3c" onclick="pickOption(this)">EM</button>
+        <button class="fo-btn" data-q="6" data-val="DA" data-color="#27ae60" onclick="pickOption(this)">DA</button>
+        <button class="fo-btn" data-q="6" data-val="RP" data-color="#f39c12" onclick="pickOption(this)">RP</button>
+        <button class="fo-btn" data-q="6" data-val="ST" data-color="#8e44ad" onclick="pickOption(this)">ST</button>
       </div>
     </li>
   </ul>
@@ -750,7 +747,7 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt">Now bring it all together. Using the topic and arguments from Exercise 3, write a full persuasive paragraph. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
+  <p class="prompt">Now bring it all together. Using the topic and arguments from Exercise 3, write a full persuasive paragraph. <a href="descriptive-vocabulary.html#ch6" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
 
   <p class="prompt"><strong>Step 1 &mdash; Use this template as a guide</strong> (planning step, not your final answer):</p>
 
@@ -845,15 +842,22 @@
 </div>
 
 <script>
-  // Rhetorical device spotter buttons
-  function pickDevice(btn) {
-    var q = btn.dataset.q;
-    var val = btn.dataset.val;
+  // Color-coded multi-choice buttons
+  function pickOption(btn) {
+    var color = btn.getAttribute('data-color');
+    var item = btn.closest('.fo-item');
     var siblings = btn.parentElement.querySelectorAll('.fo-btn');
     siblings.forEach(function(b) {
-      b.classList.remove('selected-r3', 'selected-rq', 'selected-em', 'selected-da', 'selected-rp', 'selected-st');
+      b.style.background = 'white';
+      b.style.color = b.getAttribute('data-color');
+      b.style.borderColor = b.getAttribute('data-color');
     });
-    btn.classList.add('selected-' + val.toLowerCase());
+    btn.style.background = color;
+    btn.style.color = 'white';
+    btn.style.borderColor = color;
+    item.style.borderLeft = '4px solid ' + color;
+    item.style.background = color + '12';
+    item.style.borderRadius = '0 0 0 0';
   }
 
   // Word counter
@@ -881,6 +885,12 @@
     else msg = 'Excellent! You\'ve written a genuinely persuasive paragraph.';
     document.getElementById('scoreMsg').textContent = msg;
   }
+
+  // Init button colors from data-color attributes
+  document.querySelectorAll('.fo-btn').forEach(function(b) {
+    var c = b.getAttribute('data-color');
+    if (c) { b.style.borderColor = c; b.style.color = c; }
+  });
 </script>
 <script src="../nav.js"></script>
 </body>
