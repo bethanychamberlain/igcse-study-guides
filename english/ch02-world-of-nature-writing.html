@@ -205,6 +205,31 @@
     margin-top: 3px;
   }
 
+  /* Stacked vertical grid (mobile-friendly) */
+  .stacked-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin: 14px 0;
+  }
+  .stacked-item {
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+  .stacked-item.stacked-highlight {
+    background: var(--subject-light);
+    border: 2px solid var(--subject);
+  }
+  .stacked-label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--subject-dark);
+    margin-bottom: 8px;
+  }
+
   /* Flat-to-vivid exercise */
   .rewrite-block {
     background: #f9f9f9;
@@ -543,34 +568,30 @@
   <textarea class="rewrite-area" rows="1" placeholder="Briefly describe what you're choosing (e.g. 'The wind coming off the North Sea')"></textarea>
   <div class="print-lines"><div class="line"></div></div>
 
-  <p class="prompt" style="margin-top:16px;">Now fill in the table. The last column is the key one &mdash; it's your <strong>personification bridge</strong>.</p>
+  <p class="prompt" style="margin-top:16px;">Now work through each step below. The last one is the key one &mdash; it's your <strong>personification bridge</strong>.</p>
 
-  <table class="senses-table">
-    <tr>
-      <th>What is it?</th>
-      <th>What does it look like?</th>
-      <th>What does it do?</th>
-      <th>If it were a person, it would be&hellip;</th>
-    </tr>
-    <tr>
-      <td>
-        <textarea placeholder="e.g. the wind"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-      <td>
-        <textarea placeholder="e.g. you can see it bending grass, lifting waves"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-      <td>
-        <textarea placeholder="e.g. pushes clouds, chills your face, rattles windows"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-      <td>
-        <textarea placeholder="e.g. an impatient person shoving through a crowd"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-    </tr>
-  </table>
+  <div class="stacked-grid">
+    <div class="stacked-item">
+      <div class="stacked-label">What is it?</div>
+      <textarea class="rewrite-area" rows="1" placeholder="e.g. the wind"></textarea>
+      <div class="print-lines"><div class="line"></div></div>
+    </div>
+    <div class="stacked-item">
+      <div class="stacked-label">What does it look like?</div>
+      <textarea class="rewrite-area" rows="2" placeholder="e.g. you can see it bending grass, lifting waves"></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="stacked-item">
+      <div class="stacked-label">What does it do?</div>
+      <textarea class="rewrite-area" rows="2" placeholder="e.g. pushes clouds, chills your face, rattles windows"></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+    <div class="stacked-item stacked-highlight">
+      <div class="stacked-label">If it were a person, it would be&hellip;</div>
+      <textarea class="rewrite-area" rows="2" placeholder="e.g. an impatient person shoving through a crowd"></textarea>
+      <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    </div>
+  </div>
 
   <div class="tip-box">
     <div class="tip-label">Tip</div>
