@@ -154,57 +154,6 @@
     color: var(--text-secondary);
   }
 
-  /* Senses grid table */
-  .senses-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 14px 0;
-    font-size: 14px;
-  }
-  .senses-table th {
-    background: var(--subject-light);
-    color: var(--subject-dark);
-    padding: 10px 12px;
-    text-align: left;
-    font-size: 12px;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-  }
-  .senses-table td {
-    padding: 10px 12px;
-    border-bottom: 1px solid #eee;
-    vertical-align: top;
-  }
-  .senses-table td:first-child {
-    font-weight: 700;
-    color: var(--subject-dark);
-    white-space: nowrap;
-    width: 160px;
-  }
-  .senses-table textarea {
-    width: 100%;
-    min-height: 36px;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    padding: 6px 10px;
-    font-family: inherit;
-    font-size: 13px;
-    resize: vertical;
-    line-height: 1.4;
-  }
-  .senses-table textarea:focus {
-    outline: none;
-    border-color: var(--subject);
-    box-shadow: 0 0 0 2px var(--subject-light);
-  }
-  .sense-hint {
-    font-size: 11px;
-    color: #999;
-    font-style: italic;
-    display: block;
-    margin-top: 3px;
-  }
-
   /* Flat-to-vivid / rewrite exercise */
   .rewrite-block {
     background: #f9f9f9;
@@ -226,24 +175,6 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     color: #e74c3c;
-    display: block;
-    margin-bottom: 2px;
-  }
-  /* Given-text block (blue instead of red) */
-  .given-sentence {
-    background: var(--accent-bg);
-    border-left: 4px solid var(--accent);
-    border-radius: 0 6px 6px 0;
-    padding: 10px 14px;
-    font-size: 14px;
-    margin-bottom: 8px;
-  }
-  .given-sentence .given-label {
-    font-size: 10px;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--accent);
     display: block;
     margin-bottom: 2px;
   }
@@ -272,23 +203,69 @@
     box-shadow: 0 0 0 2px var(--subject-light);
   }
 
-  /* Mood version labels */
+  /* Mood labels for Ex2 rewrites */
   .mood-label {
-    display: inline-block;
-    padding: 3px 12px;
-    border-radius: 12px;
     font-size: 12px;
     font-weight: 700;
-    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+    margin-top: 10px;
   }
-  .mood-label-a {
-    background: #fdedec;
-    color: #c0392b;
+  .mood-label.positive { color: var(--success); }
+  .mood-label.tense { color: #e74c3c; }
+
+  /* Perspective labels (fo-list) */
+  .fo-list {
+    list-style: none;
+    counter-reset: fo;
   }
-  .mood-label-b {
-    background: var(--success-bg);
-    color: var(--success);
+  .fo-item {
+    counter-increment: fo;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    font-size: 14px;
   }
+  .fo-item:last-child { border-bottom: none; }
+  .fo-num {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f0f0f0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-secondary);
+    flex-shrink: 0;
+  }
+  .fo-text { flex: 1; }
+  .fo-buttons {
+    display: flex;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .fo-btn {
+    min-width: 32px;
+    height: 28px;
+    border-radius: 6px;
+    border: 2px solid #ddd;
+    background: white;
+    font-size: 11px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text-secondary);
+    padding: 0 6px;
+  }
+  .fo-btn:hover { border-color: var(--subject); color: var(--subject); }
+  .fo-btn.selected-1 { background: var(--accent); color: white; border-color: var(--accent); }
+  .fo-btn.selected-l { background: var(--subject); color: white; border-color: var(--subject); }
+  .fo-btn.selected-o { background: var(--success); color: white; border-color: var(--success); }
 
   /* Tip boxes */
   .tip-box {
@@ -342,22 +319,6 @@
     background: #fff;
   }
   .writing-area:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px var(--subject-light);
-  }
-  .writing-area-half {
-    width: 100%;
-    min-height: 120px;
-    border: 2px solid var(--subject);
-    border-radius: 8px;
-    padding: 16px 20px;
-    font-family: inherit;
-    font-size: 15px;
-    line-height: 1.7;
-    resize: vertical;
-    background: #fff;
-  }
-  .writing-area-half:focus {
     outline: none;
     box-shadow: 0 0 0 3px var(--subject-light);
   }
@@ -473,7 +434,8 @@
     .end-card { break-inside: avoid; }
 
     /* Hide interactive elements */
-    textarea, .rewrite-area, .writing-area, .writing-area-half { display: none; }
+    textarea, .rewrite-area, .writing-area { display: none; }
+    .fo-buttons { display: none; }
     .vocab-link, .vocab-link-inline { display: none; }
     .word-count { display: none; }
 
@@ -483,6 +445,7 @@
       border-bottom: 1px solid #ccc;
       height: 28px;
     }
+    .print-fo-blank { display: inline !important; }
 
     /* Keep checklist visible */
     .score-box { display: none; }
@@ -490,6 +453,7 @@
 
   /* Hide print elements on screen */
   .print-lines { display: none; }
+  .print-fo-blank { display: none; }
 </style>
 </head>
 <body>
@@ -497,18 +461,18 @@
 <div class="hero">
   <div class="tag">English Ch3 &mdash; Writing Task</div>
   <h1>Points of View &mdash; Your Turn</h1>
-  <p>Explore how changing perspective, mood, and tone transforms a story &mdash; using moments from your life in Denmark.</p>
+  <p>Practise shifting perspective and building atmosphere &mdash; using everyday moments from your life at the efterskole in Denmark.</p>
   <div class="time-badge">About 35 minutes &mdash; 5 exercises</div>
 </div>
 
 <div class="intro-box">
   <h2>What You're Practising</h2>
-  <p>This task is about seeing the same moment through different lenses. You'll experiment with first and third person, shift moods through word choice, and discover how perspective changes everything a reader feels. Each exercise builds toward a final piece written two ways.</p>
+  <p>This task builds up step by step. You'll start by switching between 1st and 3rd person, then learn to shift mood through word choice, identify narrative perspective in passages, and finally write your own atmosphere paragraph. Each exercise feeds into the next.</p>
   <ul class="skills-list">
-    <li>Narrative perspective (1st / 3rd person)</li>
-    <li>Literary techniques</li>
+    <li>Narrative perspective</li>
     <li>Mood &amp; tone</li>
-    <li>Comparing texts</li>
+    <li>1st vs 3rd person</li>
+    <li>Creating atmosphere</li>
   </ul>
   <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link"><span class="vocab-icon">&#128218;</span> Open Vocabulary Bank (new tab)</a>
 </div>
@@ -522,198 +486,219 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt"><strong>Think of a moment at your school that involved you AND someone else</strong> &mdash; it doesn't have to be dramatic, just something you both experienced.</p>
+  <p class="prompt"><strong>Pick ONE everyday moment from efterskole life.</strong> It doesn't need to be dramatic &mdash; ordinary moments work best for this exercise.</p>
 
-  <p class="prompt">It could be any of these, or something else:</p>
+  <p class="prompt">It could be any of these, or something else entirely:</p>
   <div class="suggestions">
-    <span class="chip">Eating in the dining hall</span>
-    <span class="chip">A class activity</span>
-    <span class="chip">Arriving for the first time</span>
-    <span class="chip">A sports game</span>
-    <span class="chip">A misunderstanding</span>
-    <span class="chip">Trying to communicate</span>
-    <span class="chip">A group project</span>
-    <span class="chip">Free time in the evening</span>
+    <span class="chip">Lunch in the dining hall</span>
+    <span class="chip">A morning assembly</span>
+    <span class="chip">PE class</span>
+    <span class="chip">Walking between buildings</span>
+    <span class="chip">Lights-out time</span>
+    <span class="chip">A bus ride to town</span>
   </div>
 
-  <p class="prompt"><strong>My moment:</strong></p>
-  <textarea class="rewrite-area" rows="1" placeholder="Briefly describe the moment (e.g. 'My first meal in the dining hall, sitting next to a Danish student')"></textarea>
-  <div class="print-lines"><div class="line"></div></div>
+  <p class="prompt"><strong>Step 1 &mdash; First person ("I"):</strong> Write 2&ndash;3 sentences about this moment from YOUR point of view.</p>
+  <textarea class="rewrite-area" rows="3" placeholder="I walked into the dining hall and..."></textarea>
+  <div class="print-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
 
-  <p class="prompt" style="margin-top:16px;">Now fill in both columns &mdash; YOUR perspective and how <strong>the other person</strong> might have seen the same moment.</p>
-
-  <table class="senses-table">
-    <tr>
-      <th></th>
-      <th>How I saw it</th>
-      <th>How they might have seen it</th>
-    </tr>
-    <tr>
-      <td>What I/they noticed first</td>
-      <td>
-        <textarea placeholder="e.g. everyone speaking Danish, no idea where to sit"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-      <td>
-        <textarea placeholder="e.g. a new foreign kid standing in the doorway looking lost"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-    </tr>
-    <tr>
-      <td>What I/they felt</td>
-      <td>
-        <textarea placeholder="e.g. nervous, out of place, didn't want to look stupid"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-      <td>
-        <textarea placeholder="e.g. curious, maybe awkward about making conversation in English"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-    </tr>
-    <tr>
-      <td>What I/they didn't understand</td>
-      <td>
-        <textarea placeholder="e.g. the routine, the jokes, how meals work here"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-      <td>
-        <textarea placeholder="e.g. why the new kid looked so tense, whether to say hi in English or Danish"></textarea>
-        <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-      </td>
-    </tr>
-  </table>
+  <p class="prompt" style="margin-top:16px;"><strong>Step 2 &mdash; Third person ("he" or "they"):</strong> Rewrite the SAME moment, but as if someone else is watching you. Same details, different perspective.</p>
+  <textarea class="rewrite-area" rows="3" placeholder="He walked into the dining hall and..."></textarea>
+  <div class="print-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
 
   <div class="tip-box">
     <div class="tip-label">Tip</div>
-    You don't need to know what the other person actually thought. The point is to <strong>imagine</strong> it &mdash; that's what writers do. The same moment always looks different depending on who's experiencing it. That difference is what makes perspective powerful in writing.
+    Notice what changes when you switch. In first person, you can share your thoughts and feelings directly. In third person, you have to <strong>show</strong> those feelings through actions and details instead of just telling. Which version feels more personal? Which feels more cinematic?
   </div>
 </div>
 
-<!-- ===== EXERCISE 2: FIRST VS THIRD ===== -->
+<!-- ===== EXERCISE 2: MOOD SHIFT ===== -->
 <div class="ex-header">
   <div class="ex-num">2</div>
-  <div class="ex-info">
-    <h2>First vs Third Person</h2>
-    <div class="ex-time">About 5 minutes</div>
-  </div>
-</div>
-<div class="ex-card">
-  <p class="prompt">Here's a short paragraph written in <strong>first person</strong>. Read it, then rewrite it in <strong>third person</strong> below.</p>
-
-  <div class="rewrite-block">
-    <div class="given-sentence">
-      <span class="given-label">First person &mdash; original</span>
-      "I walked through the gate and immediately felt out of place. Everyone seemed to know each other. I shoved my hands in my pockets and tried to look like I belonged."
-    </div>
-    <div class="rewrite-hint">Task: Rewrite this in third person ("He walked..."). Change "I" to "he" and adjust the verbs.</div>
-    <textarea class="rewrite-area" placeholder="He walked through the gate..."></textarea>
-    <div class="print-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
-  </div>
-
-  <p class="prompt" style="margin-top:16px;"><strong>Now answer these questions</strong> (just a sentence or two each):</p>
-
-  <p class="prompt">Which version feels more personal and immediate?</p>
-  <textarea class="rewrite-area" rows="1" placeholder="Your answer..."></textarea>
-  <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-
-  <p class="prompt" style="margin-top:12px;">Which gives a wider view &mdash; like a camera zoomed out?</p>
-  <textarea class="rewrite-area" rows="1" placeholder="Your answer..."></textarea>
-  <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-
-  <p class="prompt" style="margin-top:12px;">Why might a writer choose one over the other?</p>
-  <textarea class="rewrite-area" rows="1" placeholder="Your answer..."></textarea>
-  <div class="print-lines"><div class="line"></div><div class="line"></div></div>
-
-  <div class="tip-box">
-    <div class="tip-label">Key difference</div>
-    <strong>First person ("I")</strong> puts the reader inside the character's head &mdash; you feel what they feel. <strong>Third person ("he/she")</strong> steps back and can show things the character might not notice. Neither is "better" &mdash; they do different jobs.
-  </div>
-</div>
-
-<!-- ===== EXERCISE 3: MOOD SHIFT ===== -->
-<div class="ex-header">
-  <div class="ex-num">3</div>
   <div class="ex-info">
     <h2>Mood Shift</h2>
     <div class="ex-time">About 5 minutes</div>
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt">Here's a basic scene: <strong>"A student sits alone in the dining hall at a new school."</strong></p>
-  <p class="prompt">The facts don't change. But your <strong>word choices</strong> completely change how it feels. Write <strong>two versions</strong> of 2&ndash;3 sentences each.</p>
+  <p class="prompt">These sentences are <strong>neutral &mdash; no mood at all</strong>. Rewrite each one <strong>twice</strong>: once to create a <strong>positive</strong> mood and once to create a <strong>tense or negative</strong> mood. Same basic fact, completely different feeling. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Stuck for words? Open the Vocabulary Bank &#8599;</a></p>
 
   <div class="rewrite-block">
-    <span class="mood-label mood-label-a">Version A &mdash; Lonely and uncomfortable</span>
-    <div class="rewrite-hint">Make the reader feel the isolation. What words create discomfort? Think about sounds, emptiness, self-consciousness.</div>
-    <textarea class="rewrite-area" placeholder="Version A: The student sat alone..."></textarea>
-    <div class="print-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    <div class="flat-sentence">
+      <span class="flat-label">Neutral</span>
+      "The classroom was quiet."
+    </div>
+    <div class="rewrite-hint">Hint: Quiet can feel peaceful OR eerie. What details create each feeling?</div>
+    <div class="mood-label positive">Positive mood:</div>
+    <textarea class="rewrite-area" rows="2" placeholder="Rewrite with a warm, calm, or happy feeling..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    <div class="mood-label tense">Tense mood:</div>
+    <textarea class="rewrite-area" rows="2" placeholder="Rewrite with an uneasy, anxious, or dark feeling..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div></div>
   </div>
 
   <div class="rewrite-block">
-    <span class="mood-label mood-label-b">Version B &mdash; Peaceful and calm</span>
-    <div class="rewrite-hint">Same scene, but make the solitude feel chosen and pleasant. What words create peace? Think about warmth, quietness, contentment.</div>
-    <textarea class="rewrite-area" placeholder="Version B: The student sat alone..."></textarea>
-    <div class="print-lines"><div class="line"></div><div class="line"></div><div class="line"></div></div>
+    <div class="flat-sentence">
+      <span class="flat-label">Neutral</span>
+      "It was raining outside."
+    </div>
+    <div class="rewrite-hint">Hint: Rain can be cosy or threatening. Think about the sound, the light, and how the character feels.</div>
+    <div class="mood-label positive">Positive mood:</div>
+    <textarea class="rewrite-area" rows="2" placeholder="Rewrite with a warm, calm, or happy feeling..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    <div class="mood-label tense">Tense mood:</div>
+    <textarea class="rewrite-area" rows="2" placeholder="Rewrite with an uneasy, anxious, or dark feeling..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+  </div>
+
+  <div class="rewrite-block">
+    <div class="flat-sentence">
+      <span class="flat-label">Neutral</span>
+      "The hallway was empty."
+    </div>
+    <div class="rewrite-hint">Hint: An empty hallway can feel free and spacious OR lonely and unsettling. Word choice is everything.</div>
+    <div class="mood-label positive">Positive mood:</div>
+    <textarea class="rewrite-area" rows="2" placeholder="Rewrite with a warm, calm, or happy feeling..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div></div>
+    <div class="mood-label tense">Tense mood:</div>
+    <textarea class="rewrite-area" rows="2" placeholder="Rewrite with an uneasy, anxious, or dark feeling..."></textarea>
+    <div class="print-lines"><div class="line"></div><div class="line"></div></div>
   </div>
 
   <div class="tip-box">
-    <div class="tip-label">The lesson here</div>
-    The FACTS didn't change &mdash; only the WORD CHOICES changed the mood. "Sat alone" can feel sad or content depending on every other word around it. This is one of the most powerful tools a writer has. In your IGCSE exam, you'll be asked to create a specific mood &mdash; and <strong>this</strong> is how you do it.
+    <div class="tip-label">Remember from Chapter 3</div>
+    Mood isn't created by saying "it was scary" or "it was nice." Mood comes from <strong>word choice</strong> and <strong>specific details</strong>. "Sunlight pooled on the desks" creates a different mood than "shadows crept across the desks" &mdash; even though both describe the same empty classroom.
   </div>
 </div>
 
-<!-- ===== EXERCISE 4: YOUR PERSPECTIVE PARAGRAPH ===== -->
+<!-- ===== EXERCISE 3: PERSPECTIVE DETECTIVE ===== -->
+<div class="ex-header">
+  <div class="ex-num">3</div>
+  <div class="ex-info">
+    <h2>Perspective Detective</h2>
+    <div class="ex-time">About 5 minutes</div>
+  </div>
+</div>
+<div class="ex-card">
+  <p class="prompt">Label each passage: <strong>1st</strong> = first person, <strong>3L</strong> = third person limited, <strong>3O</strong> = third person omniscient.</p>
+
+  <div class="tip-box" style="margin-top:0; margin-bottom:16px;">
+    <div class="tip-label">Quick reminder</div>
+    <strong>1st person:</strong> "I" &mdash; narrator is a character in the story.<br>
+    <strong>3rd person limited:</strong> "He/she/they" &mdash; follows ONE character's thoughts.<br>
+    <strong>3rd person omniscient:</strong> "He/she/they" &mdash; knows EVERYONE's thoughts and feelings.
+  </div>
+
+  <ul class="fo-list">
+    <li class="fo-item">
+      <span class="fo-num">1</span>
+      <span class="fo-text">"I could hear the rain hitting the windows during the test. My mind kept drifting back to the weekend, and I had to force myself to focus on question three."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="1" data-val="1" onclick="pickPerspective(this)">1st</button>
+        <button class="fo-btn" data-q="1" data-val="L" onclick="pickPerspective(this)">3L</button>
+        <button class="fo-btn" data-q="1" data-val="O" onclick="pickPerspective(this)">3O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">2</span>
+      <span class="fo-text">"Marcus kicked the ball hard, hoping no one had noticed his mistake. On the other side of the pitch, Elias grinned &mdash; he had noticed, and he was already planning how to use it."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="2" data-val="1" onclick="pickPerspective(this)">1st</button>
+        <button class="fo-btn" data-q="2" data-val="L" onclick="pickPerspective(this)">3L</button>
+        <button class="fo-btn" data-q="2" data-val="O" onclick="pickPerspective(this)">3O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">3</span>
+      <span class="fo-text">"She stared out the bus window at the flat Danish countryside. The grey sky seemed to stretch on forever, and she wondered if the sun would ever come back."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="3" data-val="1" onclick="pickPerspective(this)">1st</button>
+        <button class="fo-btn" data-q="3" data-val="L" onclick="pickPerspective(this)">3L</button>
+        <button class="fo-btn" data-q="3" data-val="O" onclick="pickPerspective(this)">3O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">4</span>
+      <span class="fo-text">"I didn't want to admit it, but the cold was getting to me. My fingers were numb and I couldn't feel my toes inside my trainers."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="4" data-val="1" onclick="pickPerspective(this)">1st</button>
+        <button class="fo-btn" data-q="4" data-val="L" onclick="pickPerspective(this)">3L</button>
+        <button class="fo-btn" data-q="4" data-val="O" onclick="pickPerspective(this)">3O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">5</span>
+      <span class="fo-text">"Jake thought the assembly would never end. Next to him, Sofia was secretly relieved &mdash; it meant less time in maths. At the front, Mr Hansen could sense the whole room losing patience."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="5" data-val="1" onclick="pickPerspective(this)">1st</button>
+        <button class="fo-btn" data-q="5" data-val="L" onclick="pickPerspective(this)">3L</button>
+        <button class="fo-btn" data-q="5" data-val="O" onclick="pickPerspective(this)">3O</button>
+      </div>
+    </li>
+    <li class="fo-item">
+      <span class="fo-num">6</span>
+      <span class="fo-text">"He sat alone in the common room, scrolling through his phone. He told himself he wasn't bothered that no one had texted back, but his jaw was tight and his knee wouldn't stop bouncing."</span>
+      <span class="print-fo-blank">___</span>
+      <div class="fo-buttons">
+        <button class="fo-btn" data-q="6" data-val="1" onclick="pickPerspective(this)">1st</button>
+        <button class="fo-btn" data-q="6" data-val="L" onclick="pickPerspective(this)">3L</button>
+        <button class="fo-btn" data-q="6" data-val="O" onclick="pickPerspective(this)">3O</button>
+      </div>
+    </li>
+  </ul>
+
+  <div class="tip-box" style="margin-top:16px;">
+    <div class="tip-label">The tricky one</div>
+    Third person limited and third person omniscient both use "he/she/they." The difference? <strong>Limited</strong> only knows what ONE person thinks. <strong>Omniscient</strong> can tell you what MULTIPLE characters are thinking or feeling in the same passage. Look for that switch between characters' inner thoughts.
+  </div>
+</div>
+
+<!-- ===== EXERCISE 4: YOUR ATMOSPHERE PARAGRAPH ===== -->
 <div class="ex-header">
   <div class="ex-num">4</div>
   <div class="ex-info">
-    <h2>Your Perspective Paragraph</h2>
+    <h2>Your Atmosphere Paragraph</h2>
     <div class="ex-time">About 15 minutes</div>
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt">Write a short passage (<strong>80&ndash;120 words each</strong>) about a moment from your life in Denmark. Write it <strong>TWICE</strong>:</p>
+  <p class="prompt">Now bring it all together. <strong>Pick a place at the efterskole or somewhere in Denmark</strong> and describe it to create a <strong>specific mood or atmosphere</strong>. You choose the mood &mdash; peaceful, tense, lonely, exciting, nostalgic, whatever fits.</p>
 
-  <p class="prompt"><strong>Version A:</strong> First person, present tense (you're there right now)<br>
-  <strong>Version B:</strong> Third person, past tense (looking back on it)</p>
+  <p class="prompt"><strong>Step 1 &mdash; Fill in the template</strong> (this is your planning step, not your final answer):</p>
 
-  <p class="prompt">Each version should create a <strong>clear mood</strong> through word choice. They can have different moods or the same mood seen from two angles &mdash; your choice.</p>
-
-  <div class="suggestions">
-    <span class="chip">First day at school</span>
-    <span class="chip">A conversation you struggled with</span>
-    <span class="chip">A moment you felt at home</span>
-    <span class="chip">Something that surprised you</span>
-    <span class="chip">A weekend trip</span>
-    <span class="chip">Missing home</span>
+  <div class="template-box">
+    <p>The <span class="fill-line">place</span> was <span class="fill-line">mood adjective</span>.</p>
+    <p><span class="fill-line">A sight detail</span>.</p>
+    <p><span class="fill-line">A sound detail</span>.</p>
+    <p>The feeling was <span class="fill-line">emotion</span> because <span class="fill-line">reason</span>.</p>
   </div>
+  <div class="print-lines">
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div>
+  </div>
+
+  <p class="prompt" style="margin-top: 20px;"><strong>Step 2 &mdash; Write it for real.</strong> Use the template ideas but write a <strong>flowing paragraph in your own voice</strong>. Aim for <strong>80&ndash;120 words</strong>. <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a></p>
 
   <div class="tip-box">
-    <div class="tip-label">Before you write</div>
-    &bull; Version A (1st person, present): "I walk into the room. The noise hits me..." &mdash; the reader is IN the moment<br>
-    &bull; Version B (3rd person, past): "He walked into the room. The noise hit him..." &mdash; the reader is watching from outside<br>
-    &bull; Use the <a href="descriptive-vocabulary.html" target="_blank" class="vocab-link-inline">Vocabulary Bank &#8599;</a> for mood words
+    <div class="tip-label">Your paragraph should</div>
+    &bull; Have a <strong>consistent perspective</strong> &mdash; pick 1st or 3rd person and stick with it<br>
+    &bull; Create a <strong>clear mood</strong> through word choice, not by naming it<br>
+    &bull; Include <strong>at least 2 senses</strong> (not just sight &mdash; add sound, touch, smell)<br>
+    &bull; Use <strong>specific details</strong> from a real place you know
   </div>
 
-  <div style="margin-top:16px;">
-    <span class="mood-label mood-label-a">Version A &mdash; First person, present tense</span>
-    <textarea class="writing-area-half" id="versionA" placeholder="I walk... I see... I feel..." oninput="countWordsA(this)"></textarea>
-    <div class="word-count" id="wordCountA">0 words</div>
-    <div class="print-lines">
-      <div class="line"></div><div class="line"></div><div class="line"></div>
-      <div class="line"></div><div class="line"></div><div class="line"></div>
-      <div class="line"></div><div class="line"></div>
-    </div>
-  </div>
-
-  <div style="margin-top:16px;">
-    <span class="mood-label mood-label-b">Version B &mdash; Third person, past tense</span>
-    <textarea class="writing-area-half" id="versionB" placeholder="He walked... He saw... He felt..." oninput="countWordsB(this)"></textarea>
-    <div class="word-count" id="wordCountB">0 words</div>
-    <div class="print-lines">
-      <div class="line"></div><div class="line"></div><div class="line"></div>
-      <div class="line"></div><div class="line"></div><div class="line"></div>
-      <div class="line"></div><div class="line"></div>
-    </div>
+  <textarea class="writing-area" id="mainParagraph" placeholder="Write your atmosphere paragraph here..." oninput="countWords(this)"></textarea>
+  <div class="word-count" id="wordCount">0 words</div>
+  <div class="print-lines">
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
+    <div class="line"></div><div class="line"></div><div class="line"></div>
   </div>
 </div>
 
@@ -726,32 +711,32 @@
   </div>
 </div>
 <div class="ex-card">
-  <p class="prompt"><strong>Read both versions from Exercise 4 out loud.</strong> Do they sound different? They should. Check each box honestly.</p>
+  <p class="prompt"><strong>Read your paragraph from Exercise 4 out loud.</strong> Yes, actually out loud &mdash; you'll hear awkward phrasing that you won't catch by reading silently. Then check each box honestly.</p>
 
   <ul class="checklist" id="writerChecklist">
     <li>
       <input type="checkbox" onchange="updateChecklist()">
-      <span><strong>Perspective</strong> &mdash; Is Version A clearly first person and B clearly third person?</span>
+      <span><strong>Consistent perspective</strong> &mdash; Did I stick with one point of view (1st or 3rd) the whole way through?</span>
     </li>
     <li>
       <input type="checkbox" onchange="updateChecklist()">
-      <span><strong>Tense</strong> &mdash; Is A in present tense and B in past tense throughout?</span>
+      <span><strong>Clear mood/atmosphere</strong> &mdash; Could a reader name the mood without me telling them directly?</span>
     </li>
     <li>
       <input type="checkbox" onchange="updateChecklist()">
-      <span><strong>Mood</strong> &mdash; Could a reader name the mood of each version?</span>
+      <span><strong>Sensory details (2+ senses)</strong> &mdash; Did I go beyond just sight? Count the senses you used.</span>
     </li>
     <li>
       <input type="checkbox" onchange="updateChecklist()">
-      <span><strong>Word choice</strong> &mdash; Did I use specific words to CREATE the mood, not just name it? ("He felt sad" doesn't count.)</span>
+      <span><strong>Specific word choices</strong> &mdash; No "nice," "good," "really," or "very"? Every word earns its place?</span>
     </li>
     <li>
       <input type="checkbox" onchange="updateChecklist()">
-      <span><strong>Show don't tell</strong> &mdash; Did I show feelings through actions and details, not just say "I felt sad" or "He was nervous"?</span>
+      <span><strong>Varied sentence structure</strong> &mdash; Mix of short and long sentences? Read it aloud &mdash; does it flow?</span>
     </li>
     <li>
       <input type="checkbox" onchange="updateChecklist()">
-      <span><strong>Different effect</strong> &mdash; Do the two versions feel genuinely different to read?</span>
+      <span><strong>Reader can feel the mood</strong> &mdash; Would someone reading this actually feel the atmosphere, not just understand it?</span>
     </li>
   </ul>
 
@@ -763,37 +748,41 @@
 
   <div class="tip-box" style="margin-top:14px;">
     <div class="tip-label">What to do with your score</div>
-    <strong>0&ndash;2 checks:</strong> Go back to Exercise 4 and revise. Focus on tense and perspective first &mdash; those are the foundation.<br>
-    <strong>3&ndash;4 checks:</strong> Solid start. Pick one unchecked box and try to fix just that one thing. Mood and "show don't tell" are the hardest.<br>
-    <strong>5&ndash;6 checks:</strong> Excellent work. You've shown real control over perspective and mood.
+    <strong>0&ndash;2 checks:</strong> Go back to Exercise 4 and revise. Look at your mood-shift work from Exercise 2 &mdash; you already know how to create atmosphere, now put it into a full paragraph.<br>
+    <strong>3&ndash;4 checks:</strong> Solid start. Pick one unchecked box and try to fix just that one thing.<br>
+    <strong>5&ndash;6 checks:</strong> Excellent work. You're controlling perspective and mood like a real writer.
   </div>
 </div>
 
 <!-- ===== END CARD ===== -->
 <div class="end-card">
   <h2>Writing Task Complete</h2>
-  <p>You've practised narrative perspective, mood shifting through word choice, and writing the same moment two ways. These are core IGCSE skills &mdash; keep both versions for your revision folder.</p>
+  <p>You've practised narrative perspective, mood and tone, and creating atmosphere through word choice. These are skills you'll use in every piece of writing from here on &mdash; keep this paragraph and see how you improve.</p>
 </div>
 
 <script>
-  // Word counter for Version A
-  function countWordsA(textarea) {
-    var text = textarea.value.trim();
-    var count = text.length === 0 ? 0 : text.split(/\s+/).length;
-    var el = document.getElementById('wordCountA');
-    el.textContent = count + ' word' + (count !== 1 ? 's' : '');
-    if (count >= 80 && count <= 120) {
-      el.className = 'word-count in-range';
+  // Perspective Detective buttons
+  function pickPerspective(btn) {
+    var q = btn.dataset.q;
+    var val = btn.dataset.val;
+    var siblings = btn.parentElement.querySelectorAll('.fo-btn');
+    siblings.forEach(function(b) {
+      b.classList.remove('selected-1', 'selected-l', 'selected-o');
+    });
+    if (val === '1') {
+      btn.classList.add('selected-1');
+    } else if (val === 'L') {
+      btn.classList.add('selected-l');
     } else {
-      el.className = 'word-count';
+      btn.classList.add('selected-o');
     }
   }
 
-  // Word counter for Version B
-  function countWordsB(textarea) {
+  // Word counter
+  function countWords(textarea) {
     var text = textarea.value.trim();
     var count = text.length === 0 ? 0 : text.split(/\s+/).length;
-    var el = document.getElementById('wordCountB');
+    var el = document.getElementById('wordCount');
     el.textContent = count + ' word' + (count !== 1 ? 's' : '');
     if (count >= 80 && count <= 120) {
       el.className = 'word-count in-range';
@@ -809,9 +798,9 @@
     boxes.forEach(function(cb) { if (cb.checked) checked++; });
     document.getElementById('scoreNum').textContent = checked + ' / 6';
     var msg = '';
-    if (checked <= 2) msg = 'Go back to Exercise 4 and revise — focus on tense and perspective first.';
+    if (checked <= 2) msg = 'Go back to Exercise 4 and revise your paragraph.';
     else if (checked <= 4) msg = 'Solid start! Pick one unchecked box and fix just that.';
-    else msg = 'Excellent! You\'ve shown real control over perspective and mood.';
+    else msg = 'Excellent! You\'re controlling perspective and mood like a real writer.';
     document.getElementById('scoreMsg').textContent = msg;
   }
 </script>
