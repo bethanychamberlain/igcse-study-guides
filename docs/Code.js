@@ -29,7 +29,14 @@ function doPost(e) {
     // One-time setup: rename sheets, create Dashboard (cached after first run)
     ensureSetup(ss);
 
-    if (data.target === 'progress') {
+    if (data.target === 'resetDashboard') {
+      // Admin command: delete and recreate Dashboard with latest layout
+      var db = ss.getSheetByName('Dashboard');
+      if (db) ss.deleteSheet(db);
+      PropertiesService.getScriptProperties().deleteProperty('setupDone');
+      ensureSetup(ss);
+      return ContentService.createTextOutput('Dashboard reset');
+    } else if (data.target === 'progress') {
       // Per-exercise tracking → "Writing & Notes" sheet
       // overwrite flag = re-save in same browser session (don't create new columns)
       writeProgress(ss, data.exercises || [], !!data.overwrite);
