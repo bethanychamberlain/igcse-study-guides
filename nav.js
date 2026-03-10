@@ -453,14 +453,19 @@
           prev = prev.previousElementSibling;
         }
       }
-      if (!sectionMap[label]) { sectionMap[label] = {checked:0, total:0}; sectionOrder.push(label); }
+      if (!sectionMap[label]) { sectionMap[label] = {checked:0, total:0, items:[]}; sectionOrder.push(label); }
       sectionMap[label].total++;
+      // Get the checkbox label text from its parent <li>
+      var li = cb.closest('li');
+      var itemText = li ? li.textContent.trim() : 'Item ' + (sectionMap[label].total);
+      sectionMap[label].items.push((cb.checked ? '\u2705 ' : '\u2610 ') + itemText);
       if (cb.checked) sectionMap[label].checked++;
     });
     var exercises = [];
     sectionOrder.forEach(function(label) {
       var s = sectionMap[label];
-      exercises.push([subject, chapter, label, 'notes', dateStr, s.checked + '/' + s.total + ' checked']);
+      var detail = s.checked + '/' + s.total + ' checked\n' + s.items.join('\n');
+      exercises.push([subject, chapter, label, 'notes', dateStr, detail]);
     });
     return exercises;
   }
