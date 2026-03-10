@@ -154,15 +154,15 @@ function createDashboard(ss) {
     '=IFERROR(QUERY(\'Activity Log\'!A:J,"SELECT D, E, AVG(I), COUNT(F) WHERE C=\'quiz\' AND I IS NOT NULL GROUP BY D, E ORDER BY AVG(I) ASC LIMIT 10 LABEL D \'Subject\', E \'Chapter\', AVG(I) \'Avg Rating\', COUNT(F) \'Questions\'",0),"No quiz data yet")'
   );
 
-  // ===== WRITING PROGRESS (Row 43-53) =====
+  // ===== WRITING PROGRESS (Row 43-68) =====
   header(43, 'Writing & Notes Progress');
   db.getRange(44, 1).setFormula(
-    '=IFERROR(QUERY(\'Writing & Notes\'!A:F,"SELECT A, B, C, D WHERE A IS NOT NULL ORDER BY A, B, C LABEL A \'Subject\', B \'Chapter\', C \'Exercise\', D \'Type\'",1),"No writing/notes data yet")'
+    '=IFERROR(QUERY(\'Writing & Notes\'!A:F,"SELECT A, B, C, D WHERE A IS NOT NULL ORDER BY A, B, C LIMIT 25 LABEL A \'Subject\', B \'Chapter\', C \'Exercise\', D \'Type\'",1),"No writing/notes data yet")'
   );
 
-  // ===== RECENT ACTIVITY (Row 55-70) =====
-  header(55, 'Recent Activity — Last 20 Entries');
-  db.getRange(56, 1).setFormula(
+  // ===== RECENT ACTIVITY (Row 70-92) =====
+  header(70, 'Recent Activity — Last 20 Entries');
+  db.getRange(71, 1).setFormula(
     '=IFERROR(QUERY(\'Activity Log\'!A:J,"SELECT A, B, C, D, E, F, I, J ORDER BY A DESC, B DESC LIMIT 20 LABEL A \'Date\', B \'Time\', C \'Type\', D \'Subject\', E \'Chapter\', F \'Item\', I \'Rating\', J \'Seconds\'",1),"No activity yet")'
   );
 
