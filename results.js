@@ -13,7 +13,7 @@
   var STORAGE_KEY = 'study-results';
 
   // ---- TUTOR MODE ----
-  // When active, all tracking is silently suppressed (set via Ctrl+.)
+  // When active, all tracking is silently suppressed (set via Ctrl+Shift+K)
   function isTutorMode() {
     try { return localStorage.getItem('igcse-tutor-mode') === 'on'; } catch(e) { return false; }
   }

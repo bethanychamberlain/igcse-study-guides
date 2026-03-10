@@ -1280,7 +1280,7 @@
 })();
 
 // ============================================================
-// Tutor Mode Toggle — Ctrl+. suppresses all tracking
+// Tutor Mode Toggle — Ctrl+Shift+K suppresses all tracking
 // ============================================================
 (function() {
   var KEY = 'igcse-tutor-mode';
@@ -1308,8 +1308,8 @@
   }
 
   document.addEventListener('keydown', function(e) {
-    // Ctrl+. (or Cmd+. on Mac) — no browser shortcut conflict
-    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === '.') {
+    // Ctrl+Shift+K (or Cmd+Shift+K on Mac)
+    if ((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'K') {
       e.preventDefault();
       var next = isOn() ? null : 'on';
       try {
