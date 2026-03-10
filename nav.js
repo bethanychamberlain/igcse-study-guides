@@ -274,7 +274,7 @@
 
 // ============================================================
 // Page Save — auto-save for notes & writing pages
-// Persists textareas + checkboxes to localStorage, logs to StudyResults
+// localStorage persistence + per-exercise Google Sheets tracking
 // ============================================================
 (function() {
   var path = window.location.pathname;
@@ -285,6 +285,8 @@
 
   var SAVE_KEY = 'page-save-' + filename.replace('.html', '');
   var pageType = isWriting ? 'writing' : 'notes';
+  var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzwQywmHmRgm9J3U-UjI6KXnmke5DCX1nplLgOAtPo81BGkWgy1jWLu1r08_N021Hv3/exec';
+  var SHEETS_KEY = 'igcse-study-2026';
 
   // Detect subject and chapter from path
   var parts = path.split('/').filter(function(p) { return p.length > 0; });
@@ -294,19 +296,12 @@
   var chMatch = filename.match(/ch(\d+)/);
   var chapter = chMatch ? 'Ch ' + parseInt(chMatch[1]) : filename;
 
-  // Dynamically load results.js
-  if (!window.StudyResults) {
-    var rs = document.createElement('script');
-    rs.src = '../results.js';
-    document.head.appendChild(rs);
-  }
-
   // nav.js is the last script tag, so DOM is ready
   var textareas = document.querySelectorAll('textarea');
   var checkboxes = document.querySelectorAll('input[type="checkbox"]');
   if (textareas.length === 0 && checkboxes.length === 0) return;
 
-  // --- Restore saved state ---
+  // --- Restore saved state from localStorage ---
   try {
     var raw = localStorage.getItem(SAVE_KEY);
     if (raw) {
@@ -328,9 +323,9 @@
         });
       }
     }
-  } catch(e) { /* corrupt data — ignore */ }
+  } catch(e) {}
 
-  // --- Auto-save on change ---
+  // --- Auto-save to localStorage on change ---
   var timer;
   function saveToLocal() {
     var s = { textareas: [], checkboxes: [], saved: new Date().toISOString() };
@@ -348,6 +343,86 @@
   checkboxes.forEach(function(cb) {
     cb.addEventListener('change', saveToLocal);
   });
+
+  // --- Exercise label extraction ---
+  // Writing pages: h2 inside parent .card
+  // Notes pages: .section-header preceding parent .card
+  function getWritingLabels() {
+    var labelCounts = {};
+    textareas.forEach(function(ta) {
+      var card = ta.closest('.card');
+      var h2 = card ? card.querySelector('h2') : null;
+      var base = h2 ? h2.textContent.trim() : 'Textarea';
+      labelCounts[base] = (labelCounts[base] || 0) + 1;
+    });
+    var seen = {};
+    var labels = [];
+    textareas.forEach(function(ta) {
+      var card = ta.closest('.card');
+      var h2 = card ? card.querySelector('h2') : null;
+      var base = h2 ? h2.textContent.trim() : 'Textarea';
+      seen[base] = (seen[base] || 0) + 1;
+      labels.push(labelCounts[base] > 1 ? base + ' (' + seen[base] + ')' : base);
+    });
+    return labels;
+  }
+
+  function getNotesData(dateStr) {
+    var sectionMap = {};
+    var sectionOrder = [];
+    checkboxes.forEach(function(cb) {
+      var card = cb.closest('.card');
+      var label = 'Progress';
+      if (card) {
+        var prev = card.previousElementSibling;
+        while (prev) {
+          if (prev.classList && prev.classList.contains('section-header')) {
+            var numSpan = prev.querySelector('.num');
+            var numText = numSpan ? numSpan.textContent.trim() : '';
+            label = prev.textContent.trim();
+            if (numText) label = label.replace(numText, '').trim();
+            break;
+          }
+          prev = prev.previousElementSibling;
+        }
+      }
+      if (!sectionMap[label]) { sectionMap[label] = {checked:0, total:0}; sectionOrder.push(label); }
+      sectionMap[label].total++;
+      if (cb.checked) sectionMap[label].checked++;
+    });
+    var exercises = [];
+    sectionOrder.forEach(function(label) {
+      var s = sectionMap[label];
+      exercises.push([subject, chapter, label, 'notes', dateStr, s.checked + '/' + s.total + ' checked']);
+    });
+    return exercises;
+  }
+
+  // --- Build exercises array for Google Sheets ---
+  function buildExercises(dateStr) {
+    var exercises = [];
+
+    if (isWriting) {
+      var labels = getWritingLabels();
+      textareas.forEach(function(ta, i) {
+        var content = ta.value.trim();
+        if (content.length > 0) {
+          exercises.push([subject, chapter, labels[i], 'writing', dateStr, content]);
+        }
+      });
+      // Writer's Checklist row (if checkboxes exist)
+      if (checkboxes.length > 0) {
+        var checked = 0;
+        checkboxes.forEach(function(cb) { if (cb.checked) checked++; });
+        exercises.push([subject, chapter, "Writer's Checklist", 'writing', dateStr,
+          checked + '/' + checkboxes.length + ' checked']);
+      }
+    } else {
+      exercises = getNotesData(dateStr);
+    }
+
+    return exercises;
+  }
 
   // --- Save button + toast ---
   var css = document.createElement('style');
@@ -379,29 +454,19 @@
   btn.addEventListener('click', function() {
     saveToLocal();
 
-    // Log summary to StudyResults
-    if (window.StudyResults) {
-      var now = new Date();
-      var checked = 0;
-      checkboxes.forEach(function(cb) { if (cb.checked) checked++; });
-      var filled = 0;
-      textareas.forEach(function(ta) { if (ta.value.trim().length > 0) filled++; });
-      var resp = '';
-      if (checkboxes.length > 0) resp += checked + '/' + checkboxes.length + ' checks';
-      if (textareas.length > 0) resp += (resp ? ', ' : '') + filled + '/' + textareas.length + ' written';
+    var dateStr = new Date().toISOString().slice(0, 10);
+    var exercises = buildExercises(dateStr);
 
-      window.StudyResults.save([{
-        date: now.toISOString().slice(0, 10),
-        time: now.toTimeString().slice(0, 5),
-        type: pageType,
-        subject: subject,
-        chapter: chapter,
-        item: 'progress',
-        response: resp,
-        result: 'saved',
-        selfRating: '',
-        seconds: 0
-      }]);
+    // Post to Google Sheets "Writing & Notes" sheet
+    if (exercises.length > 0) {
+      try {
+        fetch(SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {'Content-Type': 'text/plain'},
+          body: JSON.stringify({key: SHEETS_KEY, target: 'progress', exercises: exercises})
+        }).catch(function() {});
+      } catch(e) {}
     }
 
     // Flash confirmation
