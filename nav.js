@@ -208,10 +208,13 @@
     var tp = chapterTypes[j];
     var cls = 'sn-type' + (tp === currentType ? ' sn-active' : '');
     var link = makeLink(currentSlug + '-' + tp + '.html', cls, TYPE_LABELS[tp]);
-    // Log type switches to Activity Log (fires before navigation)
+    // Log type switches + silently save before navigating away
     if (tp !== currentType) {
       (function(fromType, toType) {
         link.addEventListener('click', function() {
+          // Trigger silent save so beforeunload won't warn
+          window._navSwitching = true;
+          document.dispatchEvent(new Event('section-navigate'));
           var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzwQywmHmRgm9J3U-UjI6KXnmke5DCX1nplLgOAtPo81BGkWgy1jWLu1r08_N021Hv3/exec';
           var now = new Date();
           var chapterLabel = currentSlug.replace(/^ch0?(\d+)-/, 'Ch$1 ').replace(/-/g, ' ');
@@ -552,7 +555,7 @@
   var chapter = slug.replace(/^ch0?(\d+)-/, 'Ch$1 ').replace(/-/g, ' ');
   chapter = chapter.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
 
-  // After 30 seconds on page, log a view event
+  // After 1 second on page, log a view event
   setTimeout(function() {
     var now = new Date();
     try {
@@ -572,12 +575,12 @@
             '',
             'viewed',
             '',
-            30
+            1
           ]]
         })
       }).catch(function() {});
     } catch(e) {}
-  }, 30000);
+  }, 1000);
 
   // --- Tab-Away Tracking ---
   // Logs when the student leaves the tab and how long they were gone.
@@ -703,13 +706,101 @@
     }
   });
 
+  // Show a dictionary entry in the result panel
+  function showDefinition(entry, originalQuery) {
+    while (result.firstChild) result.removeChild(result.firstChild);
+
+    if (originalQuery) {
+      var note = document.createElement('div');
+      note.style.cssText = 'font-size:12px;color:#888;margin-bottom:6px;font-style:italic';
+      note.textContent = 'Showing result for \u201c' + entry.word + '\u201d';
+      result.appendChild(note);
+    }
+
+    var wordEl = document.createElement('div');
+    wordEl.className = 'word';
+    wordEl.textContent = entry.word;
+    result.appendChild(wordEl);
+
+    if (entry.phonetic) {
+      var phonetic = document.createElement('div');
+      phonetic.textContent = entry.phonetic;
+      phonetic.style.color = '#888';
+      phonetic.style.fontSize = '13px';
+      result.appendChild(phonetic);
+    }
+
+    var meanings = entry.meanings || [];
+    for (var m = 0; m < meanings.length && m < 3; m++) {
+      var meaning = meanings[m];
+      var pos = document.createElement('div');
+      pos.className = 'pos';
+      pos.textContent = meaning.partOfSpeech;
+      result.appendChild(pos);
+
+      var defs = meaning.definitions || [];
+      for (var d = 0; d < defs.length && d < 2; d++) {
+        var defEl = document.createElement('div');
+        defEl.className = 'def';
+        defEl.textContent = (d + 1) + '. ' + defs[d].definition;
+        result.appendChild(defEl);
+      }
+    }
+  }
+
+  // Try fuzzy match via Datamuse suggestion API
+  function tryFuzzyMatch(word, original) {
+    fetch('https://api.datamuse.com/sug?s=' + encodeURIComponent(word))
+      .then(function(res) { return res.json(); })
+      .then(function(suggestions) {
+        while (result.firstChild) result.removeChild(result.firstChild);
+
+        if (!suggestions || suggestions.length === 0) {
+          var none = document.createElement('div');
+          none.className = 'none';
+          none.textContent = 'No definition found for \u201c' + original + '\u201d';
+          result.appendChild(none);
+          return;
+        }
+
+        var heading = document.createElement('div');
+        heading.style.cssText = 'font-size:13px;color:#666;margin-bottom:8px';
+        heading.textContent = 'Did you mean:';
+        result.appendChild(heading);
+
+        var max = Math.min(suggestions.length, 5);
+        for (var i = 0; i < max; i++) {
+          var suggBtn = document.createElement('button');
+          suggBtn.style.cssText = 'display:inline-block;background:#f0f0f0;border:1px solid #ddd;' +
+            'border-radius:16px;padding:4px 14px;margin:3px 4px;font-size:13px;' +
+            'cursor:pointer;font-family:inherit';
+          suggBtn.textContent = suggestions[i].word;
+          (function(w) {
+            suggBtn.addEventListener('click', function() {
+              input.value = w;
+              doLookup();
+            });
+          })(suggestions[i].word);
+          result.appendChild(suggBtn);
+        }
+      })
+      .catch(function() {
+        result.textContent = 'Could not look up \u201c' + original + '\u201d';
+      });
+  }
+
   function doLookup() {
-    var word = input.value.trim().toLowerCase();
-    if (!word) return;
+    var raw = input.value.trim().toLowerCase();
+    if (!raw) return;
 
-    result.textContent = 'Looking up...';
+    // Multi-word queries: search the first word
+    var words = raw.split(/\s+/);
+    var word = words[0];
+    var isMulti = words.length > 1;
 
-    // Log the search to Activity Log
+    result.textContent = isMulti ? 'Looking up \u201c' + word + '\u201d\u2026' : 'Looking up\u2026';
+
+    // Log the original search query to Activity Log
     var now = new Date();
     try {
       fetch(SHEETS_URL, {
@@ -724,7 +815,7 @@
             'lookup',
             subject,
             chapter,
-            word,
+            raw,
             '',
             '',
             '',
@@ -734,54 +825,18 @@
       }).catch(function() {});
     } catch(e) {}
 
-    // Fetch definition from free dictionary API
+    // Fetch definition — fall back to fuzzy match on failure
     fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word))
-      .then(function(res) { return res.json(); })
+      .then(function(res) {
+        if (!res.ok) throw new Error('not found');
+        return res.json();
+      })
       .then(function(data) {
-        // Clear previous results
-        while (result.firstChild) result.removeChild(result.firstChild);
-
-        if (!Array.isArray(data) || data.length === 0) {
-          var none = document.createElement('div');
-          none.className = 'none';
-          none.textContent = 'No definition found for "' + word + '"';
-          result.appendChild(none);
-          return;
-        }
-
-        var entry = data[0];
-        var wordEl = document.createElement('div');
-        wordEl.className = 'word';
-        wordEl.textContent = entry.word || word;
-        result.appendChild(wordEl);
-
-        if (entry.phonetic) {
-          var phonetic = document.createElement('div');
-          phonetic.textContent = entry.phonetic;
-          phonetic.style.color = '#888';
-          phonetic.style.fontSize = '13px';
-          result.appendChild(phonetic);
-        }
-
-        var meanings = entry.meanings || [];
-        for (var m = 0; m < meanings.length && m < 3; m++) {
-          var meaning = meanings[m];
-          var pos = document.createElement('div');
-          pos.className = 'pos';
-          pos.textContent = meaning.partOfSpeech;
-          result.appendChild(pos);
-
-          var defs = meaning.definitions || [];
-          for (var d = 0; d < defs.length && d < 2; d++) {
-            var defEl = document.createElement('div');
-            defEl.className = 'def';
-            defEl.textContent = (d + 1) + '. ' + defs[d].definition;
-            result.appendChild(defEl);
-          }
-        }
+        if (!Array.isArray(data) || data.length === 0) throw new Error('empty');
+        showDefinition(data[0], isMulti ? raw : null);
       })
       .catch(function() {
-        result.textContent = 'Could not look up "' + word + '"';
+        tryFuzzyMatch(word, raw);
       });
   }
 
@@ -869,8 +924,9 @@
     });
   });
 
-  // Warn before leaving with unsaved work
+  // Warn before leaving with unsaved work (skipped for type-switcher navigation)
   window.addEventListener('beforeunload', function(e) {
+    if (window._navSwitching) return;
     if (pageDirty) {
       e.preventDefault();
       e.returnValue = '';
@@ -989,38 +1045,48 @@
     return exercises;
   }
 
-  // --- Save button + toast ---
+  // --- Nav bar integration: Save + Upload tabs ---
   var css = document.createElement('style');
   css.textContent =
-    '.page-save-btn{position:fixed;bottom:20px;right:20px;z-index:999;' +
-    'background:#27ae60;color:#fff;border:none;border-radius:28px;' +
-    'padding:12px 24px;font-size:14px;font-weight:700;font-family:inherit;' +
-    'cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25);transition:all .2s}' +
-    '.page-save-btn:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(0,0,0,.3)}' +
-    '.page-save-btn:active{transform:translateY(0)}' +
-    '.save-toast{position:fixed;bottom:72px;right:20px;z-index:999;' +
-    'background:#2c3e50;color:#fff;padding:10px 20px;border-radius:8px;' +
-    'font-size:13px;font-weight:600;font-family:inherit;opacity:0;' +
-    'transition:opacity .3s;pointer-events:none}' +
-    '.save-toast.show{opacity:1}' +
-    '@media print{.page-save-btn,.save-toast{display:none!important}}';
+    '.sn-sep{width:1px;height:18px;background:rgba(255,255,255,.3);align-self:center}' +
+    '.sn-save-btn,.sn-upload-btn{color:#fff;background:none;border:none;' +
+    'border-radius:6px;padding:4px 12px;font-weight:600;font-size:12px;' +
+    'opacity:.7;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}' +
+    '.sn-save-btn:hover,.sn-upload-btn:hover{opacity:.9;background:rgba(255,255,255,.15)}' +
+    '.sn-save-btn.saved{opacity:1;background:rgba(39,174,96,.5)}' +
+    '.sn-upload-btn.uploaded{opacity:1;background:rgba(39,174,96,.5)}' +
+    '.sn-upload-wrap{position:relative;display:inline-flex}' +
+    '.upload-dropdown{position:absolute;top:calc(100% + 12px);right:-20px;background:#fff;' +
+    'border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,.25);padding:20px;' +
+    'width:280px;display:none;text-align:center;z-index:1001}' +
+    '.upload-dropdown.open{display:block}' +
+    '.upload-dropdown h4{margin:0 0 8px;font-size:15px;color:#2c3e50}' +
+    '.upload-dropdown p{margin:0 0 12px;font-size:13px;color:#666;line-height:1.4}' +
+    '.upload-dropdown .qr-upload-link{display:inline-block;background:#e74c3c;color:#fff;' +
+    'text-decoration:none;border-radius:20px;padding:10px 22px;font-size:14px;' +
+    'font-weight:700;margin-bottom:10px;transition:all .2s}' +
+    '.upload-dropdown .qr-upload-link:hover{background:#c0392b}' +
+    '.upload-dropdown .qr-or{display:block;font-size:12px;color:#999;margin:8px 0}' +
+    '.upload-dropdown img{display:block;margin:0 auto 12px;border-radius:8px}' +
+    '.upload-dropdown .qr-done-btn{background:#27ae60;color:#fff;border:none;border-radius:20px;' +
+    'padding:8px 20px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit}' +
+    '.upload-dropdown .qr-done-btn:hover{background:#219a52}' +
+    '.upload-dropdown .qr-done-btn.confirmed{background:#95a5a6;cursor:default}' +
+    '.qr-reminder{position:fixed;bottom:20px;left:20px;z-index:999;' +
+    'background:#e74c3c;color:#fff;padding:10px 16px;border-radius:10px;' +
+    'font-size:13px;font-weight:600;font-family:inherit;' +
+    'box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;transition:opacity .5s;' +
+    'pointer-events:none;max-width:260px;line-height:1.4}' +
+    '.qr-reminder.show{opacity:1}' +
+    '@media(max-width:600px){.upload-dropdown{right:-40px;width:260px}}' +
+    '@media print{.sn-sep,.sn-save-btn,.sn-upload-wrap,.upload-dropdown,.qr-reminder{display:none!important}}';
   document.head.appendChild(css);
-
-  var btn = document.createElement('button');
-  btn.className = 'page-save-btn';
-  btn.textContent = 'Save Progress';
-  document.body.appendChild(btn);
-
-  var toast = document.createElement('div');
-  toast.className = 'save-toast';
-  toast.textContent = 'Progress saved!';
-  document.body.appendChild(toast);
 
   // Track whether we already saved to Sheets in this page load (session).
   // First save = new attempt. Subsequent saves = overwrite (same work session).
   var savedThisSession = false;
 
-  // Core save logic — used by both button click and silent navigation saves
+  // Core save logic — used by button click, silent navigation, and type-switch saves
   function saveToSheets() {
     saveToLocal();
     var dateStr = new Date().toISOString().slice(0, 10);
@@ -1046,17 +1112,6 @@
     pageDirty = false;
   }
 
-  btn.addEventListener('click', function() {
-    saveToSheets();
-    // Flash confirmation
-    toast.classList.add('show');
-    btn.textContent = 'Saved!';
-    setTimeout(function() {
-      toast.classList.remove('show');
-      btn.textContent = 'Save Progress';
-    }, 2000);
-  });
-
   // Silent save when navigating between sections
   document.addEventListener('section-navigate', function() {
     if (pageDirty) {
@@ -1064,134 +1119,150 @@
     }
   });
 
-  // =====================================================
-  // QR Code Photo Upload Section (notes pages only)
-  // =====================================================
-  if (isNotes && checkboxes.length > 0) {
-    var uploadUrl = SHEETS_URL +
-      '?subject=' + encodeURIComponent(subject) +
-      '&chapter=' + encodeURIComponent(chapter);
+  // --- Add Save + Upload buttons to the nav bar type switcher ---
+  var typesDiv = document.querySelector('.sn-types');
+  if (typesDiv) {
+    // Separator between page types and utility buttons
+    var sep = document.createElement('span');
+    sep.className = 'sn-sep';
+    typesDiv.appendChild(sep);
 
-    var qrCss = document.createElement('style');
-    qrCss.textContent =
-      '.qr-upload-section{max-width:700px;margin:40px auto 60px;padding:24px;' +
-      'background:#f8f9fa;border:2px dashed #bbb;border-radius:16px;text-align:center}' +
-      '.qr-upload-section h3{margin:0 0 8px;font-size:18px;color:#2c3e50}' +
-      '.qr-upload-section p{margin:0 0 16px;font-size:14px;color:#555;line-height:1.5}' +
-      '.qr-upload-section img{display:block;margin:0 auto 16px;border-radius:8px}' +
-      '.qr-upload-link{display:inline-block;background:#e74c3c;color:#fff;' +
-      'text-decoration:none;border-radius:24px;padding:12px 28px;font-size:15px;' +
-      'font-weight:700;margin-bottom:16px;transition:all .2s}' +
-      '.qr-upload-link:hover{background:#c0392b;transform:translateY(-1px)}' +
-      '.qr-or{display:block;font-size:13px;color:#999;margin-bottom:12px}' +
-      '.qr-done-btn{background:#27ae60;color:#fff;border:none;border-radius:24px;' +
-      'padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;' +
-      'font-family:inherit;transition:all .2s}' +
-      '.qr-done-btn:hover{background:#219a52;transform:translateY(-1px)}' +
-      '.qr-done-btn.confirmed{background:#95a5a6;cursor:default}' +
-      '.qr-reminder{position:fixed;bottom:72px;left:20px;z-index:999;' +
-      'background:#e74c3c;color:#fff;padding:10px 16px;border-radius:10px;' +
-      'font-size:13px;font-weight:600;font-family:inherit;' +
-      'box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;transition:opacity .5s;' +
-      'pointer-events:none;max-width:260px;line-height:1.4}' +
-      '.qr-reminder.show{opacity:1}' +
-      '@media print{.qr-upload-section,.qr-reminder{display:none!important}}';
-    document.head.appendChild(qrCss);
-
-    // Build QR section at bottom of page
-    var qrSection = document.createElement('div');
-    qrSection.className = 'qr-upload-section';
-
-    var qrTitle = document.createElement('h3');
-    qrTitle.textContent = 'Upload Your Handwritten Notes';
-    qrSection.appendChild(qrTitle);
-
-    var qrDesc = document.createElement('p');
-    qrDesc.textContent = 'Take a photo of your notes and upload them.';
-    qrSection.appendChild(qrDesc);
-
-    // Always show direct upload link (works on same device)
-    var uploadLink = document.createElement('a');
-    uploadLink.className = 'qr-upload-link';
-    uploadLink.href = uploadUrl;
-    uploadLink.target = '_blank';
-    uploadLink.textContent = 'Take Photo & Upload';
-    qrSection.appendChild(uploadLink);
-
-    // Also show QR code for scanning from a different device
-    var qrOr = document.createElement('span');
-    qrOr.className = 'qr-or';
-    qrOr.textContent = 'or scan from another device:';
-    qrSection.appendChild(qrOr);
-
-    var qrImg = document.createElement('img');
-    qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' +
-      encodeURIComponent(uploadUrl);
-    qrImg.alt = 'QR code — scan to upload notes photo';
-    qrImg.width = 150;
-    qrImg.height = 150;
-    qrSection.appendChild(qrImg);
-
-    var qrDoneBtn = document.createElement('button');
-    qrDoneBtn.className = 'qr-done-btn';
-    qrDoneBtn.textContent = "I've uploaded my notes";
-    qrSection.appendChild(qrDoneBtn);
-
-    document.body.appendChild(qrSection);
-
-    // Floating reminder bubble (fades in, then auto-fades after 5s)
-    var qrReminder = document.createElement('div');
-    qrReminder.className = 'qr-reminder';
-    qrReminder.textContent = "Don't forget to photograph your handwritten notes!";
-    document.body.appendChild(qrReminder);
-
-    // State tracking
-    var photoUploaded = false;
-    var anyChecked = false;
-    var checkCount = 0;        // counts checkbox checks (not unchecks)
-    var reminderTimer = null;
-
-    qrDoneBtn.addEventListener('click', function() {
-      photoUploaded = true;
-      qrDoneBtn.textContent = 'Uploaded!';
-      qrDoneBtn.classList.add('confirmed');
-      qrReminder.classList.remove('show');
+    // Save button
+    var saveBtn = document.createElement('button');
+    saveBtn.className = 'sn-save-btn';
+    saveBtn.textContent = 'Save';
+    saveBtn.addEventListener('click', function() {
+      saveToSheets();
+      saveBtn.textContent = 'Saved!';
+      saveBtn.classList.add('saved');
+      setTimeout(function() {
+        saveBtn.textContent = 'Save';
+        saveBtn.classList.remove('saved');
+      }, 2000);
     });
+    typesDiv.appendChild(saveBtn);
 
-    // Flash reminder for 5 seconds, then fade out
-    function flashReminder() {
-      if (photoUploaded) return;
-      qrReminder.classList.add('show');
-      clearTimeout(reminderTimer);
-      reminderTimer = setTimeout(function() {
-        qrReminder.classList.remove('show');
-      }, 5000);
-    }
+    // Upload button + dropdown (notes pages only)
+    if (isNotes && checkboxes.length > 0) {
+      var uploadUrl = SHEETS_URL +
+        '?subject=' + encodeURIComponent(subject) +
+        '&chapter=' + encodeURIComponent(chapter);
 
-    // Show reminder every 4th checkbox check (not on every one)
-    checkboxes.forEach(function(cb) {
-      cb.addEventListener('change', function() {
-        // Track anyChecked for beforeunload
-        anyChecked = false;
-        for (var i = 0; i < checkboxes.length; i++) {
-          if (checkboxes[i].checked) { anyChecked = true; break; }
-        }
-        // Only count newly checked boxes (not unchecks)
-        if (cb.checked) {
-          checkCount++;
-          if (checkCount % 4 === 0) {
-            flashReminder();
-          }
+      var uploadWrap = document.createElement('span');
+      uploadWrap.className = 'sn-upload-wrap';
+
+      var uploadBtn = document.createElement('button');
+      uploadBtn.className = 'sn-upload-btn';
+      uploadBtn.textContent = 'Upload';
+      uploadWrap.appendChild(uploadBtn);
+
+      // Dropdown panel
+      var dropdown = document.createElement('div');
+      dropdown.className = 'upload-dropdown';
+
+      var ddTitle = document.createElement('h4');
+      ddTitle.textContent = 'Upload Notes Photo';
+      dropdown.appendChild(ddTitle);
+
+      var ddDesc = document.createElement('p');
+      ddDesc.textContent = 'Take a photo of your handwritten notes.';
+      dropdown.appendChild(ddDesc);
+
+      var uploadLink = document.createElement('a');
+      uploadLink.className = 'qr-upload-link';
+      uploadLink.href = uploadUrl;
+      uploadLink.target = '_blank';
+      uploadLink.textContent = 'Take Photo & Upload';
+      dropdown.appendChild(uploadLink);
+
+      var qrOr = document.createElement('span');
+      qrOr.className = 'qr-or';
+      qrOr.textContent = 'or scan from another device:';
+      dropdown.appendChild(qrOr);
+
+      var qrImg = document.createElement('img');
+      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=' +
+        encodeURIComponent(uploadUrl);
+      qrImg.alt = 'QR code — scan to upload';
+      qrImg.width = 120;
+      qrImg.height = 120;
+      dropdown.appendChild(qrImg);
+
+      var doneBtn = document.createElement('button');
+      doneBtn.className = 'qr-done-btn';
+      doneBtn.textContent = "I've uploaded my notes";
+      dropdown.appendChild(doneBtn);
+
+      uploadWrap.appendChild(dropdown);
+      typesDiv.appendChild(uploadWrap);
+
+      // Toggle dropdown
+      uploadBtn.addEventListener('click', function(e) {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+      });
+
+      // Close dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        if (!uploadWrap.contains(e.target)) {
+          dropdown.classList.remove('open');
         }
       });
-    });
 
-    // Enhance beforeunload to also warn about un-uploaded photo
-    window.addEventListener('beforeunload', function(e) {
-      if (anyChecked && !photoUploaded) {
-        e.preventDefault();
-        e.returnValue = '';
+      // --- Photo upload state + reminder ---
+      var photoUploaded = false;
+      var anyChecked = false;
+      var checkCount = 0;
+      var reminderTimer = null;
+
+      var qrReminder = document.createElement('div');
+      qrReminder.className = 'qr-reminder';
+      qrReminder.textContent = "Don't forget to photograph your handwritten notes!";
+      document.body.appendChild(qrReminder);
+
+      doneBtn.addEventListener('click', function() {
+        photoUploaded = true;
+        doneBtn.textContent = 'Uploaded!';
+        doneBtn.classList.add('confirmed');
+        uploadBtn.textContent = 'Uploaded';
+        uploadBtn.classList.add('uploaded');
+        dropdown.classList.remove('open');
+        qrReminder.classList.remove('show');
+      });
+
+      function flashReminder() {
+        if (photoUploaded) return;
+        qrReminder.classList.add('show');
+        clearTimeout(reminderTimer);
+        reminderTimer = setTimeout(function() {
+          qrReminder.classList.remove('show');
+        }, 5000);
       }
-    });
+
+      // Show reminder every 4th checkbox check
+      checkboxes.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+          anyChecked = false;
+          for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) { anyChecked = true; break; }
+          }
+          if (cb.checked) {
+            checkCount++;
+            if (checkCount % 4 === 0) {
+              flashReminder();
+            }
+          }
+        });
+      });
+
+      // Warn about un-uploaded photo (skipped for type-switcher navigation)
+      window.addEventListener('beforeunload', function(e) {
+        if (window._navSwitching) return;
+        if (anyChecked && !photoUploaded) {
+          e.preventDefault();
+          e.returnValue = '';
+        }
+      });
+    }
   }
 })();
