@@ -564,6 +564,9 @@
       '?subject=' + encodeURIComponent(subject) +
       '&chapter=' + encodeURIComponent(chapter);
 
+    // Detect mobile (for tap-to-upload vs QR code)
+    var isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
     var qrCss = document.createElement('style');
     qrCss.textContent =
       '.qr-upload-section{max-width:700px;margin:40px auto 60px;padding:24px;' +
@@ -571,6 +574,10 @@
       '.qr-upload-section h3{margin:0 0 8px;font-size:18px;color:#2c3e50}' +
       '.qr-upload-section p{margin:0 0 16px;font-size:14px;color:#555;line-height:1.5}' +
       '.qr-upload-section img{display:block;margin:0 auto 16px;border-radius:8px}' +
+      '.qr-upload-link{display:inline-block;background:#e74c3c;color:#fff;' +
+      'text-decoration:none;border-radius:24px;padding:12px 28px;font-size:15px;' +
+      'font-weight:700;margin-bottom:16px;transition:all .2s}' +
+      '.qr-upload-link:hover{background:#c0392b;transform:translateY(-1px)}' +
       '.qr-done-btn{background:#27ae60;color:#fff;border:none;border-radius:24px;' +
       'padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;' +
       'font-family:inherit;transition:all .2s}' +
@@ -579,10 +586,9 @@
       '.qr-reminder{position:fixed;bottom:72px;left:20px;z-index:999;' +
       'background:#e74c3c;color:#fff;padding:10px 16px;border-radius:10px;' +
       'font-size:13px;font-weight:600;font-family:inherit;' +
-      'box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;transition:opacity .3s;' +
+      'box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;transition:opacity .5s;' +
       'pointer-events:none;max-width:260px;line-height:1.4}' +
-      '.qr-reminder.show{opacity:1;animation:qrPulse 2s infinite}' +
-      '@keyframes qrPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}' +
+      '.qr-reminder.show{opacity:1}' +
       '@media print{.qr-upload-section,.qr-reminder{display:none!important}}';
     document.head.appendChild(qrCss);
 
@@ -595,26 +601,40 @@
     qrSection.appendChild(qrTitle);
 
     var qrDesc = document.createElement('p');
-    qrDesc.textContent = 'Scan this QR code with your phone to take a photo of your notes and upload them.';
+    if (isMobile) {
+      qrDesc.textContent = 'Tap the button below to photograph your notes and upload them.';
+    } else {
+      qrDesc.textContent = 'Scan this QR code with your phone to take a photo of your notes and upload them.';
+    }
     qrSection.appendChild(qrDesc);
 
-    var qrImg = document.createElement('img');
-    qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' +
-      encodeURIComponent(uploadUrl);
-    qrImg.alt = 'QR code — scan to upload notes photo';
-    qrImg.width = 180;
-    qrImg.height = 180;
-    qrSection.appendChild(qrImg);
+    if (isMobile) {
+      // Mobile: direct link button instead of QR code
+      var uploadLink = document.createElement('a');
+      uploadLink.className = 'qr-upload-link';
+      uploadLink.href = uploadUrl;
+      uploadLink.target = '_blank';
+      uploadLink.textContent = 'Take Photo & Upload';
+      qrSection.appendChild(uploadLink);
+    } else {
+      // Desktop: QR code image
+      var qrImg = document.createElement('img');
+      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' +
+        encodeURIComponent(uploadUrl);
+      qrImg.alt = 'QR code — scan to upload notes photo';
+      qrImg.width = 180;
+      qrImg.height = 180;
+      qrSection.appendChild(qrImg);
+    }
 
     var qrDoneBtn = document.createElement('button');
     qrDoneBtn.className = 'qr-done-btn';
     qrDoneBtn.textContent = "I've uploaded my notes";
     qrSection.appendChild(qrDoneBtn);
 
-    // Insert before the last element (or just append)
     document.body.appendChild(qrSection);
 
-    // Floating reminder bubble
+    // Floating reminder bubble (fades in, then auto-fades after 5s)
     var qrReminder = document.createElement('div');
     qrReminder.className = 'qr-reminder';
     qrReminder.textContent = "Don't forget to photograph your handwritten notes!";
@@ -623,6 +643,8 @@
     // State tracking
     var photoUploaded = false;
     var anyChecked = false;
+    var checkCount = 0;        // counts checkbox checks (not unchecks)
+    var reminderTimer = null;
 
     qrDoneBtn.addEventListener('click', function() {
       photoUploaded = true;
@@ -631,25 +653,33 @@
       qrReminder.classList.remove('show');
     });
 
-    // Show reminder when checkboxes are checked but photo not uploaded
-    function updateQrReminder() {
-      anyChecked = false;
-      for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].checked) { anyChecked = true; break; }
-      }
-      if (anyChecked && !photoUploaded) {
-        qrReminder.classList.add('show');
-      } else {
+    // Flash reminder for 5 seconds, then fade out
+    function flashReminder() {
+      if (photoUploaded) return;
+      qrReminder.classList.add('show');
+      clearTimeout(reminderTimer);
+      reminderTimer = setTimeout(function() {
         qrReminder.classList.remove('show');
-      }
+      }, 5000);
     }
 
+    // Show reminder every 4th checkbox check (not on every one)
     checkboxes.forEach(function(cb) {
-      cb.addEventListener('change', updateQrReminder);
+      cb.addEventListener('change', function() {
+        // Track anyChecked for beforeunload
+        anyChecked = false;
+        for (var i = 0; i < checkboxes.length; i++) {
+          if (checkboxes[i].checked) { anyChecked = true; break; }
+        }
+        // Only count newly checked boxes (not unchecks)
+        if (cb.checked) {
+          checkCount++;
+          if (checkCount % 4 === 0) {
+            flashReminder();
+          }
+        }
+      });
     });
-
-    // Check on load in case checkboxes were restored from localStorage
-    updateQrReminder();
 
     // Enhance beforeunload to also warn about un-uploaded photo
     window.addEventListener('beforeunload', function(e) {
