@@ -207,7 +207,36 @@
   for (var j = 0; j < chapterTypes.length; j++) {
     var tp = chapterTypes[j];
     var cls = 'sn-type' + (tp === currentType ? ' sn-active' : '');
-    typesDiv.appendChild(makeLink(currentSlug + '-' + tp + '.html', cls, TYPE_LABELS[tp]));
+    var link = makeLink(currentSlug + '-' + tp + '.html', cls, TYPE_LABELS[tp]);
+    // Log type switches to Activity Log (fires before navigation)
+    if (tp !== currentType) {
+      (function(fromType, toType) {
+        link.addEventListener('click', function() {
+          var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzwQywmHmRgm9J3U-UjI6KXnmke5DCX1nplLgOAtPo81BGkWgy1jWLu1r08_N021Hv3/exec';
+          var now = new Date();
+          var chapterLabel = currentSlug.replace(/^ch0?(\d+)-/, 'Ch$1 ').replace(/-/g, ' ');
+          chapterLabel = chapterLabel.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+          try {
+            navigator.sendBeacon(SHEETS_URL, JSON.stringify({
+              key: 'igcse-study-2026',
+              rows: [[
+                now.toISOString().slice(0, 10),
+                now.toTimeString().slice(0, 5),
+                'type-switch',
+                subject.label,
+                chapterLabel,
+                fromType + ' → ' + toType,
+                '',
+                '',
+                '',
+                ''
+              ]]
+            }));
+          } catch(e) {}
+        });
+      })(currentType, tp);
+    }
+    typesDiv.appendChild(link);
   }
   row.appendChild(typesDiv);
 
