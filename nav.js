@@ -273,6 +273,59 @@
 })();
 
 // ============================================================
+// Page View Tracking — logs a view after 30s on any subject page
+// ============================================================
+(function() {
+  var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzwQywmHmRgm9J3U-UjI6KXnmke5DCX1nplLgOAtPo81BGkWgy1jWLu1r08_N021Hv3/exec';
+  var SHEETS_KEY = 'igcse-study-2026';
+  var path = window.location.pathname;
+  var filename = path.split('/').pop() || '';
+  var parts = path.split('/').filter(function(p) { return p.length > 0; });
+  var dir = parts[parts.length - 2] || '';
+  var subjectMap = {biology:'Biology',chemistry:'Chemistry',physics:'Physics',english:'English',spanish:'Spanish',math:'Math'};
+  var subject = subjectMap[dir];
+  if (!subject) return;
+
+  var pageMode = null;
+  ['notes','cheatsheet','quiz','writing'].forEach(function(t) {
+    if (filename.indexOf('-' + t) !== -1) pageMode = t;
+  });
+  if (!pageMode) return;
+
+  // Chapter label matching quiz-challenge.js format: "Ch1 Travellers Tales"
+  var slug = filename.replace(/-(notes|cheatsheet|quiz|writing)\.html$/, '');
+  var chapter = slug.replace(/^ch0?(\d+)-/, 'Ch$1 ').replace(/-/g, ' ');
+  chapter = chapter.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+
+  // After 30 seconds on page, log a view event
+  setTimeout(function() {
+    var now = new Date();
+    try {
+      fetch(SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'text/plain'},
+        body: JSON.stringify({
+          key: SHEETS_KEY,
+          rows: [[
+            now.toISOString().slice(0, 10),
+            now.toTimeString().slice(0, 5),
+            'page-view',
+            subject,
+            chapter,
+            pageMode,
+            '',
+            'viewed',
+            '',
+            30
+          ]]
+        })
+      }).catch(function() {});
+    } catch(e) {}
+  }, 30000);
+})();
+
+// ============================================================
 // Page Save — auto-save for notes & writing pages
 // localStorage persistence + per-exercise Google Sheets tracking
 // ============================================================
@@ -288,13 +341,14 @@
   var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzwQywmHmRgm9J3U-UjI6KXnmke5DCX1nplLgOAtPo81BGkWgy1jWLu1r08_N021Hv3/exec';
   var SHEETS_KEY = 'igcse-study-2026';
 
-  // Detect subject and chapter from path
+  // Detect subject and chapter from path (format matches quiz-challenge.js)
   var parts = path.split('/').filter(function(p) { return p.length > 0; });
   var dir = parts[parts.length - 2] || '';
   var subjectMap = {biology:'Biology',chemistry:'Chemistry',physics:'Physics',english:'English',spanish:'Spanish',math:'Math'};
   var subject = subjectMap[dir] || dir;
-  var chMatch = filename.match(/ch(\d+)/);
-  var chapter = chMatch ? 'Ch ' + parseInt(chMatch[1]) : filename;
+  var slug = filename.replace(/-(notes|cheatsheet|quiz|writing)\.html$/, '');
+  var chapter = slug.replace(/^ch0?(\d+)-/, 'Ch$1 ').replace(/-/g, ' ');
+  chapter = chapter.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
 
   // nav.js is the last script tag, so DOM is ready
   var textareas = document.querySelectorAll('textarea');
