@@ -199,7 +199,9 @@
   } else {
     chNav.appendChild(el('span', 'sn-arrow sn-disabled', '\u203a'));
   }
-  row.appendChild(chNav);
+  // Middle colored section: chapter nav + type switcher
+  var middle = el('div', 'sn-middle');
+  middle.appendChild(chNav);
 
   // Type switcher (Notes / Cheatsheet / Quiz / Writing if available)
   var chapterTypes = chapter.types || DEFAULT_TYPES;
@@ -241,7 +243,8 @@
     }
     typesDiv.appendChild(link);
   }
-  row.appendChild(typesDiv);
+  middle.appendChild(typesDiv);
+  row.appendChild(middle);
 
   nav.appendChild(row);
 
@@ -269,17 +272,19 @@
     var s = document.createElement('style');
     s.textContent =
       '#study-nav{position:sticky;top:0;z-index:1000;' +
-      'background:linear-gradient(rgba(0,0,0,.32),rgba(0,0,0,.22)),' + color + ';' +
+      'background:#2c3e50;' +
       'color:#fff;font-family:-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;' +
       'font-size:13px;padding:0 16px;box-shadow:0 2px 8px rgba(0,0,0,.2);' +
       'margin-bottom:16px}' +
       '#study-nav *{box-sizing:border-box}' +
-      '.sn-row{display:flex;align-items:center;gap:12px;max-width:900px;margin:0 auto;min-height:44px;flex-wrap:wrap;padding:6px 0}' +
-      '.sn-home{color:#fff;text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap;opacity:.9;padding:4px 10px;border-radius:6px}' +
-      '.sn-home:hover{opacity:1;background:rgba(255,255,255,.15)}' +
+      '.sn-row{display:flex;align-items:center;gap:10px;max-width:960px;margin:0 auto;min-height:44px;flex-wrap:wrap;padding:6px 0}' +
+      '.sn-home{color:#fff;text-decoration:none;font-weight:700;font-size:14px;white-space:nowrap;opacity:.85;padding:4px 10px;border-radius:6px}' +
+      '.sn-home:hover{opacity:1;background:rgba(255,255,255,.1)}' +
+      '.sn-middle{display:flex;align-items:center;gap:8px;flex:1;min-width:0;' +
+      'background:linear-gradient(rgba(255,255,255,.05),rgba(0,0,0,.1)),' + color + ';' +
+      'border-radius:8px;padding:5px 10px}' +
       '.sn-chapter-nav{display:flex;align-items:center;gap:2px;flex:1;justify-content:center;min-width:0;' +
-      'border-left:1px solid rgba(255,255,255,.25);border-right:1px solid rgba(255,255,255,.25);' +
-      'margin:0 4px;padding:0 8px}' +
+      'padding:0 6px}' +
       '.sn-arrow{color:#fff;text-decoration:none;font-weight:600;font-size:12px;' +
       'padding:3px 10px;border-radius:20px;white-space:nowrap;' +
       'background:rgba(255,255,255,.13);letter-spacing:.2px}' +
@@ -287,16 +292,18 @@
       '.sn-disabled{opacity:.25;cursor:default;background:none!important}' +
       '.sn-title{font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;' +
       'text-overflow:ellipsis;max-width:200px;text-align:center;padding:0 10px;letter-spacing:.3px}' +
-      '.sn-types{display:flex;gap:4px}' +
+      '.sn-types{display:flex;gap:4px;border-left:1px solid rgba(255,255,255,.25);padding-left:8px}' +
       '.sn-type{color:#fff;text-decoration:none;padding:4px 12px;border-radius:6px;font-weight:600;font-size:12px;opacity:.7;white-space:nowrap}' +
       '.sn-type:hover{opacity:.9;background:rgba(255,255,255,.15)}' +
       '.sn-type.sn-active{opacity:1;background:rgba(255,255,255,.25)}' +
+      '.sn-utility{display:flex;gap:6px;align-items:center}' +
       '@media(max-width:600px){' +
         '.sn-row{justify-content:center;gap:6px;padding:8px 0}' +
-        '.sn-chapter-nav{order:2;width:100%;justify-content:center;border-left:none;border-right:none;' +
-        'border-top:1px solid rgba(255,255,255,.2);border-bottom:1px solid rgba(255,255,255,.2);' +
-        'margin:2px 0;padding:4px 0}' +
-        '.sn-home{order:1}.sn-types{order:3;width:100%;justify-content:center}' +
+        '.sn-home{order:1}' +
+        '.sn-middle{order:2;width:100%;flex-wrap:wrap;justify-content:center;gap:4px;padding:6px 10px}' +
+        '.sn-chapter-nav{width:100%;justify-content:center;padding:0}' +
+        '.sn-types{border-left:none;padding-left:0;justify-content:center}' +
+        '.sn-utility{order:3;width:100%;justify-content:center}' +
         '.sn-title{max-width:140px;font-size:13px}' +
       '}' +
       '@media print{#study-nav{display:none!important}}';
@@ -1048,11 +1055,10 @@
   // --- Nav bar integration: Save + Upload tabs ---
   var css = document.createElement('style');
   css.textContent =
-    '.sn-sep{width:1px;height:18px;background:rgba(255,255,255,.3);align-self:center}' +
     '.sn-save-btn,.sn-upload-btn{color:#fff;background:none;border:none;' +
     'border-radius:6px;padding:4px 12px;font-weight:600;font-size:12px;' +
-    'opacity:.7;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}' +
-    '.sn-save-btn:hover,.sn-upload-btn:hover{opacity:.9;background:rgba(255,255,255,.15)}' +
+    'opacity:.85;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}' +
+    '.sn-save-btn:hover,.sn-upload-btn:hover{opacity:1;background:rgba(255,255,255,.1)}' +
     '.sn-save-btn.saved{opacity:1;background:rgba(39,174,96,.5)}' +
     '.sn-upload-btn.uploaded{opacity:1;background:rgba(39,174,96,.5)}' +
     '.sn-upload-wrap{position:relative;display:inline-flex}' +
@@ -1119,13 +1125,11 @@
     }
   });
 
-  // --- Add Save + Upload buttons to the nav bar type switcher ---
-  var typesDiv = document.querySelector('.sn-types');
-  if (typesDiv) {
-    // Separator between page types and utility buttons
-    var sep = document.createElement('span');
-    sep.className = 'sn-sep';
-    typesDiv.appendChild(sep);
+  // --- Add Save + Upload buttons to the nav bar utility zone ---
+  var snRow = document.querySelector('.sn-row');
+  if (snRow) {
+    var utilDiv = document.createElement('div');
+    utilDiv.className = 'sn-utility';
 
     // Save button
     var saveBtn = document.createElement('button');
@@ -1140,7 +1144,7 @@
         saveBtn.classList.remove('saved');
       }, 2000);
     });
-    typesDiv.appendChild(saveBtn);
+    utilDiv.appendChild(saveBtn);
 
     // Upload button + dropdown (notes pages only)
     if (isNotes && checkboxes.length > 0) {
@@ -1194,7 +1198,7 @@
       dropdown.appendChild(doneBtn);
 
       uploadWrap.appendChild(dropdown);
-      typesDiv.appendChild(uploadWrap);
+      utilDiv.appendChild(uploadWrap);
 
       // Toggle dropdown
       uploadBtn.addEventListener('click', function(e) {
@@ -1264,5 +1268,7 @@
         }
       });
     }
+
+    snRow.appendChild(utilDiv);
   }
 })();
