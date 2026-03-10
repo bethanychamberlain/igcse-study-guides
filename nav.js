@@ -1290,7 +1290,7 @@
     try { return localStorage.getItem(KEY) === 'on'; } catch(e) { return false; }
   }
 
-  function showIndicator(on) {
+  function showIndicator(on, flash) {
     if (!dot) {
       dot = document.createElement('div');
       dot.style.cssText = 'position:fixed;bottom:4px;right:4px;width:8px;height:8px;border-radius:50%;z-index:99999;pointer-events:none;transition:opacity .3s;';
@@ -1298,6 +1298,15 @@
     }
     dot.style.backgroundColor = on ? '#e74c3c' : 'transparent';
     dot.title = on ? 'Tutor mode ON — tracking paused' : '';
+    // Brief toast on toggle so you know it worked
+    if (flash) {
+      var toast = document.createElement('div');
+      toast.textContent = on ? 'Tracking paused' : 'Tracking resumed';
+      toast.style.cssText = 'position:fixed;bottom:20px;right:20px;padding:8px 16px;background:#333;color:#fff;border-radius:6px;font:13px sans-serif;z-index:99999;opacity:1;transition:opacity .5s;';
+      document.body.appendChild(toast);
+      setTimeout(function() { toast.style.opacity = '0'; }, 1500);
+      setTimeout(function() { toast.remove(); }, 2100);
+    }
   }
 
   // Show on load if already active
@@ -1316,7 +1325,7 @@
         if (next) localStorage.setItem(KEY, next);
         else localStorage.removeItem(KEY);
       } catch(ex) {}
-      showIndicator(!!next);
+      showIndicator(!!next, true);
     }
   });
 })();
