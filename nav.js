@@ -271,3 +271,145 @@
     document.head.appendChild(s);
   }
 })();
+
+// ============================================================
+// Page Save — auto-save for notes & writing pages
+// Persists textareas + checkboxes to localStorage, logs to StudyResults
+// ============================================================
+(function() {
+  var path = window.location.pathname;
+  var filename = path.split('/').pop() || '';
+  var isNotes = filename.indexOf('-notes') !== -1;
+  var isWriting = filename.indexOf('-writing') !== -1;
+  if (!isNotes && !isWriting) return;
+
+  var SAVE_KEY = 'page-save-' + filename.replace('.html', '');
+  var pageType = isWriting ? 'writing' : 'notes';
+
+  // Detect subject and chapter from path
+  var parts = path.split('/').filter(function(p) { return p.length > 0; });
+  var dir = parts[parts.length - 2] || '';
+  var subjectMap = {biology:'Biology',chemistry:'Chemistry',physics:'Physics',english:'English',spanish:'Spanish',math:'Math'};
+  var subject = subjectMap[dir] || dir;
+  var chMatch = filename.match(/ch(\d+)/);
+  var chapter = chMatch ? 'Ch ' + parseInt(chMatch[1]) : filename;
+
+  // Dynamically load results.js
+  if (!window.StudyResults) {
+    var rs = document.createElement('script');
+    rs.src = '../results.js';
+    document.head.appendChild(rs);
+  }
+
+  // nav.js is the last script tag, so DOM is ready
+  var textareas = document.querySelectorAll('textarea');
+  var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+  if (textareas.length === 0 && checkboxes.length === 0) return;
+
+  // --- Restore saved state ---
+  try {
+    var raw = localStorage.getItem(SAVE_KEY);
+    if (raw) {
+      var state = JSON.parse(raw);
+      if (state.textareas) {
+        textareas.forEach(function(ta, i) {
+          if (state.textareas[i]) {
+            ta.value = state.textareas[i];
+            ta.dispatchEvent(new Event('input'));
+          }
+        });
+      }
+      if (state.checkboxes) {
+        checkboxes.forEach(function(cb, i) {
+          if (state.checkboxes[i] !== undefined && cb.checked !== state.checkboxes[i]) {
+            cb.checked = state.checkboxes[i];
+            cb.dispatchEvent(new Event('change'));
+          }
+        });
+      }
+    }
+  } catch(e) { /* corrupt data — ignore */ }
+
+  // --- Auto-save on change ---
+  var timer;
+  function saveToLocal() {
+    var s = { textareas: [], checkboxes: [], saved: new Date().toISOString() };
+    textareas.forEach(function(ta) { s.textareas.push(ta.value); });
+    checkboxes.forEach(function(cb) { s.checkboxes.push(cb.checked); });
+    try { localStorage.setItem(SAVE_KEY, JSON.stringify(s)); } catch(e) {}
+  }
+
+  textareas.forEach(function(ta) {
+    ta.addEventListener('input', function() {
+      clearTimeout(timer);
+      timer = setTimeout(saveToLocal, 1500);
+    });
+  });
+  checkboxes.forEach(function(cb) {
+    cb.addEventListener('change', saveToLocal);
+  });
+
+  // --- Save button + toast ---
+  var css = document.createElement('style');
+  css.textContent =
+    '.page-save-btn{position:fixed;bottom:20px;right:20px;z-index:999;' +
+    'background:#27ae60;color:#fff;border:none;border-radius:28px;' +
+    'padding:12px 24px;font-size:14px;font-weight:700;font-family:inherit;' +
+    'cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25);transition:all .2s}' +
+    '.page-save-btn:hover{transform:translateY(-2px);box-shadow:0 5px 16px rgba(0,0,0,.3)}' +
+    '.page-save-btn:active{transform:translateY(0)}' +
+    '.save-toast{position:fixed;bottom:72px;right:20px;z-index:999;' +
+    'background:#2c3e50;color:#fff;padding:10px 20px;border-radius:8px;' +
+    'font-size:13px;font-weight:600;font-family:inherit;opacity:0;' +
+    'transition:opacity .3s;pointer-events:none}' +
+    '.save-toast.show{opacity:1}' +
+    '@media print{.page-save-btn,.save-toast{display:none!important}}';
+  document.head.appendChild(css);
+
+  var btn = document.createElement('button');
+  btn.className = 'page-save-btn';
+  btn.textContent = 'Save Progress';
+  document.body.appendChild(btn);
+
+  var toast = document.createElement('div');
+  toast.className = 'save-toast';
+  toast.textContent = 'Progress saved!';
+  document.body.appendChild(toast);
+
+  btn.addEventListener('click', function() {
+    saveToLocal();
+
+    // Log summary to StudyResults
+    if (window.StudyResults) {
+      var now = new Date();
+      var checked = 0;
+      checkboxes.forEach(function(cb) { if (cb.checked) checked++; });
+      var filled = 0;
+      textareas.forEach(function(ta) { if (ta.value.trim().length > 0) filled++; });
+      var resp = '';
+      if (checkboxes.length > 0) resp += checked + '/' + checkboxes.length + ' checks';
+      if (textareas.length > 0) resp += (resp ? ', ' : '') + filled + '/' + textareas.length + ' written';
+
+      window.StudyResults.save([{
+        date: now.toISOString().slice(0, 10),
+        time: now.toTimeString().slice(0, 5),
+        type: pageType,
+        subject: subject,
+        chapter: chapter,
+        item: 'progress',
+        response: resp,
+        result: 'saved',
+        selfRating: '',
+        seconds: 0
+      }]);
+    }
+
+    // Flash confirmation
+    toast.classList.add('show');
+    btn.textContent = 'Saved!';
+    setTimeout(function() {
+      toast.classList.remove('show');
+      btn.textContent = 'Save Progress';
+    }, 2000);
+  });
+})();
