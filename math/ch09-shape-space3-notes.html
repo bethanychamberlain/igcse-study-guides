@@ -298,6 +298,49 @@
   .end-card h2 { font-size: 20px; margin-bottom: 8px; }
   .end-card p { opacity: 0.9; font-size: 14px; }
 
+  /* ===== Collapsible applet system ===== */
+  .applet-wrap {
+    margin: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .applet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .applet-header:hover { background: #eee; }
+  .applet-arrow {
+    font-size: 10px;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .applet-wrap:not(.collapsed) .applet-arrow { transform: rotate(90deg); }
+  .applet-content { border-top: 1px solid #e0e0e0; overflow: hidden; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: #f8f9fa; }
+  .applet-wrap.collapsed .applet-content { display: none; }
+  .ggb-container { width: 100%; max-width: 700px; }
+  .applet-content .ggb-label {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 700px;
+  }
+  .applet-content .ggb-label strong { color: var(--subject-dark); }
+  @media print { .applet-wrap { display: none; } }
+
   /* Print */
   @media print {
     body { background: #fff; padding: 0; font-size: 13px; }
@@ -409,6 +452,17 @@
     <li><input type="checkbox"> I can use the scale factor to find a missing length</li>
     <li><input type="checkbox"> I know that similar triangles need matching angles; other shapes need matching angles AND side ratios</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Similar Triangle Maker
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="HpYmnw8f"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the vertices to resize the triangles. Notice the angles stay equal and the sides stay in the same ratio — that's similarity.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 2: CONGRUENT SHAPES ===== -->
@@ -500,6 +554,17 @@
     <li><input type="checkbox"> I can label H, O, and A on a right-angled triangle</li>
     <li><input type="checkbox"> I've memorised SOHCAHTOA</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: True Meaning of Sine, Cosine, Tangent Ratios
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="UUrFubnN"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the angle and watch sine, cosine, and tangent change on the unit circle. See why SOH CAH TOA works.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 4: FINDING A SIDE ===== -->
@@ -736,5 +801,32 @@
   updateProgress();
 </script>
 <script src="../nav.js"></script>
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+  function toggleApplet(headerEl) {
+    var wrap = headerEl.parentNode;
+    wrap.classList.toggle('collapsed');
+    if (!wrap.classList.contains('collapsed')) {
+      var container = wrap.querySelector('.ggb-container[data-material-id]');
+      if (container) {
+        var id = container.getAttribute('data-material-id');
+        container.removeAttribute('data-material-id');
+        var applet = new GGBApplet({
+          material_id: id,
+          scaleContainerClass: 'ggb-container',
+          showToolBar: false,
+          showMenuBar: false,
+          showAlgebraInput: false,
+          showResetIcon: true,
+          enableRightClick: false,
+          allowStyleBar: false,
+          enableLabelDrags: false,
+          enableShiftDragZoom: false
+        }, true);
+        applet.inject(container);
+      }
+    }
+  }
+</script>
 </body>
 </html>

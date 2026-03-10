@@ -298,6 +298,49 @@
   .end-card h2 { font-size: 20px; margin-bottom: 8px; }
   .end-card p { opacity: 0.9; font-size: 14px; }
 
+  /* ===== Collapsible applet system ===== */
+  .applet-wrap {
+    margin: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .applet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .applet-header:hover { background: #eee; }
+  .applet-arrow {
+    font-size: 10px;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .applet-wrap:not(.collapsed) .applet-arrow { transform: rotate(90deg); }
+  .applet-content { border-top: 1px solid #e0e0e0; overflow: hidden; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: #f8f9fa; }
+  .applet-wrap.collapsed .applet-content { display: none; }
+  .ggb-container { width: 100%; max-width: 700px; }
+  .applet-content .ggb-label {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 700px;
+  }
+  .applet-content .ggb-label strong { color: var(--subject-dark); }
+  @media print { .applet-wrap { display: none; } }
+
   /* Print */
   @media print {
     body { background: #fff; padding: 0; font-size: 13px; }
@@ -440,6 +483,17 @@
     <li><input type="checkbox"> I can use the nth term to find any term (e.g., the 50th)</li>
     <li><input type="checkbox"> I always check my formula by plugging in n = 1, 2, 3</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Formula for nth Term
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="27555638"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Adjust n to see how the formula generates each term in the sequence.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 2: SOLVING EQUATIONS ===== -->
@@ -560,6 +614,17 @@
     <li><input type="checkbox"> I can expand brackets and then solve</li>
     <li><input type="checkbox"> I always check by substituting back in</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Balance Scale Model to Solve Linear Equations
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="51380095"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag objects onto both sides of the scale to solve the equation. Keep it balanced!</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 3: DRAWING GRAPHS ===== -->
@@ -621,6 +686,17 @@
     <li><input type="checkbox"> I use a ruler for straight lines</li>
     <li><input type="checkbox"> I check my graph by making sure all points lie on the line</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Linear Function &mdash; Equation to Table to Graph
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="58192103"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Change the equation and watch the table and graph update in real time.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 4: GRADIENT AND y = mx + c ===== -->
@@ -721,6 +797,17 @@
     <li><input type="checkbox"> I know positive gradient = uphill, negative = downhill</li>
     <li><input type="checkbox"> I can write the equation of a line given gradient and y-intercept</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Effect of Gradient and y-Intercept on Graph
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="1323157"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the sliders to change the gradient (m) and y-intercept (c) and see how the line moves.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== OVERALL STUDY TIPS ===== -->
@@ -788,5 +875,32 @@
   updateProgress();
 </script>
 <script src="../nav.js"></script>
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+  function toggleApplet(headerEl) {
+    var wrap = headerEl.parentNode;
+    wrap.classList.toggle('collapsed');
+    if (!wrap.classList.contains('collapsed')) {
+      var container = wrap.querySelector('.ggb-container[data-material-id]');
+      if (container) {
+        var id = container.getAttribute('data-material-id');
+        container.removeAttribute('data-material-id');
+        var applet = new GGBApplet({
+          material_id: id,
+          scaleContainerClass: 'ggb-container',
+          showToolBar: false,
+          showMenuBar: false,
+          showAlgebraInput: false,
+          showResetIcon: true,
+          enableRightClick: false,
+          allowStyleBar: false,
+          enableLabelDrags: false,
+          enableShiftDragZoom: false
+        }, true);
+        applet.inject(container);
+      }
+    }
+  }
+</script>
 </body>
 </html>

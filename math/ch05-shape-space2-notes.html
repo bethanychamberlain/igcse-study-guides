@@ -308,6 +308,49 @@
     .block { break-inside: avoid; }
     .end-card { break-inside: avoid; }
   }
+
+  /* ===== Collapsible applet system ===== */
+  .applet-wrap {
+    margin: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .applet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .applet-header:hover { background: #eee; }
+  .applet-arrow {
+    font-size: 10px;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .applet-wrap:not(.collapsed) .applet-arrow { transform: rotate(90deg); }
+  .applet-content { border-top: 1px solid #e0e0e0; overflow: hidden; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: #f8f9fa; }
+  .applet-wrap.collapsed .applet-content { display: none; }
+  .ggb-container { width: 100%; max-width: 700px; }
+  .applet-content .ggb-label {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 700px;
+  }
+  .applet-content .ggb-label strong { color: var(--subject-dark); }
+  @media print { .applet-wrap { display: none; } }
 </style>
 </head>
 <body>
@@ -464,6 +507,17 @@
     <li><input type="checkbox"> I can enlarge a shape with a given scale factor and centre</li>
     <li><input type="checkbox"> I can describe a transformation fully with all required information</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Rotation, Reflection, Enlargement, Translation
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="yq2nnewu"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Select a transformation type and drag to apply it. See how each one moves the shape differently.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 2: QUADRILATERALS & POLYGONS ===== -->
@@ -530,6 +584,17 @@
     <li><input type="checkbox"> I can describe the diagonal properties of each quadrilateral</li>
     <li><input type="checkbox"> I know the names of common polygons and what "regular" means</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Quadrilateral properties (drag to explore)
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="pgJ2gGks"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the vertices to deform the quadrilateral and observe which properties (parallel sides, equal angles, diagonals) are preserved.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 3: BEARINGS ===== -->
@@ -694,6 +759,17 @@
     <li><input type="checkbox"> I know to check: am I adding or subtracting?</li>
     <li><input type="checkbox"> I can use Pythagoras to find the distance between two coordinate points</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Pythagoras's Theorem (drag pieces proof)
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="adgkwqyn"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the coloured pieces to fill the squares and see how the areas prove a&sup2; + b&sup2; = c&sup2;.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== OVERALL STUDY TIPS ===== -->
@@ -760,5 +836,32 @@
   updateProgress();
 </script>
 <script src="../nav.js"></script>
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+  function toggleApplet(headerEl) {
+    var wrap = headerEl.parentNode;
+    wrap.classList.toggle('collapsed');
+    if (!wrap.classList.contains('collapsed')) {
+      var container = wrap.querySelector('.ggb-container[data-material-id]');
+      if (container) {
+        var id = container.getAttribute('data-material-id');
+        container.removeAttribute('data-material-id');
+        var applet = new GGBApplet({
+          material_id: id,
+          scaleContainerClass: 'ggb-container',
+          showToolBar: false,
+          showMenuBar: false,
+          showAlgebraInput: false,
+          showResetIcon: true,
+          enableRightClick: false,
+          allowStyleBar: false,
+          enableLabelDrags: false,
+          enableShiftDragZoom: false
+        }, true);
+        applet.inject(container);
+      }
+    }
+  }
+</script>
 </body>
 </html>

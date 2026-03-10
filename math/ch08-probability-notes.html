@@ -299,6 +299,49 @@
   .end-card p { opacity: 0.9; font-size: 14px; }
 
   /* Print */
+  /* ===== Collapsible applet system ===== */
+  .applet-wrap {
+    margin: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .applet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .applet-header:hover { background: #eee; }
+  .applet-arrow {
+    font-size: 10px;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .applet-wrap:not(.collapsed) .applet-arrow { transform: rotate(90deg); }
+  .applet-content { border-top: 1px solid #e0e0e0; overflow: hidden; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: #f8f9fa; }
+  .applet-wrap.collapsed .applet-content { display: none; }
+  .ggb-container { width: 100%; max-width: 700px; }
+  .applet-content .ggb-label {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 700px;
+  }
+  .applet-content .ggb-label strong { color: var(--subject-dark); }
+  @media print { .applet-wrap { display: none; } }
+
   @media print {
     body { background: #fff; padding: 0; font-size: 13px; }
     .hero { break-after: avoid; }
@@ -589,6 +632,17 @@
     <li><input type="checkbox"> I can calculate probabilities from a Venn diagram</li>
     <li><input type="checkbox"> I understand the difference between "A" and "only A"</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Operation of 2 Sets
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="Cy3CHcFD"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Add elements to sets A and B, then see how union, intersection, and complement regions change in the Venn diagram.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 5: TREE DIAGRAMS AND COMBINED EVENTS ===== -->
@@ -693,6 +747,17 @@
     <li><input type="checkbox"> I always check that all end probabilities add up to 1</li>
     <li><input type="checkbox"> I can solve "one of each" problems using tree diagrams</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Probability Tree Diagrams
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="M85jmuEv"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Set the probabilities on each branch and watch the tree diagram calculate combined probabilities automatically.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== OVERALL STUDY TIPS ===== -->
@@ -760,6 +825,33 @@
 
   checkboxes.forEach(cb => cb.addEventListener('change', updateProgress));
   updateProgress();
+</script>
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+  function toggleApplet(headerEl) {
+    var wrap = headerEl.parentNode;
+    wrap.classList.toggle('collapsed');
+    if (!wrap.classList.contains('collapsed')) {
+      var container = wrap.querySelector('.ggb-container[data-material-id]');
+      if (container) {
+        var id = container.getAttribute('data-material-id');
+        container.removeAttribute('data-material-id');
+        var applet = new GGBApplet({
+          material_id: id,
+          scaleContainerClass: 'ggb-container',
+          showToolBar: false,
+          showMenuBar: false,
+          showAlgebraInput: false,
+          showResetIcon: true,
+          enableRightClick: false,
+          allowStyleBar: false,
+          enableLabelDrags: false,
+          enableShiftDragZoom: false
+        }, true);
+        applet.inject(container);
+      }
+    }
+  }
 </script>
 <script src="../nav.js"></script>
 </body>

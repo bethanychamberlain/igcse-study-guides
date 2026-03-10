@@ -299,6 +299,49 @@
   .end-card p { opacity: 0.9; font-size: 14px; }
 
   /* Print */
+  /* ===== Collapsible applet system ===== */
+  .applet-wrap {
+    margin: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .applet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .applet-header:hover { background: #eee; }
+  .applet-arrow {
+    font-size: 10px;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .applet-wrap:not(.collapsed) .applet-arrow { transform: rotate(90deg); }
+  .applet-content { border-top: 1px solid #e0e0e0; overflow: hidden; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: #f8f9fa; }
+  .applet-wrap.collapsed .applet-content { display: none; }
+  .ggb-container { width: 100%; max-width: 700px; }
+  .applet-content .ggb-label {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 700px;
+  }
+  .applet-content .ggb-label strong { color: var(--subject-dark); }
+  @media print { .applet-wrap { display: none; } }
+
   @media print {
     body { background: #fff; padding: 0; font-size: 13px; }
     .hero { break-after: avoid; }
@@ -524,6 +567,17 @@
     <li><input type="checkbox"> I can solve by substitution when one variable is already isolated</li>
     <li><input type="checkbox"> I always check my answer in the other equation</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Solutions to Simultaneous Linear Equations
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="DjW2kCDE"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Change the equations and see where the two lines cross — that's the solution to the simultaneous equations.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 3: SEQUENCES AND NTH TERM ===== -->
@@ -831,6 +885,17 @@
     <li><input type="checkbox"> I can make a table of values and plot a straight line</li>
     <li><input type="checkbox"> I know to use a ruler and plot at least 3 points</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: y = mx + c
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="s3jEhYHw"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Adjust m (gradient) and c (y-intercept) with the sliders and watch the line y = mx + c change.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== OVERALL STUDY TIPS ===== -->
@@ -899,5 +964,32 @@
   updateProgress();
 </script>
 <script src="../nav.js"></script>
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+  function toggleApplet(headerEl) {
+    var wrap = headerEl.parentNode;
+    wrap.classList.toggle('collapsed');
+    if (!wrap.classList.contains('collapsed')) {
+      var container = wrap.querySelector('.ggb-container[data-material-id]');
+      if (container) {
+        var id = container.getAttribute('data-material-id');
+        container.removeAttribute('data-material-id');
+        var applet = new GGBApplet({
+          material_id: id,
+          scaleContainerClass: 'ggb-container',
+          showToolBar: false,
+          showMenuBar: false,
+          showAlgebraInput: false,
+          showResetIcon: true,
+          enableRightClick: false,
+          allowStyleBar: false,
+          enableLabelDrags: false,
+          enableShiftDragZoom: false
+        }, true);
+        applet.inject(container);
+      }
+    }
+  }
+</script>
 </body>
 </html>

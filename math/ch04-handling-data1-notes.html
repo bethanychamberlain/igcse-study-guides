@@ -298,7 +298,49 @@
   .end-card h2 { font-size: 20px; margin-bottom: 8px; }
   .end-card p { opacity: 0.9; font-size: 14px; }
 
-  /* Print */
+  /* ===== Collapsible applet system ===== */
+  .applet-wrap {
+    margin: 12px 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fff;
+  }
+  .applet-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    background: #f8f9fa;
+    cursor: pointer;
+    user-select: none;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+  .applet-header:hover { background: #eee; }
+  .applet-arrow {
+    font-size: 10px;
+    display: inline-block;
+    transition: transform 0.2s;
+  }
+  .applet-wrap:not(.collapsed) .applet-arrow { transform: rotate(90deg); }
+  .applet-content { border-top: 1px solid #e0e0e0; overflow: hidden; padding: 16px; display: flex; flex-direction: column; align-items: center; gap: 8px; background: #f8f9fa; }
+  .applet-wrap.collapsed .applet-content { display: none; }
+  .ggb-container { width: 100%; max-width: 700px; }
+  .applet-content .ggb-label {
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    border-top: 1px solid #e0e0e0;
+    background: #fff;
+    border-radius: 6px;
+    width: 100%;
+    max-width: 700px;
+  }
+  .applet-content .ggb-label strong { color: var(--subject-dark); }
+  @media print { .applet-wrap { display: none; } }
+
   @media print {
     body { background: #fff; padding: 0; font-size: 13px; }
     .hero { break-after: avoid; }
@@ -479,6 +521,17 @@
     <li><input type="checkbox"> I can calculate angles for a pie chart and check they sum to 360&deg;</li>
     <li><input type="checkbox"> I can read values from a pie chart using angle &divide; 360 &times; total</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Pie Chart vs Bar Graph
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="uhJYg8zm"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Enter data values and toggle between pie chart and bar graph to see how the same data looks in different formats.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 3: AVERAGES ===== -->
@@ -555,6 +608,17 @@
     <li><input type="checkbox"> I can calculate the range</li>
     <li><input type="checkbox"> I know when the median is a better average than the mean</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Comparing Mean, Median, and Mode
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="qd7tr6Pr"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Drag the data points and watch how mean, median, and mode change differently.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 4: SCATTER GRAPHS & CORRELATION ===== -->
@@ -617,6 +681,17 @@
     <li><input type="checkbox"> I can draw a line of best fit and use it to estimate values</li>
     <li><input type="checkbox"> I understand that correlation does not prove cause</li>
   </ul>
+
+  <div class="applet-wrap collapsed">
+    <div class="applet-header" onclick="toggleApplet(this)">
+      <span class="applet-arrow">&#9654;</span>
+      Interactive: Line of Best Fit (4-step scaffolded)
+    </div>
+    <div class="applet-content">
+      <div class="ggb-container" data-material-id="VJ8zmZwn"></div>
+      <div class="ggb-label"><strong>Try it:</strong> Plot points, then draw a line of best fit step by step. The applet guides you through 4 stages.</div>
+    </div>
+  </div>
 </div>
 
 <!-- ===== SECTION 5: FREQUENCY POLYGONS ===== -->
@@ -736,5 +811,32 @@
   updateProgress();
 </script>
 <script src="../nav.js"></script>
+<script src="https://www.geogebra.org/apps/deployggb.js"></script>
+<script>
+  function toggleApplet(headerEl) {
+    var wrap = headerEl.parentNode;
+    wrap.classList.toggle('collapsed');
+    if (!wrap.classList.contains('collapsed')) {
+      var container = wrap.querySelector('.ggb-container[data-material-id]');
+      if (container) {
+        var id = container.getAttribute('data-material-id');
+        container.removeAttribute('data-material-id');
+        var applet = new GGBApplet({
+          material_id: id,
+          scaleContainerClass: 'ggb-container',
+          showToolBar: false,
+          showMenuBar: false,
+          showAlgebraInput: false,
+          showResetIcon: true,
+          enableRightClick: false,
+          allowStyleBar: false,
+          enableLabelDrags: false,
+          enableShiftDragZoom: false
+        }, true);
+        applet.inject(container);
+      }
+    }
+  }
+</script>
 </body>
 </html>
