@@ -36,6 +36,21 @@ function doPost(e) {
       PropertiesService.getScriptProperties().deleteProperty('setupDone');
       ensureSetup(ss);
       return ContentService.createTextOutput('Dashboard reset');
+    } else if (data.target === 'clearAllData') {
+      // Admin command: clear all data rows, keep headers + structure + Dashboard formulas
+      var sheets = ['Activity Log', 'Writing & Notes', 'Checkbox Tracker'];
+      var cleared = [];
+      for (var i = 0; i < sheets.length; i++) {
+        var s = ss.getSheetByName(sheets[i]);
+        if (s && s.getLastRow() > 1) {
+          // Clear everything below row 1 (headers)
+          var lastRow = s.getLastRow();
+          var lastCol = s.getLastColumn() || 1;
+          s.getRange(2, 1, lastRow - 1, lastCol).clear();
+          cleared.push(sheets[i] + ' (' + (lastRow - 1) + ' rows)');
+        }
+      }
+      return ContentService.createTextOutput('Cleared: ' + (cleared.length ? cleared.join(', ') : 'nothing to clear'));
     } else if (data.target === 'progress') {
       // Per-exercise tracking → "Writing & Notes" sheet
       // overwrite flag = re-save in same browser session (don't create new columns)
