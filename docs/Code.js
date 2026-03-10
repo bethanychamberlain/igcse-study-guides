@@ -312,13 +312,9 @@ function doGet(e) {
     .addMetaTag('viewport', 'width=device-width, initial-scale=1');
 }
 
-function processUpload(form) {
-  var subject = form.subject;
-  var chapter = form.chapter;
-
-  // form.photo is a single Blob or an array of Blobs (when multiple)
-  var photos = Array.isArray(form.photo) ? form.photo : [form.photo];
-
+// Upload a single photo from base64 data.
+// Called once per file from the client (which loops through selected files).
+function uploadPhoto(subject, chapter, mimeType, base64Data) {
   // Get or create folder: IGCSE Study Photos / {Subject}
   var root = DriveApp.getRootFolder();
   var parentName = 'IGCSE Study Photos';
@@ -334,36 +330,32 @@ function processUpload(form) {
   var tz = Session.getScriptTimeZone();
   var ts = Utilities.formatDate(now, tz, 'yyyy-MM-dd_HHmmss');
   var base = chapter ? chapter.replace(/\s+/g, '_') : 'notes';
+  var ext = (mimeType || '').indexOf('png') !== -1 ? '.png' : '.jpg';
+  var name = base + '_' + ts + ext;
 
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  ensureSetup(ss);
-  var sheet = ss.getSheetByName('Activity Log') || ss.getSheets()[0];
+  var blob = Utilities.newBlob(Utilities.base64Decode(base64Data), mimeType, name);
+  parent.createFile(blob);
 
-  for (var i = 0; i < photos.length; i++) {
-    var file = photos[i];
-    if (!file || !file.getBytes || file.getBytes().length === 0) continue;
-    var name = base + '_' + ts + (photos.length > 1 ? '_' + (i + 1) : '');
-    file.setName(name);
-    parent.createFile(file);
+  // Log to Activity Log
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    ensureSetup(ss);
+    var sheet = ss.getSheetByName('Activity Log') || ss.getSheets()[0];
+    sheet.appendRow([
+      Utilities.formatDate(now, tz, 'yyyy-MM-dd'),
+      Utilities.formatDate(now, tz, 'HH:mm'),
+      'photo-upload',
+      subject,
+      chapter,
+      name,
+      '',
+      'uploaded',
+      '',
+      ''
+    ]);
+  } catch(e) {}
 
-    // Log each upload to Activity Log
-    try {
-      sheet.appendRow([
-        Utilities.formatDate(now, tz, 'yyyy-MM-dd'),
-        Utilities.formatDate(now, tz, 'HH:mm'),
-        'photo-upload',
-        subject,
-        chapter,
-        name,
-        '',
-        'uploaded',
-        '',
-        ''
-      ]);
-    } catch(e) {}
-  }
-
-  return photos.length + ' photo(s) uploaded';
+  return 'OK';
 }
 
 function getUploadHtml(subject, chapter) {
@@ -426,6 +418,8 @@ function getUploadHtml(subject, chapter) {
   '</div>' +
 
   '<script>' +
+  'var subject = "' + subject + '";' +
+  'var chapter = "' + chapter + '";' +
   'function clearEl(el) { while (el.firstChild) el.removeChild(el.firstChild); }' +
   'function showPreviews(input) {' +
   '  var files = input.files; if (!files.length) return;' +
@@ -446,24 +440,34 @@ function getUploadHtml(subject, chapter) {
   '  }' +
   '}' +
   'function submitForm() {' +
+  '  var files = document.getElementById("photo").files;' +
+  '  if (!files.length) return;' +
   '  var btn = document.getElementById("uploadBtn");' +
   '  var status = document.getElementById("status");' +
-  '  btn.disabled = true; btn.textContent = "Uploading...";' +
+  '  btn.disabled = true;' +
   '  status.className = "status"; status.textContent = "";' +
-  '  google.script.run' +
-  '    .withSuccessHandler(function(msg) {' +
+  '  var total = files.length, done = 0, failed = 0;' +
+  '  function uploadNext(i) {' +
+  '    if (i >= total) {' +
   '      btn.style.display = "none";' +
   '      document.getElementById("uploadForm").style.display = "none";' +
-  '      var done = document.getElementById("doneBox");' +
-  '      done.style.display = "block";' +
-  '      done.querySelector("h2").textContent = "\\u2713 " + (msg || "Uploaded!");' +
-  '    })' +
-  '    .withFailureHandler(function(err) {' +
-  '      status.className = "status err";' +
-  '      status.textContent = "Error: " + err.message;' +
-  '      btn.disabled = false; btn.textContent = "Try Again";' +
-  '    })' +
-  '    .processUpload(document.getElementById("uploadForm"));' +
+  '      var box = document.getElementById("doneBox"); box.style.display = "block";' +
+  '      box.querySelector("h2").textContent = "\\u2713 " + done + " photo" + (done > 1 ? "s" : "") + " uploaded!";' +
+  '      if (failed) { status.className = "status err"; status.textContent = failed + " failed"; }' +
+  '      return;' +
+  '    }' +
+  '    btn.textContent = "Uploading " + (i + 1) + " of " + total + "...";' +
+  '    var reader = new FileReader();' +
+  '    reader.onload = function(e) {' +
+  '      var b64 = e.target.result.split(",")[1];' +
+  '      google.script.run' +
+  '        .withSuccessHandler(function() { done++; uploadNext(i + 1); })' +
+  '        .withFailureHandler(function() { failed++; uploadNext(i + 1); })' +
+  '        .uploadPhoto(subject, chapter, files[i].type, b64);' +
+  '    };' +
+  '    reader.readAsDataURL(files[i]);' +
+  '  }' +
+  '  uploadNext(0);' +
   '}' +
   'function resetForm() {' +
   '  document.getElementById("uploadForm").style.display = "block";' +
@@ -472,6 +476,7 @@ function getUploadHtml(subject, chapter) {
   '  clearEl(document.getElementById("previews"));' +
   '  document.getElementById("fileCount").textContent = "";' +
   '  document.getElementById("dropArea").classList.remove("has-file");' +
+  '  document.getElementById("status").textContent = "";' +
   '  var btn = document.getElementById("uploadBtn");' +
   '  btn.style.display = "block"; btn.disabled = true; btn.textContent = "Upload Photos";' +
   '}' +
