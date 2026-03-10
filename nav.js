@@ -549,6 +549,217 @@
       }).catch(function() {});
     } catch(e) {}
   }, 30000);
+
+  // --- Tab-Away Tracking ---
+  // Logs when the student leaves the tab and how long they were gone.
+  // Only logs absences > 5 seconds to filter accidental switches.
+  var hiddenAt = null;
+
+  document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+      hiddenAt = Date.now();
+    } else if (hiddenAt) {
+      var awaySec = Math.round((Date.now() - hiddenAt) / 1000);
+      hiddenAt = null;
+      if (awaySec < 5) return; // ignore brief switches
+      var now = new Date();
+      try {
+        fetch(SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {'Content-Type': 'text/plain'},
+          body: JSON.stringify({
+            key: SHEETS_KEY,
+            rows: [[
+              now.toISOString().slice(0, 10),
+              now.toTimeString().slice(0, 5),
+              'tab-away',
+              subject,
+              chapter,
+              pageMode,
+              '',
+              'returned',
+              '',
+              awaySec
+            ]]
+          })
+        }).catch(function() {});
+      } catch(e) {}
+    }
+  });
+})();
+
+// ============================================================
+// Quick Lookup — in-page dictionary so the student doesn't need
+// to tab away. Logs every search to the Activity Log.
+// ============================================================
+(function() {
+  var path = window.location.pathname;
+  var filename = path.split('/').pop() || '';
+  // Only on notes and quiz pages
+  if (filename.indexOf('-notes') === -1 && filename.indexOf('-quiz') === -1) return;
+
+  var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzwQywmHmRgm9J3U-UjI6KXnmke5DCX1nplLgOAtPo81BGkWgy1jWLu1r08_N021Hv3/exec';
+  var SHEETS_KEY = 'igcse-study-2026';
+  var parts = path.split('/').filter(function(p) { return p.length > 0; });
+  var dir = parts[parts.length - 2] || '';
+  var subjectMap = {biology:'Biology',chemistry:'Chemistry',physics:'Physics',english:'English',spanish:'Spanish',math:'Math'};
+  var subject = subjectMap[dir] || dir;
+  var slug = filename.replace(/-(notes|cheatsheet|quiz|writing)\.html$/, '');
+  var chapter = slug.replace(/^ch0?(\d+)-/, 'Ch$1 ').replace(/-/g, ' ');
+  chapter = chapter.replace(/\b\w/g, function(c) { return c.toUpperCase(); });
+
+  var css = document.createElement('style');
+  css.textContent =
+    '.lookup-toggle{position:fixed;bottom:20px;left:20px;z-index:998;' +
+    'background:#2c3e50;color:#fff;border:none;border-radius:50%;width:44px;height:44px;' +
+    'font-size:20px;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.25);' +
+    'font-family:inherit;transition:all .2s;line-height:44px;text-align:center}' +
+    '.lookup-toggle:hover{background:#1a252f;transform:translateY(-2px)}' +
+    '.lookup-panel{position:fixed;bottom:74px;left:20px;z-index:998;' +
+    'background:#fff;border-radius:12px;box-shadow:0 4px 20px rgba(0,0,0,.2);' +
+    'width:320px;max-height:400px;overflow:hidden;display:none;' +
+    'font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}' +
+    '.lookup-panel.open{display:block}' +
+    '.lookup-input-wrap{display:flex;border-bottom:1px solid #eee;padding:8px}' +
+    '.lookup-input{flex:1;border:1px solid #ddd;border-radius:8px;padding:8px 12px;' +
+    'font-size:14px;font-family:inherit;outline:none}' +
+    '.lookup-input:focus{border-color:#2c3e50}' +
+    '.lookup-go{background:#2c3e50;color:#fff;border:none;border-radius:8px;' +
+    'padding:8px 14px;margin-left:6px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit}' +
+    '.lookup-result{padding:12px;font-size:13px;line-height:1.5;max-height:320px;' +
+    'overflow-y:auto;color:#333}' +
+    '.lookup-result .word{font-size:16px;font-weight:700;margin-bottom:4px}' +
+    '.lookup-result .pos{color:#666;font-style:italic;margin-top:8px}' +
+    '.lookup-result .def{margin:2px 0 2px 12px}' +
+    '.lookup-result .none{color:#999;font-style:italic}' +
+    '@media print{.lookup-toggle,.lookup-panel{display:none!important}}';
+  document.head.appendChild(css);
+
+  var toggleBtn = document.createElement('button');
+  toggleBtn.className = 'lookup-toggle';
+  toggleBtn.textContent = '?';
+  toggleBtn.title = 'Look up a word';
+  document.body.appendChild(toggleBtn);
+
+  var panel = document.createElement('div');
+  panel.className = 'lookup-panel';
+
+  var inputWrap = document.createElement('div');
+  inputWrap.className = 'lookup-input-wrap';
+
+  var input = document.createElement('input');
+  input.className = 'lookup-input';
+  input.type = 'text';
+  input.placeholder = 'Look up a word...';
+  inputWrap.appendChild(input);
+
+  var goBtn = document.createElement('button');
+  goBtn.className = 'lookup-go';
+  goBtn.textContent = 'Go';
+  inputWrap.appendChild(goBtn);
+
+  panel.appendChild(inputWrap);
+
+  var result = document.createElement('div');
+  result.className = 'lookup-result';
+  panel.appendChild(result);
+
+  document.body.appendChild(panel);
+
+  toggleBtn.addEventListener('click', function() {
+    panel.classList.toggle('open');
+    if (panel.classList.contains('open')) {
+      input.focus();
+    }
+  });
+
+  function doLookup() {
+    var word = input.value.trim().toLowerCase();
+    if (!word) return;
+
+    result.textContent = 'Looking up...';
+
+    // Log the search to Activity Log
+    var now = new Date();
+    try {
+      fetch(SHEETS_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        headers: {'Content-Type': 'text/plain'},
+        body: JSON.stringify({
+          key: SHEETS_KEY,
+          rows: [[
+            now.toISOString().slice(0, 10),
+            now.toTimeString().slice(0, 5),
+            'lookup',
+            subject,
+            chapter,
+            word,
+            '',
+            '',
+            '',
+            ''
+          ]]
+        })
+      }).catch(function() {});
+    } catch(e) {}
+
+    // Fetch definition from free dictionary API
+    fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word))
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        // Clear previous results
+        while (result.firstChild) result.removeChild(result.firstChild);
+
+        if (!Array.isArray(data) || data.length === 0) {
+          var none = document.createElement('div');
+          none.className = 'none';
+          none.textContent = 'No definition found for "' + word + '"';
+          result.appendChild(none);
+          return;
+        }
+
+        var entry = data[0];
+        var wordEl = document.createElement('div');
+        wordEl.className = 'word';
+        wordEl.textContent = entry.word || word;
+        result.appendChild(wordEl);
+
+        if (entry.phonetic) {
+          var phonetic = document.createElement('div');
+          phonetic.textContent = entry.phonetic;
+          phonetic.style.color = '#888';
+          phonetic.style.fontSize = '13px';
+          result.appendChild(phonetic);
+        }
+
+        var meanings = entry.meanings || [];
+        for (var m = 0; m < meanings.length && m < 3; m++) {
+          var meaning = meanings[m];
+          var pos = document.createElement('div');
+          pos.className = 'pos';
+          pos.textContent = meaning.partOfSpeech;
+          result.appendChild(pos);
+
+          var defs = meaning.definitions || [];
+          for (var d = 0; d < defs.length && d < 2; d++) {
+            var defEl = document.createElement('div');
+            defEl.className = 'def';
+            defEl.textContent = (d + 1) + '. ' + defs[d].definition;
+            result.appendChild(defEl);
+          }
+        }
+      })
+      .catch(function() {
+        result.textContent = 'Could not look up "' + word + '"';
+      });
+  }
+
+  goBtn.addEventListener('click', doLookup);
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') doLookup();
+  });
 })();
 
 // ============================================================
