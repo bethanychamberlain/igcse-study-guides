@@ -468,10 +468,16 @@
   // Wire up both nav bars
   [topNav, bottomNav].forEach(function(nav) {
     nav.prevBtn.addEventListener('click', function() {
-      if (currentPage > 0) showPage(currentPage - 1);
+      if (currentPage > 0) {
+        document.dispatchEvent(new Event('section-navigate'));
+        showPage(currentPage - 1);
+      }
     });
     nav.nextBtn.addEventListener('click', function() {
-      if (currentPage < pages.length - 1) showPage(currentPage + 1);
+      if (currentPage < pages.length - 1) {
+        document.dispatchEvent(new Event('section-navigate'));
+        showPage(currentPage + 1);
+      }
     });
   });
 
@@ -774,17 +780,15 @@
   // First save = new attempt. Subsequent saves = overwrite (same work session).
   var savedThisSession = false;
 
-  btn.addEventListener('click', function() {
+  // Core save logic — used by both button click and silent navigation saves
+  function saveToSheets() {
     saveToLocal();
-
     var dateStr = new Date().toISOString().slice(0, 10);
     var exercises = buildExercises(dateStr);
-
-    // Post to Google Sheets "Writing & Notes" sheet + Checkbox Tracker
     if (exercises.length > 0) {
       var payload = {key: SHEETS_KEY, target: 'progress', exercises: exercises};
       if (savedThisSession) {
-        payload.overwrite = true; // same session re-save — overwrite, don't create new columns
+        payload.overwrite = true;
       }
       if (isNotes) {
         payload.checkboxItems = buildCheckboxItems();
@@ -799,9 +803,11 @@
       } catch(e) {}
       savedThisSession = true;
     }
+    pageDirty = false;
+  }
 
-    pageDirty = false; // saved — safe to leave without warning
-
+  btn.addEventListener('click', function() {
+    saveToSheets();
     // Flash confirmation
     toast.classList.add('show');
     btn.textContent = 'Saved!';
@@ -811,6 +817,13 @@
     }, 2000);
   });
 
+  // Silent save when navigating between sections
+  document.addEventListener('section-navigate', function() {
+    if (pageDirty) {
+      saveToSheets();
+    }
+  });
+
   // =====================================================
   // QR Code Photo Upload Section (notes pages only)
   // =====================================================
@@ -818,9 +831,6 @@
     var uploadUrl = SHEETS_URL +
       '?subject=' + encodeURIComponent(subject) +
       '&chapter=' + encodeURIComponent(chapter);
-
-    // Detect mobile (for tap-to-upload vs QR code)
-    var isMobile = /Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     var qrCss = document.createElement('style');
     qrCss.textContent =
@@ -833,6 +843,7 @@
       'text-decoration:none;border-radius:24px;padding:12px 28px;font-size:15px;' +
       'font-weight:700;margin-bottom:16px;transition:all .2s}' +
       '.qr-upload-link:hover{background:#c0392b;transform:translateY(-1px)}' +
+      '.qr-or{display:block;font-size:13px;color:#999;margin-bottom:12px}' +
       '.qr-done-btn{background:#27ae60;color:#fff;border:none;border-radius:24px;' +
       'padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;' +
       'font-family:inherit;transition:all .2s}' +
@@ -856,31 +867,30 @@
     qrSection.appendChild(qrTitle);
 
     var qrDesc = document.createElement('p');
-    if (isMobile) {
-      qrDesc.textContent = 'Tap the button below to photograph your notes and upload them.';
-    } else {
-      qrDesc.textContent = 'Scan this QR code with your phone to take a photo of your notes and upload them.';
-    }
+    qrDesc.textContent = 'Take a photo of your notes and upload them.';
     qrSection.appendChild(qrDesc);
 
-    if (isMobile) {
-      // Mobile: direct link button instead of QR code
-      var uploadLink = document.createElement('a');
-      uploadLink.className = 'qr-upload-link';
-      uploadLink.href = uploadUrl;
-      uploadLink.target = '_blank';
-      uploadLink.textContent = 'Take Photo & Upload';
-      qrSection.appendChild(uploadLink);
-    } else {
-      // Desktop: QR code image
-      var qrImg = document.createElement('img');
-      qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' +
-        encodeURIComponent(uploadUrl);
-      qrImg.alt = 'QR code — scan to upload notes photo';
-      qrImg.width = 180;
-      qrImg.height = 180;
-      qrSection.appendChild(qrImg);
-    }
+    // Always show direct upload link (works on same device)
+    var uploadLink = document.createElement('a');
+    uploadLink.className = 'qr-upload-link';
+    uploadLink.href = uploadUrl;
+    uploadLink.target = '_blank';
+    uploadLink.textContent = 'Take Photo & Upload';
+    qrSection.appendChild(uploadLink);
+
+    // Also show QR code for scanning from a different device
+    var qrOr = document.createElement('span');
+    qrOr.className = 'qr-or';
+    qrOr.textContent = 'or scan from another device:';
+    qrSection.appendChild(qrOr);
+
+    var qrImg = document.createElement('img');
+    qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' +
+      encodeURIComponent(uploadUrl);
+    qrImg.alt = 'QR code — scan to upload notes photo';
+    qrImg.width = 150;
+    qrImg.height = 150;
+    qrSection.appendChild(qrImg);
 
     var qrDoneBtn = document.createElement('button');
     qrDoneBtn.className = 'qr-done-btn';
