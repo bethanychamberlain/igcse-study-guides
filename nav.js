@@ -273,6 +273,226 @@
 })();
 
 // ============================================================
+// Section Pagination — shows one section at a time on notes pages
+// Hero, progress bar, and how-to always visible.
+// Each "page" = one .section-header + its following .card(s).
+// The .end-card is appended to the last page.
+// Applets in the visible section auto-expand; hidden ones collapse.
+// ============================================================
+(function() {
+  var path = window.location.pathname;
+  var filename = path.split('/').pop() || '';
+  if (filename.indexOf('-notes') === -1) return;
+
+  var headers = document.querySelectorAll('.section-header');
+  if (headers.length < 2) return; // single section — no pagination needed
+
+  // Build pages: each page is an array of elements (section-header + cards until next header)
+  var pages = [];
+  for (var i = 0; i < headers.length; i++) {
+    var group = [headers[i]];
+    var next = headers[i].nextElementSibling;
+    while (next && !next.classList.contains('section-header') && !next.classList.contains('end-card')) {
+      group.push(next);
+      next = next.nextElementSibling;
+    }
+    pages.push(group);
+  }
+
+  // Attach .end-card to the last page
+  var endCard = document.querySelector('.end-card');
+  if (endCard) {
+    pages[pages.length - 1].push(endCard);
+  }
+
+  // Hide all pages initially
+  for (var p = 0; p < pages.length; p++) {
+    for (var e = 0; e < pages[p].length; e++) {
+      pages[p][e].style.display = 'none';
+    }
+  }
+
+  // Inject CSS
+  var pagCss = document.createElement('style');
+  pagCss.textContent =
+    '.section-nav{max-width:700px;margin:24px auto;display:flex;align-items:center;' +
+    'justify-content:space-between;gap:12px;font-family:inherit}' +
+    '.section-nav-btn{background:#2c3e50;color:#fff;border:none;border-radius:24px;' +
+    'padding:10px 22px;font-size:14px;font-weight:700;cursor:pointer;' +
+    'font-family:inherit;transition:all .2s;min-width:100px}' +
+    '.section-nav-btn:hover:not(:disabled){background:#1a252f;transform:translateY(-1px)}' +
+    '.section-nav-btn:disabled{background:#ccc;cursor:default}' +
+    '.section-nav-info{text-align:center;font-size:13px;color:#666;line-height:1.4}' +
+    '.section-nav-info strong{display:block;font-size:15px;color:#2c3e50}' +
+    '.section-dots{display:flex;gap:6px;justify-content:center;margin-top:6px}' +
+    '.section-dot{width:10px;height:10px;border-radius:50%;background:#ddd;transition:background .2s}' +
+    '.section-dot.active{background:#2c3e50}' +
+    '.section-dot.done{background:#27ae60}' +
+    '@media print{.section-nav{display:none!important}}';
+  document.head.appendChild(pagCss);
+
+  // Build top nav bar (after the .how-to or .progress-bar)
+  function createNavBar(id) {
+    var bar = document.createElement('div');
+    bar.className = 'section-nav';
+    bar.id = id;
+
+    var prevBtn = document.createElement('button');
+    prevBtn.className = 'section-nav-btn';
+    prevBtn.textContent = 'Previous';
+    bar.appendChild(prevBtn);
+
+    var info = document.createElement('div');
+    info.className = 'section-nav-info';
+    var label = document.createElement('strong');
+    info.appendChild(label);
+    var dots = document.createElement('div');
+    dots.className = 'section-dots';
+    for (var d = 0; d < pages.length; d++) {
+      var dot = document.createElement('span');
+      dot.className = 'section-dot';
+      dots.appendChild(dot);
+    }
+    info.appendChild(dots);
+    bar.appendChild(info);
+
+    var nextBtn = document.createElement('button');
+    nextBtn.className = 'section-nav-btn';
+    nextBtn.textContent = 'Next';
+    bar.appendChild(nextBtn);
+
+    return {bar: bar, prevBtn: prevBtn, nextBtn: nextBtn, label: label, dots: dots};
+  }
+
+  var topNav = createNavBar('section-nav-top');
+  var bottomNav = createNavBar('section-nav-bottom');
+
+  // Insert top nav after .how-to or .progress-bar (whichever is last before first section)
+  var howTo = document.querySelector('.how-to');
+  var insertAfter = howTo || document.querySelector('.progress-bar');
+  if (insertAfter && insertAfter.nextSibling) {
+    insertAfter.parentNode.insertBefore(topNav.bar, insertAfter.nextSibling);
+  } else {
+    // Fallback: insert before the first section header
+    headers[0].parentNode.insertBefore(topNav.bar, headers[0]);
+  }
+
+  // Insert bottom nav after the last page element
+  var lastPage = pages[pages.length - 1];
+  var lastEl = lastPage[lastPage.length - 1];
+  if (lastEl.nextSibling) {
+    lastEl.parentNode.insertBefore(bottomNav.bar, lastEl.nextSibling);
+  } else {
+    lastEl.parentNode.appendChild(bottomNav.bar);
+  }
+
+  // Track current page
+  var currentPage = 0;
+
+  // Check which pages have at least one checkbox checked (for dot coloring)
+  function getPageCompletionStatus() {
+    var status = [];
+    for (var p = 0; p < pages.length; p++) {
+      var hasCheckbox = false;
+      var allChecked = true;
+      for (var e = 0; e < pages[p].length; e++) {
+        var cbs = pages[p][e].querySelectorAll('input[type="checkbox"]');
+        for (var c = 0; c < cbs.length; c++) {
+          hasCheckbox = true;
+          if (!cbs[c].checked) allChecked = false;
+        }
+      }
+      status.push(hasCheckbox && allChecked);
+    }
+    return status;
+  }
+
+  function showPage(idx) {
+    // Hide current page
+    for (var e = 0; e < pages[currentPage].length; e++) {
+      pages[currentPage][e].style.display = 'none';
+      // Collapse applets on the page we're leaving
+      var applets = pages[currentPage][e].querySelectorAll('.applet-wrap');
+      for (var a = 0; a < applets.length; a++) {
+        applets[a].classList.add('collapsed');
+      }
+    }
+
+    currentPage = idx;
+
+    // Show new page
+    for (var e2 = 0; e2 < pages[currentPage].length; e2++) {
+      pages[currentPage][e2].style.display = '';
+      // Auto-expand applets on the visible page
+      var applets2 = pages[currentPage][e2].querySelectorAll('.applet-wrap.collapsed');
+      for (var a2 = 0; a2 < applets2.length; a2++) {
+        // toggleApplet removes .collapsed AND lazy-loads the GeoGebra applet
+        var header = applets2[a2].querySelector('.applet-header');
+        if (header && typeof window.toggleApplet === 'function') {
+          window.toggleApplet(header);
+        } else {
+          // Non-GeoGebra pages: just remove collapsed class
+          applets2[a2].classList.remove('collapsed');
+        }
+      }
+    }
+
+    // Get section title from the header
+    var headerEl = pages[currentPage][0];
+    var title = headerEl.textContent.trim();
+    // Strip the "Section X.X" prefix for cleaner display
+    var numSpan = headerEl.querySelector('.num');
+    if (numSpan) {
+      title = title.replace(numSpan.textContent.trim(), '').trim();
+    }
+
+    // Update both nav bars
+    var completion = getPageCompletionStatus();
+    [topNav, bottomNav].forEach(function(nav) {
+      nav.label.textContent = 'Section ' + (currentPage + 1) + ' of ' + pages.length;
+      nav.prevBtn.disabled = currentPage === 0;
+      nav.nextBtn.disabled = currentPage === pages.length - 1;
+      nav.nextBtn.textContent = currentPage === pages.length - 1 ? 'Done!' : 'Next';
+      var allDots = nav.dots.querySelectorAll('.section-dot');
+      for (var d = 0; d < allDots.length; d++) {
+        allDots[d].classList.toggle('active', d === currentPage);
+        allDots[d].classList.toggle('done', completion[d] && d !== currentPage);
+      }
+    });
+
+    // Scroll to top of content
+    var scrollTarget = topNav.bar;
+    scrollTarget.scrollIntoView({behavior: 'smooth', block: 'start'});
+  }
+
+  // Wire up both nav bars
+  [topNav, bottomNav].forEach(function(nav) {
+    nav.prevBtn.addEventListener('click', function() {
+      if (currentPage > 0) showPage(currentPage - 1);
+    });
+    nav.nextBtn.addEventListener('click', function() {
+      if (currentPage < pages.length - 1) showPage(currentPage + 1);
+    });
+  });
+
+  // Update dot completion status when checkboxes change
+  document.addEventListener('change', function(e) {
+    if (e.target && e.target.type === 'checkbox') {
+      var completion = getPageCompletionStatus();
+      [topNav, bottomNav].forEach(function(nav) {
+        var allDots = nav.dots.querySelectorAll('.section-dot');
+        for (var d = 0; d < allDots.length; d++) {
+          allDots[d].classList.toggle('done', completion[d] && d !== currentPage);
+        }
+      });
+    }
+  });
+
+  // Show the first page
+  showPage(0);
+})();
+
+// ============================================================
 // Page View Tracking — logs a view after 30s on any subject page
 // ============================================================
 (function() {
