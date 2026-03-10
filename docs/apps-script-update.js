@@ -31,7 +31,8 @@ function doPost(e) {
 
     if (data.target === 'progress') {
       // Per-exercise tracking → "Writing & Notes" sheet
-      writeProgress(ss, data.exercises || []);
+      // overwrite flag = re-save in same browser session (don't create new columns)
+      writeProgress(ss, data.exercises || [], !!data.overwrite);
     } else {
       // Quiz, flashcard, page-view rows → "Activity Log" sheet
       var sheet = ss.getSheetByName('Activity Log') || ss.getSheets()[0];
@@ -207,12 +208,15 @@ function createDashboard(ss) {
 // Attempt pairs:  E/F = Att 1 Date / Att 1 Response
 //                 G/H = Att 2 Date / Att 2 Response  ...
 //
-// Same-date saves OVERWRITE the last attempt (prevents column
-// bloat from multiple Save clicks in one session).
+// overwrite flag (sent by client on re-saves within the same
+// browser session) causes same-date attempts to be overwritten
+// instead of creating new columns. A fresh page load always
+// creates a new attempt, even on the same day — so morning and
+// evening sessions are preserved separately.
 //
 // exercises: array of [subject, chapter, exercise, type, date, content]
 // ============================================================
-function writeProgress(ss, exercises) {
+function writeProgress(ss, exercises, overwrite) {
   var SHEET_NAME = 'Writing & Notes';
   var FIXED_COLS = 4;
 
@@ -251,9 +255,7 @@ function writeProgress(ss, exercises) {
       lookup[key] = rowIdx;
     }
 
-    // Find the right attempt column:
-    // - If the last filled attempt has the SAME date, overwrite it
-    // - Otherwise, use the next empty column pair
+    // Find the next empty attempt column (scan date columns: 5, 7, 9, ...)
     var lastCol = sheet.getLastColumn();
     var attemptCol = FIXED_COLS + 1; // start at column E
     var lastFilledCol = null;        // track the last non-empty date column
@@ -268,15 +270,12 @@ function writeProgress(ss, exercises) {
       }
     }
 
-    // If last attempt has the same date, overwrite instead of creating new column
-    if (lastFilledCol !== null) {
-      var lastDate = sheet.getRange(rowIdx, lastFilledCol).getValue();
-      var lastDateStr = (lastDate instanceof Date)
-        ? lastDate.toISOString().slice(0, 10)
-        : String(lastDate);
-      if (lastDateStr === date) {
-        attemptCol = lastFilledCol; // overwrite same-date attempt
-      }
+    // Only overwrite the last attempt if the client sent the overwrite flag
+    // (meaning this is a re-save within the same browser session).
+    // A fresh page load never sends overwrite, so morning + evening sessions
+    // always get separate attempt columns even on the same day.
+    if (overwrite && lastFilledCol !== null) {
+      attemptCol = lastFilledCol;
     }
 
     // Add column headers if this is a new attempt pair

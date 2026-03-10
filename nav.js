@@ -518,6 +518,10 @@
   toast.textContent = 'Progress saved!';
   document.body.appendChild(toast);
 
+  // Track whether we already saved to Sheets in this page load (session).
+  // First save = new attempt. Subsequent saves = overwrite (same work session).
+  var savedThisSession = false;
+
   btn.addEventListener('click', function() {
     saveToLocal();
 
@@ -526,14 +530,19 @@
 
     // Post to Google Sheets "Writing & Notes" sheet
     if (exercises.length > 0) {
+      var payload = {key: SHEETS_KEY, target: 'progress', exercises: exercises};
+      if (savedThisSession) {
+        payload.overwrite = true; // same session re-save — overwrite, don't create new columns
+      }
       try {
         fetch(SHEETS_URL, {
           method: 'POST',
           mode: 'no-cors',
           headers: {'Content-Type': 'text/plain'},
-          body: JSON.stringify({key: SHEETS_KEY, target: 'progress', exercises: exercises})
+          body: JSON.stringify(payload)
         }).catch(function() {});
       } catch(e) {}
+      savedThisSession = true;
     }
 
     pageDirty = false; // saved — safe to leave without warning
