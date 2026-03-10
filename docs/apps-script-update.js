@@ -26,7 +26,7 @@ function doPost(e) {
 
     var ss = SpreadsheetApp.getActiveSpreadsheet();
 
-    // One-time setup: rename sheets, create Dashboard
+    // One-time setup: rename sheets, create Dashboard (cached after first run)
     ensureSetup(ss);
 
     if (data.target === 'progress') {
@@ -36,8 +36,10 @@ function doPost(e) {
       // Quiz, flashcard, page-view rows → "Activity Log" sheet
       var sheet = ss.getSheetByName('Activity Log') || ss.getSheets()[0];
       var rows = data.rows || [];
-      for (var i = 0; i < rows.length; i++) {
-        sheet.appendRow(rows[i]);
+      if (rows.length > 0) {
+        // Batch insert — one API call instead of N appendRow calls
+        var lastRow = sheet.getLastRow();
+        sheet.getRange(lastRow + 1, 1, rows.length, rows[0].length).setValues(rows);
       }
     }
 
@@ -48,9 +50,15 @@ function doPost(e) {
 }
 
 // ============================================================
-// ONE-TIME SETUP — runs on first doPost, idempotent after that
+// ONE-TIME SETUP — runs on first doPost, skips on subsequent
+// Uses PropertiesService to cache that setup has been done
 // ============================================================
 function ensureSetup(ss) {
+  var props = PropertiesService.getScriptProperties();
+  if (props.getProperty('setupDone') === 'true') {
+    return; // already set up — skip all checks
+  }
+
   // Rename first sheet to "Activity Log" if it has a default name
   var first = ss.getSheets()[0];
   var name = first.getName();
@@ -71,10 +79,21 @@ function ensureSetup(ss) {
   if (!ss.getSheetByName('Dashboard')) {
     createDashboard(ss);
   }
+
+  // Mark setup as done — subsequent requests skip all the above
+  props.setProperty('setupDone', 'true');
 }
 
 // ============================================================
 // CREATE DASHBOARD — formulas auto-update from live data
+//
+// Layout (with generous spacing to prevent QUERY overflow):
+//   Rows 1-3:   Title + timestamp
+//   Rows 4-12:  Subject Overview (6 subjects)
+//   Rows 14-28: Study Habits (pivot tables, LIMIT 20 each)
+//   Rows 30-42: Weakest Chapters (LIMIT 10)
+//   Rows 44-70: Writing Progress (LIMIT 25)
+//   Rows 72-94: Recent Activity (LIMIT 20)
 // ============================================================
 function createDashboard(ss) {
   var db = ss.insertSheet('Dashboard', 0); // insert as first tab
@@ -100,7 +119,7 @@ function createDashboard(ss) {
     .setFormula('="Last refreshed: "&TEXT(NOW(),"yyyy-mm-dd hh:mm")')
     .setFontColor('#888888').setHorizontalAlignment('center');
 
-  // ===== SUBJECT OVERVIEW (Row 4-11) =====
+  // ===== SUBJECT OVERVIEW (Row 4-12) =====
   header(4, 'Subject Overview');
   subHeader(5, ['Subject', 'Pages Viewed', 'Quiz Answers', 'Avg Rating (1-4)', 'Quiz Minutes', 'Flashcard Items', 'Last Active', '']);
 
@@ -126,43 +145,43 @@ function createDashboard(ss) {
     // Last Active
     db.getRange(r, 7).setFormula('=IFERROR(TEXT(MAX(FILTER(\'Activity Log\'!A:A,\'Activity Log\'!D:D="' + s + '")),"yyyy-mm-dd"),"-")');
   }
-  // Flashcard note
-  db.getRange(6, 6).setNote('Flashcards are logged under "Word Roots" subject — total shown on English row');
+  // Flashcard note — on English row (row 9), Flashcard column (col 6)
+  db.getRange(9, 6).setNote('Flashcards are logged under "Word Roots" subject — total shown on English row');
 
-  // ===== STUDY HABITS (Row 13-28) =====
-  header(13, 'Study Habits — Did He Study Before Challenging?');
-  db.getRange(14, 1, 1, 6).setValues([['', '', '', '', '', '']]);
-  db.getRange(14, 1).setValue('This table shows page views by type per chapter, plus quiz attempts. Chapters with quiz attempts but NO notes views = skipped studying.');
-  db.getRange(14, 1, 1, 6).merge().setFontColor('#666666').setFontStyle('italic').setWrap(true);
+  // ===== STUDY HABITS (Row 14-28) =====
+  header(14, 'Study Habits — Did He Study Before Challenging?');
+  db.getRange(15, 1, 1, 6).setValues([['', '', '', '', '', '']]);
+  db.getRange(15, 1).setValue('This table shows page views by type per chapter, plus quiz attempts. Chapters with quiz attempts but NO notes views = skipped studying.');
+  db.getRange(15, 1, 1, 6).merge().setFontColor('#666666').setFontStyle('italic').setWrap(true);
 
-  // Page views pivot: chapters × page types
-  db.getRange(16, 1).setValue('Page Views by Chapter & Type:').setFontWeight('bold');
-  db.getRange(17, 1).setFormula(
-    '=IFERROR(QUERY(\'Activity Log\'!C:F,"SELECT E, COUNT(C) WHERE C=\'page-view\' GROUP BY E PIVOT F ORDER BY E LABEL E \'Chapter\'",1),"No page views yet")'
+  // Page views pivot: chapters × page types (LIMIT 12 to prevent overflow)
+  db.getRange(17, 1).setValue('Page Views by Chapter & Type:').setFontWeight('bold');
+  db.getRange(18, 1).setFormula(
+    '=IFERROR(QUERY(\'Activity Log\'!C:F,"SELECT E, COUNT(C) WHERE C=\'page-view\' GROUP BY E PIVOT F ORDER BY E LIMIT 12 LABEL E \'Chapter\'",1),"No page views yet")'
   );
 
-  // Quiz attempts per chapter
-  db.getRange(16, 6).setValue('Quiz Attempts:').setFontWeight('bold');
-  db.getRange(17, 6).setFormula(
-    '=IFERROR(QUERY(\'Activity Log\'!C:E,"SELECT E, COUNT(C) WHERE C=\'quiz\' GROUP BY E ORDER BY E LABEL E \'Chapter\', COUNT(C) \'Answers\'",1),"No quiz data yet")'
+  // Quiz attempts per chapter (LIMIT 12 to match)
+  db.getRange(17, 6).setValue('Quiz Attempts:').setFontWeight('bold');
+  db.getRange(18, 6).setFormula(
+    '=IFERROR(QUERY(\'Activity Log\'!C:E,"SELECT E, COUNT(C) WHERE C=\'quiz\' GROUP BY E ORDER BY E LIMIT 12 LABEL E \'Chapter\', COUNT(C) \'Answers\'",1),"No quiz data yet")'
   );
 
-  // ===== WEAKEST CHAPTERS (Row 30-41) =====
-  header(30, 'Weakest Chapters — Lowest Avg Self-Rating');
-  subHeader(31, ['Subject', 'Chapter', 'Avg Rating', 'Questions', '', '', '', '']);
-  db.getRange(32, 1).setFormula(
+  // ===== WEAKEST CHAPTERS (Row 32-43) =====
+  header(32, 'Weakest Chapters — Lowest Avg Self-Rating');
+  subHeader(33, ['Subject', 'Chapter', 'Avg Rating', 'Questions', '', '', '', '']);
+  db.getRange(34, 1).setFormula(
     '=IFERROR(QUERY(\'Activity Log\'!A:J,"SELECT D, E, AVG(I), COUNT(F) WHERE C=\'quiz\' AND I IS NOT NULL GROUP BY D, E ORDER BY AVG(I) ASC LIMIT 10 LABEL D \'Subject\', E \'Chapter\', AVG(I) \'Avg Rating\', COUNT(F) \'Questions\'",0),"No quiz data yet")'
   );
 
-  // ===== WRITING PROGRESS (Row 43-68) =====
-  header(43, 'Writing & Notes Progress');
-  db.getRange(44, 1).setFormula(
+  // ===== WRITING PROGRESS (Row 46-70) =====
+  header(46, 'Writing & Notes Progress');
+  db.getRange(47, 1).setFormula(
     '=IFERROR(QUERY(\'Writing & Notes\'!A:F,"SELECT A, B, C, D WHERE A IS NOT NULL ORDER BY A, B, C LIMIT 25 LABEL A \'Subject\', B \'Chapter\', C \'Exercise\', D \'Type\'",1),"No writing/notes data yet")'
   );
 
-  // ===== RECENT ACTIVITY (Row 70-92) =====
-  header(70, 'Recent Activity — Last 20 Entries');
-  db.getRange(71, 1).setFormula(
+  // ===== RECENT ACTIVITY (Row 74-96) =====
+  header(74, 'Recent Activity — Last 20 Entries');
+  db.getRange(75, 1).setFormula(
     '=IFERROR(QUERY(\'Activity Log\'!A:J,"SELECT A, B, C, D, E, F, I, J ORDER BY A DESC, B DESC LIMIT 20 LABEL A \'Date\', B \'Time\', C \'Type\', D \'Subject\', E \'Chapter\', F \'Item\', I \'Rating\', J \'Seconds\'",1),"No activity yet")'
   );
 
@@ -187,6 +206,9 @@ function createDashboard(ss) {
 // Fixed columns:  A=Subject, B=Chapter, C=Exercise, D=Type
 // Attempt pairs:  E/F = Att 1 Date / Att 1 Response
 //                 G/H = Att 2 Date / Att 2 Response  ...
+//
+// Same-date saves OVERWRITE the last attempt (prevents column
+// bloat from multiple Save clicks in one session).
 //
 // exercises: array of [subject, chapter, exercise, type, date, content]
 // ============================================================
@@ -229,15 +251,31 @@ function writeProgress(ss, exercises) {
       lookup[key] = rowIdx;
     }
 
-    // Find next empty attempt column (scan date columns: 5, 7, 9, ...)
+    // Find the right attempt column:
+    // - If the last filled attempt has the SAME date, overwrite it
+    // - Otherwise, use the next empty column pair
     var lastCol = sheet.getLastColumn();
     var attemptCol = FIXED_COLS + 1; // start at column E
+    var lastFilledCol = null;        // track the last non-empty date column
+
     if (lastCol >= attemptCol) {
       var rowVals = sheet.getRange(rowIdx, attemptCol, 1, lastCol - FIXED_COLS).getValues()[0];
       for (var c = 0; c < rowVals.length; c += 2) {
         if (rowVals[c] !== '' && rowVals[c] !== null) {
-          attemptCol = FIXED_COLS + 1 + c + 2;
+          lastFilledCol = FIXED_COLS + 1 + c;
+          attemptCol = FIXED_COLS + 1 + c + 2; // next empty pair
         }
+      }
+    }
+
+    // If last attempt has the same date, overwrite instead of creating new column
+    if (lastFilledCol !== null) {
+      var lastDate = sheet.getRange(rowIdx, lastFilledCol).getValue();
+      var lastDateStr = (lastDate instanceof Date)
+        ? lastDate.toISOString().slice(0, 10)
+        : String(lastDate);
+      if (lastDateStr === date) {
+        attemptCol = lastFilledCol; // overwrite same-date attempt
       }
     }
 
@@ -261,6 +299,8 @@ function writeProgress(ss, exercises) {
 // ============================================================
 function manualSetup() {
   var ss = SpreadsheetApp.getActiveSpreadsheet();
+  // Clear cached flag so ensureSetup runs fully
+  PropertiesService.getScriptProperties().deleteProperty('setupDone');
   ensureSetup(ss);
   SpreadsheetApp.getUi().alert('Setup complete! Dashboard created.');
 }
