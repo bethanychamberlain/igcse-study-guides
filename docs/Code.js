@@ -315,7 +315,9 @@ function doGet(e) {
 function processUpload(form) {
   var subject = form.subject;
   var chapter = form.chapter;
-  var file = form.photo;
+
+  // form.photo is a single Blob or an array of Blobs (when multiple)
+  var photos = Array.isArray(form.photo) ? form.photo : [form.photo];
 
   // Get or create folder: IGCSE Study Photos / {Subject}
   var root = DriveApp.getRootFolder();
@@ -328,34 +330,40 @@ function processUpload(form) {
     parent = subs.hasNext() ? subs.next() : parent.createFolder(subject);
   }
 
-  // Name the file with chapter + timestamp
   var now = new Date();
   var tz = Session.getScriptTimeZone();
   var ts = Utilities.formatDate(now, tz, 'yyyy-MM-dd_HHmmss');
-  var name = (chapter ? chapter.replace(/\s+/g, '_') : 'notes') + '_' + ts;
-  file.setName(name);
-  parent.createFile(file);
+  var base = chapter ? chapter.replace(/\s+/g, '_') : 'notes';
 
-  // Log upload to Activity Log
-  try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    ensureSetup(ss);
-    var sheet = ss.getSheetByName('Activity Log') || ss.getSheets()[0];
-    sheet.appendRow([
-      Utilities.formatDate(now, tz, 'yyyy-MM-dd'),
-      Utilities.formatDate(now, tz, 'HH:mm'),
-      'photo-upload',
-      subject,
-      chapter,
-      name,
-      '',
-      'uploaded',
-      '',
-      ''
-    ]);
-  } catch(e) {}
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  ensureSetup(ss);
+  var sheet = ss.getSheetByName('Activity Log') || ss.getSheets()[0];
 
-  return 'OK';
+  for (var i = 0; i < photos.length; i++) {
+    var file = photos[i];
+    if (!file || !file.getBytes || file.getBytes().length === 0) continue;
+    var name = base + '_' + ts + (photos.length > 1 ? '_' + (i + 1) : '');
+    file.setName(name);
+    parent.createFile(file);
+
+    // Log each upload to Activity Log
+    try {
+      sheet.appendRow([
+        Utilities.formatDate(now, tz, 'yyyy-MM-dd'),
+        Utilities.formatDate(now, tz, 'HH:mm'),
+        'photo-upload',
+        subject,
+        chapter,
+        name,
+        '',
+        'uploaded',
+        '',
+        ''
+      ]);
+    } catch(e) {}
+  }
+
+  return photos.length + ' photo(s) uploaded';
 }
 
 function getUploadHtml(subject, chapter) {
@@ -374,7 +382,9 @@ function getUploadHtml(subject, chapter) {
   '.upload-area.has-file { border-color: #27ae60; border-style: solid; }' +
   '.upload-area p { font-size: 15px; color: #888; margin-top: 8px; }' +
   '.cam-icon { font-size: 48px; }' +
-  '#preview { max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 12px; display: none; }' +
+  '.previews { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; justify-content: center; }' +
+  '.previews img { width: 90px; height: 90px; object-fit: cover; border-radius: 8px; }' +
+  '.file-count { font-size: 14px; font-weight: 600; color: #27ae60; margin-top: 8px; }' +
   'input[type=file] { display: none; }' +
   '.btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; ' +
   'font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 16px; transition: all 0.2s; }' +
@@ -389,8 +399,8 @@ function getUploadHtml(subject, chapter) {
   '</style></head><body>' +
   '<div class="hero">' +
   '<div class="cam-icon">&#128247;</div>' +
-  '<h1>Upload Notes Photo</h1>' +
-  '<p>Take a photo of your handwritten notes</p>' +
+  '<h1>Upload Notes Photos</h1>' +
+  '<p>Take photos of your handwritten notes or choose from gallery</p>' +
   '<div class="tags">' +
   '<span class="tag">' + subject + '</span>' +
   '<span class="tag">' + chapter + '</span>' +
@@ -402,29 +412,38 @@ function getUploadHtml(subject, chapter) {
   '<div class="upload-area" id="dropArea" onclick="document.getElementById(\'photo\').click()">' +
   '<div class="cam-icon">&#128248;</div>' +
   '<p>Tap to take a photo or choose from gallery</p>' +
-  '<img id="preview">' +
+  '<div class="previews" id="previews"></div>' +
+  '<div class="file-count" id="fileCount"></div>' +
   '</div>' +
-  '<input type="file" id="photo" name="photo" accept="image/*" capture="environment" onchange="showPreview(this)">' +
-  '<button type="button" class="btn btn-upload" id="uploadBtn" disabled onclick="submitForm()">Upload Photo</button>' +
+  '<input type="file" id="photo" name="photo" accept="image/*" multiple onchange="showPreviews(this)">' +
+  '<button type="button" class="btn btn-upload" id="uploadBtn" disabled onclick="submitForm()">Upload Photos</button>' +
   '</form>' +
   '<div class="status" id="status"></div>' +
   '<div class="done-box" id="doneBox">' +
   '<h2>&#10003; Uploaded!</h2>' +
-  '<p>Your tutor can see your notes now.<br>You can close this page or take another photo.</p>' +
-  '<button type="button" class="btn btn-upload" onclick="resetForm()">Take Another Photo</button>' +
+  '<p>Your tutor can see your notes now.<br>You can close this page or upload more.</p>' +
+  '<button type="button" class="btn btn-upload" onclick="resetForm()">Upload More Photos</button>' +
   '</div>' +
 
   '<script>' +
-  'function showPreview(input) {' +
-  '  var file = input.files[0]; if (!file) return;' +
-  '  var reader = new FileReader();' +
-  '  reader.onload = function(e) {' +
-  '    var img = document.getElementById("preview");' +
-  '    img.src = e.target.result; img.style.display = "block";' +
-  '    document.getElementById("dropArea").classList.add("has-file");' +
-  '    document.getElementById("uploadBtn").disabled = false;' +
-  '  };' +
-  '  reader.readAsDataURL(file);' +
+  'function clearEl(el) { while (el.firstChild) el.removeChild(el.firstChild); }' +
+  'function showPreviews(input) {' +
+  '  var files = input.files; if (!files.length) return;' +
+  '  var box = document.getElementById("previews"); clearEl(box);' +
+  '  document.getElementById("fileCount").textContent = files.length + " photo" + (files.length > 1 ? "s" : "") + " selected";' +
+  '  document.getElementById("dropArea").classList.add("has-file");' +
+  '  document.getElementById("uploadBtn").disabled = false;' +
+  '  document.getElementById("uploadBtn").textContent = "Upload " + files.length + " Photo" + (files.length > 1 ? "s" : "");' +
+  '  for (var i = 0; i < files.length; i++) {' +
+  '    (function(file) {' +
+  '      var reader = new FileReader();' +
+  '      reader.onload = function(e) {' +
+  '        var img = document.createElement("img"); img.src = e.target.result;' +
+  '        box.appendChild(img);' +
+  '      };' +
+  '      reader.readAsDataURL(file);' +
+  '    })(files[i]);' +
+  '  }' +
   '}' +
   'function submitForm() {' +
   '  var btn = document.getElementById("uploadBtn");' +
@@ -432,10 +451,12 @@ function getUploadHtml(subject, chapter) {
   '  btn.disabled = true; btn.textContent = "Uploading...";' +
   '  status.className = "status"; status.textContent = "";' +
   '  google.script.run' +
-  '    .withSuccessHandler(function() {' +
+  '    .withSuccessHandler(function(msg) {' +
   '      btn.style.display = "none";' +
   '      document.getElementById("uploadForm").style.display = "none";' +
-  '      document.getElementById("doneBox").style.display = "block";' +
+  '      var done = document.getElementById("doneBox");' +
+  '      done.style.display = "block";' +
+  '      done.querySelector("h2").textContent = "\\u2713 " + (msg || "Uploaded!");' +
   '    })' +
   '    .withFailureHandler(function(err) {' +
   '      status.className = "status err";' +
@@ -448,10 +469,11 @@ function getUploadHtml(subject, chapter) {
   '  document.getElementById("uploadForm").style.display = "block";' +
   '  document.getElementById("uploadForm").reset();' +
   '  document.getElementById("doneBox").style.display = "none";' +
-  '  document.getElementById("preview").style.display = "none";' +
+  '  clearEl(document.getElementById("previews"));' +
+  '  document.getElementById("fileCount").textContent = "";' +
   '  document.getElementById("dropArea").classList.remove("has-file");' +
   '  var btn = document.getElementById("uploadBtn");' +
-  '  btn.style.display = "block"; btn.disabled = true; btn.textContent = "Upload Photo";' +
+  '  btn.style.display = "block"; btn.disabled = true; btn.textContent = "Upload Photos";' +
   '}' +
   '</script></body></html>';
 }
