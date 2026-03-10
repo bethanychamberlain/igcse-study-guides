@@ -15,7 +15,16 @@
   var qTextareas = {};     // data-q -> textarea element
   var originalParents = {}; // data-q -> {parent, nextSibling} for restoring position
   var qWasSkipped = {};    // data-q -> true if "Later" was clicked at any point
+  var challengeUnsaved = false; // true once challenge starts, false after save
   // Results saving handled by results.js (localStorage + Google Sheets)
+
+  // ---- BEFOREUNLOAD — warn if leaving with unsaved challenge results ----
+  window.addEventListener('beforeunload', function(e) {
+    if (challengeActive && challengeUnsaved) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
+  });
 
   // ---- PAGE INFO (from URL) ----
   var SUBJECT_LABELS = {
@@ -254,18 +263,27 @@
         hints.push({type: 'listLetter', index: li, term: firstWord});
       }
     } else {
-      // For text: extract key terms from answer bold elements
+      // For text: extract key terms from answer bold elements,
+      // but skip terms that are already bold in the question (useless as hints)
       var ansBox = card.querySelector('.answer-box');
+      var qTextEl = card.querySelector('.q-text');
+      var qBolds = {};
+      if (qTextEl) {
+        var qb = qTextEl.querySelectorAll('strong');
+        for (var qbi = 0; qbi < qb.length; qbi++) {
+          qBolds[qb[qbi].textContent.trim().toLowerCase()] = true;
+        }
+      }
       if (ansBox) {
         var bolds = ansBox.querySelectorAll('strong');
         for (var b = 0; b < bolds.length; b++) {
           var term = bolds[b].textContent.trim();
-          if (term.length > 1 && !/^[A-D]$/.test(term)) {
+          if (term.length > 1 && !/^[A-D]$/.test(term) && !qBolds[term.toLowerCase()]) {
             hints.push({type: 'firstLetter', term: term});
           }
         }
       }
-      // If no bold terms found, use first words of answer text
+      // If no useful bold terms found, use first words of answer text
       if (hints.length === 0 && ansBox) {
         var ansText = ansBox.textContent.replace(/Answer/i, '').trim();
         var words = ansText.split(/\s+/).filter(function(w) { return w.length > 3; });
@@ -437,6 +455,7 @@
   // ---- START CHALLENGE ----
   function startChallenge() {
     challengeActive = true;
+    challengeUnsaved = true;
     quizStartTime = Date.now();
     document.body.classList.add('ch-mode');
 
@@ -946,6 +965,7 @@
     });
 
     StudyResults.save(rows);
+    challengeUnsaved = false;
     var total = StudyResults.count();
 
     var saveBtn = document.getElementById('save-btn');

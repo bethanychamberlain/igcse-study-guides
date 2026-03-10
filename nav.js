@@ -381,6 +381,7 @@
 
   // --- Auto-save to localStorage on change ---
   var timer;
+  var pageDirty = false; // true when changes exist that haven't been Sheets-saved
   function saveToLocal() {
     var s = { textareas: [], checkboxes: [], saved: new Date().toISOString() };
     textareas.forEach(function(ta) { s.textareas.push(ta.value); });
@@ -390,12 +391,24 @@
 
   textareas.forEach(function(ta) {
     ta.addEventListener('input', function() {
+      pageDirty = true;
       clearTimeout(timer);
       timer = setTimeout(saveToLocal, 1500);
     });
   });
   checkboxes.forEach(function(cb) {
-    cb.addEventListener('change', saveToLocal);
+    cb.addEventListener('change', function() {
+      pageDirty = true;
+      saveToLocal();
+    });
+  });
+
+  // Warn before leaving with unsaved work
+  window.addEventListener('beforeunload', function(e) {
+    if (pageDirty) {
+      e.preventDefault();
+      e.returnValue = '';
+    }
   });
 
   // --- Exercise label extraction ---
@@ -522,6 +535,8 @@
         }).catch(function() {});
       } catch(e) {}
     }
+
+    pageDirty = false; // saved — safe to leave without warning
 
     // Flash confirmation
     toast.classList.add('show');
