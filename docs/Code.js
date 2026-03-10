@@ -299,6 +299,164 @@ function writeProgress(ss, exercises, overwrite) {
 }
 
 // ============================================================
+// PHOTO UPLOAD — doGet serves a mobile upload page
+// URL: .../exec?subject=Math&chapter=Ch2+Algebra+1
+// Photos saved to Google Drive: IGCSE Study Photos/{Subject}/
+// Also logs a row to Activity Log for tracking
+// ============================================================
+function doGet(e) {
+  var subject = (e.parameter.subject || '').replace(/[<>"'&]/g, '');
+  var chapter = (e.parameter.chapter || '').replace(/[<>"'&]/g, '');
+  return HtmlService.createHtmlOutput(getUploadHtml(subject, chapter))
+    .setTitle('Upload Notes Photo')
+    .addMetaTag('viewport', 'width=device-width, initial-scale=1');
+}
+
+function processUpload(form) {
+  var subject = form.subject;
+  var chapter = form.chapter;
+  var file = form.photo;
+
+  // Get or create folder: IGCSE Study Photos / {Subject}
+  var root = DriveApp.getRootFolder();
+  var parentName = 'IGCSE Study Photos';
+  var parents = root.getFoldersByName(parentName);
+  var parent = parents.hasNext() ? parents.next() : root.createFolder(parentName);
+
+  if (subject) {
+    var subs = parent.getFoldersByName(subject);
+    parent = subs.hasNext() ? subs.next() : parent.createFolder(subject);
+  }
+
+  // Name the file with chapter + timestamp
+  var now = new Date();
+  var tz = Session.getScriptTimeZone();
+  var ts = Utilities.formatDate(now, tz, 'yyyy-MM-dd_HHmmss');
+  var name = (chapter ? chapter.replace(/\s+/g, '_') : 'notes') + '_' + ts;
+  file.setName(name);
+  parent.createFile(file);
+
+  // Log upload to Activity Log
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    ensureSetup(ss);
+    var sheet = ss.getSheetByName('Activity Log') || ss.getSheets()[0];
+    sheet.appendRow([
+      Utilities.formatDate(now, tz, 'yyyy-MM-dd'),
+      Utilities.formatDate(now, tz, 'HH:mm'),
+      'photo-upload',
+      subject,
+      chapter,
+      name,
+      '',
+      'uploaded',
+      '',
+      ''
+    ]);
+  } catch(e) {}
+
+  return 'OK';
+}
+
+function getUploadHtml(subject, chapter) {
+  return '<!DOCTYPE html><html><head><meta charset="utf-8">' +
+  '<style>' +
+  '* { box-sizing: border-box; margin: 0; padding: 0; }' +
+  'body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; ' +
+  'max-width: 420px; margin: 0 auto; padding: 24px 16px; background: #f5f5f5; color: #333; }' +
+  '.hero { text-align: center; margin-bottom: 24px; }' +
+  '.hero h1 { font-size: 22px; margin-bottom: 4px; }' +
+  '.hero p { color: #666; font-size: 14px; }' +
+  '.tags { display: flex; gap: 8px; justify-content: center; margin: 12px 0; }' +
+  '.tag { background: #e74c3c; color: #fff; padding: 4px 14px; border-radius: 14px; font-size: 13px; font-weight: 600; }' +
+  '.upload-area { background: #fff; border: 2px dashed #ccc; border-radius: 12px; padding: 32px 16px; ' +
+  'text-align: center; margin: 16px 0; cursor: pointer; transition: border-color 0.2s; }' +
+  '.upload-area.has-file { border-color: #27ae60; border-style: solid; }' +
+  '.upload-area p { font-size: 15px; color: #888; margin-top: 8px; }' +
+  '.cam-icon { font-size: 48px; }' +
+  '#preview { max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 12px; display: none; }' +
+  'input[type=file] { display: none; }' +
+  '.btn { display: block; width: 100%; padding: 14px; border: none; border-radius: 10px; ' +
+  'font-size: 17px; font-weight: 700; cursor: pointer; margin-top: 16px; transition: all 0.2s; }' +
+  '.btn-upload { background: #e74c3c; color: #fff; }' +
+  '.btn-upload:disabled { background: #ccc; }' +
+  '.btn-upload:not(:disabled):active { transform: scale(0.98); }' +
+  '.status { text-align: center; margin-top: 16px; font-size: 15px; font-weight: 600; }' +
+  '.status.ok { color: #27ae60; }' +
+  '.status.err { color: #e74c3c; }' +
+  '.done-box { text-align: center; margin-top: 24px; padding: 20px; background: #fff; border-radius: 12px; display: none; }' +
+  '.done-box h2 { color: #27ae60; margin-bottom: 8px; }' +
+  '</style></head><body>' +
+  '<div class="hero">' +
+  '<div class="cam-icon">&#128247;</div>' +
+  '<h1>Upload Notes Photo</h1>' +
+  '<p>Take a photo of your handwritten notes</p>' +
+  '<div class="tags">' +
+  '<span class="tag">' + subject + '</span>' +
+  '<span class="tag">' + chapter + '</span>' +
+  '</div></div>' +
+
+  '<form id="uploadForm">' +
+  '<input type="hidden" name="subject" value="' + subject + '">' +
+  '<input type="hidden" name="chapter" value="' + chapter + '">' +
+  '<div class="upload-area" id="dropArea" onclick="document.getElementById(\'photo\').click()">' +
+  '<div class="cam-icon">&#128248;</div>' +
+  '<p>Tap to take a photo or choose from gallery</p>' +
+  '<img id="preview">' +
+  '</div>' +
+  '<input type="file" id="photo" name="photo" accept="image/*" capture="environment" onchange="showPreview(this)">' +
+  '<button type="button" class="btn btn-upload" id="uploadBtn" disabled onclick="submitForm()">Upload Photo</button>' +
+  '</form>' +
+  '<div class="status" id="status"></div>' +
+  '<div class="done-box" id="doneBox">' +
+  '<h2>&#10003; Uploaded!</h2>' +
+  '<p>Your tutor can see your notes now.<br>You can close this page or take another photo.</p>' +
+  '<button type="button" class="btn btn-upload" onclick="resetForm()">Take Another Photo</button>' +
+  '</div>' +
+
+  '<script>' +
+  'function showPreview(input) {' +
+  '  var file = input.files[0]; if (!file) return;' +
+  '  var reader = new FileReader();' +
+  '  reader.onload = function(e) {' +
+  '    var img = document.getElementById("preview");' +
+  '    img.src = e.target.result; img.style.display = "block";' +
+  '    document.getElementById("dropArea").classList.add("has-file");' +
+  '    document.getElementById("uploadBtn").disabled = false;' +
+  '  };' +
+  '  reader.readAsDataURL(file);' +
+  '}' +
+  'function submitForm() {' +
+  '  var btn = document.getElementById("uploadBtn");' +
+  '  var status = document.getElementById("status");' +
+  '  btn.disabled = true; btn.textContent = "Uploading...";' +
+  '  status.className = "status"; status.textContent = "";' +
+  '  google.script.run' +
+  '    .withSuccessHandler(function() {' +
+  '      btn.style.display = "none";' +
+  '      document.getElementById("uploadForm").style.display = "none";' +
+  '      document.getElementById("doneBox").style.display = "block";' +
+  '    })' +
+  '    .withFailureHandler(function(err) {' +
+  '      status.className = "status err";' +
+  '      status.textContent = "Error: " + err.message;' +
+  '      btn.disabled = false; btn.textContent = "Try Again";' +
+  '    })' +
+  '    .processUpload(document.getElementById("uploadForm"));' +
+  '}' +
+  'function resetForm() {' +
+  '  document.getElementById("uploadForm").style.display = "block";' +
+  '  document.getElementById("uploadForm").reset();' +
+  '  document.getElementById("doneBox").style.display = "none";' +
+  '  document.getElementById("preview").style.display = "none";' +
+  '  document.getElementById("dropArea").classList.remove("has-file");' +
+  '  var btn = document.getElementById("uploadBtn");' +
+  '  btn.style.display = "block"; btn.disabled = true; btn.textContent = "Upload Photo";' +
+  '}' +
+  '</script></body></html>';
+}
+
+// ============================================================
 // MANUAL TRIGGER — Run this from the script editor to force
 // Dashboard creation without waiting for data.
 // Apps Script editor → Select "manualSetup" → Click Run

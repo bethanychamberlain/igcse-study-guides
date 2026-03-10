@@ -555,4 +555,108 @@
       btn.textContent = 'Save Progress';
     }, 2000);
   });
+
+  // =====================================================
+  // QR Code Photo Upload Section (notes pages only)
+  // =====================================================
+  if (isNotes && checkboxes.length > 0) {
+    var uploadUrl = SHEETS_URL +
+      '?subject=' + encodeURIComponent(subject) +
+      '&chapter=' + encodeURIComponent(chapter);
+
+    var qrCss = document.createElement('style');
+    qrCss.textContent =
+      '.qr-upload-section{max-width:700px;margin:40px auto 60px;padding:24px;' +
+      'background:#f8f9fa;border:2px dashed #bbb;border-radius:16px;text-align:center}' +
+      '.qr-upload-section h3{margin:0 0 8px;font-size:18px;color:#2c3e50}' +
+      '.qr-upload-section p{margin:0 0 16px;font-size:14px;color:#555;line-height:1.5}' +
+      '.qr-upload-section img{display:block;margin:0 auto 16px;border-radius:8px}' +
+      '.qr-done-btn{background:#27ae60;color:#fff;border:none;border-radius:24px;' +
+      'padding:10px 24px;font-size:14px;font-weight:700;cursor:pointer;' +
+      'font-family:inherit;transition:all .2s}' +
+      '.qr-done-btn:hover{background:#219a52;transform:translateY(-1px)}' +
+      '.qr-done-btn.confirmed{background:#95a5a6;cursor:default}' +
+      '.qr-reminder{position:fixed;bottom:72px;left:20px;z-index:999;' +
+      'background:#e74c3c;color:#fff;padding:10px 16px;border-radius:10px;' +
+      'font-size:13px;font-weight:600;font-family:inherit;' +
+      'box-shadow:0 3px 12px rgba(0,0,0,.25);opacity:0;transition:opacity .3s;' +
+      'pointer-events:none;max-width:260px;line-height:1.4}' +
+      '.qr-reminder.show{opacity:1;animation:qrPulse 2s infinite}' +
+      '@keyframes qrPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}' +
+      '@media print{.qr-upload-section,.qr-reminder{display:none!important}}';
+    document.head.appendChild(qrCss);
+
+    // Build QR section at bottom of page
+    var qrSection = document.createElement('div');
+    qrSection.className = 'qr-upload-section';
+
+    var qrTitle = document.createElement('h3');
+    qrTitle.textContent = 'Upload Your Handwritten Notes';
+    qrSection.appendChild(qrTitle);
+
+    var qrDesc = document.createElement('p');
+    qrDesc.textContent = 'Scan this QR code with your phone to take a photo of your notes and upload them.';
+    qrSection.appendChild(qrDesc);
+
+    var qrImg = document.createElement('img');
+    qrImg.src = 'https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=' +
+      encodeURIComponent(uploadUrl);
+    qrImg.alt = 'QR code — scan to upload notes photo';
+    qrImg.width = 180;
+    qrImg.height = 180;
+    qrSection.appendChild(qrImg);
+
+    var qrDoneBtn = document.createElement('button');
+    qrDoneBtn.className = 'qr-done-btn';
+    qrDoneBtn.textContent = "I've uploaded my notes";
+    qrSection.appendChild(qrDoneBtn);
+
+    // Insert before the last element (or just append)
+    document.body.appendChild(qrSection);
+
+    // Floating reminder bubble
+    var qrReminder = document.createElement('div');
+    qrReminder.className = 'qr-reminder';
+    qrReminder.textContent = "Don't forget to photograph your handwritten notes!";
+    document.body.appendChild(qrReminder);
+
+    // State tracking
+    var photoUploaded = false;
+    var anyChecked = false;
+
+    qrDoneBtn.addEventListener('click', function() {
+      photoUploaded = true;
+      qrDoneBtn.textContent = 'Uploaded!';
+      qrDoneBtn.classList.add('confirmed');
+      qrReminder.classList.remove('show');
+    });
+
+    // Show reminder when checkboxes are checked but photo not uploaded
+    function updateQrReminder() {
+      anyChecked = false;
+      for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) { anyChecked = true; break; }
+      }
+      if (anyChecked && !photoUploaded) {
+        qrReminder.classList.add('show');
+      } else {
+        qrReminder.classList.remove('show');
+      }
+    }
+
+    checkboxes.forEach(function(cb) {
+      cb.addEventListener('change', updateQrReminder);
+    });
+
+    // Check on load in case checkboxes were restored from localStorage
+    updateQrReminder();
+
+    // Enhance beforeunload to also warn about un-uploaded photo
+    window.addEventListener('beforeunload', function(e) {
+      if (anyChecked && !photoUploaded) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+  }
 })();
