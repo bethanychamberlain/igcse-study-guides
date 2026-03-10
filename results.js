@@ -12,10 +12,17 @@
 
   var STORAGE_KEY = 'study-results';
 
+  // ---- TUTOR MODE ----
+  // When active, all tracking is silently suppressed (set via Ctrl+.)
+  function isTutorMode() {
+    try { return localStorage.getItem('igcse-tutor-mode') === 'on'; } catch(e) { return false; }
+  }
+
   // ---- SAVE ----
   // rows: array of objects {date, time, type, subject, chapter, item, response, result, selfRating, seconds}
   function save(rows) {
     if (!rows || rows.length === 0) return {local: false, sheets: false};
+    if (isTutorMode()) return {local: false, sheets: false};
     var localOk = saveToLocalStorage(rows);
     var sheetsOk = postToGoogleSheets(rows);
     return {local: localOk, sheets: sheetsOk};
@@ -137,6 +144,7 @@
     count: count,
     getStats: getStats,
     downloadCSV: downloadCSV,
-    isSheetsConfigured: isSheetsConfigured
+    isSheetsConfigured: isSheetsConfigured,
+    isTutorMode: isTutorMode
   };
 })();

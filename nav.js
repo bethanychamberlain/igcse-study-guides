@@ -564,6 +564,7 @@
 
   // After 1 second on page, log a view event
   setTimeout(function() {
+    try { if (localStorage.getItem('igcse-tutor-mode') === 'on') return; } catch(e) {}
     var now = new Date();
     try {
       fetch(SHEETS_URL, {
@@ -601,6 +602,7 @@
       var awaySec = Math.round((Date.now() - hiddenAt) / 1000);
       hiddenAt = null;
       if (awaySec < 5) return; // ignore brief switches
+      try { if (localStorage.getItem('igcse-tutor-mode') === 'on') return; } catch(e) {}
       var now = new Date();
       try {
         fetch(SHEETS_URL, {
@@ -808,29 +810,33 @@
     result.textContent = isMulti ? 'Looking up \u201c' + word + '\u201d\u2026' : 'Looking up\u2026';
 
     // Log the original search query to Activity Log
-    var now = new Date();
-    try {
-      fetch(SHEETS_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: {'Content-Type': 'text/plain'},
-        body: JSON.stringify({
-          key: SHEETS_KEY,
-          rows: [[
-            now.toISOString().slice(0, 10),
-            now.toTimeString().slice(0, 5),
-            'lookup',
-            subject,
-            chapter,
-            raw,
-            '',
-            '',
-            '',
-            ''
-          ]]
-        })
-      }).catch(function() {});
-    } catch(e) {}
+    var tutorOff = false;
+    try { tutorOff = localStorage.getItem('igcse-tutor-mode') === 'on'; } catch(e) {}
+    if (!tutorOff) {
+      var now = new Date();
+      try {
+        fetch(SHEETS_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: {'Content-Type': 'text/plain'},
+          body: JSON.stringify({
+            key: SHEETS_KEY,
+            rows: [[
+              now.toISOString().slice(0, 10),
+              now.toTimeString().slice(0, 5),
+              'lookup',
+              subject,
+              chapter,
+              raw,
+              '',
+              '',
+              '',
+              ''
+            ]]
+          })
+        }).catch(function() {});
+      } catch(e) {}
+    }
 
     // Fetch definition — fall back to fuzzy match on failure
     fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + encodeURIComponent(word))
@@ -1271,4 +1277,46 @@
 
     snRow.appendChild(utilDiv);
   }
+})();
+
+// ============================================================
+// Tutor Mode Toggle — Ctrl+. suppresses all tracking
+// ============================================================
+(function() {
+  var KEY = 'igcse-tutor-mode';
+  var dot = null;
+
+  function isOn() {
+    try { return localStorage.getItem(KEY) === 'on'; } catch(e) { return false; }
+  }
+
+  function showIndicator(on) {
+    if (!dot) {
+      dot = document.createElement('div');
+      dot.style.cssText = 'position:fixed;bottom:4px;right:4px;width:8px;height:8px;border-radius:50%;z-index:99999;pointer-events:none;transition:opacity .3s;';
+      document.body.appendChild(dot);
+    }
+    dot.style.backgroundColor = on ? '#e74c3c' : 'transparent';
+    dot.title = on ? 'Tutor mode ON — tracking paused' : '';
+  }
+
+  // Show on load if already active
+  if (document.body) {
+    showIndicator(isOn());
+  } else {
+    document.addEventListener('DOMContentLoaded', function() { showIndicator(isOn()); });
+  }
+
+  document.addEventListener('keydown', function(e) {
+    // Ctrl+. (or Cmd+. on Mac) — no browser shortcut conflict
+    if ((e.ctrlKey || e.metaKey) && !e.shiftKey && e.key === '.') {
+      e.preventDefault();
+      var next = isOn() ? null : 'on';
+      try {
+        if (next) localStorage.setItem(KEY, next);
+        else localStorage.removeItem(KEY);
+      } catch(ex) {}
+      showIndicator(!!next);
+    }
+  });
 })();
