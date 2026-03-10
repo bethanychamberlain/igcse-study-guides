@@ -470,6 +470,33 @@
     return exercises;
   }
 
+  // Build structured checkbox items for the Checkbox Tracker sheet
+  // Returns flat array of [subject, chapter, section, itemText, checked]
+  function buildCheckboxItems() {
+    var items = [];
+    checkboxes.forEach(function(cb) {
+      var card = cb.closest('.card');
+      var section = 'Progress';
+      if (card) {
+        var prev = card.previousElementSibling;
+        while (prev) {
+          if (prev.classList && prev.classList.contains('section-header')) {
+            var numSpan = prev.querySelector('.num');
+            var numText = numSpan ? numSpan.textContent.trim() : '';
+            section = prev.textContent.trim();
+            if (numText) section = section.replace(numText, '').trim();
+            break;
+          }
+          prev = prev.previousElementSibling;
+        }
+      }
+      var li = cb.closest('li');
+      var itemText = li ? li.textContent.trim() : 'Item';
+      items.push([subject, chapter, section, itemText, cb.checked]);
+    });
+    return items;
+  }
+
   // --- Build exercises array for Google Sheets ---
   function buildExercises(dateStr) {
     var exercises = [];
@@ -533,11 +560,14 @@
     var dateStr = new Date().toISOString().slice(0, 10);
     var exercises = buildExercises(dateStr);
 
-    // Post to Google Sheets "Writing & Notes" sheet
+    // Post to Google Sheets "Writing & Notes" sheet + Checkbox Tracker
     if (exercises.length > 0) {
       var payload = {key: SHEETS_KEY, target: 'progress', exercises: exercises};
       if (savedThisSession) {
         payload.overwrite = true; // same session re-save — overwrite, don't create new columns
+      }
+      if (isNotes) {
+        payload.checkboxItems = buildCheckboxItems();
       }
       try {
         fetch(SHEETS_URL, {

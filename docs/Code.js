@@ -40,6 +40,10 @@ function doPost(e) {
       // Per-exercise tracking → "Writing & Notes" sheet
       // overwrite flag = re-save in same browser session (don't create new columns)
       writeProgress(ss, data.exercises || [], !!data.overwrite);
+      // Structured checkbox data → "Checkbox Tracker" sheet
+      if (data.checkboxItems && data.checkboxItems.length > 0) {
+        writeCheckboxTracker(ss, data.checkboxItems);
+      }
     } else {
       // Quiz, flashcard, page-view rows → "Activity Log" sheet
       var sheet = ss.getSheetByName('Activity Log') || ss.getSheets()[0];
@@ -295,6 +299,68 @@ function writeProgress(ss, exercises, overwrite) {
     // Write the attempt
     sheet.getRange(rowIdx, attemptCol).setValue(date);
     sheet.getRange(rowIdx, attemptCol + 1).setValue(content);
+  }
+}
+
+// ============================================================
+// CHECKBOX TRACKER — one row per checkbox item across all notes
+//
+// Columns: Subject | Chapter | Section | Item | Checked | Last Updated
+//
+// Upserts by Subject+Chapter+Section+Item key. Each save overwrites
+// the Checked status and Last Updated date for that item.
+// ============================================================
+function writeCheckboxTracker(ss, items) {
+  var SHEET_NAME = 'Checkbox Tracker';
+  var COLS = 6; // Subject, Chapter, Section, Item, Checked, Last Updated
+
+  var sheet = ss.getSheetByName(SHEET_NAME);
+  if (!sheet) {
+    sheet = ss.insertSheet(SHEET_NAME);
+    sheet.getRange(1, 1, 1, COLS)
+      .setValues([['Subject', 'Chapter', 'Section', 'Item', 'Checked', 'Last Updated']])
+      .setFontWeight('bold');
+    sheet.setFrozenRows(1);
+  }
+
+  // Read all existing rows for fast key lookup
+  var lastRow = sheet.getLastRow();
+  var lookup = {}; // "subject|chapter|section|item" → row number
+  if (lastRow >= 2) {
+    var existing = sheet.getRange(2, 1, lastRow - 1, 4).getValues();
+    for (var r = 0; r < existing.length; r++) {
+      var k = existing[r][0] + '|' + existing[r][1] + '|' + existing[r][2] + '|' + existing[r][3];
+      lookup[k] = r + 2;
+    }
+  }
+
+  var now = new Date();
+  var tz = Session.getScriptTimeZone();
+  var dateStr = Utilities.formatDate(now, tz, 'yyyy-MM-dd HH:mm');
+
+  // Batch: collect updates and new rows separately
+  var newRows = [];
+
+  for (var i = 0; i < items.length; i++) {
+    var item = items[i];
+    // item = [subject, chapter, section, itemText, checked]
+    var subj = item[0], chap = item[1], sect = item[2], text = item[3], checked = item[4];
+    var key = subj + '|' + chap + '|' + sect + '|' + text;
+
+    var rowIdx = lookup[key];
+    if (rowIdx) {
+      // Update existing row — just Checked + Last Updated (cols 5-6)
+      sheet.getRange(rowIdx, 5, 1, 2).setValues([[checked, dateStr]]);
+    } else {
+      // Queue for batch append
+      newRows.push([subj, chap, sect, text, checked, dateStr]);
+      lookup[key] = lastRow + newRows.length; // prevent dupes within same save
+    }
+  }
+
+  // Batch append all new rows at once
+  if (newRows.length > 0) {
+    sheet.getRange(lastRow + 1, 1, newRows.length, COLS).setValues(newRows);
   }
 }
 
