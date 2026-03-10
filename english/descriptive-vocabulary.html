@@ -258,6 +258,11 @@
     margin-bottom: 8px;
     line-height: 1.5;
   }
+  .vocab-popup .popup-examples {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
   .vocab-popup .popup-eg {
     font-size: 12px;
     font-style: italic;
@@ -267,15 +272,22 @@
     border-radius: 6px;
     border-left: 3px solid var(--subject);
     line-height: 1.5;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
   }
-  .vocab-popup .popup-eg::before {
-    content: 'e.g. ';
+  .popup-eg .ch-tag {
+    font-size: 9px;
     font-weight: 700;
     font-style: normal;
-    color: var(--subject);
     text-transform: uppercase;
-    font-size: 10px;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background: var(--subject-light);
+    color: var(--subject-dark);
+    white-space: nowrap;
+    flex-shrink: 0;
   }
 
   /* Sense-colored chips */
@@ -518,231 +530,231 @@
 <script>
 // ============================================================
 // VOCABULARY DATA
-// Each word: [word, sense, level, example, subcategory, intensity-group]
+// Each word: [word, sense, level, example, subcategory, intensity-group, definition, examples]
 // sense: sight/sound/smell/taste/touch/emotion
 // level: c=common, i=intermediate, a=advanced
+// examples: [["ChN","phrase"], ...] — 2-3 chapter-tagged usage examples
 // ============================================================
-// Each word: [word, sense, level, example, subcategory, intensity-group, definition]
 var WORDS = [
   // ===== SIGHT: Colour & light =====
-  ["golden","sight","c","golden light on the old stone walls","colour & light","beautiful","Warm yellow colour, like gold or late-afternoon sunlight"],
-  ["crimson","sight","i","crimson flowers spilling over the balcony","colour & light","beautiful","Deep, dark red"],
-  ["turquoise","sight","i","turquoise water in the harbour","colour & light","beautiful","Blue-green, like tropical sea water"],
-  ["amber","sight","i","amber glow of the street lamps","colour & light","beautiful","Warm orange-yellow, like honey or old glass"],
-  ["ivory","sight","i","ivory columns lining the entrance","colour & light",null,"Creamy off-white, like old bone or teeth"],
-  ["slate","sight","c","slate-grey clouds rolling in","colour & light",null,"Dark blue-grey, like the stone used for roofs"],
-  ["emerald","sight","i","emerald hillsides after the rain","colour & light","beautiful","Rich bright green, like the gemstone"],
-  ["dusty","sight","c","dusty shelves in the old bookshop","colour & light","old","Covered with a fine layer of dust; faded and dry-looking"],
-  ["faded","sight","c","faded paint peeling from the shutters","colour & light","old","Colour that has lost its brightness over time"],
-  ["gleaming","sight","i","gleaming marble floor","colour & light","beautiful","Shining with a steady, reflected light"],
-  ["dappled","sight","a","dappled sunlight through the trees","colour & light",null,"Marked with patches of light and shadow"],
-  ["shimmering","sight","i","shimmering heat rising from the pavement","colour & light","hot","Glittering or wavering with soft, unsteady light"],
-  ["dazzling","sight","i","dazzling white sand","colour & light","beautiful","So bright it almost hurts your eyes"],
-  ["dim","sight","c","dim corridor leading underground","colour & light","dark","Only a small amount of light; hard to see clearly"],
-  ["shadowy","sight","c","shadowy arches of the Gothic Quarter","colour & light","dark","Full of dark areas created by blocked light"],
-  ["flickering","sight","c","flickering candles in the church","colour & light",null,"Light that keeps going on and off quickly"],
-  ["radiant","sight","i","radiant morning sun","colour & light","beautiful","Sending out bright, warm light in all directions"],
-  ["luminous","sight","a","luminous stained-glass windows","colour & light","beautiful","Glowing with its own soft light, as if lit from within"],
-  ["hazy","sight","c","hazy outline of the mountains","colour & light",null,"Slightly blurred or unclear, as if seen through mist"],
-  ["vivid","sight","i","vivid colours of the market stalls","colour & light","beautiful","Intensely bright and strong; impossible to ignore"],
+  ["golden","sight","c","golden light on the old stone walls","colour & light","beautiful","Warm yellow colour, like gold or late-afternoon sunlight",[["Ch1","golden light on the old stone walls"],["Ch2","golden wheat field stretching to the horizon"],["Ch9","golden glow of the final sunset together"]]],
+  ["crimson","sight","i","crimson flowers spilling over the balcony","colour & light","beautiful","Deep, dark red",[["Ch1","crimson flowers spilling over the balcony"],["Ch2","crimson leaves carpeting the forest floor"],["Ch9","crimson sky as the last day faded"]]],
+  ["turquoise","sight","i","turquoise water in the harbour","colour & light","beautiful","Blue-green, like tropical sea water",[["Ch1","turquoise water in the harbour"],["Ch2","turquoise dragonfly hovering over the pond"]]],
+  ["amber","sight","i","amber glow of the street lamps","colour & light","beautiful","Warm orange-yellow, like honey or old glass",[["Ch1","amber glow of the street lamps"],["Ch2","amber light filtering through autumn leaves"],["Ch9","amber streetlight outside the window on the last night"]]],
+  ["ivory","sight","i","ivory columns lining the entrance","colour & light",null,"Creamy off-white, like old bone or teeth",[["Ch1","ivory columns lining the entrance"],["Ch5","ivory lace on her grandmother's wedding dress"],["Ch8","ivory keys of the piano she practised on daily"]]],
+  ["slate","sight","c","slate-grey clouds rolling in","colour & light",null,"Dark blue-grey, like the stone used for roofs",[["Ch1","slate-grey clouds rolling in"],["Ch2","slate-coloured sea under the winter sky"],["Ch7","slate sky threatening rain before the match"]]],
+  ["emerald","sight","i","emerald hillsides after the rain","colour & light","beautiful","Rich bright green, like the gemstone",[["Ch1","emerald hillsides after the rain"],["Ch2","emerald canopy of the tropical rainforest"]]],
+  ["dusty","sight","c","dusty shelves in the old bookshop","colour & light","old","Covered with a fine layer of dust; faded and dry-looking",[["Ch1","dusty shelves in the old bookshop"],["Ch3","dusty trophy cabinet in the school hallway"],["Ch8","dusty manuscript found in her attic"]]],
+  ["faded","sight","c","faded paint peeling from the shutters","colour & light","old","Colour that has lost its brightness over time",[["Ch1","faded paint peeling from the shutters"],["Ch5","faded photograph on the mantelpiece"],["Ch9","faded memories of the very first day"]]],
+  ["gleaming","sight","i","gleaming marble floor","colour & light","beautiful","Shining with a steady, reflected light",[["Ch1","gleaming marble floor"],["Ch6","gleaming new shopping centre towering over the old town"],["Ch8","gleaming trophy she held above her head"]]],
+  ["dappled","sight","a","dappled sunlight through the trees","colour & light",null,"Marked with patches of light and shadow",[["Ch2","dappled sunlight through the trees"],["Ch1","dappled shade of the courtyard olive tree"],["Ch9","dappled light on the path we walked for the last time"]]],
+  ["shimmering","sight","i","shimmering heat rising from the pavement","colour & light","hot","Glittering or wavering with soft, unsteady light",[["Ch1","shimmering heat rising from the pavement"],["Ch2","shimmering surface of the lake at dawn"],["Ch9","shimmering candles at the farewell dinner"]]],
+  ["dazzling","sight","i","dazzling white sand","colour & light","beautiful","So bright it almost hurts your eyes",[["Ch1","dazzling white sand"],["Ch2","dazzling snow on the mountain peaks"],["Ch8","dazzling smile that lit up every photograph"]]],
+  ["dim","sight","c","dim corridor leading underground","colour & light","dark","Only a small amount of light; hard to see clearly",[["Ch1","dim corridor leading underground"],["Ch3","dim reading lamp in the dormitory"],["Ch9","dim outline of the school disappearing behind us"]]],
+  ["shadowy","sight","c","shadowy arches of the Gothic Quarter","colour & light","dark","Full of dark areas created by blocked light",[["Ch1","shadowy arches of the Gothic Quarter"],["Ch2","shadowy forest floor beneath the pines"],["Ch3","shadowy corner of the common room after lights-out"]]],
+  ["flickering","sight","c","flickering candles in the church","colour & light",null,"Light that keeps going on and off quickly",[["Ch1","flickering candles in the church"],["Ch2","flickering fireflies in the summer meadow"],["Ch9","flickering bonfire on the last night of term"]]],
+  ["radiant","sight","i","radiant morning sun","colour & light","beautiful","Sending out bright, warm light in all directions",[["Ch2","radiant morning sun"],["Ch1","radiant stained-glass window above the altar"],["Ch5","radiant expression on her face when she heard the news"]]],
+  ["luminous","sight","a","luminous stained-glass windows","colour & light","beautiful","Glowing with its own soft light, as if lit from within",[["Ch1","luminous stained-glass windows"],["Ch2","luminous full moon reflected in the sea"],["Ch9","luminous ending to an unforgettable year"]]],
+  ["hazy","sight","c","hazy outline of the mountains","colour & light",null,"Slightly blurred or unclear, as if seen through mist",[["Ch1","hazy outline of the mountains"],["Ch2","hazy summer afternoon over the meadow"],["Ch9","hazy recollection of that very first morning"]]],
+  ["vivid","sight","i","vivid colours of the market stalls","colour & light","beautiful","Intensely bright and strong; impossible to ignore",[["Ch1","vivid colours of the market stalls"],["Ch2","vivid plumage of the kingfisher"],["Ch5","vivid stories my grandfather used to tell"]]],
 
   // ===== SIGHT: Shape, size & structure =====
-  ["tall","sight","c","tall church tower visible from across the town","shape & size","big","Having a greater than average height"],
-  ["large","sight","c","large stone archway at the entrance to the square","shape & size","big","Of considerable or relatively great size"],
-  ["little","sight","c","little side streets branching off the main road","shape & size","small","Small in size; not big"],
-  ["tiny","sight","c","tiny window high up in the tower wall","shape & size","small","Extremely small"],
-  ["towering","sight","c","towering spires of the cathedral","shape & size","big","Extremely tall, rising high above everything around it"],
-  ["sprawling","sight","i","sprawling city viewed from the hilltop","shape & size","big","Spread out over a large area in an untidy way"],
-  ["narrow","sight","c","narrow alleyway barely wide enough for two","shape & size","small","Very small width from side to side"],
-  ["vast","sight","i","vast open square","shape & size","big","Extremely large in area or scale"],
-  ["compact","sight","c","compact courtyard tucked behind the cathedral","shape & size","small","Small and neatly fitted together; using space efficiently"],
-  ["miniature","sight","c","miniature balconies on every floor","shape & size","small","Very small version of something; tiny"],
-  ["immense","sight","i","immense cavern opening up before us","shape & size","big","Extremely large or great in scale"],
-  ["jagged","sight","i","jagged rock formations in the cave","shape & size",null,"Having rough, sharp, uneven edges"],
-  ["angular","sight","i","angular modern sculpture","shape & size",null,"Having sharp corners and straight edges"],
-  ["looming","sight","i","looming cliff face above us","shape & size","big","Appearing large and threatening, often above you"],
-  ["squat","sight","i","squat stone buildings lining the road","shape & size","small","Short and wide; low to the ground"],
-  ["soaring","sight","i","soaring ceiling far above our heads","shape & size","big","Rising dramatically upward to a great height"],
-  ["imposing","sight","i","imposing iron gates at the entrance","shape & size","big","Large and impressive in a way that demands attention"],
-  ["colossal","sight","a","colossal pillars holding up the roof","shape & size","big","Enormously large; like a giant"],
-  ["monumental","sight","a","monumental staircase of white stone","shape & size","big","Huge and built to impress; grand in scale"],
-  ["crumbling","sight","c","crumbling wall overtaken by vines","shape & size","old","Slowly breaking apart and falling to pieces"],
-  ["ornate","sight","i","ornate carvings around the doorway","shape & size","beautiful","Covered in detailed, elaborate decoration"],
-  ["intricate","sight","i","intricate mosaic covering the floor","shape & size","beautiful","Extremely detailed and complex in design"],
-  ["pretty","sight","c","pretty tiled courtyard with a small fountain","shape & size","beautiful","Attractive in a delicate, simple way"],
-  ["stunning","sight","i","stunning view of the city from the rooftop","shape & size","beautiful","Extremely beautiful; striking enough to stop you in your tracks"],
-  ["magnificent","sight","a","magnificent facade covered in carved figures","shape & size","beautiful","Impressively grand and beautiful"],
-  ["sublime","sight","a","sublime colours of the sunset over the sea","shape & size","beautiful","Of such outstanding beauty it feels almost spiritual"],
-  ["ancient","sight","i","ancient Roman walls still standing after two thousand years","shape & size","old","Extremely old; from a time long ago"],
-  ["aged","sight","c","aged wooden beams across the low ceiling","shape & size","old","Old and showing signs of long use"],
-  ["timeworn","sight","a","timeworn steps worn smooth by centuries of feet","shape & size","old","Damaged or changed by the passage of many years"],
+  ["tall","sight","c","tall church tower visible from across the town","shape & size","big","Having a greater than average height",[["Ch1","tall church tower visible from across the town"],["Ch2","tall pine trees swaying in the wind"],["Ch8","tall figure who commanded attention wherever she went"]]],
+  ["large","sight","c","large stone archway at the entrance to the square","shape & size","big","Of considerable or relatively great size",[["Ch1","large stone archway at the entrance to the square"],["Ch7","large banner headline splashed across the front page"]]],
+  ["little","sight","c","little side streets branching off the main road","shape & size","small","Small in size; not big",[["Ch1","little side streets branching off the main road"],["Ch5","little gestures that showed he truly cared"],["Ch2","little wildflowers growing between the rocks"]]],
+  ["tiny","sight","c","tiny window high up in the tower wall","shape & size","small","Extremely small",[["Ch1","tiny window high up in the tower wall"],["Ch2","tiny insects skating across the surface of the pond"],["Ch5","tiny kitchen where the whole family somehow fitted"]]],
+  ["towering","sight","c","towering spires of the cathedral","shape & size","big","Extremely tall, rising high above everything around it",[["Ch1","towering spires of the cathedral"],["Ch2","towering cliffs along the coast"],["Ch8","towering achievement that nobody thought possible"]]],
+  ["sprawling","sight","i","sprawling city viewed from the hilltop","shape & size","big","Spread out over a large area in an untidy way",[["Ch1","sprawling city viewed from the hilltop"],["Ch2","sprawling roots of the ancient banyan tree"],["Ch6","sprawling retail park built on what was once farmland"]]],
+  ["narrow","sight","c","narrow alleyway barely wide enough for two","shape & size","small","Very small width from side to side",[["Ch1","narrow alleyway barely wide enough for two"],["Ch3","narrow corridor connecting the dormitories"],["Ch7","narrow victory decided in the final seconds"]]],
+  ["vast","sight","i","vast open square","shape & size","big","Extremely large in area or scale",[["Ch1","vast open square"],["Ch2","vast expanse of ocean stretching to the horizon"],["Ch6","vast quantities of plastic washing up on beaches"]]],
+  ["compact","sight","c","compact courtyard tucked behind the cathedral","shape & size","small","Small and neatly fitted together; using space efficiently",[["Ch1","compact courtyard tucked behind the cathedral"],["Ch3","compact study desk crammed with textbooks"],["Ch5","compact apartment where four generations had lived"]]],
+  ["miniature","sight","c","miniature balconies on every floor","shape & size","small","Very small version of something; tiny",[["Ch1","miniature balconies on every floor"],["Ch2","miniature ecosystem thriving in the rock pool"],["Ch8","miniature model she built of her first invention"]]],
+  ["immense","sight","i","immense cavern opening up before us","shape & size","big","Extremely large or great in scale",[["Ch1","immense cavern opening up before us"],["Ch2","immense glacier creeping down the mountainside"],["Ch8","immense pressure she faced before every performance"]]],
+  ["jagged","sight","i","jagged rock formations in the cave","shape & size",null,"Having rough, sharp, uneven edges",[["Ch1","jagged rock formations in the cave"],["Ch2","jagged coastline battered by Atlantic waves"],["Ch7","jagged shards of glass scattered across the pitch"]]],
+  ["angular","sight","i","angular modern sculpture","shape & size",null,"Having sharp corners and straight edges",[["Ch1","angular modern sculpture"],["Ch6","angular glass tower reflecting the clouds"],["Ch8","angular features that made her instantly recognisable"]]],
+  ["looming","sight","i","looming cliff face above us","shape & size","big","Appearing large and threatening, often above you",[["Ch1","looming cliff face above us"],["Ch2","looming storm clouds darkening the valley"],["Ch7","looming deadline as the final whistle approached"]]],
+  ["squat","sight","i","squat stone buildings lining the road","shape & size","small","Short and wide; low to the ground",[["Ch1","squat stone buildings lining the road"],["Ch2","squat mushrooms growing at the base of the oak"],["Ch5","squat figure wrapped in a thick winter coat"]]],
+  ["soaring","sight","i","soaring ceiling far above our heads","shape & size","big","Rising dramatically upward to a great height",[["Ch1","soaring ceiling far above our heads"],["Ch2","soaring eagle circling over the ridge"],["Ch8","soaring ambition that drove her from the very start"]]],
+  ["imposing","sight","i","imposing iron gates at the entrance","shape & size","big","Large and impressive in a way that demands attention",[["Ch1","imposing iron gates at the entrance"],["Ch8","imposing figure who could silence a room"],["Ch7","imposing stadium rising above the city skyline"]]],
+  ["colossal","sight","a","colossal pillars holding up the roof","shape & size","big","Enormously large; like a giant",[["Ch1","colossal pillars holding up the roof"],["Ch2","colossal waves crashing against the harbour wall"],["Ch8","colossal fame that came with a single discovery"]]],
+  ["monumental","sight","a","monumental staircase of white stone","shape & size","big","Huge and built to impress; grand in scale",[["Ch1","monumental staircase of white stone"],["Ch8","monumental effort that changed the course of history"],["Ch6","monumental waste produced by a single factory each year"]]],
+  ["crumbling","sight","c","crumbling wall overtaken by vines","shape & size","old","Slowly breaking apart and falling to pieces",[["Ch1","crumbling wall overtaken by vines"],["Ch2","crumbling cliff face eroded by the sea"],["Ch9","crumbling friendships that couldn't survive the distance"]]],
+  ["ornate","sight","i","ornate carvings around the doorway","shape & size","beautiful","Covered in detailed, elaborate decoration",[["Ch1","ornate carvings around the doorway"],["Ch8","ornate costume she wore for the opening ceremony"],["Ch5","ornate frame around the old family portrait"]]],
+  ["intricate","sight","i","intricate mosaic covering the floor","shape & size","beautiful","Extremely detailed and complex in design",[["Ch1","intricate mosaic covering the floor"],["Ch2","intricate web spun between the branches"],["Ch8","intricate choreography she perfected over years of practice"]]],
+  ["pretty","sight","c","pretty tiled courtyard with a small fountain","shape & size","beautiful","Attractive in a delicate, simple way",[["Ch1","pretty tiled courtyard with a small fountain"],["Ch2","pretty wildflower meadow behind the farmhouse"],["Ch5","pretty handwriting on the letters she kept"]]],
+  ["stunning","sight","i","stunning view of the city from the rooftop","shape & size","beautiful","Extremely beautiful; striking enough to stop you in your tracks",[["Ch1","stunning view of the city from the rooftop"],["Ch2","stunning sunset painting the sky in pinks and golds"],["Ch8","stunning debut that made her an overnight sensation"]]],
+  ["magnificent","sight","a","magnificent facade covered in carved figures","shape & size","beautiful","Impressively grand and beautiful",[["Ch1","magnificent facade covered in carved figures"],["Ch2","magnificent stag standing perfectly still in the clearing"],["Ch8","magnificent career spanning four decades"]]],
+  ["sublime","sight","a","sublime colours of the sunset over the sea","shape & size","beautiful","Of such outstanding beauty it feels almost spiritual",[["Ch1","sublime colours of the sunset over the sea"],["Ch2","sublime silence of the mountain at dawn"],["Ch9","sublime final paragraph that brought the story full circle"]]],
+  ["ancient","sight","i","ancient Roman walls still standing after two thousand years","shape & size","old","Extremely old; from a time long ago",[["Ch1","ancient Roman walls still standing after two thousand years"],["Ch2","ancient oak with roots as thick as my arm"],["Ch8","ancient traditions she fought to preserve"]]],
+  ["aged","sight","c","aged wooden beams across the low ceiling","shape & size","old","Old and showing signs of long use",[["Ch1","aged wooden beams across the low ceiling"],["Ch5","aged hands carefully turning the pages"],["Ch2","aged cliff face scarred by centuries of weather"]]],
+  ["timeworn","sight","a","timeworn steps worn smooth by centuries of feet","shape & size","old","Damaged or changed by the passage of many years",[["Ch1","timeworn steps worn smooth by centuries of feet"],["Ch2","timeworn rocks shaped by the relentless tide"],["Ch9","timeworn tradition of the end-of-year assembly"]]],
 
   // ===== SIGHT: Movement & activity =====
-  ["lively","sight","c","lively atmosphere in the tapas bar","movement","busy","Full of energy and activity"],
-  ["bustling","sight","c","bustling morning crowd at the market","movement","busy","Full of energetic, noisy activity"],
-  ["swirling","sight","i","swirling patterns in the stonework","movement",null,"Moving in circles or spirals"],
-  ["drifting","sight","c","smoke drifting from a food stall","movement",null,"Moving slowly and gently through the air"],
-  ["darting","sight","i","children darting between the tables","movement","busy","Moving suddenly and quickly in a direction"],
-  ["surging","sight","i","surging crowd pushing toward the entrance","movement","busy","Moving forward powerfully like a wave"],
-  ["rippling","sight","i","rippling reflections in the fountain","movement",null,"Moving in small, gentle waves across a surface"],
-  ["streaming","sight","i","sunlight streaming through the windows","movement",null,"Flowing steadily in one direction like a river"],
-  ["swarming","sight","i","tourists swarming around the monument","movement","busy","A large group moving in all directions at once"],
-  ["teeming","sight","a","teeming square full of performers","movement","busy","Absolutely packed with moving life and activity"],
+  ["lively","sight","c","lively atmosphere in the tapas bar","movement","busy","Full of energy and activity",[["Ch1","lively atmosphere in the tapas bar"],["Ch4","lively debate that spilled over into break time"],["Ch5","lively toddler running circles around the dinner table"]]],
+  ["bustling","sight","c","bustling morning crowd at the market","movement","busy","Full of energetic, noisy activity",[["Ch1","bustling morning crowd at the market"],["Ch7","bustling newsroom on the day of the election"],["Ch5","bustling kitchen full of relatives cooking together"]]],
+  ["swirling","sight","i","swirling patterns in the stonework","movement",null,"Moving in circles or spirals",[["Ch1","swirling patterns in the stonework"],["Ch2","swirling autumn leaves caught in the wind"],["Ch9","swirling emotions on the last day of term"]]],
+  ["drifting","sight","c","smoke drifting from a food stall","movement",null,"Moving slowly and gently through the air",[["Ch1","smoke drifting from a food stall"],["Ch2","dandelion seeds drifting across the meadow"],["Ch9","drifting apart as the final weeks went by"]]],
+  ["darting","sight","i","children darting between the tables","movement","busy","Moving suddenly and quickly in a direction",[["Ch1","children darting between the tables"],["Ch2","fish darting through the shallows"],["Ch5","darting glances exchanged across the dinner table"]]],
+  ["surging","sight","i","surging crowd pushing toward the entrance","movement","busy","Moving forward powerfully like a wave",[["Ch1","surging crowd pushing toward the entrance"],["Ch7","surging second-half comeback that stunned the favourites"],["Ch2","surging river swollen by the spring rains"]]],
+  ["rippling","sight","i","rippling reflections in the fountain","movement",null,"Moving in small, gentle waves across a surface",[["Ch2","rippling reflections in the fountain"],["Ch1","rippling water in the harbour at sunset"],["Ch9","rippling applause as the final curtain fell"]]],
+  ["streaming","sight","i","sunlight streaming through the windows","movement",null,"Flowing steadily in one direction like a river",[["Ch1","sunlight streaming through the windows"],["Ch2","rain streaming down the hillside"],["Ch7","fans streaming out of the stadium after the final whistle"]]],
+  ["swarming","sight","i","tourists swarming around the monument","movement","busy","A large group moving in all directions at once",[["Ch1","tourists swarming around the monument"],["Ch7","reporters swarming the winner at the finish line"],["Ch2","bees swarming around the wildflower patch"]]],
+  ["teeming","sight","a","teeming square full of performers","movement","busy","Absolutely packed with moving life and activity",[["Ch1","teeming square full of performers"],["Ch2","teeming rock pool full of crabs and anemones"],["Ch7","teeming crowd outside the court on judgement day"]]],
 
   // ===== SOUND: Volume =====
-  ["noisy","sound","c","noisy crowd outside the stadium","volume","loud","Making a lot of sound; not quiet"],
-  ["soft","sound","c","soft guitar playing from an open window","volume","quiet","Gentle and low in volume; not harsh"],
-  ["thundering","sound","i","thundering waterfall echoing off the rocks","volume","loud","Extremely loud, deep sound like thunder"],
-  ["roaring","sound","c","roaring traffic on the main road","volume","loud","A loud, continuous, deep sound"],
-  ["murmuring","sound","i","murmuring conversation at nearby tables","volume","quiet","A soft, continuous sound of voices speaking low"],
-  ["whispering","sound","c","whispering voices in the cathedral","volume","quiet","Speaking or sounding very softly"],
-  ["deafening","sound","i","deafening music from the open bar","volume","loud","So loud you can barely hear anything else"],
-  ["hushed","sound","i","hushed silence inside the museum","volume","quiet","Very quiet, as if everyone is being careful not to make noise"],
-  ["faint","sound","c","faint church bells in the distance","volume","quiet","Barely loud enough to hear"],
-  ["piercing","sound","i","piercing whistle of the train","volume","loud","A sharp, high-pitched sound that cuts through everything"],
-  ["booming","sound","c","booming voice of the tour guide","volume","loud","A deep, loud sound that carries a long way"],
-  ["muffled","sound","i","muffled footsteps on the stone floor","volume","quiet","Sound that is dulled or blocked, like hearing through a wall"],
+  ["noisy","sound","c","noisy crowd outside the stadium","volume","loud","Making a lot of sound; not quiet",[["Ch1","noisy crowd outside the stadium"],["Ch4","noisy rehearsal echoing down the corridor"],["Ch5","noisy family gathering with everyone talking at once"]]],
+  ["soft","sound","c","soft guitar playing from an open window","volume","quiet","Gentle and low in volume; not harsh",[["Ch1","soft guitar playing from an open window"],["Ch2","soft rustle of leaves in the breeze"],["Ch5","soft voice she used when telling bedtime stories"]]],
+  ["thundering","sound","i","thundering waterfall echoing off the rocks","volume","loud","Extremely loud, deep sound like thunder",[["Ch2","thundering waterfall echoing off the rocks"],["Ch1","thundering drums of the street parade"],["Ch7","thundering header that put them two goals ahead"]]],
+  ["roaring","sound","c","roaring traffic on the main road","volume","loud","A loud, continuous, deep sound",[["Ch1","roaring traffic on the main road"],["Ch2","roaring waves during the winter storm"],["Ch7","roaring crowd after the winning try"]]],
+  ["murmuring","sound","i","murmuring conversation at nearby tables","volume","quiet","A soft, continuous sound of voices speaking low",[["Ch1","murmuring conversation at nearby tables"],["Ch2","murmuring brook winding through the valley"],["Ch3","murmuring whispers spreading through the classroom"]]],
+  ["whispering","sound","c","whispering voices in the cathedral","volume","quiet","Speaking or sounding very softly",[["Ch1","whispering voices in the cathedral"],["Ch2","whispering wind through the tall grass"],["Ch3","whispering in the back row during assembly"]]],
+  ["deafening","sound","i","deafening music from the open bar","volume","loud","So loud you can barely hear anything else",[["Ch1","deafening music from the open bar"],["Ch7","deafening roar when the final goal went in"],["Ch4","deafening applause at the end of the concert"]]],
+  ["hushed","sound","i","hushed silence inside the museum","volume","quiet","Very quiet, as if everyone is being careful not to make noise",[["Ch1","hushed silence inside the museum"],["Ch3","hushed anticipation as the results were read out"],["Ch9","hushed goodbye at the school gates"]]],
+  ["faint","sound","c","faint church bells in the distance","volume","quiet","Barely loud enough to hear",[["Ch1","faint church bells in the distance"],["Ch2","faint birdsong at the edge of the forest"],["Ch9","faint echo of laughter from the empty hall"]]],
+  ["piercing","sound","i","piercing whistle of the train","volume","loud","A sharp, high-pitched sound that cuts through everything",[["Ch1","piercing whistle of the train"],["Ch2","piercing cry of the hawk overhead"],["Ch7","piercing half-time whistle that silenced the crowd"]]],
+  ["booming","sound","c","booming voice of the tour guide","volume","loud","A deep, loud sound that carries a long way",[["Ch1","booming voice of the tour guide"],["Ch7","booming commentary echoing around the arena"],["Ch8","booming laugh that everyone recognised"]]],
+  ["muffled","sound","i","muffled footsteps on the stone floor","volume","quiet","Sound that is dulled or blocked, like hearing through a wall",[["Ch1","muffled footsteps on the stone floor"],["Ch3","muffled conversation through the dormitory wall"],["Ch9","muffled sobs from someone at the back of the hall"]]],
 
   // ===== SOUND: Quality =====
-  ["melodic","sound","i","melodic street musician on guitar","quality",null,"Pleasant and tuneful, like a melody"],
-  ["shrill","sound","i","shrill seagulls circling above","quality","loud","High-pitched and unpleasantly sharp"],
-  ["raspy","sound","i","raspy voice of the old waiter","quality",null,"Rough and scratchy, like sandpaper on the throat"],
-  ["crisp","sound","i","crisp echo of our footsteps in the cave","quality",null,"Clear, sharp, and clean-sounding"],
-  ["echoing","sound","c","echoing laughter in the stairwell","quality",null,"Sound that bounces back and repeats in a space"],
-  ["rhythmic","sound","i","rhythmic clatter of the train on the tracks","quality",null,"Having a regular, repeated beat or pattern"],
-  ["discordant","sound","a","discordant honking of impatient drivers","quality","loud","Harsh and clashing; the opposite of harmonious"],
-  ["tinkling","sound","i","tinkling of glasses at the outdoor cafe","quality","quiet","A light, high, ringing sound like small bells"],
-  ["rumbling","sound","c","rumbling of the metro beneath our feet","quality","loud","A low, continuous, vibrating sound"],
+  ["melodic","sound","i","melodic street musician on guitar","quality",null,"Pleasant and tuneful, like a melody",[["Ch1","melodic street musician on guitar"],["Ch2","melodic song of the nightingale at dusk"],["Ch4","melodic opening bars of the school orchestra"]]],
+  ["shrill","sound","i","shrill seagulls circling above","quality","loud","High-pitched and unpleasantly sharp",[["Ch2","shrill seagulls circling above"],["Ch3","shrill fire alarm at three in the morning"],["Ch7","shrill blast of the referee's whistle"]]],
+  ["raspy","sound","i","raspy voice of the old waiter","quality",null,"Rough and scratchy, like sandpaper on the throat",[["Ch1","raspy voice of the old waiter"],["Ch5","raspy laugh she had from years of singing"],["Ch8","raspy voice that became her trademark"]]],
+  ["crisp","sound","i","crisp echo of our footsteps in the cave","quality",null,"Clear, sharp, and clean-sounding",[["Ch1","crisp echo of our footsteps in the cave"],["Ch2","crisp snap of a twig underfoot"],["Ch3","crisp pronunciation of the new English teacher"]]],
+  ["echoing","sound","c","echoing laughter in the stairwell","quality",null,"Sound that bounces back and repeats in a space",[["Ch1","echoing laughter in the stairwell"],["Ch3","echoing corridor after everyone had gone to class"],["Ch9","echoing silence of the cleared-out dormitory"]]],
+  ["rhythmic","sound","i","rhythmic clatter of the train on the tracks","quality",null,"Having a regular, repeated beat or pattern",[["Ch1","rhythmic clatter of the train on the tracks"],["Ch2","rhythmic crash of waves on the shingle beach"],["Ch4","rhythmic beat of the drums in the rehearsal room"]]],
+  ["discordant","sound","a","discordant honking of impatient drivers","quality","loud","Harsh and clashing; the opposite of harmonious",[["Ch1","discordant honking of impatient drivers"],["Ch4","discordant notes from the beginner's violin class"],["Ch6","discordant clash between old buildings and new glass towers"]]],
+  ["tinkling","sound","i","tinkling of glasses at the outdoor cafe","quality","quiet","A light, high, ringing sound like small bells",[["Ch1","tinkling of glasses at the outdoor cafe"],["Ch2","tinkling of a stream over the pebbles"],["Ch5","tinkling laughter of the children playing in the garden"]]],
+  ["rumbling","sound","c","rumbling of the metro beneath our feet","quality","loud","A low, continuous, vibrating sound",[["Ch1","rumbling of the metro beneath our feet"],["Ch2","rumbling thunder in the distance"],["Ch7","rumbling engines of the team bus arriving at the ground"]]],
 
   // ===== SOUND: Specific =====
-  ["chattering","sound","c","chattering tourists filling the square","specific sounds","busy","Quick, continuous talking or teeth clicking"],
-  ["chanting","sound","i","chanting from inside the monastery","specific sounds",null,"Repeating words or sounds in a rhythmic pattern"],
-  ["rustling","sound","i","rustling of leaves in the courtyard","specific sounds","quiet","A soft, dry, brushing sound like leaves moving"],
-  ["crackling","sound","i","crackling of the wood-fired oven","specific sounds",null,"A series of short, sharp snapping sounds"],
-  ["splashing","sound","c","splashing fountain in the centre of the plaza","specific sounds",null,"The sound of water hitting a surface"],
-  ["clattering","sound","c","clattering plates in the busy kitchen","specific sounds","busy","A rapid series of hard, knocking sounds"],
-  ["humming","sound","c","humming of the air conditioning","specific sounds","quiet","A steady, low, continuous buzzing sound"],
-  ["buzzing","sound","c","buzzing of scooters weaving through traffic","specific sounds","busy","A continuous low, vibrating sound like a bee"],
-  ["clinking","sound","c","clinking of cutlery at the long table","specific sounds",null,"A light, sharp, metallic sound of things tapping together"],
+  ["chattering","sound","c","chattering tourists filling the square","specific sounds","busy","Quick, continuous talking or teeth clicking",[["Ch1","chattering tourists filling the square"],["Ch3","chattering classmates lining up for lunch"],["Ch5","chattering cousins who hadn't seen each other in months"]]],
+  ["chanting","sound","i","chanting from inside the monastery","specific sounds",null,"Repeating words or sounds in a rhythmic pattern",[["Ch1","chanting from inside the monastery"],["Ch7","chanting fans before kick-off"],["Ch4","chanting audience during the encore"]]],
+  ["rustling","sound","i","rustling of leaves in the courtyard","specific sounds","quiet","A soft, dry, brushing sound like leaves moving",[["Ch2","rustling of leaves in the courtyard"],["Ch1","rustling of a paper bag in the market crowd"],["Ch3","rustling of exam papers being turned over"]]],
+  ["crackling","sound","i","crackling of the wood-fired oven","specific sounds",null,"A series of short, sharp snapping sounds",[["Ch1","crackling of the wood-fired oven"],["Ch2","crackling of a campfire under the stars"],["Ch9","crackling bonfire on the last night of term"]]],
+  ["splashing","sound","c","splashing fountain in the centre of the plaza","specific sounds",null,"The sound of water hitting a surface",[["Ch1","splashing fountain in the centre of the plaza"],["Ch2","splashing of fish jumping in the lake"],["Ch5","splashing of children in the paddling pool"]]],
+  ["clattering","sound","c","clattering plates in the busy kitchen","specific sounds","busy","A rapid series of hard, knocking sounds",[["Ch1","clattering plates in the busy kitchen"],["Ch3","clattering of chairs at the end of lessons"],["Ch5","clattering dishes as the family cleared the table"]]],
+  ["humming","sound","c","humming of the air conditioning","specific sounds","quiet","A steady, low, continuous buzzing sound",[["Ch1","humming of the air conditioning"],["Ch2","humming of bees around the lavender"],["Ch3","humming of the fluorescent light in the study room"]]],
+  ["buzzing","sound","c","buzzing of scooters weaving through traffic","specific sounds","busy","A continuous low, vibrating sound like a bee",[["Ch1","buzzing of scooters weaving through traffic"],["Ch2","buzzing of insects around the water's edge"],["Ch7","buzzing atmosphere in the press room before the announcement"]]],
+  ["clinking","sound","c","clinking of cutlery at the long table","specific sounds",null,"A light, sharp, metallic sound of things tapping together",[["Ch1","clinking of cutlery at the long table"],["Ch5","clinking of glasses raised in a family toast"],["Ch9","clinking of mugs during the last hot chocolate together"]]],
 
   // ===== SMELL: Pleasant =====
-  ["fragrant","smell","i","fragrant lavender fields along the road","pleasant","good-smell","Having a sweet, pleasant smell"],
-  ["aromatic","smell","i","aromatic spices piled high on the stall","pleasant","good-smell","Having a strong, pleasant smell, often from herbs or spices"],
-  ["sweet-smelling","smell","c","sweet-smelling bakery on the corner","pleasant","good-smell","Having a sugary, pleasant scent"],
-  ["fresh","smell","c","fresh sea breeze off the harbour","pleasant","good-smell","Clean and cool, like morning air or the sea"],
-  ["floral","smell","i","floral scent from the garden wall","pleasant","good-smell","Smelling of flowers"],
-  ["earthy","smell","i","earthy dampness inside the cave","pleasant",null,"Smelling of soil, clay, or damp ground"],
-  ["woody","smell","i","woody aroma of the old wine barrels","pleasant","good-smell","Smelling of wood, bark, or forests"],
-  ["zesty","smell","i","zesty citrus from the fruit stall","pleasant","good-smell","Sharp and fresh, like lemon or orange peel"],
-  ["heady","smell","a","heady perfume of jasmine at night","pleasant","good-smell","So strong and rich it almost makes you dizzy"],
-  ["intoxicating","smell","a","intoxicating smell of chocolate being melted","pleasant","good-smell","So powerfully pleasant you can't ignore it"],
+  ["fragrant","smell","i","fragrant lavender fields along the road","pleasant","good-smell","Having a sweet, pleasant smell",[["Ch1","fragrant lavender fields along the road"],["Ch2","fragrant pine needles crushed underfoot"],["Ch5","fragrant kitchen when someone was baking"]]],
+  ["aromatic","smell","i","aromatic spices piled high on the stall","pleasant","good-smell","Having a strong, pleasant smell, often from herbs or spices",[["Ch1","aromatic spices piled high on the stall"],["Ch6","aromatic coffee marketed as ethically sourced"],["Ch5","aromatic herbs growing on the kitchen windowsill"]]],
+  ["sweet-smelling","smell","c","sweet-smelling bakery on the corner","pleasant","good-smell","Having a sugary, pleasant scent",[["Ch1","sweet-smelling bakery on the corner"],["Ch2","sweet-smelling honeysuckle climbing the garden wall"],["Ch5","sweet-smelling baby freshly bathed and wrapped in a towel"]]],
+  ["fresh","smell","c","fresh sea breeze off the harbour","pleasant","good-smell","Clean and cool, like morning air or the sea",[["Ch1","fresh sea breeze off the harbour"],["Ch2","fresh morning air after overnight rain"],["Ch9","fresh start that awaited on the other side"]]],
+  ["floral","smell","i","floral scent from the garden wall","pleasant","good-smell","Smelling of flowers",[["Ch1","floral scent from the garden wall"],["Ch2","floral meadow humming with bees"],["Ch5","floral perfume that always reminded me of my grandmother"]]],
+  ["earthy","smell","i","earthy dampness inside the cave","pleasant",null,"Smelling of soil, clay, or damp ground",[["Ch1","earthy dampness inside the cave"],["Ch2","earthy smell of the forest floor after rain"],["Ch6","earthy tones used in the eco-friendly packaging"]]],
+  ["woody","smell","i","woody aroma of the old wine barrels","pleasant","good-smell","Smelling of wood, bark, or forests",[["Ch1","woody aroma of the old wine barrels"],["Ch2","woody scent of the cedar grove"],["Ch5","woody smell of grandfather's workshop"]]],
+  ["zesty","smell","i","zesty citrus from the fruit stall","pleasant","good-smell","Sharp and fresh, like lemon or orange peel",[["Ch1","zesty citrus from the fruit stall"],["Ch6","zesty flavour highlighted in the energy drink advert"]]],
+  ["heady","smell","a","heady perfume of jasmine at night","pleasant","good-smell","So strong and rich it almost makes you dizzy",[["Ch1","heady perfume of jasmine at night"],["Ch2","heady scent of wild roses along the path"],["Ch9","heady rush of freedom on the last day"]]],
+  ["intoxicating","smell","a","intoxicating smell of chocolate being melted","pleasant","good-smell","So powerfully pleasant you can't ignore it",[["Ch1","intoxicating smell of chocolate being melted"],["Ch2","intoxicating fragrance of the orange grove in bloom"],["Ch8","intoxicating thrill of performing in front of thousands"]]],
 
   // ===== SMELL: Unpleasant =====
-  ["acrid","smell","a","acrid exhaust from the passing bus","unpleasant","bad-smell","Sharp, bitter, and unpleasant, like burning chemicals"],
-  ["musty","smell","i","musty air in the underground passage","unpleasant","bad-smell","Stale and damp, like an old room that hasn't been opened"],
-  ["pungent","smell","i","pungent cheese on the market counter","unpleasant",null,"Very strong smell that hits your nose immediately"],
-  ["stale","smell","c","stale air in the crowded train","unpleasant","bad-smell","No longer fresh; old and stuffy"],
-  ["smoky","smell","c","smoky haze from the street-food grill","unpleasant",null,"Filled with or smelling of smoke"],
-  ["dank","smell","i","dank corridor leading to the crypt","unpleasant","bad-smell","Unpleasantly cold and damp"],
-  ["sour","smell","c","sour tang of overripe fruit","unpleasant","bad-smell","Sharp, acidic smell like gone-off milk or vinegar"],
-  ["stifling","smell","i","stifling mix of perfume and sweat on the metro","unpleasant","hot","So thick and heavy you feel like you can't breathe"],
+  ["acrid","smell","a","acrid exhaust from the passing bus","unpleasant","bad-smell","Sharp, bitter, and unpleasant, like burning chemicals",[["Ch1","acrid exhaust from the passing bus"],["Ch6","acrid fumes from the factory chimneys"],["Ch7","acrid smoke reported by witnesses at the scene"]]],
+  ["musty","smell","i","musty air in the underground passage","unpleasant","bad-smell","Stale and damp, like an old room that hasn't been opened",[["Ch1","musty air in the underground passage"],["Ch3","musty pages of the library's oldest books"],["Ch8","musty archive where her letters were discovered"]]],
+  ["pungent","smell","i","pungent cheese on the market counter","unpleasant",null,"Very strong smell that hits your nose immediately",[["Ch1","pungent cheese on the market counter"],["Ch2","pungent seaweed rotting on the shore"],["Ch6","pungent chemicals leaking from the waste site"]]],
+  ["stale","smell","c","stale air in the crowded train","unpleasant","bad-smell","No longer fresh; old and stuffy",[["Ch1","stale air in the crowded train"],["Ch3","stale sandwiches from the school canteen"],["Ch6","stale air recycled inside the sealed shopping mall"]]],
+  ["smoky","smell","c","smoky haze from the street-food grill","unpleasant",null,"Filled with or smelling of smoke",[["Ch1","smoky haze from the street-food grill"],["Ch2","smoky mist hanging over the autumn bonfire"],["Ch5","smoky barbecue in the back garden on summer evenings"]]],
+  ["dank","smell","i","dank corridor leading to the crypt","unpleasant","bad-smell","Unpleasantly cold and damp",[["Ch1","dank corridor leading to the crypt"],["Ch2","dank undergrowth beneath the thick canopy"],["Ch3","dank changing room after a rainy PE lesson"]]],
+  ["sour","smell","c","sour tang of overripe fruit","unpleasant","bad-smell","Sharp, acidic smell like gone-off milk or vinegar",[["Ch1","sour tang of overripe fruit"],["Ch6","sour smell from the overflowing bins behind the fast-food place"],["Ch3","sour milk carton forgotten in someone's locker"]]],
+  ["stifling","smell","i","stifling mix of perfume and sweat on the metro","unpleasant","hot","So thick and heavy you feel like you can't breathe",[["Ch1","stifling mix of perfume and sweat on the metro"],["Ch3","stifling classroom on a hot afternoon"],["Ch6","stifling air inside the factory"]]],
 
   // ===== SMELL: Food =====
-  ["savoury","smell","c","savoury roasted garlic filling the street","food","good-smell","Salty or spicy rather than sweet"],
-  ["buttery","smell","c","buttery croissants from the patisserie","food","good-smell","Rich and smooth, smelling of melted butter"],
-  ["yeasty","smell","i","yeasty warmth from the bread oven","food","good-smell","The warm, bready smell of dough rising"],
-  ["herby","smell","c","herby steam rising from the paella","food","good-smell","Smelling of fresh or dried herbs like basil or rosemary"],
-  ["rich","smell","c","rich dark chocolate at the workshop","food","good-smell","Deep, full, and satisfying in flavour or smell"],
-  ["tangy","smell","i","tangy tomato sauce bubbling on the stove","food",null,"A sharp, slightly sour taste or smell"],
+  ["savoury","smell","c","savoury roasted garlic filling the street","food","good-smell","Salty or spicy rather than sweet",[["Ch1","savoury roasted garlic filling the street"],["Ch5","savoury pie cooling on the kitchen counter"]]],
+  ["buttery","smell","c","buttery croissants from the patisserie","food","good-smell","Rich and smooth, smelling of melted butter",[["Ch1","buttery croissants from the patisserie"],["Ch5","buttery mashed potato at Sunday lunch"],["Ch9","buttery toast shared on the last morning"]]],
+  ["yeasty","smell","i","yeasty warmth from the bread oven","food","good-smell","The warm, bready smell of dough rising",[["Ch1","yeasty warmth from the bread oven"],["Ch5","yeasty dough rising on the worktop"],["Ch6","yeasty smell pumped through the bakery ventilation to attract customers"]]],
+  ["herby","smell","c","herby steam rising from the paella","food","good-smell","Smelling of fresh or dried herbs like basil or rosemary",[["Ch1","herby steam rising from the paella"],["Ch2","herby scent of wild thyme on the hillside"],["Ch5","herby stuffing that was always my favourite part"]]],
+  ["rich","smell","c","rich dark chocolate at the workshop","food","good-smell","Deep, full, and satisfying in flavour or smell",[["Ch1","rich dark chocolate at the workshop"],["Ch5","rich gravy poured over the roast"],["Ch8","rich flavours of the dish she became famous for"]]],
+  ["tangy","smell","i","tangy tomato sauce bubbling on the stove","food",null,"A sharp, slightly sour taste or smell",[["Ch1","tangy tomato sauce bubbling on the stove"],["Ch6","tangy yoghurt drink advertised as a health miracle"],["Ch5","tangy lemon drizzle cake at the family picnic"]]],
 
   // ===== TASTE: Flavour =====
-  ["bitter","taste","c","bitter dark espresso at the counter","flavour",null,"A sharp, strong taste without sweetness, like black coffee"],
-  ["sweet","taste","c","sweet glaze on the churros","flavour",null,"Having the taste of sugar or honey"],
-  ["salty","taste","c","salty olives in a small ceramic bowl","flavour",null,"Tasting of salt"],
-  ["tangy","taste","i","tangy lemon dressing on the salad","flavour",null,"A pleasantly sharp, slightly sour taste"],
-  ["bland","taste","c","bland hotel breakfast cereal","flavour","bad-food","Having almost no taste; boring and plain"],
-  ["sharp","taste","i","sharp aged cheese melting on the tongue","flavour","good-food","A strong, biting taste that hits you immediately"],
-  ["mellow","taste","i","mellow honey drizzled over yoghurt","flavour","good-food","Soft, smooth, and gentle in flavour; not harsh"],
-  ["fiery","taste","i","fiery chilli sauce on the tapas","flavour",null,"Intensely hot and spicy, like it's burning"],
-  ["delicate","taste","i","delicate flavour of the white fish","flavour","good-food","Subtle and light; easy to miss if you're not paying attention"],
-  ["tasty","taste","c","tasty tapas shared between the group","flavour","good-food","Having a pleasant, satisfying flavour"],
-  ["flavourful","taste","i","flavourful broth packed with herbs and garlic","flavour","good-food","Full of strong, distinct, enjoyable flavour"],
-  ["mouth-watering","taste","c","mouth-watering smell from the food truck","flavour","good-food","So appealing it makes your mouth produce saliva"],
-  ["divine","taste","i","divine pastry that melted in my mouth","flavour","good-food","So good it seems heavenly or perfect"],
-  ["exquisite","taste","a","exquisite combination of salt and caramel","flavour","good-food","Extremely beautiful or refined; the highest quality"],
+  ["bitter","taste","c","bitter dark espresso at the counter","flavour",null,"A sharp, strong taste without sweetness, like black coffee",[["Ch1","bitter dark espresso at the counter"],["Ch6","bitter taste left by misleading advertising"],["Ch9","bitter cold of the very last morning"]]],
+  ["sweet","taste","c","sweet glaze on the churros","flavour",null,"Having the taste of sugar or honey",[["Ch1","sweet glaze on the churros"],["Ch2","sweet nectar that attracted the butterflies"],["Ch5","sweet smile she saved for her grandchildren"]]],
+  ["salty","taste","c","salty olives in a small ceramic bowl","flavour",null,"Tasting of salt",[["Ch1","salty olives in a small ceramic bowl"],["Ch2","salty spray blown inland by the wind"],["Ch5","salty tears running down her cheeks"]]],
+  ["tangy","taste","i","tangy lemon dressing on the salad","flavour",null,"A pleasantly sharp, slightly sour taste",[["Ch1","tangy lemon dressing on the salad"],["Ch5","tangy chutney passed around the table"],["Ch6","tangy flavour promised on the label"]]],
+  ["bland","taste","c","bland hotel breakfast cereal","flavour","bad-food","Having almost no taste; boring and plain",[["Ch1","bland hotel breakfast cereal"],["Ch3","bland school lunch nobody wanted to eat"],["Ch6","bland processed food disguised by bright packaging"]]],
+  ["sharp","taste","i","sharp aged cheese melting on the tongue","flavour","good-food","A strong, biting taste that hits you immediately",[["Ch1","sharp aged cheese melting on the tongue"],["Ch5","sharp wit that kept the whole table laughing"],["Ch8","sharp tongue that made her a feared interviewer"]]],
+  ["mellow","taste","i","mellow honey drizzled over yoghurt","flavour","good-food","Soft, smooth, and gentle in flavour; not harsh",[["Ch1","mellow honey drizzled over yoghurt"],["Ch2","mellow autumn sunlight warming the bench"],["Ch5","mellow mood that settled over the family after dinner"]]],
+  ["fiery","taste","i","fiery chilli sauce on the tapas","flavour",null,"Intensely hot and spicy, like it's burning",[["Ch1","fiery chilli sauce on the tapas"],["Ch5","fiery temper he could never quite control"],["Ch8","fiery determination that carried her through setbacks"]]],
+  ["delicate","taste","i","delicate flavour of the white fish","flavour","good-food","Subtle and light; easy to miss if you're not paying attention",[["Ch1","delicate flavour of the white fish"],["Ch2","delicate frost patterns on the window"],["Ch5","delicate way she handled the argument without raising her voice"]]],
+  ["tasty","taste","c","tasty tapas shared between the group","flavour","good-food","Having a pleasant, satisfying flavour",[["Ch1","tasty tapas shared between the group"],["Ch5","tasty leftovers reheated for lunch the next day"]]],
+  ["flavourful","taste","i","flavourful broth packed with herbs and garlic","flavour","good-food","Full of strong, distinct, enjoyable flavour",[["Ch1","flavourful broth packed with herbs and garlic"],["Ch5","flavourful stew that simmered all afternoon"],["Ch6","flavourful snacks marketed to children with cartoon mascots"]]],
+  ["mouth-watering","taste","c","mouth-watering smell from the food truck","flavour","good-food","So appealing it makes your mouth produce saliva",[["Ch1","mouth-watering smell from the food truck"],["Ch5","mouth-watering spread laid out for the celebration"],["Ch6","mouth-watering images designed to make you buy more"]]],
+  ["divine","taste","i","divine pastry that melted in my mouth","flavour","good-food","So good it seems heavenly or perfect",[["Ch1","divine pastry that melted in my mouth"],["Ch5","divine Christmas pudding made from a secret recipe"],["Ch8","divine dessert the chef became world-famous for"]]],
+  ["exquisite","taste","a","exquisite combination of salt and caramel","flavour","good-food","Extremely beautiful or refined; the highest quality",[["Ch1","exquisite combination of salt and caramel"],["Ch8","exquisite attention to detail that set her apart"],["Ch5","exquisite embroidery on the christening gown"]]],
 
   // ===== TASTE: Texture in mouth =====
-  ["creamy","taste","c","creamy gelato on a hot afternoon","texture in mouth","good-food","Smooth, thick, and rich like cream"],
-  ["crunchy","taste","c","crunchy crust on the baguette","texture in mouth",null,"Hard and making a loud sound when you bite it"],
-  ["chewy","taste","c","chewy nougat from the sweet stall","texture in mouth",null,"Needing a lot of chewing; tough but not hard"],
-  ["silky","taste","i","silky hot chocolate at the workshop","texture in mouth","good-food","Extremely smooth and soft on the tongue"],
-  ["flaky","taste","c","flaky layers of the croissant","texture in mouth","good-food","Breaking apart easily into thin, flat pieces"],
-  ["tender","taste","c","tender grilled chicken at the family dinner","texture in mouth","good-food","Soft and easy to chew or cut"],
-  ["juicy","taste","c","juicy slices of fresh mango","texture in mouth","good-food","Full of liquid; moist and flavourful"],
-  ["crumbly","taste","c","crumbly shortbread from the bakery","texture in mouth",null,"Breaking apart easily into small pieces"],
-  ["velvety","taste","a","velvety mousse served in a tiny glass","texture in mouth","good-food","Incredibly smooth and rich, like velvet fabric"],
+  ["creamy","taste","c","creamy gelato on a hot afternoon","texture in mouth","good-food","Smooth, thick, and rich like cream",[["Ch1","creamy gelato on a hot afternoon"],["Ch5","creamy porridge on cold winter mornings"]]],
+  ["crunchy","taste","c","crunchy crust on the baguette","texture in mouth",null,"Hard and making a loud sound when you bite it",[["Ch1","crunchy crust on the baguette"],["Ch2","crunchy autumn leaves underfoot"],["Ch5","crunchy coating on grandma's fried chicken"]]],
+  ["chewy","taste","c","chewy nougat from the sweet stall","texture in mouth",null,"Needing a lot of chewing; tough but not hard",[["Ch1","chewy nougat from the sweet stall"],["Ch5","chewy flapjacks baked for the school fair"]]],
+  ["silky","taste","i","silky hot chocolate at the workshop","texture in mouth","good-food","Extremely smooth and soft on the tongue",[["Ch1","silky hot chocolate at the workshop"],["Ch2","silky petals of the magnolia flower"],["Ch5","silky hair she was always braiding"]]],
+  ["flaky","taste","c","flaky layers of the croissant","texture in mouth","good-food","Breaking apart easily into thin, flat pieces",[["Ch1","flaky layers of the croissant"],["Ch5","flaky pastry on the homemade sausage rolls"]]],
+  ["tender","taste","c","tender grilled chicken at the family dinner","texture in mouth","good-food","Soft and easy to chew or cut",[["Ch1","tender grilled chicken at the family dinner"],["Ch5","tender moment between father and son at the door"],["Ch2","tender green shoots pushing through the soil"]]],
+  ["juicy","taste","c","juicy slices of fresh mango","texture in mouth","good-food","Full of liquid; moist and flavourful",[["Ch1","juicy slices of fresh mango"],["Ch2","juicy wild blackberries picked from the hedgerow"],["Ch7","juicy headline that grabbed everyone's attention"]]],
+  ["crumbly","taste","c","crumbly shortbread from the bakery","texture in mouth",null,"Breaking apart easily into small pieces",[["Ch1","crumbly shortbread from the bakery"],["Ch5","crumbly cheese crumbled over the salad"],["Ch9","crumbly ruins where we sat for the last picnic"]]],
+  ["velvety","taste","a","velvety mousse served in a tiny glass","texture in mouth","good-food","Incredibly smooth and rich, like velvet fabric",[["Ch1","velvety mousse served in a tiny glass"],["Ch5","velvety sauce poured over the birthday cake"],["Ch8","velvety voice that made millions tune in every night"]]],
 
   // ===== TOUCH: Temperature =====
-  ["warm","touch","c","warm stone bench in the afternoon sun","temperature","hot","Comfortably high in temperature; not too hot"],
-  ["chilly","touch","c","chilly breeze coming off the river","temperature","cold","Unpleasantly cold, but not extreme"],
-  ["scorching","touch","i","scorching metal railing in the midday sun","temperature","hot","Extremely hot; hot enough to burn you"],
-  ["sweltering","touch","i","sweltering heat of the afternoon walk","temperature","hot","Uncomfortably hot and humid"],
-  ["lukewarm","touch","c","lukewarm tap water at the hostel","temperature",null,"Only slightly warm; neither hot nor cold"],
-  ["cool","touch","c","cool shade of the narrow street","temperature","cold","Pleasantly low in temperature"],
-  ["freezing","touch","c","freezing morning air before sunrise","temperature","cold","Extremely cold"],
-  ["icy","touch","c","icy wind on the Montserrat summit","temperature","cold","As cold as ice; bitterly cold"],
-  ["balmy","touch","i","balmy evening breeze by the harbour","temperature",null,"Pleasantly warm and gentle"],
-  ["biting","touch","i","biting wind at the top of the funicular","temperature","cold","So cold it feels sharp, like it's cutting your skin"],
-  ["blistering","touch","a","blistering pavement through my thin shoes","temperature","hot","So hot it could raise blisters on skin"],
-  ["refreshing","touch","c","refreshing spray from the fountain","temperature",null,"Pleasantly cool after being hot or tired"],
-  ["stifling","touch","i","stifling heat on the crowded bus","temperature","hot","So hot and airless it feels hard to breathe"],
-  ["mild","touch","c","mild evening perfect for walking","temperature",null,"Gently warm; not extreme in either direction"],
+  ["warm","touch","c","warm stone bench in the afternoon sun","temperature","hot","Comfortably high in temperature; not too hot",[["Ch1","warm stone bench in the afternoon sun"],["Ch2","warm spring air finally replacing the Danish winter"],["Ch5","her warm smile when she opened the door"]]],
+  ["chilly","touch","c","chilly breeze coming off the river","temperature","cold","Unpleasantly cold, but not extreme",[["Ch1","chilly breeze coming off the river"],["Ch2","chilly fog rolling in from the Danish coast"],["Ch3","chilly walk down the empty hallway at dusk"]]],
+  ["scorching","touch","i","scorching metal railing in the midday sun","temperature","hot","Extremely hot; hot enough to burn you",[["Ch1","scorching metal railing in the midday sun"],["Ch7","scorching temperatures forced the match to be delayed"],["Ch6","scorching summers will only get worse without action"]]],
+  ["sweltering","touch","i","sweltering heat of the afternoon walk","temperature","hot","Uncomfortably hot and humid",[["Ch1","sweltering heat of the afternoon walk"],["Ch4","sweltering canteen with every window shut"],["Ch7","sweltering conditions during the outdoor ceremony"]]],
+  ["lukewarm","touch","c","lukewarm tap water at the hostel","temperature",null,"Only slightly warm; neither hot nor cold",[["Ch1","lukewarm tap water at the hostel"],["Ch3","lukewarm coffee forgotten on the classroom desk"],["Ch4","lukewarm applause after the second act"]]],
+  ["cool","touch","c","cool shade of the narrow street","temperature","cold","Pleasantly low in temperature",[["Ch1","cool shade of the narrow street"],["Ch2","cool sea breeze through the birch trees"],["Ch9","cool evening air on the last night together"]]],
+  ["freezing","touch","c","freezing morning air before sunrise","temperature","cold","Extremely cold",[["Ch2","freezing morning air before sunrise"],["Ch3","freezing classroom with the broken radiator"],["Ch7","freezing rain delayed the start of the match"]]],
+  ["icy","touch","c","icy wind on the Montserrat summit","temperature","cold","As cold as ice; bitterly cold",[["Ch1","icy wind on the Montserrat summit"],["Ch2","icy waves crashing against the jetty in January"],["Ch5","his icy stare made everyone go quiet"]]],
+  ["balmy","touch","i","balmy evening breeze by the harbour","temperature",null,"Pleasantly warm and gentle",[["Ch1","balmy evening breeze by the harbour"],["Ch2","balmy night rare enough to eat outside in Denmark"],["Ch9","balmy air drifting through the open window on our last day"]]],
+  ["biting","touch","i","biting wind at the top of the funicular","temperature","cold","So cold it feels sharp, like it's cutting your skin",[["Ch1","biting wind at the top of the funicular"],["Ch2","biting cold off the North Sea in December"],["Ch7","biting conditions made the outdoor event miserable"]]],
+  ["blistering","touch","a","blistering pavement through my thin shoes","temperature","hot","So hot it could raise blisters on skin",[["Ch1","blistering pavement through my thin shoes"],["Ch7","blistering pace set by the lead runner"],["Ch8","blistering criticism she faced early in her career"]]],
+  ["refreshing","touch","c","refreshing spray from the fountain","temperature",null,"Pleasantly cool after being hot or tired",[["Ch1","refreshing spray from the fountain"],["Ch2","refreshing plunge into the cold Danish lake"],["Ch9","refreshing honesty in his goodbye speech"]]],
+  ["stifling","touch","i","stifling heat on the crowded bus","temperature","hot","So hot and airless it feels hard to breathe",[["Ch1","stifling heat on the crowded bus"],["Ch3","stifling silence of the exam hall in summer"],["Ch4","stifling tension backstage before the curtain rose"]]],
+  ["mild","touch","c","mild evening perfect for walking","temperature",null,"Gently warm; not extreme in either direction",[["Ch1","mild evening perfect for walking"],["Ch2","mild autumn day along the forest path"],["Ch5","his mild manner hid a stubborn streak"]]],
 
   // ===== TOUCH: Texture =====
-  ["rough","touch","c","rough stone wall of the old church","texture",null,"Having an uneven surface that is not smooth"],
-  ["smooth","touch","c","smooth marble under my fingertips","texture",null,"Having an even surface with no bumps or roughness"],
-  ["gritty","touch","i","gritty sand between my toes","texture",null,"Containing small, rough particles like sand"],
-  ["velvety","touch","i","velvety petals in the garden","texture",null,"Extremely soft and smooth to the touch"],
-  ["sticky","touch","c","sticky melted chocolate on my hands","texture",null,"Tending to stick to things; covered in a gluey substance"],
-  ["slippery","touch","c","slippery cave floor from the dripping water","texture",null,"So smooth or wet that you could easily slide or fall"],
-  ["coarse","touch","i","coarse rope banister on the stairs","texture",null,"Rough and scratchy; having a harsh texture"],
-  ["prickly","touch","c","prickly dry grass in the park","texture",null,"Having small sharp points that poke your skin"],
-  ["spongy","touch","i","spongy moss on the cave walls","texture",null,"Soft and springy, like a sponge"],
-  ["damp","touch","c","damp stone steps leading underground","texture","cold","Slightly wet; moist"],
-  ["weathered","touch","i","weathered wooden door with peeling paint","texture","old","Worn and changed by long exposure to sun, wind, and rain"],
+  ["rough","touch","c","rough stone wall of the old church","texture",null,"Having an uneven surface that is not smooth",[["Ch1","rough stone wall of the old church"],["Ch2","rough bark of the old oak by the shore"],["Ch5","rough hands from years of working outdoors"]]],
+  ["smooth","touch","c","smooth marble under my fingertips","texture",null,"Having an even surface with no bumps or roughness",[["Ch1","smooth marble under my fingertips"],["Ch2","smooth pebbles polished by the sea"],["Ch8","smooth transition from athlete to coach"]]],
+  ["gritty","touch","i","gritty sand between my toes","texture",null,"Containing small, rough particles like sand",[["Ch1","gritty sand between my toes"],["Ch3","gritty dust on the windowsill nobody cleaned"],["Ch6","gritty reality of pollution in coastal towns"]]],
+  ["velvety","touch","i","velvety petals in the garden","texture",null,"Extremely soft and smooth to the touch",[["Ch1","velvety petals in the garden"],["Ch2","velvety moss on the forest floor after rain"],["Ch3","velvety darkness filling the room after lights-out"]]],
+  ["sticky","touch","c","sticky melted chocolate on my hands","texture",null,"Tending to stick to things; covered in a gluey substance",[["Ch1","sticky melted chocolate on my hands"],["Ch4","sticky canteen tables after the food fight"],["Ch3","sticky summer afternoon trapped in a classroom"]]],
+  ["slippery","touch","c","slippery cave floor from the dripping water","texture",null,"So smooth or wet that you could easily slide or fall",[["Ch1","slippery cave floor from the dripping water"],["Ch2","slippery seaweed draped over the rocks"],["Ch7","slippery pitch caused three injuries in the first half"]]],
+  ["coarse","touch","i","coarse rope banister on the stairs","texture",null,"Rough and scratchy; having a harsh texture",[["Ch1","coarse rope banister on the stairs"],["Ch2","coarse grass on the dunes above the beach"],["Ch5","coarse voice that carried across any room"]]],
+  ["prickly","touch","c","prickly dry grass in the park","texture",null,"Having small sharp points that poke your skin",[["Ch1","prickly dry grass in the park"],["Ch2","prickly gorse bushes lining the coastal path"],["Ch5","prickly personality that kept most people away"]]],
+  ["spongy","touch","i","spongy moss on the cave walls","texture",null,"Soft and springy, like a sponge",[["Ch1","spongy moss on the cave walls"],["Ch2","spongy ground in the Danish forest after rain"],["Ch3","spongy carpet tiles in the common room"]]],
+  ["damp","touch","c","damp stone steps leading underground","texture","cold","Slightly wet; moist",[["Ch1","damp stone steps leading underground"],["Ch2","damp morning mist clinging to the fields"],["Ch3","damp jacket hung on the back of the chair"]]],
+  ["weathered","touch","i","weathered wooden door with peeling paint","texture","old","Worn and changed by long exposure to sun, wind, and rain",[["Ch1","weathered wooden door with peeling paint"],["Ch2","weathered fence posts leaning along the cliff edge"],["Ch8","weathered face of a man who had seen everything"]]],
 
   // ===== EMOTION: Positive =====
-  ["pleasant","emotion","c","pleasant stroll along the tree-lined avenue","positive","good","Enjoyable and agreeable; nice to experience"],
-  ["lovely","emotion","c","lovely little square hidden behind the church","positive","good","Very attractive or enjoyable"],
-  ["charming","emotion","c","charming village with cobblestone streets","positive","beautiful","Pleasingly attractive in an old-fashioned or quaint way"],
-  ["delightful","emotion","i","delightful surprise of finding a hidden garden","positive","good","Causing great pleasure; highly enjoyable"],
-  ["wonderful","emotion","c","wonderful feeling of arriving after a long journey","positive","good","Extremely good; inspiring a sense of wonder"],
-  ["exhilarating","emotion","i","exhilarating view from the top of the mountain","positive","good","Making you feel thrilled, alive, and full of energy"],
-  ["peaceful","emotion","c","peaceful courtyard with just the sound of a fountain","positive","good","Calm and quiet; free from worry or disturbance"],
-  ["awe-inspiring","emotion","i","awe-inspiring height of the cathedral ceiling","positive","beautiful","So impressive it fills you with wonder"],
-  ["enchanting","emotion","i","enchanting maze of medieval streets","positive","beautiful","Delightfully charming, as if under a magical spell"],
-  ["invigorating","emotion","a","invigorating morning walk to the summit","positive","good","Making you feel fresh, energised, and alive"],
-  ["heartwarming","emotion","c","heartwarming family dinner around a big table","positive","good","Causing feelings of happiness and affection"],
-  ["captivating","emotion","i","captivating story from the museum guide","positive","good","So interesting you can't look or think about anything else"],
-  ["magical","emotion","c","magical feeling of being inside the cathedral","positive","beautiful","So special and wonderful it feels like magic"],
-  ["thrilling","emotion","c","thrilling funicular ride up the hill","positive","good","Causing a sudden feeling of excitement"],
-  ["serene","emotion","i","serene monastery high above the clouds","positive","quiet","Completely calm, peaceful, and untroubled"],
+  ["pleasant","emotion","c","pleasant stroll along the tree-lined avenue","positive","good","Enjoyable and agreeable; nice to experience",[["Ch1","pleasant stroll along the tree-lined avenue"],["Ch2","pleasant crunch of leaves under my boots"],["Ch5","pleasant way he always remembered your name"]]],
+  ["lovely","emotion","c","lovely little square hidden behind the church","positive","good","Very attractive or enjoyable",[["Ch1","lovely little square hidden behind the church"],["Ch2","lovely streak of pink across the Danish sky"],["Ch9","lovely memory I keep coming back to"]]],
+  ["charming","emotion","c","charming village with cobblestone streets","positive","beautiful","Pleasingly attractive in an old-fashioned or quaint way",[["Ch1","charming village with cobblestone streets"],["Ch5","charming habit of laughing at his own jokes"],["Ch8","charming interviews that won her millions of fans"]]],
+  ["delightful","emotion","i","delightful surprise of finding a hidden garden","positive","good","Causing great pleasure; highly enjoyable",[["Ch1","delightful surprise of finding a hidden garden"],["Ch4","delightful twist at the end of the school play"],["Ch2","delightful chorus of birdsong in the spring forest"]]],
+  ["wonderful","emotion","c","wonderful feeling of arriving after a long journey","positive","good","Extremely good; inspiring a sense of wonder",[["Ch1","wonderful feeling of arriving after a long journey"],["Ch9","wonderful to think how much had changed since September"],["Ch4","wonderful energy in the hall during the final song"]]],
+  ["exhilarating","emotion","i","exhilarating view from the top of the mountain","positive","good","Making you feel thrilled, alive, and full of energy",[["Ch1","exhilarating view from the top of the mountain"],["Ch2","exhilarating rush of cold wind off the open sea"],["Ch7","exhilarating last-minute goal that won the tournament"]]],
+  ["peaceful","emotion","c","peaceful courtyard with just the sound of a fountain","positive","good","Calm and quiet; free from worry or disturbance",[["Ch1","peaceful courtyard with just the sound of a fountain"],["Ch2","peaceful lake reflecting the grey winter sky"],["Ch9","peaceful feeling of knowing it was finally over"]]],
+  ["awe-inspiring","emotion","i","awe-inspiring height of the cathedral ceiling","positive","beautiful","So impressive it fills you with wonder",[["Ch1","awe-inspiring height of the cathedral ceiling"],["Ch8","awe-inspiring dedication that drove her to succeed"],["Ch2","awe-inspiring cliffs rising straight out of the sea"]]],
+  ["enchanting","emotion","i","enchanting maze of medieval streets","positive","beautiful","Delightfully charming, as if under a magical spell",[["Ch1","enchanting maze of medieval streets"],["Ch2","enchanting stillness of the forest at first light"],["Ch4","enchanting performance that silenced the whole room"]]],
+  ["invigorating","emotion","a","invigorating morning walk to the summit","positive","good","Making you feel fresh, energised, and alive",[["Ch1","invigorating morning walk to the summit"],["Ch2","invigorating blast of sea air on the winter coast"],["Ch6","invigorating debate that actually changed some minds"]]],
+  ["heartwarming","emotion","c","heartwarming family dinner around a big table","positive","good","Causing feelings of happiness and affection",[["Ch5","heartwarming family dinner around a big table"],["Ch9","heartwarming speech from the quietest kid in class"],["Ch4","heartwarming moment when the audience stood up to clap"]]],
+  ["captivating","emotion","i","captivating story from the museum guide","positive","good","So interesting you can't look or think about anything else",[["Ch1","captivating story from the museum guide"],["Ch8","captivating life story of a girl who changed history"],["Ch4","captivating opening scene that gripped the whole audience"]]],
+  ["magical","emotion","c","magical feeling of being inside the cathedral","positive","beautiful","So special and wonderful it feels like magic",[["Ch1","magical feeling of being inside the cathedral"],["Ch2","magical first snowfall turning the fields white"],["Ch9","magical last evening around the bonfire together"]]],
+  ["thrilling","emotion","c","thrilling funicular ride up the hill","positive","good","Causing a sudden feeling of excitement",[["Ch1","thrilling funicular ride up the hill"],["Ch7","thrilling penalty shootout at the end of the match"],["Ch8","thrilling moment she broke the world record"]]],
+  ["serene","emotion","i","serene monastery high above the clouds","positive","quiet","Completely calm, peaceful, and untroubled",[["Ch1","serene monastery high above the clouds"],["Ch2","serene water of the lake at dawn"],["Ch9","serene acceptance on the very last morning"]]],
 
   // ===== EMOTION: Difficult =====
-  ["overwhelming","emotion","i","overwhelming number of tourists in the queue","difficult","busy","So much or so intense that it's hard to deal with"],
-  ["claustrophobic","emotion","i","claustrophobic feeling in the underground passage","difficult",null,"Feeling trapped or anxious in a small, enclosed space"],
-  ["exhausting","emotion","c","exhausting climb in the afternoon heat","difficult","hot","Making you extremely tired; draining all your energy"],
-  ["disorienting","emotion","i","disorienting tangle of identical alleyways","difficult",null,"Making you confused about where you are or what's happening"],
-  ["unsettling","emotion","i","unsettling silence deep inside the cave","difficult",null,"Making you feel slightly anxious or uncomfortable"],
+  ["overwhelming","emotion","i","overwhelming number of tourists in the queue","difficult","busy","So much or so intense that it's hard to deal with",[["Ch1","overwhelming number of tourists in the queue"],["Ch3","overwhelming pile of homework on Sunday night"],["Ch9","overwhelming sadness of saying goodbye to everyone"]]],
+  ["claustrophobic","emotion","i","claustrophobic feeling in the underground passage","difficult",null,"Feeling trapped or anxious in a small, enclosed space",[["Ch1","claustrophobic feeling in the underground passage"],["Ch3","claustrophobic dormitory with six beds crammed in"],["Ch4","claustrophobic heat backstage with the curtains closed"]]],
+  ["exhausting","emotion","c","exhausting climb in the afternoon heat","difficult","hot","Making you extremely tired; draining all your energy",[["Ch1","exhausting climb in the afternoon heat"],["Ch3","exhausting week of mock exams and late nights"],["Ch7","exhausting double-overtime match that ended in a draw"]]],
+  ["disorienting","emotion","i","disorienting tangle of identical alleyways","difficult",null,"Making you confused about where you are or what's happening",[["Ch1","disorienting tangle of identical alleyways"],["Ch3","disorienting first week at a school where nobody spoke English"],["Ch9","disorienting feeling of the place being the same but everything different"]]],
+  ["unsettling","emotion","i","unsettling silence deep inside the cave","difficult",null,"Making you feel slightly anxious or uncomfortable",[["Ch1","unsettling silence deep inside the cave"],["Ch3","unsettling flicker of the hallway lights after midnight"],["Ch5","unsettling calm in his voice when he was angry"]]],
 
   // ===== EMOTION: Complex =====
-  ["bittersweet","emotion","i","bittersweet last evening before heading home","complex",null,"A mix of happiness and sadness at the same time"],
-  ["nostalgic","emotion","i","nostalgic when I saw the photos afterwards","complex",null,"A warm but slightly sad longing for a past experience"],
-  ["surreal","emotion","i","surreal to be standing where Romans once walked","complex",null,"So strange or dreamlike it doesn't feel real"],
-  ["humbling","emotion","i","humbling size of the ancient stone walls","complex","big","Making you feel small and aware of something much greater"],
-  ["mesmerising","emotion","i","mesmerising light through the coloured glass","complex","beautiful","So beautiful or fascinating you can't look away"],
-  ["unfamiliar","emotion","c","unfamiliar language swirling around me","complex",null,"Not known or recognised; strange and new"],
-  ["dreamlike","emotion","i","dreamlike quality of the misty mountain top","complex",null,"Having a hazy, unreal quality, as if you're in a dream"]
+  ["bittersweet","emotion","i","bittersweet last evening before heading home","complex",null,"A mix of happiness and sadness at the same time",[["Ch9","bittersweet last evening before heading home"],["Ch5","bittersweet to see how much my little cousin had grown"],["Ch1","bittersweet final morning at the Barcelona market"]]],
+  ["nostalgic","emotion","i","nostalgic when I saw the photos afterwards","complex",null,"A warm but slightly sad longing for a past experience",[["Ch9","nostalgic when I saw the photos afterwards"],["Ch1","nostalgic smell of bread that reminded me of home"],["Ch5","nostalgic stories my grandmother told about her village"]]],
+  ["surreal","emotion","i","surreal to be standing where Romans once walked","complex",null,"So strange or dreamlike it doesn't feel real",[["Ch1","surreal to be standing where Romans once walked"],["Ch4","surreal silence after the fire alarm turned out to be real"],["Ch8","surreal moment she heard her name announced on live television"]]],
+  ["humbling","emotion","i","humbling size of the ancient stone walls","complex","big","Making you feel small and aware of something much greater",[["Ch1","humbling size of the ancient stone walls"],["Ch2","humbling power of the storm battering the coastline"],["Ch8","humbling sacrifice she made for people she never met"]]],
+  ["mesmerising","emotion","i","mesmerising light through the coloured glass","complex","beautiful","So beautiful or fascinating you can't look away",[["Ch1","mesmerising light through the coloured glass"],["Ch2","mesmerising pattern of waves breaking on the shore"],["Ch4","mesmerising drum solo that held the whole hall still"]]],
+  ["unfamiliar","emotion","c","unfamiliar language swirling around me","complex",null,"Not known or recognised; strange and new",[["Ch1","unfamiliar language swirling around me"],["Ch3","unfamiliar rules that nobody bothered to explain"],["Ch9","unfamiliar silence of the empty common room"]]],
+  ["dreamlike","emotion","i","dreamlike quality of the misty mountain top","complex",null,"Having a hazy, unreal quality, as if you're in a dream",[["Ch1","dreamlike quality of the misty mountain top"],["Ch2","dreamlike fog hanging over the frozen lake"],["Ch9","dreamlike final walk through the school at midnight"]]]
 ];
 
 // ============================================================
@@ -919,11 +931,24 @@ function showPopup(wordData, chipEl) {
   def.textContent = wordData[6] || '';
   popup.appendChild(def);
 
-  if (wordData[3]) {
-    var eg = document.createElement('div');
-    eg.className = 'popup-eg';
-    eg.appendChild(document.createTextNode(wordData[3]));
-    popup.appendChild(eg);
+  // Examples: use index 7 (array of [ch, text]) if available, else fall back to index 3
+  var examples = wordData[7] || (wordData[3] ? [['', wordData[3]]] : []);
+  if (examples.length > 0) {
+    var exWrap = document.createElement('div');
+    exWrap.className = 'popup-examples';
+    examples.forEach(function(ex) {
+      var eg = document.createElement('div');
+      eg.className = 'popup-eg';
+      if (ex[0]) {
+        var tag = document.createElement('span');
+        tag.className = 'ch-tag';
+        tag.textContent = ex[0];
+        eg.appendChild(tag);
+      }
+      eg.appendChild(document.createTextNode(ex[1]));
+      exWrap.appendChild(eg);
+    });
+    popup.appendChild(exWrap);
   }
 
   // Position below the chip
