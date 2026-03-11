@@ -217,6 +217,7 @@
           // Trigger silent save so beforeunload won't warn
           window._navSwitching = true;
           document.dispatchEvent(new Event('section-navigate'));
+          try { if (localStorage.getItem('igcse-tutor-mode') === 'on') return; } catch(e) {}
           var SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzwQywmHmRgm9J3U-UjI6KXnmke5DCX1nplLgOAtPo81BGkWgy1jWLu1r08_N021Hv3/exec';
           var now = new Date();
           var chapterLabel = currentSlug.replace(/^ch0?(\d+)-/, 'Ch$1 ').replace(/-/g, ' ');
@@ -1101,6 +1102,7 @@
   // Core save logic — used by button click, silent navigation, and type-switch saves
   function saveToSheets() {
     saveToLocal();
+    try { if (localStorage.getItem('igcse-tutor-mode') === 'on') return; } catch(e) {}
     var dateStr = new Date().toISOString().slice(0, 10);
     var exercises = buildExercises(dateStr);
     if (exercises.length > 0) {

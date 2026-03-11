@@ -66,6 +66,21 @@
     return t ? t.textContent.trim().substring(0, 120) : '';
   }
 
+  function getFullQText(card) {
+    var t = card.querySelector('.q-text');
+    return t ? t.textContent.trim() : '';
+  }
+
+  // Extract requested item count from question text (e.g. "three key rules" → 3)
+  function extractItemCount(qText) {
+    var wordNums = {'two':2,'three':3,'four':4,'five':5,'six':6,'seven':7,'eight':8,'nine':9,'ten':10};
+    var m = qText.toLowerCase().match(/\b(two|three|four|five|six|seven|eight|nine|ten)\b/);
+    if (m) return wordNums[m[1]];
+    var d = qText.match(/\b(\d+)\b/);
+    if (d && parseInt(d[1]) >= 2 && parseInt(d[1]) <= 10) return parseInt(d[1]);
+    return null;
+  }
+
   // Detect IGCSE command word from question text
   function detectCommand(qText) {
     var t = qText.toLowerCase();
@@ -81,7 +96,9 @@
     if (/^(outline|summarise|summarize)\b/.test(t)) return 'outline';
     if (/write\b/.test(t) && /equation/.test(t)) return 'equation';
     if (/\bquot(e|ation)\b/.test(t) || /from the (text|passage|extract)/.test(t)) return 'quote';
-    if (/\banalys[ei]/.test(t) || /\beffect\b.*on the reader/.test(t) || /\blanguage\b/.test(t)) return 'analyse';
+    if (/\banalys[ei]|\banalyti|\banalyz/.test(t) || /\beffect\b.*on the reader/.test(t)) return 'analyse';
+    // Mid-text commands (for questions starting with a passage quote)
+    if (/\bcompare\b/.test(t)) return 'compare';
     return null;
   }
 
@@ -90,16 +107,37 @@
 
     // ---- ENGLISH ----
     if (subject === 'english') {
+      // Comparison questions (detect anywhere in text, not just start)
+      if (cmd === 'compare' || /\bcompare\b/i.test(qText)) {
+        if (marks <= 4) return marks + ' marks \u2014 Compare BOTH texts. Use connectives: \u201cIn contrast,\u201d \u201cSimilarly,\u201d \u201cHowever.\u201d Quote from each.';
+        return marks + ' marks \u2014 Compare BOTH texts with P.E.E. for each. Use connectives (\u201cIn contrast,\u201d \u201cSimilarly\u201d). Link back at the end.';
+      }
       if (cmd === 'quote') return marks + ' mark' + (marks>1?'s':'') + ' \u2014 Find and copy the exact words from the text. Use quotation marks.';
-      if (cmd === 'analyse' || (marks >= 3 && !cmd)) {
+      // Definition/recall \u2014 no PEE needed
+      if (cmd === 'define') return marks + ' mark' + (marks>1?'s':'') + ' \u2014 Give a clear definition in your own words. Add an example if asked.';
+      if (cmd === 'state') {
+        var itemCount = extractItemCount(qText) || marks;
+        if (/\bexplain\b/i.test(qText)) {
+          return marks + ' mark' + (marks>1?'s':'') + ' \u2014 List ' + itemCount + ' points, then explain why for each. Use \u201cbecause\u201d to connect your reason.';
+        }
+        return marks + ' mark' + (marks>1?'s':'') + ' \u2014 ' + itemCount + ' clear, brief points. No explanation needed unless asked.';
+      }
+      // Analytical questions \u2014 PEE structure (only when question explicitly asks for analysis)
+      if (cmd === 'analyse' || /\b(write|using)\b.*\bpee\b/i.test(qText) || /\bcomment\b.*\b(language|technique|effect)/i.test(qText)) {
+        // Singular PEE: question says "a PEE paragraph" -> exactly 1 paragraph
+        if (/\ba\s+(full\s+)?p\.?e\.?e\.?\s+paragraph/i.test(qText)) {
+          return marks + ' marks \u2014 Write 1 detailed P.E.E. paragraph: Point (what you notice) \u2192 Evidence (\u201cquote\u201d) \u2192 Explanation (what effect it has on the reader and why). Aim for 5\u20138 sentences.';
+        }
         if (marks <= 3) return marks + ' marks \u2014 Use P.E.E.: Point (what you notice) \u2192 Evidence (quote with \u201c...\u201d) \u2192 Explanation (what effect it has and why).';
         if (marks <= 5) return marks + ' marks \u2014 Write ' + Math.ceil(marks/2) + ' P.E.E. paragraphs. Point \u2192 Evidence (\u201cquote\u201d) \u2192 Explanation of effect on the reader.';
         return marks + ' marks \u2014 Extended response. Plan first. Write ' + Math.ceil(marks/2) + '+ P.E.E. paragraphs with varied vocabulary. Aim for 200\u2013300 words.';
       }
+      // Generic by marks (non-analytical English questions)
+      var genCount = extractItemCount(qText) || marks;
       if (marks <= 1) return '1 mark \u2014 Short, precise answer. One clear point.';
-      if (marks <= 2) return marks + ' marks \u2014 ' + marks + ' clear points from the text. Quote where possible.';
-      if (marks >= 5) return marks + ' marks \u2014 Use P.E.E. structure. Point \u2192 Evidence (\u201cquote\u201d) \u2192 Explanation. Aim for ' + Math.ceil(marks/2) + ' paragraphs.';
-      return marks + ' marks \u2014 ' + marks + ' distinct points. Use P.E.E. if the question asks about language or effect.';
+      if (marks <= 2) return marks + ' marks \u2014 ' + genCount + ' clear points. Define or explain briefly.';
+      if (marks >= 5) return marks + ' marks \u2014 Structured response. Plan your answer: ' + genCount + ' key points with clear reasoning. Use paragraphs.';
+      return marks + ' marks \u2014 ' + genCount + ' distinct points with clear reasoning.';
     }
 
     // ---- SPANISH ----
@@ -238,6 +276,12 @@
     var marks = getMarks(card);
     var hints = [];
 
+    // Custom hint from data-hint attribute (shown first, before auto-generated hints)
+    var customHint = card.getAttribute('data-hint');
+    if (customHint) {
+      hints.push({type: 'custom', text: customHint});
+    }
+
     if (isMCQuestion(card)) {
       // For MC: each hint eliminates a wrong option
       var correct = getCorrectMCLetter(card);
@@ -278,13 +322,13 @@
         var bolds = ansBox.querySelectorAll('strong');
         for (var b = 0; b < bolds.length; b++) {
           var term = bolds[b].textContent.trim();
-          if (term.length > 1 && !/^[A-D]$/.test(term) && !qBolds[term.toLowerCase()]) {
+          if (term.length > 2 && !/^[A-D]$/.test(term) && !qBolds[term.toLowerCase()]) {
             hints.push({type: 'firstLetter', term: term});
           }
         }
       }
-      // If no useful bold terms found, use first words of answer text
-      if (hints.length === 0 && ansBox) {
+      // If no useful bold terms found, use first words of answer text (skip for English — too generic)
+      if (hints.length === 0 && ansBox && subjectKey !== 'english') {
         var ansText = ansBox.textContent.replace(/Answer/i, '').trim();
         var words = ansText.split(/\s+/).filter(function(w) { return w.length > 3; });
         for (var ww = 0; ww < Math.min(words.length, 3); ww++) {
@@ -361,6 +405,12 @@
           infoEl.textContent = hintPenaltyText(qHints[qNum]) + ' \u2014 Key terms start with: ' + letters.join(', ');
           return; // skip the default info update below
         }
+      }
+    } else if (hint.type === 'custom') {
+      var infoEl = document.getElementById('hint-info-' + qNum);
+      if (infoEl) {
+        infoEl.textContent = hintPenaltyText(qHints[qNum]) + ' \u2014 ' + hint.text;
+        return;
       }
     }
 
@@ -538,6 +588,7 @@
 
       var ismc = isMCQuestion(card);
       var qText = getQText(card);
+      var fullQText = getFullQText(card);
 
       if (ismc) {
         // ---- MC: render clickable bubbles ----
@@ -564,7 +615,7 @@
         }
 
         // Strategy hint
-        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, qText));
+        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, fullQText));
         mcWrap.appendChild(hint);
 
         // Hint penalty info (hidden until hints used)
@@ -604,7 +655,7 @@
         }
 
         // Strategy hint
-        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, qText));
+        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, fullQText));
         listWrap.appendChild(hint);
 
         // Hint penalty info
@@ -641,7 +692,7 @@
         wrap.appendChild(ta);
 
         // Strategy hint
-        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, qText));
+        var hint = el('div', 'ch-strategy', strategyHint(marks, subjectKey, fullQText));
         wrap.appendChild(hint);
 
         // Hint penalty info
