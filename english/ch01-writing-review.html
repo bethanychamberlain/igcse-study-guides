@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ch1 Writing Review &mdash; Travellers' Tales</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', system-ui, sans-serif; background: #f8f9fa; color: #2c3e50; line-height: 1.6; padding: 24px; max-width: 900px; margin: 0 auto; }
+
+  .hero { background: linear-gradient(135deg, #880e4f, #c2185b); color: #fff; padding: 32px; border-radius: 12px; margin-bottom: 24px; }
+  .hero h1 { font-size: 1.5em; margin-bottom: 6px; }
+  .hero .meta { opacity: 0.85; font-size: 0.95em; }
+  .hero .date-badge { display: inline-block; background: rgba(255,255,255,0.2); padding: 6px 14px; border-radius: 8px; font-size: 0.9em; font-weight: 600; margin-top: 10px; }
+
+  .section-header { background: #c2185b; color: #fff; padding: 12px 20px; border-radius: 8px 8px 0 0; margin-top: 28px; font-size: 1.05em; font-weight: 600; display: flex; justify-content: space-between; align-items: center; }
+  .section-header .ex-badge { background: rgba(255,255,255,0.25); padding: 2px 10px; border-radius: 12px; font-size: 0.85em; }
+
+  .card { background: #fff; border: 1px solid #e0e0e0; border-top: none; padding: 20px; }
+  .card:last-child { border-radius: 0 0 8px 8px; }
+  .card + .card { border-top: 1px solid #eee; }
+
+  .prompt-label { font-weight: 600; color: #c2185b; font-size: 0.9em; margin-bottom: 4px; }
+  .prompt-text { font-style: italic; color: #666; font-size: 0.9em; margin-bottom: 10px; }
+
+  .student-response { background: #fef9e7; border-left: 4px solid #f39c12; padding: 12px 16px; margin: 8px 0; border-radius: 0 6px 6px 0; font-family: 'Georgia', serif; }
+  .student-response.empty { background: #fdeaea; border-left-color: #e74c3c; color: #999; font-style: italic; font-family: inherit; }
+
+  .senses-grid { display: grid; grid-template-columns: 80px 1fr 1fr; gap: 0; margin: 8px 0; font-size: 0.95em; }
+  .senses-grid .sh { background: #fce4ec; color: #880e4f; padding: 8px 12px; font-weight: 700; font-size: 0.8em; text-transform: uppercase; }
+  .senses-grid .sc { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+  .senses-grid .sense-name { font-weight: 700; color: #c2185b; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; }
+  .senses-grid .filled { background: #fef9e7; }
+  .senses-grid .blank { background: #fdeaea; color: #ccc; font-style: italic; }
+
+  .flat-block { margin: 12px 0; padding: 14px; background: #f9f9f9; border-radius: 8px; }
+  .flat-orig { color: #999; font-size: 0.9em; margin-bottom: 6px; }
+  .flat-orig::before { content: 'Flat: '; font-weight: 600; }
+
+  .main-writing { background: #fef9e7; border-left: 4px solid #f39c12; padding: 16px 20px; margin: 12px 0; border-radius: 0 6px 6px 0; font-family: 'Georgia', serif; line-height: 1.8; white-space: pre-wrap; }
+
+  .checklist-summary { display: flex; gap: 8px; align-items: center; margin: 12px 0; }
+  .check-ring { width: 56px; height: 56px; border-radius: 50%; border: 4px solid #27ae60; display: flex; align-items: center; justify-content: center; font-size: 1.2em; font-weight: 800; color: #27ae60; }
+
+  .notes-progress { margin-top: 28px; }
+  .notes-row { display: flex; align-items: center; gap: 12px; padding: 10px 16px; background: #fff; border: 1px solid #e0e0e0; margin-bottom: -1px; font-size: 0.9em; }
+  .notes-row:first-child { border-radius: 8px 8px 0 0; }
+  .notes-row:last-child { border-radius: 0 0 8px 8px; }
+  .notes-bar { flex: 1; height: 8px; background: #eee; border-radius: 4px; overflow: hidden; }
+  .notes-fill { height: 100%; border-radius: 4px; }
+  .notes-fill.green { background: #27ae60; }
+  .notes-fill.amber { background: #f39c12; }
+  .notes-fill.red { background: #e74c3c; }
+  .notes-label { min-width: 180px; font-weight: 500; }
+  .notes-score { min-width: 50px; text-align: right; font-weight: 600; font-size: 0.85em; }
+
+  .tutor-comment { background: #eaf2f8; border: 1px solid #aed6f1; padding: 16px; border-radius: 8px; margin-top: 20px; }
+  .tutor-comment h3 { color: #2e86c1; margin-bottom: 8px; font-size: 1em; }
+  .tutor-comment ul { margin-left: 20px; }
+  .tutor-comment li { margin-bottom: 6px; }
+
+  .spelling { text-decoration: underline wavy #e74c3c; }
+
+  @media print {
+    body { padding: 12px; }
+    .hero { break-after: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>Ch1 Writing Review: Travellers' Tales</h1>
+  <div class="meta">His responses from the writing task, pulled from Google Sheets</div>
+  <div class="date-badge">Completed: 11 March 2026</div>
+</div>
+
+<!-- ============ EXERCISE 1: SENSES GRID ============ -->
+<div class="section-header">
+  Exercise 1: Senses Grid
+  <span class="ex-badge">5 min</span>
+</div>
+<div class="card">
+  <div class="prompt-label">His chosen moment</div>
+  <div class="student-response">Going to a football match in Toulouse</div>
+
+  <div class="prompt-text" style="margin-top:16px;">Fill in as many senses as you can remember. You need at least 3 out of 5.</div>
+
+  <div class="senses-grid">
+    <div class="sh">Sense</div>
+    <div class="sh">What do you remember?</div>
+    <div class="sh">One specific detail</div>
+
+    <div class="sense-name">Sight</div>
+    <div class="sc filled">green grass, bright lights, <span class="spelling">fooball</span> players</div>
+    <div class="sc filled">bright green natural grass, big athletic footballers. bright <span class="spelling">staduim</span> lights everywhere.</div>
+
+    <div class="sense-name">Sound</div>
+    <div class="sc filled">football chants, announcers</div>
+    <div class="sc filled">loud french football chants in sync, announcers screaming the names of players</div>
+
+    <div class="sense-name">Smell</div>
+    <div class="sc blank">(left blank)</div>
+    <div class="sc blank">(left blank)</div>
+
+    <div class="sense-name">Taste</div>
+    <div class="sc blank">(left blank)</div>
+    <div class="sc blank">(left blank)</div>
+
+    <div class="sense-name">Touch</div>
+    <div class="sc filled">cold air blowing on my skin, sitting packed with my friends</div>
+    <div class="sc filled">my friends shoulders as were tightly packed in the stadium</div>
+  </div>
+
+  <div class="tutor-comment">
+    <h3>Tutor Notes</h3>
+    <ul>
+      <li><strong>3/5 senses filled</strong> &mdash; meets the minimum. Sight, Sound, and Touch are covered.</li>
+      <li><strong>Smell and Taste left blank</strong> &mdash; understandable for a football match, but could have tried: grass, food stalls, popcorn, hot dogs, cold drink.</li>
+      <li><strong>"Specific detail" column</strong> shows real improvement from the "what you remember" column. "football chants, announcers" &rarr; "loud french football chants in sync, announcers screaming the names of players" is a genuine upgrade.</li>
+      <li><strong>Spelling</strong>: "fooball" &rarr; football, "staduim" &rarr; stadium.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ EXERCISE 2: FLAT TO VIVID ============ -->
+<div class="section-header">
+  Exercise 2: Flat to Vivid
+  <span class="ex-badge">5 min</span>
+</div>
+<div class="card">
+  <div class="prompt-text">Rewrite each flat sentence using specific, vivid details.</div>
+
+  <div class="flat-block">
+    <div class="flat-orig">"The food at the market was good."</div>
+    <div class="student-response">The market was packed like sardines as the spicy food was tingling my mouth as if there were little people dancing on my tongue.</div>
+  </div>
+
+  <div class="flat-block">
+    <div class="flat-orig">"The building was really big and impressive."</div>
+    <div class="student-response">The colossal building was standing over me like a giant giraffe</div>
+  </div>
+
+  <div class="flat-block">
+    <div class="flat-orig">"It was hot and we walked around the city all day."</div>
+    <div class="student-response">It felt like lava was being poured onto us while we were <span class="spelling">walkng</span> through the city</div>
+  </div>
+
+  <div class="tutor-comment">
+    <h3>Tutor Notes</h3>
+    <ul>
+      <li><strong>He's using similes naturally!</strong> All three rewrites contain similes ("packed like sardines," "like a giant giraffe," "like lava"). This is a real strength.</li>
+      <li><strong>Sentence 1 is the strongest</strong> &mdash; "little people dancing on my tongue" is creative and vivid. Two similes in one sentence, plus taste sense.</li>
+      <li><strong>Sentence 2 is weaker</strong> &mdash; "giant giraffe" is an unusual comparison for a building. "Standing over me" is good (personification), but could be more specific about the building itself.</li>
+      <li><strong>Sentence 3 is good but generic</strong> &mdash; "lava being poured onto us" captures the heat well but doesn't add any city-specific detail.</li>
+      <li><strong>Missing:</strong> No full stops at the end of sentences 2 and 3. Spelling: "walkng" &rarr; walking.</li>
+      <li><strong>Overall pattern:</strong> He reaches for figurative language instinctively &mdash; this is a strong foundation. The next step is combining similes with <em>specific</em> sensory details (what he actually saw/heard/felt).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ EXERCISE 4: TRAVEL PARAGRAPH ============ -->
+<div class="section-header">
+  Exercise 4: Your Travel Paragraph
+  <span class="ex-badge">10 min</span>
+</div>
+<div class="card">
+  <div class="prompt-text">Write a descriptive paragraph (80&ndash;120 words) about your chosen moment. Use at least 3 senses from your grid. Include at least one simile or metaphor.</div>
+
+  <div class="main-writing">On the Europe trip it felt like nothing before, there was always an <span class="spelling">exiting</span> thing waiting to jump at us like a lion hunting for food. In <span class="spelling">toulouse</span> me and some friends decided to go to a football match, when we got there the announcer was screaming the names of football players and the <span class="spelling">crown</span> was chanting songs and having the time of their lives like <span class="spelling">there</span> country just won the World Cup. The 360 <span class="spelling">staduim</span> lights felt like we were in an <span class="spelling">interigation</span> room, and the cold air felt like a fan was <span class="spelling">infront</span> of me on full blast, while the bright orange sun was setting and making the natural green football pitch <span class="spelling">looks</span> so mesmerizing. Days later we arrived in Barcelona and the first thing we did was go to the big vast beach on a beautiful hot and sunny day. The Europe Trip felt like a dream I <span class="spelling">didnt</span> want to end, if I could I would go back to the <span class="spelling">beggining</span> of the Europe trip and relive it again!</div>
+
+  <div style="margin-top:12px; display:flex; gap:16px; flex-wrap:wrap; font-size:0.9em;">
+    <span style="background:#fce4ec; padding:4px 12px; border-radius:12px;"><strong>~170 words</strong> (target: 80&ndash;120)</span>
+    <span style="background:#d5f5e3; padding:4px 12px; border-radius:12px;">3+ senses used</span>
+    <span style="background:#d5f5e3; padding:4px 12px; border-radius:12px;">4 similes</span>
+  </div>
+
+  <div class="tutor-comment">
+    <h3>Tutor Notes</h3>
+    <ul>
+      <li><strong>SIMILES everywhere</strong> &mdash; "like a lion hunting for food," "like there country just won the World Cup," "like we were in an interrogation room," "like a fan on full blast," "felt like a dream." He's using figurative language confidently. This is his strongest writing skill.</li>
+      <li><strong>3 senses present</strong> &mdash; Sound (announcer screaming, crowd chanting), Touch (cold air), Sight (bright orange sun, green pitch, stadium lights). Target met.</li>
+      <li><strong>Overlong</strong> &mdash; 170 words vs 80&ndash;120 target. Wanders from Toulouse football match to Barcelona beach. The task asked for ONE moment, not a trip summary.</li>
+      <li><strong>Run-on sentences</strong> &mdash; The whole paragraph is essentially 3&ndash;4 sentences connected by commas and "and." Same pattern as the Easter test Q11.</li>
+      <li><strong>Scope creep</strong> &mdash; Starts with the football match (good!) then drifts to Barcelona beach and a general trip reflection. Needs to stay focused on the one moment.</li>
+      <li><strong>Spelling issues</strong>: exiting &rarr; exciting, toulouse &rarr; Toulouse, crown &rarr; crowd, there &rarr; their, staduim &rarr; stadium, interigation &rarr; interrogation, infront &rarr; in front, looks &rarr; look, didnt &rarr; didn't, beggining &rarr; beginning.</li>
+      <li><strong>"Me and some friends"</strong> &rarr; "Some friends and I" (grammar).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ EXERCISE 5: WRITER'S CHECKLIST ============ -->
+<div class="section-header">
+  Exercise 5: Writer's Checklist
+  <span class="ex-badge">Self-assessment</span>
+</div>
+<div class="card">
+  <div class="checklist-summary">
+    <div class="check-ring">6/6</div>
+    <div>
+      <strong>He checked all 6 boxes.</strong><br>
+      <span style="color:#666; font-size:0.9em;">Claims: 3+ senses, simile/metaphor, no "nice/good/big," varied sentences, read aloud, checked spelling.</span>
+    </div>
+  </div>
+  <div class="tutor-comment">
+    <h3>Confidence vs Reality</h3>
+    <ul>
+      <li><strong>3+ senses</strong> &mdash; Yes, confirmed. Accurate self-assessment.</li>
+      <li><strong>Simile or metaphor</strong> &mdash; Yes, 4+ similes. Accurate.</li>
+      <li><strong>No "nice/good/big"</strong> &mdash; Uses "big" once ("big vast beach") and "beautiful." Not fully accurate.</li>
+      <li><strong>Varied sentence lengths</strong> &mdash; Not really &mdash; most are long run-ons. Over-confident here.</li>
+      <li><strong>Read aloud</strong> &mdash; Possible, but the run-ons suggest he didn't catch the breathlessness.</li>
+      <li><strong>Checked spelling</strong> &mdash; 10 spelling errors found. This is the "confident but wrong" pattern from the Easter test.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ============ NOTES SELF-ASSESSMENT ============ -->
+<div class="section-header" style="background:#2c3e50; margin-top:32px;">
+  Notes Self-Assessment (Ch1 Checkboxes)
+  <span class="ex-badge">9 March 2026</span>
+</div>
+<div class="card" style="border-radius: 0 0 8px 8px;">
+  <div class="prompt-text">These are the "I can..." checkboxes he ticked while reading the Ch1 notes page. Green = completed, amber = partial, red = none checked.</div>
+
+  <div class="notes-row">
+    <div class="notes-label">Reading to Identify Information</div>
+    <div class="notes-bar"><div class="notes-fill green" style="width:100%"></div></div>
+    <div class="notes-score">3/3</div>
+  </div>
+  <div class="notes-row">
+    <div class="notes-label">The SQuEE Technique</div>
+    <div class="notes-bar"><div class="notes-fill amber" style="width:33%"></div></div>
+    <div class="notes-score">2/6</div>
+  </div>
+  <div class="notes-row">
+    <div class="notes-label">Summary Writing Skills</div>
+    <div class="notes-bar"><div class="notes-fill red" style="width:0%"></div></div>
+    <div class="notes-score">0/3</div>
+  </div>
+  <div class="notes-row">
+    <div class="notes-label">Fact vs Opinion</div>
+    <div class="notes-bar"><div class="notes-fill red" style="width:0%"></div></div>
+    <div class="notes-score">0/3</div>
+  </div>
+  <div class="notes-row">
+    <div class="notes-label">Writer's Craft &mdash; Description</div>
+    <div class="notes-bar"><div class="notes-fill red" style="width:0%"></div></div>
+    <div class="notes-score">0/3</div>
+  </div>
+  <div class="notes-row">
+    <div class="notes-label">Writing to Persuade &amp; Describe</div>
+    <div class="notes-bar"><div class="notes-fill red" style="width:0%"></div></div>
+    <div class="notes-score">0/3</div>
+  </div>
+  <div class="notes-row" style="border-radius: 0 0 8px 8px;">
+    <div class="notes-label">Where the Marks Are</div>
+    <div class="notes-bar"><div class="notes-fill red" style="width:0%"></div></div>
+    <div class="notes-score">0/2</div>
+  </div>
+
+  <div class="tutor-comment" style="margin-top:16px;">
+    <h3>What This Tells Us</h3>
+    <ul>
+      <li><strong>Only 5/23 checkboxes ticked</strong> across 7 sections. He likely skimmed the notes quickly &mdash; probably engaged with the first two sections then rushed through the rest.</li>
+      <li><strong>SQuEE: 2/6</strong> &mdash; He can NAME the steps but can't yet write a PEE paragraph or list explanation starters. The two he checked are recognition-level; the four he skipped are production-level. Same "recognize vs explain" gap.</li>
+      <li><strong>0/3 on Writer's Craft, Fact vs Opinion, Summary</strong> &mdash; These are the analytical skills he needs most. Worth revisiting during tutoring.</li>
+      <li><strong>Compare to Ch3</strong>: He got 6/7 on "Narrative Point of View" &mdash; much better engagement. Suggests he finds narrative/literary content more accessible than analytical frameworks.</li>
+    </ul>
+  </div>
+</div>
+
+<div style="margin-top: 24px; padding: 16px; background: #fff; border-radius: 8px; border: 1px solid #e0e0e0; font-size: 0.9em; color: #666;">
+  <strong>Source:</strong> Data pulled from Google Sheets "Writing &amp; Notes" tab via Apps Script read endpoint. Notes from 9 March, writing from 11 March 2026.
+</div>
+
+</body>
+</html>
