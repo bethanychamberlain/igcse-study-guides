@@ -380,12 +380,56 @@ function writeCheckboxTracker(ss, items) {
 }
 
 // ============================================================
-// PHOTO UPLOAD — doGet serves a mobile upload page
-// URL: .../exec?subject=Math&chapter=Ch2+Algebra+1
-// Photos saved to Google Drive: IGCSE Study Photos/{Subject}/
-// Also logs a row to Activity Log for tracking
+// ROUTES:
+//   ?action=readWriting — returns Writing & Notes data as JSON
+//   ?action=readActivity — returns Activity Log data as JSON
+//   (default) — serves mobile photo upload page
 // ============================================================
 function doGet(e) {
+  var action = e.parameter.action || '';
+  var key = e.parameter.key || '';
+
+  // ---- READ ENDPOINTS (require passphrase) ----
+  if (action === 'readWriting' || action === 'readActivity') {
+    if (key !== 'igcse-study-2026') {
+      return ContentService.createTextOutput(JSON.stringify({error: 'Unauthorized'}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    var sheetName = action === 'readWriting' ? 'Writing & Notes' : 'Activity Log';
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheet = ss.getSheetByName(sheetName);
+    if (!sheet || sheet.getLastRow() < 2) {
+      return ContentService.createTextOutput(JSON.stringify({data: [], headers: []}))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    var all = sheet.getDataRange().getValues();
+    var headers = all[0];
+    var rows = [];
+    for (var i = 1; i < all.length; i++) {
+      var row = {};
+      for (var j = 0; j < headers.length; j++) {
+        row[String(headers[j])] = all[i][j];
+      }
+      rows.push(row);
+    }
+    // Optional filters
+    var filterSubject = e.parameter.subject;
+    var filterChapter = e.parameter.chapter;
+    if (filterSubject) {
+      rows = rows.filter(function(r) {
+        return (r.Subject || r.subject || '') === filterSubject;
+      });
+    }
+    if (filterChapter) {
+      rows = rows.filter(function(r) {
+        return String(r.Chapter || r.chapter || '').indexOf(filterChapter) >= 0;
+      });
+    }
+    return ContentService.createTextOutput(JSON.stringify({headers: headers, data: rows}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+
+  // ---- DEFAULT: photo upload page ----
   var subject = (e.parameter.subject || '').replace(/[<>"'&]/g, '');
   var chapter = (e.parameter.chapter || '').replace(/[<>"'&]/g, '');
   return HtmlService.createHtmlOutput(getUploadHtml(subject, chapter))
